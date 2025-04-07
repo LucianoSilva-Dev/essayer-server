@@ -3,11 +3,11 @@ import type { EntitySchema } from '../../shared/Types';
 import { genericError, schemaValidationError } from '../../shared/Schemas';
 import z from 'zod';
 import {
-  postRegisterAuthBodyValidation,
-  getTokenAuthBodyValidation,
+  userLoginBodyValidation,
+  userRegisterBodyValidation,
 } from './Validations';
 
-export const tokenResponse = z.object({
+export const userLoginResponse = z.object({
   token: z.string(),
 });
 
@@ -16,27 +16,27 @@ export const userRegisterResponse = z.object({
 });
 
 export const AuthSchema: EntitySchema = {
-  getToken: {
+  login: {
     schema: {
-      body: getTokenAuthBodyValidation,
+      body: userLoginBodyValidation,
       response: {
-        200: tokenResponse,
+        200: userLoginResponse,
         400: schemaValidationError,
         401: genericError,
       },
-      summary: 'Get the JWT token',
+      summary: 'Login a user with email and password',
     }
   },
 
   register: {
     schema: {
-      body: postRegisterAuthBodyValidation,
+      body: userRegisterBodyValidation,
       response: {
         201: userRegisterResponse,
         400: schemaValidationError,
-        404: genericError,
+        409: genericError,
       },
-      summary: 'Register a new user',
+      summary: 'Register a new user with email, name and password',
     }
   },
 };

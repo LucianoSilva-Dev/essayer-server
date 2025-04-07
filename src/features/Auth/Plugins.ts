@@ -16,6 +16,6 @@ export const authMiddleware = async (
   try {
     await request.jwtVerify();
   } catch (err) {
-    reply.status(401).send({ error: 'Unauthorized' });
+    reply.status(401).send({ error: 'Login necessário.' });
   }
 };

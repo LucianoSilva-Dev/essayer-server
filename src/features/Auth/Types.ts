@@ -1,5 +1,5 @@
 import type z from 'zod';
-import type { getTokenAuthBodyValidation, postRegisterAuthBodyValidation } from './Validations';
+import type { userLoginBodyValidation, userRegisterBodyValidation } from './Validations';
 
-export type getTokenAuthBody = z.infer<typeof getTokenAuthBodyValidation>;
-export type registerAuthBody = z.infer<typeof postRegisterAuthBodyValidation>;
+export type userLoginBody = z.infer<typeof userLoginBodyValidation>;
+export type userRegisterBody = z.infer<typeof userRegisterBodyValidation>;

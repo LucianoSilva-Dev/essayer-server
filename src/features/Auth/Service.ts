@@ -1,14 +1,13 @@
 // services to handle the business logic of the application
 import type { FastifyReply } from 'fastify';
-import { AuthModel } from './Model';
+import { UserModel } from './Model';
 import crypto from 'bcryptjs';
-import type { getTokenAuthBody, registerAuthBody } from './Types';
-
+import type { userLoginBody, userRegisterBody } from './Types';
 
 export const AuthService = {
-  getToken: async (userCredentials: getTokenAuthBody, reply: FastifyReply) => {
+  login: async (userCredentials: userLoginBody, reply: FastifyReply) => {
     const { email, password } = userCredentials;
-    const user = await AuthModel.findOne({ email});
+    const user = await UserModel.findOne({ email });
     if (!user) {
       return { auth: false, token: null };
     }
@@ -21,18 +20,18 @@ export const AuthService = {
     return { auth: true, token: jwt };
   },
 
-  register: async (User: registerAuthBody) => {
+  register: async (User: userRegisterBody) => {
     const { name, email, password } = User;
 
-    const user = await AuthModel.findOne({ email });
+    const user = await UserModel.findOne({ email });
     if (user) {
-      return { success: false, statusCode: 404, error: 'User already exists' };
+      return { success: false, statusCode: 409, error: 'Usuario já existe.' };
     }
 
     const hashedPassword = crypto.hashSync(password, 10);
-    const newUser = new AuthModel({ name, email, password: hashedPassword });
+    const newUser = new UserModel({ name, email, password: hashedPassword });
     await newUser.save();
 
-    return { success: true, message: 'User created successfully' };
+    return { success: true, message: 'Usuario criado com sucesso.' };
   },
 };
