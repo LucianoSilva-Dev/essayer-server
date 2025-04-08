@@ -1,21 +1,39 @@
 import z from 'zod';
 
-export const getTokenAuthBodyValidation = z.object({
+export const userLoginBodyValidation = z.object({
   email: z
-    .string({ message: 'o campo email precisa ser uma string.' })
-    .email('email inválido'),
-  password: z.string({ message: 'o campo senha precisa ser uma string.' }),
+    .string({
+      required_error: 'O campo email é obrigatório.',
+      invalid_type_error: 'O campo email precisa ser um texto.',
+    })
+    .email('Email inválido.'),
+  password: z.string({
+    required_error: 'O campo senha é obrigatório.',
+    invalid_type_error: 'O campo senha precisa ser um texto.',
+  }),
 });
 
-export const postRegisterAuthBodyValidation = z.object({
-  name: z.string({ message: 'o campo nome precisa ser uma string.' }),
+export const userRegisterBodyValidation = z.object({
+  name: z
+    .string({
+      required_error: 'O campo nome é obrigatório.',
+      invalid_type_error: 'O campo nome precisa ser um texto.',
+    })
+    .nonempty('O campo nome é obrigatório.'),
   email: z
-    .string({ message: 'o campo email precisa ser uma string.' })
-    .email('email inválido'),
+    .string({
+      required_error: 'O campo email é obrigatório.',
+      invalid_type_error: 'O campo email precisa ser um texto.',
+    })
+    .email('Email inválido.')
+    .nonempty('O campo email é obrigatório.'),
   password: z
-    .string({ message: 'o campo senha precisa ser uma string.' })
+    .string({
+      required_error: 'O campo senha é obrigatório.',
+      invalid_type_error: 'O campo senha precisa ser um texto.',
+    })
     .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,24}$/,
-      'o campo senha precisa ter entre 8 e 24 caracteres, pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,24}$/,
+      'O campo senha precisa ter entre 8 e 24 caracteres, pelo menos uma letra maiúscula, uma letra minúscula e um número.',
     ),
 });

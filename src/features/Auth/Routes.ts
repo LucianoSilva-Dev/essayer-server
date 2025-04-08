@@ -10,5 +10,5 @@ export const AuthRoutes: FastifyPluginAsyncZod = async (app) => {
   app.register(authPlugin);
 
   app.post('/register', AuthSchema.register, AuthController.register);
-  app.post('/login', AuthSchema.getToken, AuthController.getToken);
+  app.post('/login', AuthSchema.login, AuthController.login);
 };

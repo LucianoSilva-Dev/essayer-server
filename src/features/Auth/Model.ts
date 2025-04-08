@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const AuthSchema = new Schema(
+const UserSchema = new Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true },
@@ -9,4 +9,4 @@ const AuthSchema = new Schema(
   { timestamps: true },
 );
 
-export const AuthModel = model('UserCredentials', AuthSchema);
+export const UserModel = model('User', UserSchema);
