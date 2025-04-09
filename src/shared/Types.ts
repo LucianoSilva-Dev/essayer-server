@@ -32,3 +32,8 @@ export type ControllerMethod = (
 ) => Promise<void>;
 
 export type Controller = Record<string, ControllerMethod>;
+
+export type RequestUserData = {
+  id: string;
+  iat: number;
+};
