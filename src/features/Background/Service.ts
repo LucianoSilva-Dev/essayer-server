@@ -31,8 +31,11 @@ export const BackgroundService = {
     return { success: true, background: { id: _id.toString(), content, author, creator } };
   },
 
-  create: async (backgroundBody: createBackgroundBody) => {
-    const background = new BackgroundModel(backgroundBody);
+  create: async (backgroundBody: createBackgroundBody, userId: string) => {
+    const background = new BackgroundModel({
+      ...backgroundBody,
+      creator: userId,
+    });
     await background.save();
     return { message: 'Repertório criado com sucesso.' };
   },

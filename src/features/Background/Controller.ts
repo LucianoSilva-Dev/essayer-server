@@ -1,4 +1,4 @@
-import type { Controller } from '../../shared/Types';
+import type { Controller, RequestUserData } from '../../shared/Types';
 import type { createBackgroundBody } from './Types';
 import { BackgroundService } from './Service';
 import type { getBackgroundResponseType } from './Types';
@@ -24,7 +24,9 @@ export const BackgroundController: Controller = {
 
   create: async (request, reply) => {
     const backgroundBody = request.body as createBackgroundBody;
-    const response = await BackgroundService.create(backgroundBody);
+    const { id: userId } = request.user as RequestUserData;
+
+    const response = await BackgroundService.create(backgroundBody, userId);
     return reply.status(201).send({ message: response.message });
   },
 };

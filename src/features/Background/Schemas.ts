@@ -5,6 +5,7 @@ import z from 'zod';
 import { idValidation } from '../../shared/Validations';
 
 import { createBackgroundBodyValidation } from './Validations';
+import { authMiddleware } from '../Auth/Plugins';
 
 export const getBackgroundResponse = z.object({
   id: z.string(),
@@ -24,6 +25,7 @@ export const BackgroundSchema: EntitySchema = {
     schema: {
       response: {
         200: getBackgroundResponse.array(),
+        500: genericError,
       },
       summary: 'Get all backgrounds.',
     },
@@ -35,17 +37,22 @@ export const BackgroundSchema: EntitySchema = {
       response: {
         200: getBackgroundResponse,
         404: genericError,
+        500: genericError,
       },
       summary: 'Get a background by id.',
     },
   },
 
   create: {
+    preHandler: authMiddleware,
     schema: {
+      security: [{ jwtAuth: [] }],
       body: createBackgroundBodyValidation,
       response: {
         201: createBackgroundResponse,
         400: schemaValidationError,
+        401: genericError,
+        500: genericError,
       },
       summary: 'Create a new background.',
     },
