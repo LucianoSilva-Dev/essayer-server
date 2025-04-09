@@ -18,7 +18,7 @@ export const fastifySwaggerConfig: FastifyDynamicSwaggerOptions = {
           type: 'http',
           scheme: 'bearer',
           bearerFormat: 'JWT',
-          description: 'Enter the token in the format: Bearer <token>',
+          description: 'Enter JWT token.',
         },
       },
       
