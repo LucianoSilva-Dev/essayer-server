@@ -11,6 +11,7 @@ export const getBackgroundResponse = z.object({
   id: z.string(),
   content: z.string(),
   author: z.string(),
+  font: z.string(),
   creator: z.object({
     name: z.string(),
   }),
