@@ -8,7 +8,7 @@ if (!JWT_SECRET) {
   process.exit(1);
 }
 
-const SERVER_PORT = process.env.SERVER_PORT || 3000;
+const SERVER_PORT = Number.parseInt(process.env.SERVER_PORT as string) || 3000;
 
 if (typeof SERVER_PORT !== 'number') {
   console.error('SERVER_PORT is not a number.');

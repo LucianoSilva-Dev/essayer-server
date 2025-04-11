@@ -4,12 +4,12 @@ import type { createBackgroundBody } from './Types';
 export const BackgroundService = {
   get_all: async () => {
     const backgrounds = await BackgroundModel.find()
-      .select('_id content author creator')
+      .select('_id content author creator font')
       .populate('creator', 'name');
 
     const formatedBackgrounds = backgrounds.map((background) => {
-      const { _id, content, author, creator } = background;
-      return { id: _id.toString(), content, author, creator };
+      const { _id, content, author, creator, font } = background;
+      return { id: _id.toString(), content, author, font, creator };
     });
 
     return formatedBackgrounds;
@@ -17,7 +17,7 @@ export const BackgroundService = {
 
   get: async (backgroundId: string) => {
     const background = await BackgroundModel.findById(backgroundId)
-      .select('_id content author creator')
+      .select('_id content author creator font')
       .populate('creator', 'name');
 
     if (!background) {
@@ -27,8 +27,8 @@ export const BackgroundService = {
         error: 'Repertório não encontrado.',
       };
     }
-    const { _id, content, author, creator } = background;
-    return { success: true, background: { id: _id.toString(), content, author, creator } };
+    const { _id, content, author, font, creator } = background;
+    return { success: true, background: { id: _id.toString(), content, author, font, creator } };
   },
 
   create: async (backgroundBody: createBackgroundBody, userId: string) => {

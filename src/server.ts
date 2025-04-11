@@ -14,7 +14,7 @@ mongoose
     console.error('Error connecting to MongoDB:', err);
   });
 
-app.listen({ port: SERVER_PORT as number }, (err, address) => {
+app.listen({ port: SERVER_PORT }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);
