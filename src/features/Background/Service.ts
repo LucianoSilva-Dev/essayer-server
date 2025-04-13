@@ -9,7 +9,7 @@ export const BackgroundService = {
 
     const formatedBackgrounds = backgrounds.map((background) => {
       const { _id, content, author, creator, font } = background;
-      return { id: _id.toString(), content, author, font, creator };
+      return { id: _id.toString(), content, author, font, creator: { name: creator.name } };
     });
 
     return formatedBackgrounds;
