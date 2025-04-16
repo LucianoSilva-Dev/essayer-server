@@ -33,7 +33,7 @@ export const userRegisterBodyValidation = z.object({
       invalid_type_error: 'O campo senha precisa ser um texto.',
     })
     .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,24}$/,
-      'O campo senha precisa ter entre 8 e 24 caracteres, pelo menos uma letra maiúscula, uma letra minúscula e um número.',
+      /^(?=.*[a-z])(?=.*\d).{8,24}$/,
+      'A senha deve ter de 8 a 24 caracteres, ao menos uma letra minúscula e um número.',
     ),
 });
