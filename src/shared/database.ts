@@ -1,33 +1,53 @@
 import {Schema, model} from 'mongoose'
 
-const userSchema = new Schema({
-    username: {type: String, required: true},
-    password: {type: String, required: true},
-    email: {type: String, required: true}
-})
+const usuarioSchema = new Schema({
+    nome: {type: String, required: true},
+    senha: {type: String, required: true},
+    email: {type: String, required: true},
+    cargo: {type: String, required: true},
+    foto: String,
+}, {timestamps: true})
 
-const adminSchema = new Schema({
-    username: {type: String, required: true},
-    password: {type: String, required: true}
-})
+const reqSchema = new Schema({
+    lattes: {type: String, required: true},
+    requisitante: {type: Schema.Types.ObjectId, required: true, ref: 'Usuario'},
+    revisor: {type: Schema.Types.ObjectId, ref: 'Usuario'}
+}, {timestamps: true})
 
-const repSchema = new Schema({
-    conteudo: {type: String, required: true},
+const citacaoSchema = new Schema({
+    frase: {type: String, required: true},
+    autor: {type: String, required: true},
+    fonte: String,
+    criador: {type: Schema.Types.ObjectId, required: true, ref: 'Usuario'},
+    likes: [{type: Schema.Types.ObjectId, ref: 'Usuario'}],
+    comentarios: [{
+        usuario: {type: Schema.Types.ObjectId, required: true, ref: 'Usuario'}, 
+        texto: {type: String, required: true}
+    }]
+}, {timestamps: true})
+
+const artigoSchema = new Schema({
+    titulo: {type: String, required: true},
+    resumo: {type: String, required: true},
     autor: {type: String, required: true},
     fonte: {type: String, required: true},
-    usuario: {type: Schema.Types.ObjectId, ref: "Usuario"},
-    admin: {type: Schema.Types.ObjectId, ref: "Admin"}
-})
+    criador: {type: Schema.Types.ObjectId, required: true, ref: 'Usuario'},
+    likes: [{type: Schema.Types.ObjectId, ref: 'Usuario'}],
+    comentarios: [{
+        usuario: {type: Schema.Types.ObjectId, required: true, ref: 'Usuario'}, 
+        texto: {type: String, required: true}
+    }]
+}, {timestamps: true})
 
-const t_repSchema = new Schema({
-    conteudo: {type: String, required: true},
+const obraSchema = new Schema({
+    titulo: {type: String, required: true},
+    sinopse: {type: String, required: true},
     autor: {type: String, required: true},
-    fonte: {type: String, required: true},
-    usuario: {type: Schema.Types.ObjectId, ref: "Usuario"},
-})
+    criador: {type: Schema.Types.ObjectId, required: true, ref: 'Usuario'},
+    likes: [{type: Schema.Types.ObjectId, ref: 'Usuario'}],
+    comentarios: [{
+        usuario: {type: Schema.Types.ObjectId, required: true, ref: 'Usuario'}, 
+        texto: {type: String, required: true}
+    }]
+}, {timestamps: true})
 
-
-export const Usuario = model('Usuario', userSchema)
-export const Admin = model('Admin', adminSchema)
-export const t_Repertorio = model('t_Repertorio', t_repSchema)
-export const Repertorio = model('Repertorio', repSchema)
