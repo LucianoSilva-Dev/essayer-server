@@ -10,7 +10,8 @@ const ArtigoSchema = new Schema({
     comentarios: [{
         usuario: {type: Schema.Types.ObjectId, required: true, ref: 'Usuario'}, 
         texto: {type: String, required: true}
-    }]
+    }],
+    subtopicos: [String]
 }, {timestamps: true})
 
 export const ArtigoModel = model('Artigo', ArtigoSchema);
