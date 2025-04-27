@@ -6,4 +6,4 @@ const ReqSchema = new Schema({
     revisor: {type: Schema.Types.ObjectId, ref: 'Usuario'}
 }, {timestamps: true})
 
-export const RequisicaoModel = model('Requisicao', ReqSchema);
+export const RequisicaoProfessorModel = model('RequisicaoProfessor', ReqSchema);
