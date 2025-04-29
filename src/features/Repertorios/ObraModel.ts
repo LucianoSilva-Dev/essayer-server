@@ -10,7 +10,8 @@ const ObraSchema = new Schema({
         usuario: {type: Schema.Types.ObjectId, required: true, ref: 'Usuario'}, 
         texto: {type: String, required: true}
     }],
-    subtopicos: [String]
+    subtopicos: [String],
+    tipo: {type: String, required: true}
 }, {timestamps: true})
 
 export const ObraModel = model('Obra', ObraSchema);

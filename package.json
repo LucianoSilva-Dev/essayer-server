@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/server.ts",
- "scripts": {
+  "scripts": {
     "dev": "tsx watch src/server.ts",
     "debug": "tsx watch --inspect src/server.ts"
   },
@@ -30,10 +30,15 @@
     "typescript": "^5.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.13.14",
     "@biomejs/biome": "^1.9.4",
     "@types/bcrypt": "^5.0.2",
     "@types/bun": "latest",
-    "@types/mongoose": "^5.11.97"
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^22.13.14"
+  },
+  "pnpm": {
+    "overrides": {
+      "fastify@>=5.0.0 <=5.3.1": ">=5.3.2"
+    }
   }
 }
