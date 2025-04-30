@@ -5,8 +5,10 @@ import { ArtigoSchema } from './Schemas/ArtigoSchema';
 import { ObraSchema } from './Schemas/ObraSchema';
 import { RepertorioController } from './Controller';
 import { authPlugin } from '../Auth/Plugins';
+import { AddEntityWiseTags } from '../../shared/Utils';
 
 export const RepertorioRoutes: FastifyPluginAsyncZod = async (app) => {
+  AddEntityWiseTags(app, ['Repertório'])
   app.register(authPlugin);
 
   // Rotas para repertórios em geral
@@ -19,13 +21,13 @@ export const RepertorioRoutes: FastifyPluginAsyncZod = async (app) => {
     CitacaoSchema.create,
     RepertorioController.citacaoCreate,
   );
-  app.put('/citacao', CitacaoSchema.update, RepertorioController.citacaoUpdate);
+  app.put('/citacao/:id', CitacaoSchema.update, RepertorioController.citacaoUpdate);
 
   // Rotas para Artigos
   app.post('/artigo', ArtigoSchema.create, RepertorioController.artigoCreate);
-  app.put('/artigo', ArtigoSchema.update, RepertorioController.artigoUpdate);
+  app.put('/artigo/:id', ArtigoSchema.update, RepertorioController.artigoUpdate);
 
   // Rotas para Obras
   app.post('/obra', ObraSchema.create, RepertorioController.obraCreate);
-  app.put('/obra', ObraSchema.update, RepertorioController.obraUpdate);
+  app.put('/obra/:id', ObraSchema.update, RepertorioController.obraUpdate);
 };
