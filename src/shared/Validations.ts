@@ -9,3 +9,7 @@ export const idValidation = z.object({
     })
     .refine((id) => isValidObjectId(id), 'Id inválido.'),
 });
+
+export const genericSuccessResponse = z.object({
+  message: z.string(),
+})
