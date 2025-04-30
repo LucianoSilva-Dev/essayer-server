@@ -1,11 +1,5 @@
 export const ArtigoService = {
-  // ...existing code...
-  create: async (data: any) => {
-    // ...logic not implemented...
-  },
-  update: async (data: any) => {
-    // somente titulo, fonte, resumo e subtopicos
-    // ...logic not implemented...
-  },
-  // ...existing code...
+  create: async (data: any) => {},
+  update: async (data: any) => {},
+  createComentario: async (data: any) => {},
 };

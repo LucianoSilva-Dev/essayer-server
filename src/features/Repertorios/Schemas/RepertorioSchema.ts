@@ -1,16 +1,16 @@
-import { genericError } from '../../../shared/Schemas';
+import { genericError, schemaValidationError } from '../../../shared/Schemas';
 import type { EntitySchema } from '../../../shared/Types';
 import {
   genericSuccessResponse,
   idValidation,
 } from '../../../shared/Validations';
-import { getAllRepertorioResponse } from '../Validations/RepertorioValidation';
+import { getAllRepertoriosResponse } from '../Validations/RepertorioValidation';
 
 export const RepertorioSchema: EntitySchema = {
   get_all: {
     schema: {
       response: {
-        200: getAllRepertorioResponse,
+        200: getAllRepertoriosResponse,
         401: genericError,
         500: genericError,
       },
@@ -22,7 +22,7 @@ export const RepertorioSchema: EntitySchema = {
       params: idValidation,
       response: {
         200: genericSuccessResponse,
-        400: genericError,
+        400: schemaValidationError,
         401: genericError,
         404: genericError,
         500: genericError,

@@ -1,9 +1,21 @@
 import type { EntitySchema } from '../../../shared/Types';
 import { genericError, schemaValidationError } from '../../../shared/Schemas';
-import { createCitacaoBodyValidation, updateCitacaoBodyValidation } from '../Validations/CitacaoValidation';
-import { genericSuccessResponse } from '../../../shared/Validations';
+import { createCitacaoBodyValidation, getCitacaoResponse, updateCitacaoBodyValidation } from '../Validations/CitacaoValidation';
+import { genericSuccessResponse, idValidation } from '../../../shared/Validations';
 
 export const CitacaoSchema: EntitySchema = {
+  get: {
+      schema: {
+        params: idValidation,
+        response: {
+          200: getCitacaoResponse,
+          400: schemaValidationError,
+          401: genericError,
+          404: genericError,
+          500: genericError,
+        },
+      },
+    },
   create: {
     schema: {
       body: createCitacaoBodyValidation,
@@ -18,6 +30,7 @@ export const CitacaoSchema: EntitySchema = {
   },
   update: {
     schema: {
+      params: idValidation,
       body: updateCitacaoBodyValidation,
       response: {
         200: genericSuccessResponse,

@@ -1,11 +1,4 @@
 export const CitacaoService = {
-  // ...existing code...
-  create: async (data: any) => {
-    // ...logic not implemented...
-  },
-  update: async (data: any) => {
-    // somente fonte, frase e subtopicos
-    // ...logic not implemented...
-  },
-  // ...existing code...
+  create: async (data: any) => {},
+  update: async (data: any) => {},
 };

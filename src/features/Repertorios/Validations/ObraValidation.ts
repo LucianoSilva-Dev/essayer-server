@@ -1,4 +1,18 @@
 import z from 'zod';
+import { comentarioResponse, perfilUsuarioResponse } from './Commom';
+
+export const getObraResponse = z.object({
+  titulo: z.string(),
+  sinopse: z.string(),
+  autor: z.string().optional(),
+  criador: perfilUsuarioResponse,
+  totalLikes: z.number(),
+  comentarios: comentarioResponse.array(),
+  subtopicos: z.array(z.string()),
+  tipoObra: z.enum(['livro', 'filme', 'música', 'teatro']),
+  favoritadoPorUsuario: z.boolean(),
+  likeDoUsuario: z.boolean(),
+});
 
 export const createObraBodyValidation = z.object({
   titulo: z.string({

@@ -1,4 +1,17 @@
 import z from 'zod';
+import { comentarioResponse, perfilUsuarioResponse } from './Commom';
+
+export const getCitacaoResponse = z.object({
+  frase: z.string(),
+  autor: z.string(),
+  fonte: z.string().optional(),
+  criador: perfilUsuarioResponse,
+  totalLikes: z.number(),
+  comentarios: comentarioResponse.array(),
+  subtopicos: z.array(z.string()),
+  favoritadoPorUsuario: z.boolean(),
+  likeDoUsuario: z.boolean(),
+})
 
 export const createCitacaoBodyValidation = z.object({
   frase: z.string({

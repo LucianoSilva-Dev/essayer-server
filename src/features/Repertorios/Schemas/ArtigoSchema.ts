@@ -1,11 +1,27 @@
 import { genericError, schemaValidationError } from '../../../shared/Schemas';
 import type { EntitySchema } from '../../../shared/Types';
-import { genericSuccessResponse } from '../../../shared/Validations';
-import { createArtigoBodyValidation, updateArtigoBodyValidation } from '../Validations/ArtigoValidation';
+import {
+  genericSuccessResponse,
+  idValidation,
+} from '../../../shared/Validations';
+import {
+  createArtigoBodyValidation,
+  getArtigoResponse,
+  updateArtigoBodyValidation,
+} from '../Validations/ArtigoValidation';
 
 export const ArtigoSchema: EntitySchema = {
   get: {
-
+    schema: {
+      params: idValidation,
+      response: {
+        200: getArtigoResponse,
+        400: schemaValidationError,
+        401: genericError,
+        404: genericError,
+        500: genericError,
+      },
+    },
   },
   create: {
     schema: {
@@ -21,6 +37,7 @@ export const ArtigoSchema: EntitySchema = {
   },
   update: {
     schema: {
+      params: idValidation,
       body: updateArtigoBodyValidation,
       response: {
         200: genericSuccessResponse,

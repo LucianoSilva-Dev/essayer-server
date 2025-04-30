@@ -1,14 +1,26 @@
 import type { EntitySchema } from '../../../shared/Types';
 import {
   createObraBodyValidation,
+  getObraResponse,
   updateObraBodyValidation,
 } from '../Validations/ObraValidation';
-import { genericSuccessResponse } from '../../../shared/Validations';
+import { genericSuccessResponse, idValidation } from '../../../shared/Validations';
 import { genericError, schemaValidationError } from '../../../shared/Schemas';
 
 export const ObraSchema: EntitySchema = {
+  get: {
+    schema: {
+      params: idValidation,
+      response: {
+        200: getObraResponse,
+        400: schemaValidationError,
+        401: genericError,
+        404: genericError,
+        500: genericError,
+      },
+    },
+  },
   create: {
-    // placeholder para criação de obra
     schema: {
       body: createObraBodyValidation,
       response: {
@@ -21,8 +33,8 @@ export const ObraSchema: EntitySchema = {
     },
   },
   update: {
-    // placeholder para atualização de obra (somente titulo, fonte, resumo, tipo e subtopicos)
     schema: {
+      params: idValidation,
       body: updateObraBodyValidation,
       response: {
         200: genericSuccessResponse,
