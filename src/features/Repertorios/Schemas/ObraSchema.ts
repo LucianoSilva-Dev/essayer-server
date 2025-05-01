@@ -18,6 +18,7 @@ export const ObraSchema: EntitySchema = {
         404: genericError,
         500: genericError,
       },
+      summary: 'Recupera obra selecionada',
     },
   },
   create: {

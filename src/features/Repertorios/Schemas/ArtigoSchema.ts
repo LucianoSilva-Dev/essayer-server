@@ -21,6 +21,7 @@ export const ArtigoSchema: EntitySchema = {
         404: genericError,
         500: genericError,
       },
+      summary: 'Recupera artigo selecionado',
     },
   },
   create: {

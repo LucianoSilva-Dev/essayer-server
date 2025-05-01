@@ -14,6 +14,7 @@ export const CitacaoSchema: EntitySchema = {
           404: genericError,
           500: genericError,
         },
+        summary: 'Recupera citação selecionada',
       },
     },
   create: {
