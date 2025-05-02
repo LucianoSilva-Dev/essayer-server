@@ -8,6 +8,7 @@ const ArtigoSchema = new Schema(
     fonte: { type: String, required: true },
     criador: { type: Schema.Types.ObjectId, required: true, ref: 'Usuario' },
     likes: [{ type: Schema.Types.ObjectId, ref: 'Usuario' }],
+    favoritos: [{ type: Schema.Types.ObjectId, ref: 'Usuario' }],
     comentarios: [
       {
         usuario: {

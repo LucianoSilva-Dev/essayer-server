@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, type Document } from 'mongoose';
 
 const CitacaoSchema = new Schema(
   {
@@ -7,6 +7,7 @@ const CitacaoSchema = new Schema(
     fonte: String,
     criador: { type: Schema.Types.ObjectId, required: true, ref: 'Usuario' },
     likes: [{ type: Schema.Types.ObjectId, ref: 'Usuario' }],
+    favoritos: [{ type: Schema.Types.ObjectId, ref: 'Usuario' }],
     comentarios: [
       {
         usuario: {
