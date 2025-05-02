@@ -38,29 +38,40 @@ export const createObraBodyValidation = z.object({
     .min(1, 'O campo subtopicos precisa conter ao menos um subtópico.'),
 });
 
-export const updateObraBodyValidation = z.object({
-  titulo: z
-    .string({
-      invalid_type_error: 'O campo titulo precisa ser um texto.',
-    })
-    .optional(),
-  sinopse: z
-    .string({
-      invalid_type_error: 'O campo resumo precisa ser um texto.',
-    })
-    .optional(),
-  autor: z
-    .string({
-      invalid_type_error: 'O campo autor precisa ser um texto.',
-    })
-    .optional(),
-  tipo: z.enum(['livro', 'filme', 'música', 'teatro']).optional(),
-  subtopicos: z
-    .array(
-      z.string({
-        invalid_type_error: 'O campo subtopicos precisa ser um texto.',
-      }),
-    )
-    .min(1, 'O campo subtopicos precisa conter ao menos um subtópico.')
-    .optional(),
-});
+export const updateObraBodyValidation = z
+  .object({
+    titulo: z
+      .string({
+        invalid_type_error: 'O campo titulo precisa ser um texto.',
+      })
+      .nonempty('O campo titulo não pode estar vazio.')
+      .optional(),
+    sinopse: z
+      .string({
+        invalid_type_error: 'O campo resumo precisa ser um texto.',
+      })
+      .nonempty('O campo sinopse não pode estar vazio.')
+      .optional(),
+    autor: z
+      .string({
+        invalid_type_error: 'O campo autor precisa ser um texto.',
+      })
+      .nonempty('O campo autor não pode estar vazio.')
+      .optional(),
+    tipo: z
+      .enum(['livro', 'filme', 'música', 'teatro'], {
+        message: 'O campo tipo deve ser "livro", "filme", "música" ou "teatro".',
+      })
+      .optional(),
+    subtopicos: z
+      .array(
+        z.string({
+          invalid_type_error: 'O campo subtopicos precisa ser um texto.',
+        }),
+      )
+      .min(1, 'O campo subtopicos precisa conter ao menos um subtópico.')
+      .optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'Forneça ao menos um campo para atualizar.',
+  });
