@@ -3,7 +3,10 @@ import { RepertorioSchema } from './Schemas/RepertorioSchema';
 import { CitacaoSchema } from './Schemas/CitacaoSchema';
 import { ArtigoSchema } from './Schemas/ArtigoSchema';
 import { ObraSchema } from './Schemas/ObraSchema';
-import { RepertorioController } from './Controller';
+import { CitacaoController } from './Controllers/CitacaoController';
+import { RepertorioController } from './Controllers/RepertorioController';
+import { ObraController } from './Controllers/ObraController';
+import { ArtigoController } from './Controllers/ArtigoController';
 import { authPlugin } from '../Auth/Plugins';
 import { AddEntityWiseTags } from '../../shared/Utils';
 
@@ -21,29 +24,21 @@ export const RepertorioRoutes: FastifyPluginAsyncZod = async (app) => {
   );
 
   // Rotas para Citações
-  app.post(
-    '/citacao',
-    CitacaoSchema.create,
-    RepertorioController.citacaoCreate,
-  );
+  app.post('/citacao', CitacaoSchema.create, CitacaoController.citacaoCreate);
   app.put(
     '/citacao/:id',
     CitacaoSchema.update,
-    RepertorioController.citacaoUpdate,
+    CitacaoController.citacaoUpdate,
   );
   app.get('/citacao/:id', CitacaoSchema.get, RepertorioController.citacaoGet);
 
   // Rotas para Artigos
-  app.post('/artigo', ArtigoSchema.create, RepertorioController.artigoCreate);
-  app.put(
-    '/artigo/:id',
-    ArtigoSchema.update,
-    RepertorioController.artigoUpdate,
-  );
-  app.get('/artigo/:id', ArtigoSchema.get, RepertorioController.artigoGet);
+  app.post('/artigo', ArtigoSchema.create, ArtigoController.artigoCreate);
+  app.put('/artigo/:id', ArtigoSchema.update, CitacaoController.artigoUpdate);
+  app.get('/artigo/:id', ArtigoSchema.get, ArtigoController.artigoGet);
 
   // Rotas para Obras
-  app.post('/obra', ObraSchema.create, RepertorioController.obraCreate);
-  app.put('/obra/:id', ObraSchema.update, RepertorioController.obraUpdate);
-  app.get('/obra/:id', ObraSchema.get, RepertorioController.obraGet);
+  app.post('/obra', ObraSchema.create, ObraController.obraCreate);
+  app.put('/obra/:id', ObraSchema.update, ObraController.obraUpdate);
+  app.get('/obra/:id', ObraSchema.get, ObraController.obraGet);
 };
