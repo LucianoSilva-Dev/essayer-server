@@ -30,11 +30,11 @@ export const RepertorioRoutes: FastifyPluginAsyncZod = async (app) => {
     CitacaoSchema.update,
     CitacaoController.citacaoUpdate,
   );
-  app.get('/citacao/:id', CitacaoSchema.get, RepertorioController.citacaoGet);
+  app.get('/citacao/:id', CitacaoSchema.get, CitacaoController.citacaoGet);
 
   // Rotas para Artigos
   app.post('/artigo', ArtigoSchema.create, ArtigoController.artigoCreate);
-  app.put('/artigo/:id', ArtigoSchema.update, CitacaoController.artigoUpdate);
+  app.put('/artigo/:id', ArtigoSchema.update, ArtigoController.artigoUpdate);
   app.get('/artigo/:id', ArtigoSchema.get, ArtigoController.artigoGet);
 
   // Rotas para Obras
