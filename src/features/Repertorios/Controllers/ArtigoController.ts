@@ -40,7 +40,7 @@ export const ArtigoController: Controller = {
     );
 
     if (!response.success) {
-      return reply.status(response.status).send({ message: response.message });
+      return reply.status(response.status).send({ error: response.message });
     }
 
     reply.send({ message: response.data });
