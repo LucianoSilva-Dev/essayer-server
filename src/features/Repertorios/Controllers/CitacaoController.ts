@@ -38,5 +38,11 @@ export const CitacaoController: Controller = {
       { fonte, autor, frase, subtopicos },
       citacaoId,
     );
+
+    if (!response.success) {
+      return reply.status(response.status).send({ error: response.message });
+    }
+
+    reply.send({ message: response.data });
   },
 };
