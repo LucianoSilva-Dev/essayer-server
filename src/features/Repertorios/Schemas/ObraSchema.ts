@@ -4,8 +4,12 @@ import {
   getObraResponse,
   updateObraBodyValidation,
 } from '../Validations/ObraValidation';
-import { genericSuccessResponse, idValidation } from '../../../shared/Validations';
+import {
+  genericSuccessResponse,
+  idValidation,
+} from '../../../shared/Validations';
 import { genericError, schemaValidationError } from '../../../shared/Schemas';
+import { authMiddleware } from '../../Auth/Plugins';
 
 export const ObraSchema: EntitySchema = {
   get: {
@@ -22,7 +26,9 @@ export const ObraSchema: EntitySchema = {
     },
   },
   create: {
+    preHandler: authMiddleware,
     schema: {
+      security: [{ jwtAuth: [] }],
       body: createObraBodyValidation,
       response: {
         201: genericSuccessResponse,
@@ -34,7 +40,9 @@ export const ObraSchema: EntitySchema = {
     },
   },
   update: {
+    preHandler: authMiddleware,
     schema: {
+      security: [{ jwtAuth: [] }],
       params: idValidation,
       body: updateObraBodyValidation,
       response: {
