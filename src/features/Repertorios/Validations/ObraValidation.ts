@@ -2,6 +2,7 @@ import z from 'zod';
 import { comentarioResponse, perfilUsuarioResponse } from './Commom';
 
 export const getObraResponse = z.object({
+  id: z.string(),
   titulo: z.string(),
   sinopse: z.string(),
   autor: z.string().optional(),
