@@ -41,6 +41,7 @@ export const ObraSchema: EntitySchema = {
         200: genericSuccessResponse,
         400: schemaValidationError,
         401: genericError,
+        404: genericError,
         500: genericError,
       },
       summary: 'Atualiza dados da obra',
