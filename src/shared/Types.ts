@@ -33,6 +33,17 @@ export type ControllerMethod = (
 
 export type Controller = Record<string, ControllerMethod>;
 
+export type ServiceMethod = (
+  // biome-ignore lint/suspicious/noExplicitAny:
+  ...args: any[]
+) => Promise<
+  | { success: false; status: number; message: string }
+  // biome-ignore lint/suspicious/noExplicitAny:
+  | { success: true; data: any }
+>;
+
+export type Service = Record<string, ServiceMethod>;
+
 export type RequestUserData = {
   id: string;
   iat: number;
