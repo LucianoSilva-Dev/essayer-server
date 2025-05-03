@@ -1,27 +1,12 @@
 import { Schema, model } from 'mongoose';
+import { RepertorioDBSchema } from './RepertorioModel';
 
-const ArtigoSchema = new Schema(
-  {
+const ArtigoSchema = RepertorioDBSchema.discriminator(
+  'Artigo',
+  new Schema({
     titulo: { type: String, required: true },
     resumo: { type: String, required: true },
-    autor: { type: String, required: true },
-    fonte: { type: String, required: true },
-    criador: { type: Schema.Types.ObjectId, required: true, ref: 'Usuario' },
-    likes: [{ type: Schema.Types.ObjectId, ref: 'Usuario' }],
-    favoritos: [{ type: Schema.Types.ObjectId, ref: 'Usuario' }],
-    comentarios: [
-      {
-        usuario: {
-          type: Schema.Types.ObjectId,
-          required: true,
-          ref: 'Usuario',
-        },
-        texto: { type: String, required: true },
-      },
-    ],
-    subtopicos: [String],
-  },
-  { timestamps: true },
+  }),
 );
 
 export const ArtigoModel = model('Artigo', ArtigoSchema);
