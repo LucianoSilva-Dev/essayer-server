@@ -7,7 +7,7 @@ export const userLoginBodyValidation = z.object({
       invalid_type_error: 'O campo email precisa ser um texto.',
     })
     .email('Email inválido.'),
-  password: z.string({
+  senha: z.string({
     required_error: 'O campo senha é obrigatório.',
     invalid_type_error: 'O campo senha precisa ser um texto.',
   }),

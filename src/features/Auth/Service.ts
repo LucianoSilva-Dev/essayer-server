@@ -3,16 +3,17 @@ import type { FastifyReply } from 'fastify';
 import { UserModel } from './Model';
 import crypto from 'bcryptjs';
 import type { userLoginBody, userRegisterBody } from './Types';
+import { UsuarioModel } from '../../shared/models/UsuarioModel';
 
 export const AuthService = {
   login: async (userCredentials: userLoginBody, reply: FastifyReply) => {
-    const { email, password } = userCredentials;
-    const user = await UserModel.findOne({ email });
+    const { email, senha } = userCredentials;
+    const user = await UsuarioModel.findOne({ email });
     if (!user) {
       return { auth: false, token: null };
     }
 
-    if (!crypto.compareSync(password, user.password)) {
+    if (!crypto.compareSync(senha, user.senha)) {
       return { auth: false, token: null };
     }
 

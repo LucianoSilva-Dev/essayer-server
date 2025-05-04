@@ -10,6 +10,10 @@ import type {
   RouteShorthandOptions,
 } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
+import type { z } from 'zod';
+import type { createUsuarioBodyValidation, professorCreateBodyValidation, updateUsuarioBodyValidation } from './validations/UsuarioValidation';
+import type { updateStatusBodyValidation } from './validations/RequisicaoProfessorValidation';
+
 
 export type RouteSchema = RouteShorthandOptions<
   RawServerDefault,
@@ -37,3 +41,8 @@ export type RequestUserData = {
   id: string;
   iat: number;
 };
+
+export type createUsuarioBody = z.infer<typeof createUsuarioBodyValidation>
+export type updateUsuarioBody = z.infer<typeof updateUsuarioBodyValidation>
+export type professorCreateBody = z.infer<typeof professorCreateBodyValidation>
+export type updateStatusBody = z.infer<typeof updateStatusBodyValidation>
