@@ -4,13 +4,15 @@ import {
   genericSuccessResponse,
   idValidation,
 } from '../../../shared/Validations';
-import { createComentarioBodyValidation, getAllRepertoriosResponse } from '../Validations/RepertorioValidation';
+import { createComentarioBodyValidation, getAllRepertorioQueryValidation, getAllRepertorioResponse } from '../Validations/RepertorioValidation';
 
 export const RepertorioSchema: EntitySchema = {
   get_all: {
     schema: {
+      querystring: getAllRepertorioQueryValidation,
       response: {
-        200: getAllRepertoriosResponse,
+        
+        400: schemaValidationError,
         401: genericError,
         500: genericError,
       },
