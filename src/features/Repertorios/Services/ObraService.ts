@@ -10,13 +10,13 @@ import type {
 
 export const ObraService: Service = {
   create: async (createObraData: CreateObraBody, userId: string) => {
-    const { titulo, sinopse, autor, tipo, subtopicos } = createObraData;
+    const { titulo, sinopse, autor, tipoObra, subtopicos } = createObraData;
     const obra = new ObraModel({
       titulo,
       sinopse,
       autor,
       criador: userId,
-      tipo,
+      tipoObra,
       subtopicos,
     });
     await obra.save();
@@ -66,7 +66,7 @@ export const ObraService: Service = {
         texto: comentario.texto,
       })),
       subtopicos: obra.subtopicos,
-      tipoObra: obra.tipo as 'livro' | 'filme' | 'música' | 'teatro',
+      tipoObra: obra.tipoObra as 'livro' | 'filme' | 'música' | 'teatro',
     };
     return { success: true, data: response };
   },
