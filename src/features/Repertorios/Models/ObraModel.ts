@@ -1,7 +1,8 @@
-import { Schema, model } from 'mongoose';
-import { RepertorioDBSchema } from './RepertorioModel';
+import { Schema } from 'mongoose';
+import { RepertorioModel } from './RepertorioModel';
+import type { Obra } from '../Types';
 
-const ObraSchema = RepertorioDBSchema.discriminator(
+export const ObraModel = RepertorioModel.discriminator<Obra>(
   'Obra',
   new Schema({
     titulo: { type: String, required: true },
@@ -9,5 +10,3 @@ const ObraSchema = RepertorioDBSchema.discriminator(
     tipoObra: { type: String, required: true },
   }),
 );
-
-export const ObraModel = model('Obra', ObraSchema);

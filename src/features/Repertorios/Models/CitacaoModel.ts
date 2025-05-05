@@ -1,12 +1,11 @@
-import { Schema, model, type Document } from 'mongoose';
-import { RepertorioDBSchema } from './RepertorioModel';
+import { Schema } from 'mongoose';
+import { RepertorioModel } from './RepertorioModel';
+import type { Citacao } from '../Types';
 
-const CitacaoSchema = RepertorioDBSchema.discriminator(
+export const CitacaoModel = RepertorioModel.discriminator<Citacao>(
   'Citacao',
   new Schema({
     frase: { type: String, required: true },
     fonte: String,
   }),
 );
-
-export const CitacaoModel = model('Citacao', CitacaoSchema);
