@@ -14,14 +14,47 @@ export const RepertorioRoutes: FastifyPluginAsyncZod = async (app) => {
   AddEntityWiseTags(app, ['Repertório']);
   app.register(authPlugin);
 
-  // Rotas para repertórios em geral
+  // <Rotas para repertórios em geral>
   app.get('/', RepertorioSchema.get_all, RepertorioController.get_all);
   app.delete('/:id', RepertorioSchema.delete, RepertorioController.delete);
+
+  // comentarios
   app.post(
     '/:id/comentario',
     RepertorioSchema.createComentario,
     RepertorioController.comentarioCreate,
   );
+  app.delete(
+    '/:id/comentario',
+    RepertorioSchema.deleteComentario,
+    RepertorioController.comentarioDelete,
+  );
+
+  //likes
+  app.post(
+    '/:id/like',
+    RepertorioSchema.createLike,
+    RepertorioController.likeCreate,
+  );
+  app.delete(
+    '/:id/like',
+    RepertorioSchema.deleteLike,
+    RepertorioController.likeDelete,
+  );
+
+  // favoritos
+  app.post(
+    '/:id/favorito',
+    RepertorioSchema.createFavorito,
+    RepertorioController.favoritoCreate,
+  );
+  app.delete(
+    '/:id/favorito',
+    RepertorioSchema.deleteFavorito,
+    RepertorioController.favoritoDelete,
+  );
+
+  // <Rotas para repertórios em geral/>
 
   // Rotas para Citações
   app.post('/citacao', CitacaoSchema.create, CitacaoController.citacaoCreate);

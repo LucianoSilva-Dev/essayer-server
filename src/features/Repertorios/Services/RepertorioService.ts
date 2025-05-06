@@ -3,12 +3,14 @@ import { montarFiltros } from '../Helpers/MontarFiltros';
 import { montarPaginação } from '../Helpers/MontarPaginacao';
 import { RepertorioModel } from '../Models/RepertorioModel';
 import type {
+  CreateComentarioBody,
   GetAllRepertorioQueryBody,
   GetAllRepertorioResponse,
   PopulatedRepertorio,
 } from '../Types';
 import { formatGetAllRepertorioQuery } from '../Helpers/FormatGetAllQuery';
 import { montarSort } from '../Helpers/MontarSort';
+import { Types } from 'mongoose';
 
 export const RepertorioService: Service = {
   getAll: async (
@@ -47,19 +49,149 @@ export const RepertorioService: Service = {
       paginacao,
     };
 
-    return {
-      success: true,
-      data: response,
-    };
+    return { success: true, data: response };
   },
-  delete: async (id: string) => {},
+  delete: async (repertorioId: string) => {
+    const repertorio = await RepertorioModel.findByIdAndDelete(repertorioId);
+    if (!repertorio) {
+      return {
+        success: false,
+        status: 404,
+        message: `Repertório com ID "${repertorioId}" não existe.`,
+      };
+    }
+    return { success: true, data: 'Repertório deletado com sucesso.' };
+  },
 
-  createComentario: async (data: any) => {},
-  deleteComentario: async (id: string) => {},
+  createComentario: async (
+    repertorioId: string,
+    userId: string,
+    comentarioBody: CreateComentarioBody,
+  ) => {
+    const repertorio = await RepertorioModel.findById(repertorioId);
+    if (!repertorio) {
+      return {
+        success: false,
+        status: 404,
+        message: `Repertório com ID "${repertorioId}" não existe.`,
+      };
+    }
 
-  createLike: async (id: string) => {},
-  deleteLike: async (id: string) => {},
+    const comentario = new ComentarioModel({
+      usuario: userId,
+      texto: comentarioBody.texto,
+      repertorioId,
+    });
+    await comentario.save();
 
-  createFavorito: async (id: string) => {},
-  deleteFavorito: async (id: string) => {},
+    return { success: true, data: 'Comentario criado com sucesso.' };
+  },
+  deleteComentario: async (comentarioId: string) => {
+    const comentario = await ComentarioModel.findByIdAndDelete(comentarioId);
+    if (!comentario) {
+      return {
+        success: false,
+        status: 404,
+        message: `Comentario com ID "${comentarioId}" não existe.`,
+      };
+    }
+    return { success: true, data: 'Comentario deletado com sucesso.' };
+  },
+
+  createLike: async (repertorioId: string, userId: string) => {
+    const repertorio = await RepertorioModel.findById(repertorioId);
+    if (!repertorio) {
+      return {
+        success: false,
+        status: 404,
+        message: `Repertório com ID "${repertorioId}" não existe.`,
+      };
+    }
+
+    if (repertorio.likes.includes(new Types.ObjectId(userId))) {
+      return {
+        success: false,
+        status: 409,
+        message: 'Você já deu like nesse repertório.',
+      };
+    }
+
+    repertorio.likes.push(new Types.ObjectId(userId));
+    await repertorio.save();
+
+    return { success: true, data: 'Like adicionado com sucesso.' };
+  },
+  deleteLike: async (repertorioId: string, userId: string) => {
+    const repertorio = await RepertorioModel.findById(repertorioId);
+    if (!repertorio) {
+      return {
+        success: false,
+        status: 404,
+        message: `Repertório com ID "${repertorioId}" não existe.`,
+      };
+    }
+    const likeIndex = repertorio.likes.indexOf(new Types.ObjectId(userId));
+    if (likeIndex === -1) {
+      return {
+        success: false,
+        status: 404,
+        message: 'Você ainda não deu like nesse repertório.',
+      };
+    }
+
+    repertorio.likes.splice(likeIndex, 1);
+    await repertorio.save();
+
+    return { success: true, data: 'Like removido com sucesso.' };
+  },
+
+  createFavorito: async (repertorioId: string, userId: string) => {
+    const repertorio = await RepertorioModel.findById(repertorioId);
+    if (!repertorio) {
+      return {
+        success: false,
+        status: 404,
+        message: `Repertório com ID "${repertorioId}" não existe.`,
+      };
+    }
+
+    if (repertorio.favoritos.includes(new Types.ObjectId(userId))) {
+      return {
+        success: false,
+        status: 409,
+        message: 'Você já favoritou esse repertório.',
+      };
+    }
+
+    repertorio.favoritos.push(new Types.ObjectId(userId));
+    await repertorio.save();
+
+    return { success: true, data: 'Repertório favoritado com sucesso.' };
+  },
+  deleteFavorito: async (repertorioId: string, userId: string) => {
+    const repertorio = await RepertorioModel.findById(repertorioId);
+    if (!repertorio) {
+      return {
+        success: false,
+        status: 404,
+        message: `Repertório com ID "${repertorioId}" não existe.`,
+      };
+    }
+
+    const favoritoIndex = repertorio.favoritos.indexOf(
+      new Types.ObjectId(userId),
+    );
+    if (favoritoIndex === -1) {
+      return {
+        success: false,
+        status: 404,
+        message: 'Você ainda não favoritou esse repertório.',
+      };
+    }
+
+    repertorio.favoritos.splice(favoritoIndex, 1);
+    await repertorio.save();
+
+    return { success: true, data: 'Repertório removido dos favoritos.' };
+  },
 };

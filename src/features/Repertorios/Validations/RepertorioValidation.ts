@@ -55,10 +55,9 @@ export const getAllRepertorioResponse = z.object({
 });
 
 export const createComentarioBodyValidation = z.object({
-  tipoRepertorio: z.enum(['obra', 'artigo', 'citacao']),
   texto: z.string({
     required_error: 'O campo texto do comentario é obrigatório',
-    invalid_type_error: 'O campo "texto" do comentario não é um texto',
+    invalid_type_error: 'O campo texto do comentario não é um texto',
   }),
 });
 
@@ -122,13 +121,13 @@ export const getAllRepertorioQueryValidation = z.object({
 
   // paginação
   offset: z
-    .number({coerce: true})
+    .number({ coerce: true })
     .int()
     .min(0)
     .nullish()
     .transform((val) => val ?? 0),
   limit: z
-    .number({coerce: true})
+    .number({ coerce: true })
     .int()
     .min(1)
     .max(15)

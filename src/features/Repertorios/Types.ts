@@ -23,6 +23,7 @@ import type {
   getAllRepertorioObraDoc,
   getAllRepertorioArtigoDoc,
   getAllRepertorioCitacaoDoc,
+  createComentarioBodyValidation,
 } from './Validations/RepertorioValidation';
 
 // Citacao
@@ -62,6 +63,9 @@ export type GetAllRepertorioQueryBody = z.infer<
 export type GetAllRepertorioDocuments = z.infer<
   typeof getAllRepertorioDocuments
 >;
+export type CreateComentarioBody = z.infer<
+  typeof createComentarioBodyValidation
+>;
 export type Repertorio = {
   autor: string;
   criador: Types.ObjectId;
@@ -97,8 +101,12 @@ export type PopulatedRepertorio = Omit<
 };
 
 export type GetAllRepertorioObraDoc = z.infer<typeof getAllRepertorioObraDoc>;
-export type GetAllRepertorioArtigoDoc = z.infer<typeof getAllRepertorioArtigoDoc>;
-export type GetAllRepertorioCitacaoDoc = z.infer<typeof getAllRepertorioCitacaoDoc>;
+export type GetAllRepertorioArtigoDoc = z.infer<
+  typeof getAllRepertorioArtigoDoc
+>;
+export type GetAllRepertorioCitacaoDoc = z.infer<
+  typeof getAllRepertorioCitacaoDoc
+>;
 
 // Generico
 export type PerfilUsuario = z.infer<typeof perfilUsuarioResponse>;
