@@ -67,7 +67,7 @@ export const ObraService: Service = {
         texto: comentario.texto,
       })),
       subtopicos: obra.subtopicos,
-      tipoObra: obra.tipoObra as 'livro' | 'filme' | 'música' | 'teatro',
+      tipoObra: obra.tipoObra
     };
     return { success: true, data: response };
   },

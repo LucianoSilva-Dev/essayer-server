@@ -30,12 +30,12 @@ export const ObraController: Controller = {
     reply.status(201).send({ message: response.data });
   },
   obraUpdate: async (request, reply) => {
-    const { autor, sinopse, subtopicos, tipo, titulo } =
+    const { autor, sinopse, subtopicos, tipoObra, titulo } =
       request.body as UpdateObraBody;
     const { id: obraId } = request.params as { id: string };
 
     const response = await ObraService.update(
-      { titulo, sinopse, autor, tipo, subtopicos },
+      { titulo, sinopse, autor, tipoObra, subtopicos },
       obraId,
     );
 

@@ -58,7 +58,7 @@ export const updateObraBodyValidation = z
       })
       .nonempty('O campo autor não pode estar vazio.')
       .optional(),
-    tipo: z
+    tipoObra: z
       .enum(['livro', 'filme', 'música', 'teatro'], {
         message: 'O campo tipo deve ser "livro", "filme", "música" ou "teatro".',
       })
