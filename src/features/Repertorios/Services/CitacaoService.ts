@@ -65,6 +65,7 @@ export const CitacaoService: Service = {
       fonte: citacao.fonte ? citacao.fonte : undefined,
       criador: citacao.criador as unknown as PerfilUsuario,
       comentarios: citacao.comentarios.map((comentario) => ({
+        id: comentario._id.toString(),
         usuario: comentario.usuario as unknown as PerfilUsuario,
         texto: comentario.texto,
       })),

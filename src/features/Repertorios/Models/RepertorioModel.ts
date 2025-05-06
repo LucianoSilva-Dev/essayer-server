@@ -1,8 +1,7 @@
-import { Schema, type Types, model } from 'mongoose';
-import type { Repertorio } from '../Types';
+import { HydratedDocument, Schema, Types, model, type Model } from 'mongoose';
+import type { ComentarioSubDoc, Repertorio } from '../Types';
 
 const ComentarioSubDocSchema = new Schema({
-  
   texto: { type: String, required: true },
   usuario: { type: Schema.Types.ObjectId, ref: 'Usuario' },
 })
@@ -24,7 +23,13 @@ export const RepertorioDBSchema = new Schema<Repertorio>(
   { timestamps: true, discriminatorKey: 'tipoRepertorio' },
 );
 
-export const RepertorioModel = model<Repertorio>(
+// TMethodsAndOverrides
+export type THydratedRepertorioDocument = HydratedDocument<Repertorio, {
+  comentarios: Types.DocumentArray<ComentarioSubDoc>;
+}>;
+type RepertorioModelType = Model<Repertorio, {}, {}, {}, THydratedRepertorioDocument>;
+
+export const RepertorioModel = model<Repertorio, RepertorioModelType>(
   'Repertorio',
   RepertorioDBSchema,
 );

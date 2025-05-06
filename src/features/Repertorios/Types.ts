@@ -66,15 +66,17 @@ export type GetAllRepertorioDocuments = z.infer<
 export type CreateComentarioBody = z.infer<
   typeof createComentarioBodyValidation
 >;
+export type ComentarioSubDoc = {
+  _id: Types.ObjectId,
+  usuario: Types.ObjectId
+  texto: string
+}
 export type Repertorio = {
   autor: string;
   criador: Types.ObjectId;
   likes: Types.ObjectId[];
   favoritos: Types.ObjectId[];
-  comentarios: {
-    usuario: Types.ObjectId;
-    texto: string;
-  }[];
+  comentarios: ComentarioSubDoc[];
   subtopicos: string[];
   tipoRepertorio: string;
   createdAt: Date;
@@ -90,14 +92,15 @@ export type PopulatedRepertorio = Omit<
     nome: string;
     foto: string;
   };
-  comentarios: {
+  comentarios: Types.DocumentArray<{
+    _id: Types.ObjectId;
     usuario: {
       _id: Types.ObjectId;
       nome: string;
       foto: string;
     };
     texto: string;
-  }[];
+  }>;
 };
 
 export type GetAllRepertorioObraDoc = z.infer<typeof getAllRepertorioObraDoc>;

@@ -25,7 +25,7 @@ export const RepertorioRoutes: FastifyPluginAsyncZod = async (app) => {
     RepertorioController.comentarioCreate,
   );
   app.delete(
-    '/:id/comentario',
+    '/:id/comentario/:comentarioId',
     RepertorioSchema.deleteComentario,
     RepertorioController.comentarioDelete,
   );

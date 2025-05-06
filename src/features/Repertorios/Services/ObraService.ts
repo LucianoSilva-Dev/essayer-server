@@ -36,10 +36,7 @@ export const ObraService: Service = {
   get: async (id: string) => {
     const obra = await ObraModel.findById(id)
       .populate('criador', '_id nome email')
-      .populate({
-        path: 'comentarios',
-        populate: { path: 'usuario', select: '_id nome email' },
-      });
+      .populate('comentarios.usuario', '_id nome foto');
 
     if (!obra) {
       return {
@@ -65,6 +62,7 @@ export const ObraService: Service = {
       likeDoUsuario,
       favoritadoPorUsuario,
       comentarios: obra.comentarios.map((comentario) => ({
+        id: comentario._id.toString(),
         usuario: comentario.usuario as unknown as PerfilUsuario,
         texto: comentario.texto,
       })),

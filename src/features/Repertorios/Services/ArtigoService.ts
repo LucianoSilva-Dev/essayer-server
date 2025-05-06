@@ -62,6 +62,7 @@ export const ArtigoService: Service = {
       fonte: artigo.fonte,
       criador: artigo.criador as unknown as PerfilUsuario,
       comentarios: artigo.comentarios.map((comentario) => ({
+        id: comentario._id.toString(),
         usuario: comentario.usuario as unknown as PerfilUsuario,
         texto: comentario.texto,
       })),

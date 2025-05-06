@@ -1,6 +1,7 @@
 import z from 'zod';
 
 export const comentarioResponse = z.object({
+  id: z.string(),
   usuario: z.object({
     id: z.string(),
     nome: z.string(),

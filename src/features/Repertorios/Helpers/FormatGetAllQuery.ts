@@ -13,7 +13,7 @@ import { formatArtigoDoc } from './FormatArtigoDoc';
 import { formatCitacaoDoc } from './FormatCitacaoDoc';
 
 export function formatGetAllRepertorioQuery(
-  repertorios: HydratedDocument<Omit<Repertorio, 'criador'> & PopulatedWithCriador>[],
+  repertorios: any[],
   userId: string,
 ): GetAllRepertorioDocuments {
   return repertorios.map((repertorio) => {

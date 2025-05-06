@@ -10,7 +10,7 @@ import type {
 } from '../Types';
 import { formatGetAllRepertorioQuery } from '../Helpers/FormatGetAllQuery';
 import { montarSort } from '../Helpers/MontarSort';
-import { Types } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
 export const RepertorioService: Service = {
   getAll: async (
@@ -35,7 +35,7 @@ export const RepertorioService: Service = {
       .skip(queryBody.offset)
       .limit(queryBody.limit)
       .sort(sort)
-      .populate<Pick<PopulatedRepertorio, 'criador'>>('criador');
+      .populate<Pick<PopulatedRepertorio, 'criador'>>('criador')
 
     const totalDocuments = repertorios.length;
     const paginacao = montarPaginação(queryBody, reqUrl, totalDocuments);
@@ -63,7 +63,7 @@ export const RepertorioService: Service = {
     return { success: true, data: 'Repertório deletado com sucesso.' };
   },
 
-  createComentario: async (
+  createComentario:async (
     repertorioId: string,
     userId: string,
     comentarioBody: CreateComentarioBody,
@@ -77,25 +77,38 @@ export const RepertorioService: Service = {
       };
     }
 
-    const comentario = new ComentarioModel({
+    const comentario = repertorio.comentarios.create({
       usuario: userId,
       texto: comentarioBody.texto,
-      repertorioId,
-    });
-    await comentario.save();
+    })
+    repertorio.comentarios.push(comentario);
+    await repertorio.save();
 
     return { success: true, data: 'Comentario criado com sucesso.' };
   },
-  deleteComentario: async (comentarioId: string) => {
-    const comentario = await ComentarioModel.findByIdAndDelete(comentarioId);
+  deleteComentario: async (repertorioId: string, comentarioId: string) => {
+    const repertorio = await RepertorioModel.findById(repertorioId);
+    if (!repertorio) {
+      return {
+        success: false,
+        status: 404,
+        message: `Repertório com ID "${repertorioId}" não existe.`,
+      };
+    }
+
+    const comentario = repertorio.comentarios.id(comentarioId);
     if (!comentario) {
       return {
         success: false,
         status: 404,
-        message: `Comentario com ID "${comentarioId}" não existe.`,
+        message: `Comentario com ID "${comentarioId}" não existe no repertorio de id ${repertorioId}`,
       };
     }
-    return { success: true, data: 'Comentario deletado com sucesso.' };
+
+    await comentario.deleteOne()
+    await repertorio.save();
+
+    return { success: true, data: 'Comentario removido com sucesso.' };
   },
 
   createLike: async (repertorioId: string, userId: string) => {

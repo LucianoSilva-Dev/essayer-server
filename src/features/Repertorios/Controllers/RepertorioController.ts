@@ -44,9 +44,9 @@ export const RepertorioController: Controller = {
     return reply.send({ message: response.data });
   },
   comentarioDelete: async (request, reply) => {
-    const { id: comentarioId } = request.params as { id: string };
+    const { id: repertorioId, comentarioId } = request.params as { id: string, comentarioId: string };
 
-    const response = await RepertorioService.deleteComentario(comentarioId);
+    const response = await RepertorioService.deleteComentario(repertorioId, comentarioId);
     if (!response.success) {
       return reply.status(response.status).send({ error: response.message });
     }

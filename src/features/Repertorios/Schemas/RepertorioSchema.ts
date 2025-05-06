@@ -8,7 +8,6 @@ import { authMiddleware } from '../../Auth/Plugins';
 import {
   createComentarioBodyValidation,
   getAllRepertorioQueryValidation,
-  getAllRepertorioResponse,
 } from '../Validations/RepertorioValidation';
 
 export const RepertorioSchema: EntitySchema = {
