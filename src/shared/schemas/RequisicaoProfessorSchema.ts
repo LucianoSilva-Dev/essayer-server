@@ -3,11 +3,15 @@ import { genericError, schemaValidationError } from '../Schemas';
 import type { EntitySchema } from '../Types';
 import { z } from 'zod';
 import { genericSuccessResponse, idValidation } from '../Validations';
-import { getRequisicaoProfessorResponse, updateStatusBodyValidation } from '../validations/RequisicaoProfessorValidation';
+import {
+  getRequisicaoProfessorResponse,
+  updateStatusBodyValidation,
+} from '../validations/RequisicaoProfessorValidation';
+import { authAdmin, authProfessor } from '../plugins/auth';
 
 export const RequisicaoProfessorSchema: EntitySchema = {
   getAll: {
-    preHandler: authMiddleware,
+    preHandler: authAdmin,
     schema: {
       security: [{ jwtAuth: [] }],
       response: {
@@ -21,7 +25,7 @@ export const RequisicaoProfessorSchema: EntitySchema = {
   },
 
   get: {
-    preHandler: authMiddleware,
+    preHandler: authProfessor,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
@@ -37,7 +41,7 @@ export const RequisicaoProfessorSchema: EntitySchema = {
   },
 
   updateStatus: {
-    preHandler: authMiddleware,
+    preHandler: authAdmin,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,

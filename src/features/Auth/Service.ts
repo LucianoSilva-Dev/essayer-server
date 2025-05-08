@@ -17,7 +17,7 @@ export const AuthService = {
       return { auth: false, token: null };
     }
 
-    const jwt = await reply.jwtSign({ id: user._id });
+    const jwt = await reply.jwtSign({ id: user._id, cargo: user.cargo });
     return { auth: true, token: jwt };
   },
 

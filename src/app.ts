@@ -8,7 +8,9 @@ import { fastifySwagger } from '@fastify/swagger';
 import { fastifySwaggerUi } from '@fastify/swagger-ui';
 import { corsConfig } from './config/cors';
 import { fastifySwaggerConfig, fastifySwaggerUiConfig } from './config/docs';
+import { fastifyMultipartConfig } from './config/multipart';
 import fastifyCors from '@fastify/cors';
+import fastifyMultipart from '@fastify/multipart';
 
 import { appErrorHandler } from './shared/plugins/appErrorHandler';
 
@@ -36,6 +38,7 @@ class App {
     this.app.register(fastifyCors, corsConfig);
     this.app.register(fastifySwagger, fastifySwaggerConfig);
     this.app.register(fastifySwaggerUi, fastifySwaggerUiConfig);
+    this.app.register(fastifyMultipart, fastifyMultipartConfig);
     this.app.setErrorHandler(appErrorHandler);
   }
 

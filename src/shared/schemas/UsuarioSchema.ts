@@ -1,4 +1,4 @@
-import { authMiddleware } from '../../features/Auth/Plugins';
+import { authUsuario } from '../plugins/auth';
 import { genericError, schemaValidationError } from '../Schemas';
 import type { EntitySchema } from '../Types';
 import { idValidation, genericSuccessResponse } from '../Validations';
@@ -11,7 +11,7 @@ import {
 
 export const UsuarioSchema: EntitySchema = {
   get: {
-    preHandler: authMiddleware,
+    preHandler: authUsuario,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
@@ -27,7 +27,6 @@ export const UsuarioSchema: EntitySchema = {
   },
 
   create: {
-    preHandler: authMiddleware,
     schema: {
       security: [{ jwtAuth: [] }],
       body: createUsuarioBodyValidation,
@@ -43,7 +42,7 @@ export const UsuarioSchema: EntitySchema = {
   },
 
   professorCreate: {
-    preHandler: authMiddleware,
+    preHandler: authUsuario,
     schema: {
       security: [{ jwtAuth: [] }],
       body: professorCreateBodyValidation,
@@ -53,12 +52,12 @@ export const UsuarioSchema: EntitySchema = {
         401: genericError,
         500: genericError,
       },
-      summary: "Cria uma requisição de cadastro de professor"
+      summary: 'Cria uma requisição de cadastro de professor',
     },
   },
 
   update: {
-    preHandler: authMiddleware,
+    preHandler: authUsuario,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
@@ -75,7 +74,7 @@ export const UsuarioSchema: EntitySchema = {
   },
 
   delete: {
-    preHandler: authMiddleware,
+    preHandler: authUsuario,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
@@ -90,9 +89,52 @@ export const UsuarioSchema: EntitySchema = {
     },
   },
 
-  fotoCreate: {},
+  fotoCreate: {
+    preHandler: authUsuario,
+    schema: {
+      security: [{ jwtAuth: [] }],
+      params: idValidation,
+      response: {
+        200: genericSuccessResponse,
+        400: schemaValidationError,
+        401: genericError,
+        404: genericError,
+        409: genericError,
+        500: genericError,
+      },
+      summary: 'Adiciona uma foto a um usuário',
+    },
+  },
 
-  fotoUpdate: {},
-  
-  fotoDelete: {},
+  fotoUpdate: {
+    preHandler: authUsuario,
+    schema: {
+      security: [{ jwtAuth: [] }],
+      params: idValidation,
+      response: {
+        200: genericSuccessResponse,
+        400: schemaValidationError,
+        401: genericError,
+        404: genericError,
+        500: genericError,
+      },
+      summary: 'Atualiza a foto de um usuário',
+    },
+  },
+
+  fotoDelete: {
+    preHandler: authUsuario,
+    schema: {
+      security: [{ jwtAuth: [] }],
+      params: idValidation,
+      response: {
+        200: genericSuccessResponse,
+        400: schemaValidationError,
+        401: genericError,
+        409: genericError,
+        500: genericError,
+      },
+      summary: 'Exclui a foto de um usuário',
+    },
+  },
 };

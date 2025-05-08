@@ -1,5 +1,5 @@
 import { RequisicaoProfessorService } from '../services/RequisicaoProfessorService';
-import type { Controller, updateStatusBody } from '../Types';
+import type { Controller, RequestUserData, updateStatusBody } from '../Types';
 
 export const RequisicaoProfessorController: Controller = {
   getAll: async (request, reply) => {
@@ -23,7 +23,7 @@ export const RequisicaoProfessorController: Controller = {
   updateStatus: async (request, reply) => {
     const { status } = request.body as updateStatusBody;
     const { id: idReq } = request.params as { id: string };
-    const { id: idRevisor } = request.user as {id: string};
+    const { id: idRevisor } = request.user as RequestUserData;
 
     const response = await RequisicaoProfessorService.updateStatus(
       idReq,
@@ -36,6 +36,6 @@ export const RequisicaoProfessorController: Controller = {
         .send({ message: response.message });
     }
 
-    return reply.status(200).send(response.message);
+    return reply.status(200).send({message: response.message});
   },
 };

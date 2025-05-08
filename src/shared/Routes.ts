@@ -21,9 +21,13 @@ export const UsuarioRoutes: FastifyPluginAsyncZod = async (app) => {
   app.delete('/:id', UsuarioSchema.delete, UsuarioController.delete);
 
   // Fotos
-  app.post('/foto/:id', UsuarioController.fotoCreate);
-  app.put('/foto/:id', UsuarioController.fotoUpdate);
-  app.delete('/foto/:id', UsuarioController.fotoDelete);
+  app.post('/foto/:id', UsuarioSchema.fotoCreate, UsuarioController.fotoCreate);
+  app.put('/foto/:id', UsuarioSchema.fotoUpdate, UsuarioController.fotoUpdate);
+  app.delete(
+    '/foto/:id',
+    UsuarioSchema.fotoDelete,
+    UsuarioController.fotoDelete,
+  );
 };
 
 export const RequisicaoProfessorRoutes: FastifyPluginAsyncZod = async (app) => {
