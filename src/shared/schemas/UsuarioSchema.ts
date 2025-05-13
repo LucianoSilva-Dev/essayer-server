@@ -28,7 +28,6 @@ export const UsuarioSchema: EntitySchema = {
 
   create: {
     schema: {
-      security: [{ jwtAuth: [] }],
       body: createUsuarioBodyValidation,
       response: {
         201: genericSuccessResponse,

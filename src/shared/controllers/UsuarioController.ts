@@ -29,7 +29,7 @@ export const UsuarioController: Controller = {
     if (!response.success) {
       return reply
         .status(response.status as number)
-        .send({ message: response.message });
+        .send({ error: response.message });
     }
 
     return reply.status(201).send({ message: response.message });
