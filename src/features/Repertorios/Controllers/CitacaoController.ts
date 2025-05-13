@@ -4,9 +4,10 @@ import type { CreateCitacaoBody, UpdateCitacaoBody } from '../Types';
 
 export const CitacaoController: Controller = {
   citacaoGet: async (request, reply) => {
-    const { id } = request.params as { id: string };
+    const { id: citacaoId } = request.params as { id: string };
+    const { id: userId } = (request.user as RequestUserData) || { id: null };
 
-    const response = await CitacaoService.get(id);
+    const response = await CitacaoService.get(citacaoId, userId);
     if (!response.success) {
       return reply.status(response.status).send({ message: response.message });
     }

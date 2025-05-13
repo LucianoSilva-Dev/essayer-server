@@ -9,11 +9,13 @@ import {
   idValidation,
 } from '../../../shared/Validations';
 import { genericError, schemaValidationError } from '../../../shared/Schemas';
-import { authMiddleware } from '../../Auth/Plugins';
+import { authMiddleware, optionalAuthMiddleware } from '../../Auth/Plugins';
 
 export const ObraSchema: EntitySchema = {
   get: {
+    preHandler: optionalAuthMiddleware,
     schema: {
+      security: [{ jwtAuth: [] }, {}],
       params: idValidation,
       response: {
         200: getObraResponse,

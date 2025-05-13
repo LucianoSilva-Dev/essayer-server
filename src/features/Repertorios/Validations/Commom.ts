@@ -1,19 +1,15 @@
 import z from 'zod';
 
-export const comentarioResponse = z.object({
-  id: z.string(),
-  usuario: z.object({
-    id: z.string(),
-    nome: z.string(),
-    fotoPerfil: z.string(),
-  }),
-  texto: z.string()
-});
-
 export const perfilUsuarioResponse = z.object({
   id: z.string(),
   nome: z.string(),
   fotoPerfil: z.string().nullish(),
+});
+
+export const comentarioResponse = z.object({
+  id: z.string(),
+  usuario: perfilUsuarioResponse,
+  texto: z.string(),
 });
 
 export const paginacaoResponse = z.object({
@@ -22,4 +18,4 @@ export const paginacaoResponse = z.object({
   nextPageUrl: z.string().nullable(),
   previousPageUrl: z.string().nullable(),
   totalDocuments: z.number().int(),
-})
+});

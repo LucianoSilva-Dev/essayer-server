@@ -1,12 +1,13 @@
-import type { Controller } from '../../../shared/Types';
+import type { Controller, RequestUserData } from '../../../shared/Types';
 import { ObraService } from '../Services/ObraService';
 import type { CreateObraBody, UpdateObraBody } from '../Types';
 
 export const ObraController: Controller = {
   obraGet: async (request, reply) => {
     const { id: obraId } = request.params as { id: string };
+    const { id: userId } = (request.user as RequestUserData) || { id: null };
 
-    const response = await ObraService.get(obraId);
+    const response = await ObraService.get(obraId, userId);
     if (!response.success) {
       return reply.status(response.status).send({ message: response.message });
     }

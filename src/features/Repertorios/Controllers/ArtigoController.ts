@@ -5,8 +5,9 @@ import type { CreateArtigoBody, UpdateArtigoBody } from '../Types';
 export const ArtigoController: Controller = {
   artigoGet: async (request, reply) => {
     const { id: artigoId } = request.params as { id: string };
+    const { id: userId } = (request.user as RequestUserData) || { id: null };
 
-    const response = await ArtigoService.get(artigoId);
+    const response = await ArtigoService.get(artigoId, userId);
     if (!response.success) {
       return reply.status(response.status).send({ message: response.message });
     }

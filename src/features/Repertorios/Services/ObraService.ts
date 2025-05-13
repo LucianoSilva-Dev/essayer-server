@@ -7,6 +7,7 @@ import type {
   PerfilUsuario,
   UpdateObraBody,
 } from '../Types';
+import { montarInfosRepertorio } from '../Helpers/MontarInfosRepertorio';
 
 export const ObraService: Service = {
   create: async (createObraData: CreateObraBody, userId: string) => {
@@ -33,8 +34,8 @@ export const ObraService: Service = {
     }
     return { success: true, data: 'Obra atualizada com sucesso.' };
   },
-  get: async (id: string) => {
-    const obra = await ObraModel.findById(id)
+  get: async (obraId: string, userId?: string) => {
+    const obra = await ObraModel.findById(obraId)
       .populate('criador', '_id nome email')
       .populate('comentarios.usuario', '_id nome foto');
 
@@ -42,15 +43,11 @@ export const ObraService: Service = {
       return {
         success: false,
         status: 404,
-        message: `Obra com ID "${id}" não existe.`,
+        message: `Obra com ID "${obraId}" não existe.`,
       };
     }
 
-    const totalLikes = obra.likes.length;
-    const likeDoUsuario = obra.likes.includes(new Types.ObjectId(id));
-    const favoritadoPorUsuario = obra.favoritos.includes(
-      new Types.ObjectId(id),
-    );
+    const repertorioInfo = montarInfosRepertorio(obra, userId);
 
     const response: ObraResponse = {
       id: obra._id.toString(),
@@ -58,16 +55,14 @@ export const ObraService: Service = {
       sinopse: obra.sinopse,
       autor: obra.autor,
       criador: obra.criador as unknown as PerfilUsuario,
-      totalLikes,
-      likeDoUsuario,
-      favoritadoPorUsuario,
+      ...repertorioInfo,
       comentarios: obra.comentarios.map((comentario) => ({
         id: comentario._id.toString(),
         usuario: comentario.usuario as unknown as PerfilUsuario,
         texto: comentario.texto,
       })),
       subtopicos: obra.subtopicos,
-      tipoObra: obra.tipoObra
+      tipoObra: obra.tipoObra,
     };
     return { success: true, data: response };
   },

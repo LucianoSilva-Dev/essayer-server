@@ -1,4 +1,5 @@
 import type { Service } from '../../../shared/Types';
+import { montarInfosRepertorio } from '../Helpers/MontarInfosRepertorio';
 import { CitacaoModel } from '../Models/CitacaoModel';
 import type {
   CitacaoResponse,
@@ -24,7 +25,10 @@ export const CitacaoService: Service = {
     return { success: true, data: 'citação criada com sucesso.' };
   },
   update: async (updateCitacaoData: UpdateCitacaoBody, citacaoId: string) => {
-    const citacao = await CitacaoModel.findByIdAndUpdate(citacaoId, updateCitacaoData);
+    const citacao = await CitacaoModel.findByIdAndUpdate(
+      citacaoId,
+      updateCitacaoData,
+    );
 
     if (!citacao) {
       return {
@@ -36,8 +40,8 @@ export const CitacaoService: Service = {
 
     return { success: true, data: 'citação atualizada com sucesso.' };
   },
-  get: async (id: string) => {
-    const citacao = await CitacaoModel.findById(id)
+  get: async (citacaoId: string, userId?: string) => {
+    const citacao = await CitacaoModel.findById(citacaoId)
       .populate('criador', '_id nome email')
       .populate('comentarios.usuario', '_id nome foto');
 
@@ -45,21 +49,15 @@ export const CitacaoService: Service = {
       return {
         success: false,
         status: 404,
-        message: `Citação com ID "${id}" não existe.`,
+        message: `Citação com ID "${citacaoId}" não existe.`,
       };
     }
 
-    const totalLikes = citacao.likes.length;
-    const likeDoUsuario = citacao.likes.includes(new Types.ObjectId(id));
-    const favoritadoPorUsuario = citacao.favoritos.includes(
-      new Types.ObjectId(id),
-    );
+    const repertorioInfo = montarInfosRepertorio(citacao, userId);
 
     const response: CitacaoResponse = {
       id: citacao._id.toString(),
-      totalLikes,
-      likeDoUsuario,
-      favoritadoPorUsuario,
+      ...repertorioInfo, 
       frase: citacao.frase,
       autor: citacao.autor,
       fonte: citacao.fonte ? citacao.fonte : undefined,

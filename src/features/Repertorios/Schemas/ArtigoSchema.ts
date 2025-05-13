@@ -4,7 +4,7 @@ import {
   genericSuccessResponse,
   idValidation,
 } from '../../../shared/Validations';
-import { authMiddleware } from '../../Auth/Plugins';
+import { authMiddleware, optionalAuthMiddleware } from '../../Auth/Plugins';
 import {
   createArtigoBodyValidation,
   getArtigoResponse,
@@ -13,9 +13,9 @@ import {
 
 export const ArtigoSchema: EntitySchema = {
   get: {
-    preHandler: authMiddleware,
+    preHandler: optionalAuthMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ jwtAuth: [] }, {}],
       params: idValidation,
       response: {
         200: getArtigoResponse,

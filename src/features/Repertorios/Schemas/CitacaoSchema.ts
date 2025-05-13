@@ -9,13 +9,13 @@ import {
   genericSuccessResponse,
   idValidation,
 } from '../../../shared/Validations';
-import { authMiddleware } from '../../Auth/Plugins';
+import { authMiddleware, optionalAuthMiddleware } from '../../Auth/Plugins';
 
 export const CitacaoSchema: EntitySchema = {
   get: {
-    preHandler: authMiddleware,
+    preHandler: optionalAuthMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ jwtAuth: [] }, {}],
       params: idValidation,
       response: {
         200: getCitacaoResponse,
