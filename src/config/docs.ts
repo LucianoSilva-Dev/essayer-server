@@ -11,6 +11,7 @@ export const fastifySwaggerConfig: FastifyDynamicSwaggerOptions = {
     tags: [
       { name: 'Auth', description: 'Authentication related end-points' },
       { name: 'Background', description: 'Background related end-points' },
+      { name: 'Repertório', description: 'Rotas relacionadas aos repertórios' },
     ],
     components: {
       securitySchemes: {
