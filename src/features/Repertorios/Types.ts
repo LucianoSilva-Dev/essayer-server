@@ -90,14 +90,14 @@ export type PopulatedRepertorio = Omit<
   criador: {
     _id: Types.ObjectId;
     nome: string;
-    foto: string;
+    foto?: string;
   };
   comentarios: Types.DocumentArray<{
     _id: Types.ObjectId;
     usuario: {
       _id: Types.ObjectId;
       nome: string;
-      foto: string;
+      foto?: string;
     };
     texto: string;
   }>;

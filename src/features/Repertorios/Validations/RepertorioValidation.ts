@@ -1,6 +1,7 @@
 import z from 'zod';
 import { paginacaoResponse, perfilUsuarioResponse } from './Commom';
 import { isValidObjectId } from 'mongoose';
+import { HasUniqueItens } from '../Helpers/HasUniqueItens';
 
 export const getAllRepertorioObraDoc = z.object({
   tipoRepertorio: z.literal('Obra'),
@@ -64,14 +65,26 @@ export const createComentarioBodyValidation = z.object({
 export const getAllRepertorioQueryValidation = z.object({
   // opções de filtragem
   tipoRepertorio: z
-    .set(
+    .union([
+      z
+        .array(
+          z.enum(['Obra', 'Artigo', 'Citacao'], {
+            message:
+              'O campo tipoRepertorio só pode conter "Obra", "Artigo", e "Citacao"',
+          }),
+        )
+        .nonempty('O campo tipoRepertorio precisa conter ao menos um item')
+        .refine(
+          HasUniqueItens,
+          'O campo tipoRepertorio não pode conter valores repetidos',
+        ),
       z.enum(['Obra', 'Artigo', 'Citacao'], {
         message:
-          'O campo tipoRepertorio só pode conter "Obra", "Artigo", ou "Citacao"',
+          'O campo tipoRepertorio só pode conter "Obra", "Artigo", e "Citacao"',
+        required_error:
+          'O campo tipoRepertorio precisa conter ao menos um item',
       }),
-      { message: 'O campo tipoRepertorio não pode conter valores duplicados' },
-    )
-    .nonempty('O campo tipoRepertorio não pode estar vazio')
+    ])
     .optional(),
 
   conteudo: z
@@ -82,12 +95,22 @@ export const getAllRepertorioQueryValidation = z.object({
     .optional(),
 
   subtopicos: z
-    .array(
-      z.string({
-        invalid_type_error: 'O campo subtopicos precisa ser um texto.',
-      }),
+    .preprocess(
+      (val) => {
+        if (typeof val === 'string') return [val];
+        if (Array.isArray(val)) return val;
+        return []; // fallback seguro
+      },
+      z
+        .array(
+          z.string({
+            required_error:
+              'O campo subtopicos precisa conter ao menos um subtópico',
+            invalid_type_error: 'O campo subtopicos só pode conter texto',
+          }),
+        )
+        .min(1, 'O campo subtopicos precisa conter ao menos um subtópico'),
     )
-    .min(1, 'O campo subtopicos precisa conter ao menos um subtópico.')
     .optional(),
 
   criador: z

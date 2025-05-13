@@ -7,7 +7,7 @@ import type {
 
 export function formatCitacaoDoc(
   repertorio: HydratedDocument<Citacao & PopulatedWithCriador>,
-  userId: string,
+  userId?: string,
 ): GetAllRepertorioCitacaoDoc {
   const {
     __v,
@@ -24,10 +24,12 @@ export function formatCitacaoDoc(
     ...resto,
     id: _id.toString(),
     tipoRepertorio: 'Citacao',
-    likeDoUsuario: repertorio.likes.includes(new Types.ObjectId(userId)),
-    favoritadoPeloUsuario: repertorio.favoritos.includes(
-      new Types.ObjectId(userId),
-    ),
+    likeDoUsuario: userId
+      ? repertorio.likes.includes(new Types.ObjectId(userId))
+      : false,
+    favoritadoPeloUsuario: userId
+      ? repertorio.favoritos.includes(new Types.ObjectId(userId))
+      : false,
     criador: {
       id: criador._id.toString(),
       nome: criador.nome,

@@ -2,9 +2,6 @@ import app from './app';
 import mongoose from 'mongoose';
 import { MONGO_CONN_STR, SERVER_PORT } from './shared/Env';
 
-// enable mongoose sanitization for all models
-mongoose.set('sanitizeFilter', true);
-
 mongoose
   .connect(MONGO_CONN_STR as string)
   .then(() => {

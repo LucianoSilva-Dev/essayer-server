@@ -7,7 +7,7 @@ import type {
 
 export function formatArtigoDoc(
   repertorio: HydratedDocument<Artigo & PopulatedWithCriador>,
-  userId: string,
+  userId?: string,
 ): GetAllRepertorioArtigoDoc {
   const {
     __v,
@@ -24,10 +24,12 @@ export function formatArtigoDoc(
     ...resto,
     id: _id.toString(),
     tipoRepertorio: 'Artigo',
-    likeDoUsuario: repertorio.likes.includes(new Types.ObjectId(userId)),
-    favoritadoPeloUsuario: repertorio.favoritos.includes(
-      new Types.ObjectId(userId),
-    ),
+    likeDoUsuario: userId
+      ? repertorio.likes.includes(new Types.ObjectId(userId))
+      : false,
+    favoritadoPeloUsuario: userId
+      ? repertorio.favoritos.includes(new Types.ObjectId(userId))
+      : false,
     criador: {
       id: criador._id.toString(),
       nome: criador.nome,

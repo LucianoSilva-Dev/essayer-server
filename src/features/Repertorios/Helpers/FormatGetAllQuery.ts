@@ -14,7 +14,7 @@ import { formatCitacaoDoc } from './FormatCitacaoDoc';
 
 export function formatGetAllRepertorioQuery(
   repertorios: any[],
-  userId: string,
+  userId?: string,
 ): GetAllRepertorioDocuments {
   return repertorios.map((repertorio) => {
     if (isRepertorioDocument<Obra & PopulatedWithCriador>(repertorio, 'Obra'))

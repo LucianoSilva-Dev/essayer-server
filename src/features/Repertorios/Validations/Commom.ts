@@ -13,7 +13,7 @@ export const comentarioResponse = z.object({
 export const perfilUsuarioResponse = z.object({
   id: z.string(),
   nome: z.string(),
-  fotoPerfil: z.string(),
+  fotoPerfil: z.string().nullish(),
 });
 
 export const paginacaoResponse = z.object({

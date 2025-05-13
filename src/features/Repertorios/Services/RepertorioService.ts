@@ -10,13 +10,13 @@ import type {
 } from '../Types';
 import { formatGetAllRepertorioQuery } from '../Helpers/FormatGetAllQuery';
 import { montarSort } from '../Helpers/MontarSort';
-import { HydratedDocument, Types } from 'mongoose';
+import mongoose, { HydratedDocument, Types } from 'mongoose';
 
 export const RepertorioService: Service = {
   getAll: async (
     queryBody: GetAllRepertorioQueryBody,
     reqUrl: string,
-    userId = '',
+    userId?: string,
   ) => {
     if (
       (queryBody.favoritadoPeloUsuario && !userId) ||
@@ -31,13 +31,18 @@ export const RepertorioService: Service = {
 
     const filtros = montarFiltros(queryBody, userId);
     const sort = montarSort(queryBody);
-    const repertorios = await RepertorioModel.find(filtros)
-      .skip(queryBody.offset)
-      .limit(queryBody.limit)
-      .sort(sort)
-      .populate<Pick<PopulatedRepertorio, 'criador'>>('criador')
 
-    const totalDocuments = repertorios.length;
+    const [repertorios, totalDocuments] = await Promise.all([
+      RepertorioModel.find(filtros)
+        .skip(queryBody.offset)
+        .limit(queryBody.limit)
+        .sort(sort)
+        .populate<Pick<PopulatedRepertorio, 'criador'>>('criador')
+        .exec(),
+
+      RepertorioModel.countDocuments(filtros),
+    ]);
+
     const paginacao = montarPaginação(queryBody, reqUrl, totalDocuments);
 
     const formattedRepertorios = formatGetAllRepertorioQuery(
@@ -63,7 +68,7 @@ export const RepertorioService: Service = {
     return { success: true, data: 'Repertório deletado com sucesso.' };
   },
 
-  createComentario:async (
+  createComentario: async (
     repertorioId: string,
     userId: string,
     comentarioBody: CreateComentarioBody,
@@ -80,7 +85,7 @@ export const RepertorioService: Service = {
     const comentario = repertorio.comentarios.create({
       usuario: userId,
       texto: comentarioBody.texto,
-    })
+    });
     repertorio.comentarios.push(comentario);
     await repertorio.save();
 
@@ -105,7 +110,7 @@ export const RepertorioService: Service = {
       };
     }
 
-    await comentario.deleteOne()
+    await comentario.deleteOne();
     await repertorio.save();
 
     return { success: true, data: 'Comentario removido com sucesso.' };

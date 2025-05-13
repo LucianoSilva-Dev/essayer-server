@@ -4,17 +4,21 @@ import {
   genericSuccessResponse,
   idValidation,
 } from '../../../shared/Validations';
-import { authMiddleware } from '../../Auth/Plugins';
+import { authMiddleware, optionalAuthMiddleware } from '../../Auth/Plugins';
 import {
   createComentarioBodyValidation,
   getAllRepertorioQueryValidation,
+  getAllRepertorioResponse,
 } from '../Validations/RepertorioValidation';
 
 export const RepertorioSchema: EntitySchema = {
   get_all: {
+    preHandler: optionalAuthMiddleware,
     schema: {
+      security: [{jwtAuth: []}, {}], // "{}" significa autenticacão opcional
       querystring: getAllRepertorioQueryValidation,
       response: {
+        200: getAllRepertorioResponse,
         400: schemaValidationError,
         401: genericError,
         500: genericError,

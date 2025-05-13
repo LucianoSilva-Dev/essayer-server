@@ -1,10 +1,16 @@
-import { HydratedDocument, Schema, Types, model, type Model } from 'mongoose';
+import {
+  type HydratedDocument,
+  Schema,
+  type Types,
+  model,
+  type Model,
+} from 'mongoose';
 import type { ComentarioSubDoc, Repertorio } from '../Types';
 
 const ComentarioSubDocSchema = new Schema({
   texto: { type: String, required: true },
   usuario: { type: Schema.Types.ObjectId, ref: 'Usuario' },
-})
+});
 
 // O seguinte model é usado como um modelo base para outros tipos de repertórios,
 // ele contém os campos comuns a todos os repertórios, e faz com que todos que herdem dele
@@ -24,10 +30,19 @@ export const RepertorioDBSchema = new Schema<Repertorio>(
 );
 
 // TMethodsAndOverrides
-export type THydratedRepertorioDocument = HydratedDocument<Repertorio, {
-  comentarios: Types.DocumentArray<ComentarioSubDoc>;
-}>;
-type RepertorioModelType = Model<Repertorio, {}, {}, {}, THydratedRepertorioDocument>;
+export type THydratedRepertorioDocument = HydratedDocument<
+  Repertorio,
+  {
+    comentarios: Types.DocumentArray<ComentarioSubDoc>;
+  }
+>;
+type RepertorioModelType = Model<
+  Repertorio,
+  {},
+  {},
+  {},
+  THydratedRepertorioDocument
+>;
 
 export const RepertorioModel = model<Repertorio, RepertorioModelType>(
   'Repertorio',
