@@ -2,7 +2,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { AuthSchema } from './Schemas';
 import { AddEntityWiseTags } from '../../shared/Utils';
 import { AuthController } from './Controller';
-import { authPlugin } from './Plugins';
+import { authPlugin } from '../../shared/plugins/auth';
 
 export const AuthRoutes: FastifyPluginAsyncZod = async (app) => {
   AddEntityWiseTags(app, ['Auth']);

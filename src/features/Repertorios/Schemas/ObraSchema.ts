@@ -9,7 +9,10 @@ import {
   idValidation,
 } from '../../../shared/Validations';
 import { genericError, schemaValidationError } from '../../../shared/Schemas';
-import { authMiddleware, optionalAuthMiddleware } from '../../Auth/Plugins';
+import {
+  authMiddleware,
+  optionalAuthMiddleware,
+} from '../../../shared/middlewares/Authentication';
 
 export const ObraSchema: EntitySchema = {
   get: {

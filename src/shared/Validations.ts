@@ -12,4 +12,6 @@ export const idValidation = z.object({
 
 export const genericSuccessResponse = z.object({
   message: z.string(),
-})
+});
+
+export const userCargo = z.enum(['admin', 'aluno', 'professor']);

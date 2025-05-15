@@ -5,7 +5,7 @@ import z from 'zod';
 import { idValidation } from '../../shared/Validations';
 
 import { createBackgroundBodyValidation } from './Validations';
-import { authMiddleware } from '../Auth/Plugins';
+import { authMiddleware } from '../../shared/middlewares/Authentication';
 
 export const getBackgroundResponse = z.object({
   id: z.string(),

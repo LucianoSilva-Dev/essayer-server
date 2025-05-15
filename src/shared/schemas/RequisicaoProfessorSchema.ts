@@ -1,4 +1,3 @@
-import { authMiddleware } from '../../features/Auth/Plugins';
 import { genericError, schemaValidationError } from '../Schemas';
 import type { EntitySchema } from '../Types';
 import { z } from 'zod';
@@ -7,7 +6,7 @@ import {
   getRequisicaoProfessorResponse,
   updateStatusBodyValidation,
 } from '../validations/RequisicaoProfessorValidation';
-import { authAdmin, authProfessor } from '../plugins/auth';
+import { authAdmin, authProfessor } from '../middlewares/Authorization';
 
 export const RequisicaoProfessorSchema: EntitySchema = {
   getAll: {

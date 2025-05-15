@@ -4,7 +4,10 @@ import {
   genericSuccessResponse,
   idValidation,
 } from '../../../shared/Validations';
-import { authMiddleware, optionalAuthMiddleware } from '../../Auth/Plugins';
+import {
+  authMiddleware,
+  optionalAuthMiddleware,
+} from '../../../shared/middlewares/Authentication';
 import {
   createArtigoBodyValidation,
   getArtigoResponse,
