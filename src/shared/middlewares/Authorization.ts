@@ -11,7 +11,7 @@ export const authProfessor = async (
     const { cargo } = request.user as RequestUserData;
 
     if (cargo === 'aluno') {
-      reply.status(401).send({ error: 'Necessário login como professor.' });
+      reply.status(403).send({ error: 'Necessário login como professor.' });
     }
   } catch (err) {
     reply.status(401).send({ error: 'Login necessário.' });
@@ -28,7 +28,7 @@ export const authAdmin = async (
     const { cargo } = request.user as RequestUserData;
 
     if (cargo !== 'admin') {
-      reply.status(401).send({ error: 'Necessário login como administrador.' });
+      reply.status(403).send({ error: 'Necessário login como administrador.' });
     }
   } catch (err) {
     reply.status(401).send({ error: 'Login necessário.' });

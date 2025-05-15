@@ -13,6 +13,7 @@ import {
   authMiddleware,
   optionalAuthMiddleware,
 } from '../../../shared/middlewares/Authentication';
+import { authProfessor } from '../../../shared/middlewares/Authorization';
 
 export const CitacaoSchema: EntitySchema = {
   get: {
@@ -31,7 +32,7 @@ export const CitacaoSchema: EntitySchema = {
     },
   },
   create: {
-    preHandler: authMiddleware,
+    preHandler: authProfessor,
     schema: {
       security: [{ jwtAuth: [] }],
       body: createCitacaoBodyValidation,
@@ -39,13 +40,14 @@ export const CitacaoSchema: EntitySchema = {
         201: genericSuccessResponse,
         400: schemaValidationError,
         401: genericError,
+        403: genericError,
         500: genericError,
       },
       summary: 'Cria nova citação',
     },
   },
   update: {
-    preHandler: authMiddleware,
+    preHandler: authProfessor,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
@@ -54,6 +56,7 @@ export const CitacaoSchema: EntitySchema = {
         200: genericSuccessResponse,
         400: schemaValidationError,
         401: genericError,
+        403: genericError,
         404: genericError,
         500: genericError,
       },
