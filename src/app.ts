@@ -16,6 +16,7 @@ import { appErrorHandler } from './shared/plugins/appErrorHandler';
 
 import { AuthRoutes } from './features/Auth/Routes';
 import { BackgroundRoutes } from './features/Background/Routes';
+import { RepertorioRoutes } from './features/Repertorios/Routes';
 import { appConfig } from './config/app';
 import { RequisicaoProfessorRoutes, UsuarioRoutes } from './shared/Routes';
 
@@ -49,6 +50,7 @@ class App {
     this.app.register(RequisicaoProfessorRoutes, {
       prefix: '/requisicao-professor',
     });
+    this.app.register(RepertorioRoutes, { prefix: '/repertorio', });
   }
 }
 

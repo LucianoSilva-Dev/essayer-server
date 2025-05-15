@@ -1,6 +1,6 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { AddEntityWiseTags } from './Utils';
-import { authPlugin } from '../features/Auth/Plugins';
+import { authPlugin } from './plugins/auth';
 import { UsuarioController } from './controllers/UsuarioController';
 import { RequisicaoProfessorController } from './controllers/RequisicaoProfessorController';
 import { UsuarioSchema } from './schemas/UsuarioSchema';

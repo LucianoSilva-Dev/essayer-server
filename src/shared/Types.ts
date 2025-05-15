@@ -17,6 +17,7 @@ import type {
   updateUsuarioBodyValidation,
 } from './validations/UsuarioValidation';
 import type { updateStatusBodyValidation } from './validations/RequisicaoProfessorValidation';
+import type { userCargo } from './Validations';
 
 export type RouteSchema = RouteShorthandOptions<
   RawServerDefault,
@@ -40,9 +41,22 @@ export type ControllerMethod = (
 
 export type Controller = Record<string, ControllerMethod>;
 
+export type ServiceMethod = (
+  // biome-ignore lint/suspicious/noExplicitAny:
+  ...args: any[]
+) => Promise<
+  | { success: false; status: number; message: string }
+  // biome-ignore lint/suspicious/noExplicitAny:
+  | { success: true; data: any }
+>;
+
+export type Service = Record<string, ServiceMethod>;
+
+export type UserCargo = z.infer<typeof userCargo>;
+
 export type RequestUserData = {
   id: string;
-  cargo: string;
+  cargo: UserCargo;
   iat: number;
 };
 

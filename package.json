@@ -25,7 +25,6 @@
     "fastify-type-provider-zod": "^4.0.2",
     "fs-extra": "^11.3.0",
     "mongoose": "^8.12.1",
-    "tsx": "^4.19.3",
     "zod": "^3.24.2"
   },
   "peerDependencies": {
@@ -37,7 +36,8 @@
     "@types/bun": "latest",
     "@types/fs-extra": "^11.0.4",
     "@types/mongoose": "^5.11.97",
-    "@types/node": "^22.13.14"
+    "@types/node": "^22.13.14",
+    "tsx": "^4.19.4"
   },
   "pnpm": {
     "overrides": {

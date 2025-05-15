@@ -1,4 +1,4 @@
-import { authUsuario } from '../plugins/auth';
+import { authMiddleware } from '../middlewares/Authentication';
 import { genericError, schemaValidationError } from '../Schemas';
 import type { EntitySchema } from '../Types';
 import { idValidation, genericSuccessResponse } from '../Validations';
@@ -11,7 +11,7 @@ import {
 
 export const UsuarioSchema: EntitySchema = {
   get: {
-    preHandler: authUsuario,
+    preHandler: authMiddleware,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
@@ -28,7 +28,6 @@ export const UsuarioSchema: EntitySchema = {
 
   create: {
     schema: {
-      security: [{ jwtAuth: [] }],
       body: createUsuarioBodyValidation,
       response: {
         201: genericSuccessResponse,
@@ -42,7 +41,7 @@ export const UsuarioSchema: EntitySchema = {
   },
 
   professorCreate: {
-    preHandler: authUsuario,
+    preHandler: authMiddleware,
     schema: {
       security: [{ jwtAuth: [] }],
       body: professorCreateBodyValidation,
@@ -57,7 +56,7 @@ export const UsuarioSchema: EntitySchema = {
   },
 
   update: {
-    preHandler: authUsuario,
+    preHandler: authMiddleware,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
@@ -74,7 +73,7 @@ export const UsuarioSchema: EntitySchema = {
   },
 
   delete: {
-    preHandler: authUsuario,
+    preHandler: authMiddleware,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
@@ -90,7 +89,7 @@ export const UsuarioSchema: EntitySchema = {
   },
 
   fotoCreate: {
-    preHandler: authUsuario,
+    preHandler: authMiddleware,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
@@ -107,7 +106,7 @@ export const UsuarioSchema: EntitySchema = {
   },
 
   fotoUpdate: {
-    preHandler: authUsuario,
+    preHandler: authMiddleware,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
@@ -123,7 +122,7 @@ export const UsuarioSchema: EntitySchema = {
   },
 
   fotoDelete: {
-    preHandler: authUsuario,
+    preHandler: authMiddleware,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
