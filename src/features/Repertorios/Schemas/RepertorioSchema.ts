@@ -4,7 +4,11 @@ import {
   genericSuccessResponse,
   idValidation,
 } from '../../../shared/Validations';
-import { authMiddleware, optionalAuthMiddleware } from '../../Auth/Plugins';
+import {
+  authMiddleware,
+  optionalAuthMiddleware,
+} from '../../../shared/middlewares/Authentication';
+import { authProfessor } from '../../../shared/middlewares/Authorization';
 import {
   createComentarioBodyValidation,
   getAllRepertorioQueryValidation,
@@ -15,7 +19,7 @@ export const RepertorioSchema: EntitySchema = {
   get_all: {
     preHandler: optionalAuthMiddleware,
     schema: {
-      security: [{jwtAuth: []}, {}], // "{}" significa autenticacão opcional
+      security: [{ jwtAuth: [] }, {}], // "{}" significa autenticacão opcional
       querystring: getAllRepertorioQueryValidation,
       response: {
         200: getAllRepertorioResponse,
@@ -27,7 +31,7 @@ export const RepertorioSchema: EntitySchema = {
     },
   },
   delete: {
-    preHandler: authMiddleware,
+    preHandler: authProfessor,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
@@ -35,6 +39,7 @@ export const RepertorioSchema: EntitySchema = {
         200: genericSuccessResponse,
         400: schemaValidationError,
         401: genericError,
+        403: genericError,
         404: genericError,
         500: genericError,
       },
@@ -43,7 +48,7 @@ export const RepertorioSchema: EntitySchema = {
   },
 
   createComentario: {
-    preHandler: authMiddleware,
+    preHandler: authProfessor,
     schema: {
       security: [{ jwtAuth: [] }],
       body: createComentarioBodyValidation,
@@ -51,6 +56,7 @@ export const RepertorioSchema: EntitySchema = {
         200: genericSuccessResponse,
         400: schemaValidationError,
         401: genericError,
+        403: genericError,
         404: genericError,
         500: genericError,
       },
@@ -58,13 +64,14 @@ export const RepertorioSchema: EntitySchema = {
     },
   },
   deleteComentario: {
-    preHandler: authMiddleware,
+    preHandler: authProfessor,
     schema: {
       security: [{ jwtAuth: [] }],
       response: {
         200: genericSuccessResponse,
         400: schemaValidationError,
         401: genericError,
+        403: genericError,
         404: genericError,
         500: genericError,
       },

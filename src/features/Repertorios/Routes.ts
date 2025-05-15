@@ -7,7 +7,7 @@ import { CitacaoController } from './Controllers/CitacaoController';
 import { RepertorioController } from './Controllers/RepertorioController';
 import { ObraController } from './Controllers/ObraController';
 import { ArtigoController } from './Controllers/ArtigoController';
-import { authPlugin } from '../Auth/Plugins';
+import { authPlugin } from '../../shared/plugins/auth';
 import { AddEntityWiseTags } from '../../shared/Utils';
 
 export const RepertorioRoutes: FastifyPluginAsyncZod = async (app) => {

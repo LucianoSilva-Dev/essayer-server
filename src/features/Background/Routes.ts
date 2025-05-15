@@ -2,7 +2,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { BackgroundSchema } from './Schemas';
 import { AddEntityWiseTags } from '../../shared/Utils';
 import { BackgroundController } from './Controller';
-import { authPlugin } from '../Auth/Plugins';
+import { authPlugin } from '../../shared/plugins/auth';
 
 export const BackgroundRoutes: FastifyPluginAsyncZod = async (app) => {
   AddEntityWiseTags(app, ['Background']);

@@ -1,9 +1,10 @@
 import { z } from 'zod';
+import { userCargo } from '../Validations';
 
 export const getUsuarioResponse = z.object({
   id: z.string(),
   nome: z.string(),
-  cargo: z.enum(['aluno', 'professor', 'admin']),
+  cargo: userCargo,
 });
 
 export const createUsuarioBodyValidation = z.object({

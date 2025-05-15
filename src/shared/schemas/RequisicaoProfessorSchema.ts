@@ -1,4 +1,3 @@
-import { authMiddleware } from '../../features/Auth/Plugins';
 import { genericError, schemaValidationError } from '../Schemas';
 import type { EntitySchema } from '../Types';
 import { z } from 'zod';
@@ -7,7 +6,7 @@ import {
   getRequisicaoProfessorResponse,
   updateStatusBodyValidation,
 } from '../validations/RequisicaoProfessorValidation';
-import { authAdmin, authProfessor } from '../plugins/auth';
+import { authAdmin, authProfessor } from '../middlewares/Authorization';
 
 export const RequisicaoProfessorSchema: EntitySchema = {
   getAll: {
@@ -18,6 +17,7 @@ export const RequisicaoProfessorSchema: EntitySchema = {
         200: z.array(getRequisicaoProfessorResponse),
         400: schemaValidationError,
         401: genericError,
+        403: genericError,
         500: genericError,
       },
       summary: 'Recupera todas as requisições de cadastro de professores',
@@ -33,6 +33,7 @@ export const RequisicaoProfessorSchema: EntitySchema = {
         200: getRequisicaoProfessorResponse,
         400: schemaValidationError,
         401: genericError,
+        403: genericError,
         404: genericError,
         500: genericError,
       },
@@ -50,6 +51,7 @@ export const RequisicaoProfessorSchema: EntitySchema = {
         200: genericSuccessResponse,
         400: schemaValidationError,
         401: genericError,
+        403: genericError,
         404: genericError,
         500: genericError,
       },

@@ -17,6 +17,7 @@ import type {
   updateUsuarioBodyValidation,
 } from './validations/UsuarioValidation';
 import type { updateStatusBodyValidation } from './validations/RequisicaoProfessorValidation';
+import type { userCargo } from './Validations';
 
 export type RouteSchema = RouteShorthandOptions<
   RawServerDefault,
@@ -51,9 +52,11 @@ export type ServiceMethod = (
 
 export type Service = Record<string, ServiceMethod>;
 
+export type UserCargo = z.infer<typeof userCargo>;
+
 export type RequestUserData = {
   id: string;
-  cargo: string;
+  cargo: UserCargo;
   iat: number;
 };
 

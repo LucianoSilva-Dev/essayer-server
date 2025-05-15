@@ -4,7 +4,11 @@ import {
   genericSuccessResponse,
   idValidation,
 } from '../../../shared/Validations';
-import { authMiddleware, optionalAuthMiddleware } from '../../Auth/Plugins';
+import {
+  authMiddleware,
+  optionalAuthMiddleware,
+} from '../../../shared/middlewares/Authentication';
+import { authProfessor } from '../../../shared/middlewares/Authorization';
 import {
   createArtigoBodyValidation,
   getArtigoResponse,
@@ -28,7 +32,7 @@ export const ArtigoSchema: EntitySchema = {
     },
   },
   create: {
-    preHandler: authMiddleware,
+    preHandler: authProfessor,
     schema: {
       security: [{ jwtAuth: [] }],
       body: createArtigoBodyValidation,
@@ -36,13 +40,14 @@ export const ArtigoSchema: EntitySchema = {
         201: genericSuccessResponse,
         400: schemaValidationError,
         401: genericError,
+        403: genericError,
         500: genericError,
       },
       summary: 'Cria novo artigo',
     },
   },
   update: {
-    preHandler: authMiddleware,
+    preHandler: authProfessor,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
@@ -51,6 +56,7 @@ export const ArtigoSchema: EntitySchema = {
         200: genericSuccessResponse,
         400: schemaValidationError,
         401: genericError,
+        403: genericError,
         404: genericError,
         500: genericError,
       },
