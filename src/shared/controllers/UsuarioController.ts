@@ -15,7 +15,7 @@ export const UsuarioController: Controller = {
     if (!response.success) {
       return reply
         .status(response.status as number)
-        .send({ message: response.message });
+        .send({ error: response.message });
     }
 
     return reply.status(200).send(response.data);
@@ -46,13 +46,20 @@ export const UsuarioController: Controller = {
   update: async (request, reply) => {
     const { nome, email, senha } = request.body as updateUsuarioBody;
     const { id } = request.params as { id: string };
+    const { id: requisitor } = request.user as RequestUserData;
+
+    if (requisitor !== id) {
+      return reply.status(403).send({
+        error: 'Não é possível editar informações de outro usuário.',
+      });
+    }
 
     const response = await UsuarioService.update(id, { nome, email, senha });
 
     if (!response.success) {
       return reply
         .status(response.status as number)
-        .send({ message: response.message });
+        .send({ error: response.message });
     }
 
     return reply.status(200).send({ message: response.message });
@@ -60,13 +67,20 @@ export const UsuarioController: Controller = {
 
   delete: async (request, reply) => {
     const { id } = request.params as { id: string };
+    const { id: requisitante, cargo } = request.user as RequestUserData;
+
+    if (requisitante !== id && cargo !== 'admin') {
+      return reply.status(403).send({
+        error: 'Não é possível editar a conta de outro usuário.',
+      });
+    }
 
     const response = await UsuarioService.delete(id);
 
     if (!response.success) {
       return reply
         .status(response.status as number)
-        .send({ message: response.message });
+        .send({ error: response.message });
     }
 
     return reply.status(200).send({ message: response.message });
@@ -74,14 +88,21 @@ export const UsuarioController: Controller = {
 
   fotoCreate: async (request, reply) => {
     const { id } = request.params as { id: string };
+    const { id: requisitor } = request.user as RequestUserData;
     const files = await request.saveRequestFiles();
+
+    if (requisitor !== id) {
+      return reply.status(403).send({
+        error: 'Não é possível editar informações de outro usuário.',
+      });
+    }
 
     const response = await UsuarioService.fotoCreate(id, files[0]);
 
     if (!response.success) {
       return reply
         .status(response.status as number)
-        .send({ message: response.message });
+        .send({ error: response.message });
     }
 
     return reply.status(200).send({ message: response.message });
@@ -89,14 +110,21 @@ export const UsuarioController: Controller = {
 
   fotoUpdate: async (request, reply) => {
     const { id } = request.params as { id: string };
+    const { id: requisitor } = request.user as RequestUserData;
     const files = await request.saveRequestFiles();
+
+    if (requisitor !== id) {
+      return reply.status(403).send({
+        error: 'Não é possível editar informações de outro usuário.',
+      });
+    }
 
     const response = await UsuarioService.fotoUpdate(id, files[0]);
 
     if (!response.success) {
       return reply
         .status(response.status as number)
-        .send({ message: response.message });
+        .send({ error: response.message });
     }
 
     return reply.status(200).send({ message: response.message });
@@ -104,6 +132,13 @@ export const UsuarioController: Controller = {
 
   fotoDelete: async (request, reply) => {
     const { id } = request.params as { id: string };
+    const { id: requisitor } = request.user as RequestUserData;
+
+    if (requisitor !== id) {
+      return reply.status(403).send({
+        error: 'Não é possível editar informações de outro usuário.',
+      });
+    }
 
     const response = await UsuarioService.fotoDelete(id);
 

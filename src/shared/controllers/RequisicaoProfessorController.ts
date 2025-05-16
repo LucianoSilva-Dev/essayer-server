@@ -14,7 +14,7 @@ export const RequisicaoProfessorController: Controller = {
     if (!response.success) {
       return reply
         .status(response.status as number)
-        .send({ message: response.message });
+        .send({ error: response.message });
     }
 
     return reply.status(200).send(response.data);
@@ -23,19 +23,28 @@ export const RequisicaoProfessorController: Controller = {
   updateStatus: async (request, reply) => {
     const { status } = request.body as updateStatusBody;
     const { id: idReq } = request.params as { id: string };
-    const { id: idRevisor } = request.user as RequestUserData;
+    const { id: idRevisor, cargo } = request.user as RequestUserData;
+
+    if (cargo !== 'admin') {
+      return reply
+        .status(403)
+        .send({
+          error: 'Somente admins podem revisar requisições de cadastro.',
+        });
+    }
 
     const response = await RequisicaoProfessorService.updateStatus(
       idReq,
       idRevisor,
       status,
     );
+    
     if (!response.success) {
       return reply
         .status(response.status as number)
-        .send({ message: response.message });
+        .send({ error: response.message });
     }
 
-    return reply.status(200).send({message: response.message});
+    return reply.status(200).send({ message: response.message });
   },
 };

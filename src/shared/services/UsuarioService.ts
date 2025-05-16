@@ -1,11 +1,10 @@
 import { UserModel } from '../../features/Auth/Model';
 import { UsuarioModel } from '../models/UsuarioModel';
 import crypto from 'bcryptjs';
-import type { createUsuarioBody, updateUsuarioBody } from '../Types';
+import type { createUsuarioBody, RequestUserData, updateUsuarioBody } from '../Types';
 import { RequisicaoProfessorModel } from '../models/RequisicaoProfessorModel';
 import type { SavedMultipartFile } from '@fastify/multipart';
 import fs from 'fs-extra';
-import { extname } from 'node:path';
 
 export const UsuarioService = {
   get: async (id: string) => {
@@ -107,9 +106,9 @@ export const UsuarioService = {
   },
 
   fotoCreate: async (id: string, img: SavedMultipartFile) => {
-    const destiny = `${process.cwd()}/profilePictures/${id}/`;
+    const destiny = `${process.cwd()}\\profilePictures\\${id}\\`;
 
-    const usuario = UsuarioModel.findByIdAndUpdate(id, {
+    const usuario = await UsuarioModel.findByIdAndUpdate(id, {
       $set: { foto: destiny + img.filename },
     });
 
@@ -135,7 +134,7 @@ export const UsuarioService = {
   },
 
   fotoUpdate: async (id: string, img: SavedMultipartFile) => {
-    const destiny = `${process.cwd()}/profilePictures/${id}/`;
+    const destiny = `${process.cwd()}\\profilePictures\\${id}\\`;
 
     if (!fs.pathExistsSync(destiny)) {
       return {
@@ -145,7 +144,7 @@ export const UsuarioService = {
       };
     }
 
-    const usuario = UsuarioModel.findByIdAndUpdate(id, {
+    const usuario = await UsuarioModel.findByIdAndUpdate(id, {
       foto: destiny + img.filename,
     });
 
@@ -164,7 +163,7 @@ export const UsuarioService = {
   },
 
   fotoDelete: async (id: string) => {
-    const destiny = `${process.cwd()}/profilePictures/${id}/`;
+    const destiny = `${process.cwd()}\\profilePictures\\${id}\\`;
 
     if (!fs.pathExistsSync(destiny)) {
       return {
@@ -174,7 +173,9 @@ export const UsuarioService = {
       };
     }
 
-    const usuario = UsuarioModel.findByIdAndUpdate(id, { foto: undefined });
+    const usuario = await UsuarioModel.findByIdAndUpdate(id, {
+      foto: undefined,
+    });
 
     if (!usuario) {
       return {
