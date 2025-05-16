@@ -2,6 +2,8 @@ import { configDotenv } from 'dotenv';
 configDotenv();
 
 const JWT_SECRET = process.env.JWT_SECRET;
+const SMTP_KEY = process.env.SMTP_KEY;
+const SMTP_SECRET = process.env.SMTP_SECRET;
 
 if (!JWT_SECRET) {
   console.error('JWT_SECRET is not defined');
@@ -22,4 +24,9 @@ if (!MONGO_CONN_STR) {
   process.exit(1);
 }
 
-export { JWT_SECRET, SERVER_PORT, MONGO_CONN_STR };
+if (!SMTP_KEY || !SMTP_SECRET){
+  console.error("SMTP is not defined.");
+  process.exit(1);
+}
+
+export { JWT_SECRET, SERVER_PORT, MONGO_CONN_STR, SMTP_KEY, SMTP_SECRET };

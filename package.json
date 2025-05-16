@@ -25,6 +25,8 @@
     "fastify-type-provider-zod": "^4.0.2",
     "fs-extra": "^11.3.0",
     "mongoose": "^8.12.1",
+    "nodemailer": "^7.0.3",
+    "nodemailer-mailjet-transport": "^1.0.4",
     "zod": "^3.24.2",
     "zod-form-data": "^2.0.7"
   },
@@ -38,6 +40,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.13.14",
+    "@types/nodemailer": "^6.4.17",
     "tsx": "^4.19.4"
   },
   "pnpm": {

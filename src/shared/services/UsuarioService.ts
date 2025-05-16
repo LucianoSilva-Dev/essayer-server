@@ -1,9 +1,13 @@
 import { UserModel } from '../../features/Auth/Model';
 import { UsuarioModel } from '../models/UsuarioModel';
 import crypto from 'bcryptjs';
-import type { createUsuarioBody, RequestUserData, updateUsuarioBody } from '../Types';
+import type { createUsuarioBody, updateUsuarioBody } from '../Types';
 import { RequisicaoProfessorModel } from '../models/RequisicaoProfessorModel';
 import type { SavedMultipartFile } from '@fastify/multipart';
+import { createTransport } from 'nodemailer';
+import mailjetTransport from 'nodemailer-mailjet-transport';
+import { SMTP_KEY, SMTP_SECRET } from '../Env';
+
 import fs from 'fs-extra';
 
 export const UsuarioService = {
@@ -44,6 +48,22 @@ export const UsuarioService = {
       email,
       senha: hashedSenha,
       cargo: 'aluno',
+    });
+
+    const transporter = createTransport(
+      mailjetTransport({
+        auth: {
+          apiKey: SMTP_KEY,
+          apiSecret: SMTP_SECRET,
+        },
+      }),
+    );
+
+    transporter.sendMail({
+      from: 'murillo.dev.teste@gmail.com',
+      to: email,
+      subject: 'Cadastro Incita',
+      html: '<h1>Template</h1>',
     });
 
     return {
