@@ -1,6 +1,6 @@
 import app from './app';
 import mongoose from 'mongoose';
-import { MONGO_CONN_STR, SERVER_PORT } from './shared/Env';
+import { HOST, MONGO_CONN_STR, SERVER_PORT } from './shared/Env';
 
 mongoose
   .connect(MONGO_CONN_STR as string)
@@ -11,7 +11,7 @@ mongoose
     console.error('Error connecting to MongoDB:', err);
   });
 
-app.listen({ port: SERVER_PORT }, (err, address) => {
+app.listen({ port: SERVER_PORT, host: HOST as string }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);
