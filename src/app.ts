@@ -15,7 +15,6 @@ import fastifyMultipart from '@fastify/multipart';
 import { appErrorHandler } from './shared/plugins/appErrorHandler';
 
 import { AuthRoutes } from './features/Auth/Routes';
-import { BackgroundRoutes } from './features/Background/Routes';
 import { RepertorioRoutes } from './features/Repertorios/Routes';
 import { appConfig } from './config/app';
 import { RequisicaoProfessorRoutes, UsuarioRoutes } from './shared/Routes';
@@ -45,7 +44,6 @@ class App {
 
   private routes() {
     this.app.register(AuthRoutes, { prefix: '/auth' });
-    this.app.register(BackgroundRoutes, { prefix: '/background' });
     this.app.register(UsuarioRoutes, { prefix: '/usuario' });
     this.app.register(RequisicaoProfessorRoutes, {
       prefix: '/requisicao-professor',
