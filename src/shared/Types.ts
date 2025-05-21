@@ -14,10 +14,13 @@ import type { z } from 'zod';
 import type {
   createUsuarioBodyValidation,
   professorCreateBodyValidation,
+  updateSenhaBodyValidation,
   updateUsuarioBodyValidation,
 } from './validations/UsuarioValidation';
 import type { updateStatusBodyValidation } from './validations/RequisicaoProfessorValidation';
 import type { userCargo } from './Validations';
+import type { validateRequisicaoMudancaSenhaBodyValidation } from './validations/RequisicaoMudancaSenhaValidation';
+import type { validateRequisicaoUsuarioBodyValidation } from './validations/RequisicaoUsuarioValidation';
 
 export type RouteSchema = RouteShorthandOptions<
   RawServerDefault,
@@ -64,3 +67,8 @@ export type createUsuarioBody = z.infer<typeof createUsuarioBodyValidation>;
 export type updateUsuarioBody = z.infer<typeof updateUsuarioBodyValidation>;
 export type professorCreateBody = z.infer<typeof professorCreateBodyValidation>;
 export type updateStatusBody = z.infer<typeof updateStatusBodyValidation>;
+export type validateRequisicaoMudancaSenhaBody = z.infer<
+  typeof validateRequisicaoMudancaSenhaBodyValidation
+>;
+export type validateRequisicaoUsuarioBody = z.infer<typeof validateRequisicaoUsuarioBodyValidation>
+export type updateSenhaBody = z.infer<typeof updateSenhaBodyValidation>

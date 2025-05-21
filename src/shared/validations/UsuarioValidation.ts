@@ -8,6 +8,10 @@ export const getUsuarioResponse = z.object({
   foto: z.string().optional(),
 });
 
+export const createUsuarioResponse = z.object({
+  id: z.string()
+})
+
 export const createUsuarioBodyValidation = z.object({
   nome: z
     .string({
@@ -49,7 +53,13 @@ export const updateUsuarioBodyValidation = z
       .email('Email inválido')
       .nonempty('O campo email não pode estar vazio.')
       .optional(),
-    senha: z
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'Forneça ao menos um campo para atualizar.',
+  });
+
+export const updateSenhaBodyValidation = z.object({
+  senha: z
       .string({
         invalid_type_error: 'O campo senha precisa ser um texto.',
       })
@@ -58,11 +68,7 @@ export const updateUsuarioBodyValidation = z
         'A senha deve ter de 8 a 24 caracteres, ao menos uma letra minúscula e um número.',
       )
       .nonempty('O campo senha não pode estar vazio.')
-      .optional(),
-  })
-  .refine((data) => Object.keys(data).length > 0, {
-    message: 'Forneça ao menos um campo para atualizar.',
-  });
+})
 
 export const professorCreateBodyValidation = z.object({
   lattes: z

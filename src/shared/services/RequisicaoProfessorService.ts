@@ -1,6 +1,11 @@
-import { isDeepStrictEqual } from 'node:util';
+import { EMAIL } from '../Env';
 import { RequisicaoProfessorModel } from '../models/RequisicaoProfessorModel';
 import { UsuarioModel } from '../models/UsuarioModel';
+import {
+  createApproveEmail,
+  createRejectEmail,
+  Transporter,
+} from '../Transporter';
 
 export const RequisicaoProfessorService = {
   getAll: async () => {
@@ -33,12 +38,11 @@ export const RequisicaoProfessorService = {
   },
 
   updateStatus: async (idReq: string, idRevisor: string, status: string) => {
+    const approved = status === 'aprovado'
+
     const req = await RequisicaoProfessorModel.findByIdAndUpdate(idReq, {
       $set: { status: status, revisor: idRevisor },
-    })
-      .select('lattes requisitante revisor status')
-      .populate('requisitante', 'nome')
-      .populate('revisor', 'nome');
+    }).select('lattes requisitante revisor status');
 
     if (!req) {
       return {
@@ -48,7 +52,24 @@ export const RequisicaoProfessorService = {
       };
     }
 
-    if (status === 'aprovado') {
+    const usuario = await UsuarioModel.findById(req.requisitante);
+
+    if (!usuario) {
+      return {
+        success: false,
+        status: 404,
+        message: `Usuário com id ${req.id} não existe.`,
+      };
+    }
+
+    Transporter.sendMail({
+      from: `Incita <${EMAIL}>`,
+      to: usuario.email,
+      subject: 'Requisição de cadastro de professor',
+      html: approved ? createApproveEmail() : createRejectEmail(),
+    });
+
+    if (approved) {
       await UsuarioModel.findOneAndUpdate(req.requisitante, {
         cargo: 'professor',
       });
@@ -56,7 +77,7 @@ export const RequisicaoProfessorService = {
 
     return {
       success: true,
-      message: "Status atualizado com sucesso.",
+      message: 'Status atualizado com sucesso.',
     };
   },
 };

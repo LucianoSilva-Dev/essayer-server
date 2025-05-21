@@ -4,6 +4,7 @@ import type {
   createUsuarioBody,
   professorCreateBody,
   RequestUserData,
+  updateSenhaBody,
   updateUsuarioBody,
 } from '../Types';
 
@@ -32,7 +33,7 @@ export const UsuarioController: Controller = {
         .send({ error: response.message });
     }
 
-    return reply.status(201).send({ message: response.message });
+    return reply.status(201).send({ id: response.data });
   },
 
   professorCreate: async (request, reply) => {
@@ -44,7 +45,7 @@ export const UsuarioController: Controller = {
   },
 
   update: async (request, reply) => {
-    const { nome, email, senha } = request.body as updateUsuarioBody;
+    const { nome, email } = request.body as updateUsuarioBody;
     const { id } = request.params as { id: string };
     const { id: requisitor } = request.user as RequestUserData;
 
@@ -54,7 +55,29 @@ export const UsuarioController: Controller = {
       });
     }
 
-    const response = await UsuarioService.update(id, { nome, email, senha });
+    const response = await UsuarioService.update(id, { nome, email });
+
+    if (!response.success) {
+      return reply
+        .status(response.status as number)
+        .send({ error: response.message });
+    }
+
+    return reply.status(200).send({ message: response.message });
+  },
+
+  updateSenha: async (request, reply) => {
+    const { senha } = request.body as updateSenhaBody;
+    const { id } = request.params as { id: string };
+    const { id: requisitor } = request.user as RequestUserData;
+
+    if (requisitor !== id) {
+      return reply.status(403).send({
+        error: 'Não é possível editar informações de outro usuário.',
+      });
+    }
+
+    const response = await UsuarioService.updateSenha(id, senha);
 
     if (!response.success) {
       return reply

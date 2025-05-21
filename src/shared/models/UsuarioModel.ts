@@ -7,6 +7,11 @@ const UsuarioSchema = new Schema(
     email: { type: String, required: true },
     cargo: { type: String, required: true },
     foto: String,
+    requisicao: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'RequisicaoUsuario',
+    },
   },
   { timestamps: true },
 );

@@ -11,3 +11,4 @@ export const fastifyMultipartConfig: FastifyMultipartOptions = {
     parts: 1000, // For multipart forms, the max number of parts (fields + files)
   },
 };
+  
