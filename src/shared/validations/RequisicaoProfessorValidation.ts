@@ -18,4 +18,10 @@ export const updateStatusBodyValidation = z.object({
     invalid_type_error:
       "O campo status precisa ter os valores 'aprovado' ou 'recusado'.",
   }),
+  motivo: z.string({
+    invalid_type_error: "O campo motivo precisa ser um texto."
+  })
+  .nonempty("O campo motivo não pode estar vazio.")
+  .optional()
+
 });

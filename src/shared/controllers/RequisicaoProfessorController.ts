@@ -21,7 +21,7 @@ export const RequisicaoProfessorController: Controller = {
   },
 
   updateStatus: async (request, reply) => {
-    const { status } = request.body as updateStatusBody;
+    const { status, motivo } = request.body as updateStatusBody;
     const { id: idReq } = request.params as { id: string };
     const { id: idRevisor, cargo } = request.user as RequestUserData;
 
@@ -37,8 +37,9 @@ export const RequisicaoProfessorController: Controller = {
       idReq,
       idRevisor,
       status,
+      motivo,
     );
-    
+
     if (!response.success) {
       return reply
         .status(response.status as number)

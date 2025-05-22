@@ -19,8 +19,11 @@ export const createApproveEmail = () => {
   return '<h1>Aprovado</h1>';
 };
 
-export const createRejectEmail = () => {
-  return '<h1>Recusado</h1>';
+export const createRejectEmail = (motivo?: string) => {
+  return `
+    <h1>Recusado</h1>
+    <p>Motivo: ${motivo}</p>
+  `;
 };
 
 export const createNotificationEmail = () => {

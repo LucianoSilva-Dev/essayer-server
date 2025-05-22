@@ -37,8 +37,16 @@ export const RequisicaoProfessorService = {
     };
   },
 
-  updateStatus: async (idReq: string, idRevisor: string, status: string) => {
+  updateStatus: async (idReq: string, idRevisor: string, status: string, motivo?: string) => {
     const approved = status === 'aprovado'
+
+    if(!approved && !motivo){
+      return {
+        success: false,
+        status: 400,
+        message: "É necessário apontar o motivo da recusa."
+      }
+    }
 
     const req = await RequisicaoProfessorModel.findByIdAndUpdate(idReq, {
       $set: { status: status, revisor: idRevisor },
@@ -66,7 +74,7 @@ export const RequisicaoProfessorService = {
       from: `Incita <${EMAIL}>`,
       to: usuario.email,
       subject: 'Requisição de cadastro de professor',
-      html: approved ? createApproveEmail() : createRejectEmail(),
+      html: approved ? createApproveEmail() : createRejectEmail(motivo),
     });
 
     if (approved) {

@@ -23,7 +23,7 @@ export const RequisicaoMudancaSenhaService = {
     });
 
     Transporter.sendMail({
-      from: EMAIL,
+      from: `Incita <${EMAIL}>`,
       to: usuario?.email,
       subject: 'Mudança de Senha',
       html: createCodeEmail(code),
