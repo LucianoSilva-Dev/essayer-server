@@ -13,7 +13,7 @@ import fs from 'fs-extra';
 import { EMAIL } from '../Env';
 import { RequisicaoUsuarioModel } from '../models/RequisicaoUsuarioModel';
 import { randomBytes } from 'node:crypto';
-import { configDotenv } from 'dotenv';
+import { RequisicaoMudancaSenhaModel } from '../models/RequisicaoMudancaSenhaModel';
 
 export const UsuarioService = {
   get: async (id: string) => {
@@ -97,6 +97,19 @@ export const UsuarioService = {
   },
 
   update: async (id: string, usuarioData: updateUsuarioBody) => {
+    const { email } = usuarioData;
+
+    if (email) {
+      const userEmail = await UsuarioModel.findOne({ email: email });
+      if (userEmail) {
+        return {
+          success: false,
+          status: 404,
+          message: `Email ${email} já cadastrado.`,
+        };
+      }
+    }
+
     const usuario = await UsuarioModel.findByIdAndUpdate(id, usuarioData);
 
     if (!usuario) {
@@ -111,15 +124,29 @@ export const UsuarioService = {
   },
 
   updateSenha: async (id: string, senha: string) => {
-    const hashedSenha = crypto.hashSync(senha, 10);  
+    const hashedSenha = crypto.hashSync(senha, 10);
 
-    const usuario = await UsuarioModel.findByIdAndUpdate(id, {senha: hashedSenha})
+    const req = await RequisicaoMudancaSenhaModel.findById(id).select(
+      'requisitante status',
+    );
 
-    if (!usuario) {
+    if (!req) {
       return {
         success: false,
         status: 404,
-        message: `Usuário com id ${id} não existe.`,
+        message: `Requisição com id ${id} não existe.`,
+      };
+    }
+
+    if (req.status === 'aprovado') {
+      await UsuarioModel.findByIdAndUpdate(req.requisitante, {
+        senha: hashedSenha,
+      });
+    } else {
+      return {
+        success: false,
+        status: 422,
+        message: 'Código não verificado.',
       };
     }
 

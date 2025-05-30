@@ -69,13 +69,6 @@ export const UsuarioController: Controller = {
   updateSenha: async (request, reply) => {
     const { senha } = request.body as updateSenhaBody;
     const { id } = request.params as { id: string };
-    const { id: requisitor } = request.user as RequestUserData;
-
-    if (requisitor !== id) {
-      return reply.status(403).send({
-        error: 'Não é possível editar informações de outro usuário.',
-      });
-    }
 
     const response = await UsuarioService.updateSenha(id, senha);
 

@@ -46,12 +46,20 @@ export const RequisicaoMudancaSenhaService = {
     }
 
     if (code !== req.codigo) {
+      await RequisicaoMudancaSenhaModel.findByIdAndUpdate(id, {
+        $set: { status: 'recusado' },
+      });
+
       return {
         success: false,
         status: 422,
         message: 'Código inválido.',
       };
     }
+
+    await RequisicaoMudancaSenhaModel.findByIdAndUpdate(id, {
+      $set: { status: 'aprovado' },
+    });
 
     return {
       success: true,

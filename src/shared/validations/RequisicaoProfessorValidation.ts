@@ -5,10 +5,10 @@ export const getRequisicaoProfessorResponse = z.object({
   lattes: z.string(),
   requisitante: z.object({
     nome: z.string(),
-  }),
+  }).nullable(),
   revisor: z.object({
     nome: z.string(),
-  }).optional(),
+  }).optional().nullable(),
   status: z.string().optional(),
 });
 
@@ -23,5 +23,4 @@ export const updateStatusBodyValidation = z.object({
   })
   .nonempty("O campo motivo não pode estar vazio.")
   .optional()
-
 });

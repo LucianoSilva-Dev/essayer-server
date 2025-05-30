@@ -15,6 +15,6 @@ export const validateRequisicaoMudancaSenhaBodyValidation = z.object({
 
 export const getRequisicaoMudancaSenhaResponse = z.object({
   _id: z.string(),
-  requisitante: z.string(),
+  requisitante: z.string().nullable(),
   codigo: z.string()
 })
