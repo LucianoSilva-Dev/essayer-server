@@ -69,7 +69,7 @@ export const RequisicaoMudancaSenhaService = {
   get: async (id: string) => {
     const req = await RequisicaoMudancaSenhaModel.findById(id)
       .select('requisitante codigo')
-      .populate('requisitante', 'nome');
+      .populate('requisitante', '_id nome foto');
 
     if (!req) {
       return {
