@@ -28,11 +28,6 @@ export const RequisicaoMudancaSenhaController: Controller = {
 
     return reply.status(200).send({ message: response.message });
   },
-
-  mudarSenha: async (request, reply) => {
-    
-  },
-
   get: async (request, reply) => {
     const { id } = request.params as { id: string };
 
