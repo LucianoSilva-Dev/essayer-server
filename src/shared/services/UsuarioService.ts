@@ -3,11 +3,7 @@ import crypto from 'bcryptjs';
 import type { createUsuarioBody, updateUsuarioBody } from '../Types';
 import { RequisicaoProfessorModel } from '../models/RequisicaoProfessorModel';
 import type { SavedMultipartFile } from '@fastify/multipart';
-import {
-  createCodeEmail,
-  createNotificationEmail,
-  Transporter,
-} from '../Transporter';
+import { Transporter } from '../Transporter';
 
 import fs from 'fs-extra';
 import { EMAIL } from '../Env';
@@ -61,7 +57,10 @@ export const UsuarioService = {
       from: `Incita <${EMAIL}>`,
       to: email,
       subject: 'Cadastro Incita',
-      html: createCodeEmail(code),
+      template: 'codigo',
+      context: {
+        codigo: code,
+      },
     });
 
     return {
@@ -90,7 +89,7 @@ export const UsuarioService = {
       from: `Incita <${EMAIL}>`,
       to: usuario.email,
       subject: 'Requisição Recebida!',
-      html: createNotificationEmail(),
+      template: 'notificacao',
     });
 
     return { success: true, message: 'Requisição criada com sucesso.' };

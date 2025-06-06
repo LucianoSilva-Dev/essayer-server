@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { RequisicaoMudancaSenhaModel } from '../models/RequisicaoMudancaSenhaModel';
-import { createCodeEmail, Transporter } from '../Transporter';
+import { Transporter } from '../Transporter';
 import { EMAIL } from '../Env';
 import { UsuarioModel } from '../models/UsuarioModel';
 
@@ -26,7 +26,10 @@ export const RequisicaoMudancaSenhaService = {
       from: `Incita <${EMAIL}>`,
       to: usuario?.email,
       subject: 'Mudança de Senha',
-      html: createCodeEmail(code),
+      template: 'codigo',
+      context: {
+        codigo: code
+      }
     });
 
     return {

@@ -1,11 +1,7 @@
 import { EMAIL } from '../Env';
 import { RequisicaoProfessorModel } from '../models/RequisicaoProfessorModel';
 import { UsuarioModel } from '../models/UsuarioModel';
-import {
-  createApproveEmail,
-  createRejectEmail,
-  Transporter,
-} from '../Transporter';
+import { Transporter } from '../Transporter';
 
 export const RequisicaoProfessorService = {
   getAll: async () => {
@@ -37,15 +33,20 @@ export const RequisicaoProfessorService = {
     };
   },
 
-  updateStatus: async (idReq: string, idRevisor: string, status: string, motivo?: string) => {
-    const approved = status === 'aprovado'
+  updateStatus: async (
+    idReq: string,
+    idRevisor: string,
+    status: string,
+    motivo?: string,
+  ) => {
+    const approved = status === 'aprovado';
 
-    if(!approved && !motivo){
+    if (!approved && !motivo) {
       return {
         success: false,
         status: 400,
-        message: "É necessário apontar o motivo da recusa."
-      }
+        message: 'É necessário apontar o motivo da recusa.',
+      };
     }
 
     const req = await RequisicaoProfessorModel.findByIdAndUpdate(idReq, {
@@ -74,7 +75,10 @@ export const RequisicaoProfessorService = {
       from: `Incita <${EMAIL}>`,
       to: usuario.email,
       subject: 'Requisição de cadastro de professor',
-      html: approved ? createApproveEmail() : createRejectEmail(motivo),
+      template: approved ? 'aprovado' : 'recusado',
+      context: {
+        motivo: motivo,
+      },
     });
 
     if (approved) {
