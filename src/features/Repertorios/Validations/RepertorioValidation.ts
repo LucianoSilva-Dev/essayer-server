@@ -123,21 +123,33 @@ export const getAllRepertorioQueryValidation = z.object({
     })
     .optional(),
 
-  favoritadoPeloUsuario: z
-    .boolean({
-      coerce: true,
-      invalid_type_error:
-        'O campo favoritadoPeloUsuario só pode ser verdadeiro ou falso',
-    })
-    .optional(),
+  favoritadoPeloUsuario: z.preprocess(
+    (val) => {
+      if (val === 'true') return true;
+      if (val === 'false') return false;
+      return val;
+    },
+    z
+      .boolean({
+        invalid_type_error:
+          'O campo favoritadoPeloUsuario só pode ser verdadeiro ou falso',
+      })
+      .optional(),
+  ),
 
-  likeDoUsuario: z
-    .boolean({
-      coerce: true,
-      invalid_type_error:
-        'O campo likeDoSUsuario só pode ser verdadeiro ou falso',
-    })
-    .optional(),
+  likeDoUsuario: z.preprocess(
+    (val) => {
+      if (val === 'true') return true;
+      if (val === 'false') return false;
+      return val;
+    },
+    z
+      .boolean({
+        invalid_type_error:
+          'O campo likeDoUsuario só pode ser verdadeiro ou falso',
+      })
+      .optional(),
+  ),
 
   // Ordenação
   ordernarPor: z.enum(['MaxLikes', 'MinLikes', 'Newest', 'Oldest']).optional(),
