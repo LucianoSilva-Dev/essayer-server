@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { authMiddleware } from '../middlewares/Authentication';
 import { genericError, schemaValidationError } from '../Schemas';
 import type { EntitySchema } from '../Types';
@@ -107,6 +108,18 @@ export const UsuarioSchema: EntitySchema = {
         500: genericError,
       },
       summary: 'Exclui usuário selecionado',
+    },
+  },
+
+  fotoGet: {
+    schema: {
+      params: idValidation,
+      response: {
+        400: schemaValidationError,
+        404: genericError,
+        500: genericError,
+      },
+      summary: 'Recupera a foto de um usuário',
     },
   },
 

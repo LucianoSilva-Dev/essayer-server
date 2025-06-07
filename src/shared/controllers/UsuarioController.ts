@@ -1,3 +1,4 @@
+import { formatObraDoc } from '../../features/Repertorios/Helpers/FormatObraDoc';
 import { UsuarioService } from '../services/UsuarioService';
 import type {
   Controller,
@@ -7,6 +8,7 @@ import type {
   updateSenhaBody,
   updateUsuarioBody,
 } from '../Types';
+import path from 'node:path';
 
 export const UsuarioController: Controller = {
   get: async (request, reply) => {
@@ -100,6 +102,19 @@ export const UsuarioController: Controller = {
     }
 
     return reply.status(200).send({ message: response.message });
+  },
+
+  fotoGet: async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const response = await UsuarioService.fotoGet(id);
+    if (!response.success) {
+      return reply
+        .status(response.status as number)
+        .send({ error: response.message });
+    }
+
+    const foto = response.data as string;
+    return reply.sendFile(foto);
   },
 
   fotoCreate: async (request, reply) => {

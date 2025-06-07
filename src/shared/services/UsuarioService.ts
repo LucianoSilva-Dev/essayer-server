@@ -10,6 +10,7 @@ import { EMAIL } from '../Env';
 import { RequisicaoUsuarioModel } from '../models/RequisicaoUsuarioModel';
 import { randomBytes } from 'node:crypto';
 import { RequisicaoMudancaSenhaModel } from '../models/RequisicaoMudancaSenhaModel';
+import path from 'node:path';
 
 export const UsuarioService = {
   get: async (id: string) => {
@@ -167,6 +168,47 @@ export const UsuarioService = {
     fs.removeSync(destiny);
 
     return { success: true, message: 'Usuário deletado com sucesso.' };
+  },
+
+  fotoGet: async (id: string) => {
+    const destiny = `${process.cwd()}\\profilePictures\\${id}\\`;
+
+    if (!fs.pathExistsSync(destiny)) {
+      return {
+        success: false,
+        status: 404,
+        message: `Usuário com id ${id} não possui foto.`,
+      };
+    }
+
+    const usuario = await UsuarioModel.findById(id)
+
+    if (!usuario) {
+      return {
+        success: false,
+        status: 404,
+        message: `Usuário com id ${id} não existe.`,
+      };
+    }
+
+    if (!usuario.foto) {
+      fs.removeSync(destiny);
+
+      return {
+        success: false,
+        status: 404,
+        message: `Usuário com id ${id} não possui foto.`,
+      };
+    }
+
+    const dir = path.dirname(usuario.foto);
+    const name = path.basename(usuario.foto);
+
+    const caminhoRelativo = path.relative(
+      path.join(process.cwd(), 'profilePictures'), // root
+      path.join(dir, name),
+    );
+    return { success: true, data: caminhoRelativo };
   },
 
   fotoCreate: async (id: string, img: SavedMultipartFile) => {
