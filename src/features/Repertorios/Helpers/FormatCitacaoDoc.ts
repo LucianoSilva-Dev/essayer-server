@@ -33,7 +33,6 @@ export function formatCitacaoDoc(
     criador: {
       id: criador._id.toString(),
       nome: criador.nome,
-      fotoPerfil: criador.foto,
     },
   };
   return formattedCitacao;

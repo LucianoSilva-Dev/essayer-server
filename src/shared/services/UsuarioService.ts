@@ -15,7 +15,7 @@ import path from 'node:path';
 export const UsuarioService = {
   get: async (id: string) => {
     const usuario = await UsuarioModel.findById(id).select(
-      'nome email senha foto cargo',
+      'nome email senha cargo',
     );
 
     if (!usuario) {
@@ -191,7 +191,7 @@ export const UsuarioService = {
       };
     }
 
-    if (!usuario.foto) {
+    if (!usuario.fotoPath) {
       fs.removeSync(destiny);
 
       return {
@@ -201,8 +201,8 @@ export const UsuarioService = {
       };
     }
 
-    const dir = path.dirname(usuario.foto);
-    const name = path.basename(usuario.foto);
+    const dir = path.dirname(usuario.fotoPath);
+    const name = path.basename(usuario.fotoPath);
 
     const caminhoRelativo = path.relative(
       path.join(process.cwd(), 'profilePictures'), // root
@@ -215,7 +215,7 @@ export const UsuarioService = {
     const destiny = `${process.cwd()}\\profilePictures\\${id}\\`;
 
     const usuario = await UsuarioModel.findByIdAndUpdate(id, {
-      $set: { foto: destiny + img.filename },
+      $set: { fotoPath: destiny + img.filename },
     });
 
     if (!usuario) {
@@ -251,7 +251,7 @@ export const UsuarioService = {
     }
 
     const usuario = await UsuarioModel.findByIdAndUpdate(id, {
-      foto: destiny + img.filename,
+      fotoPath: destiny + img.filename,
     });
 
     if (!usuario) {
@@ -280,7 +280,7 @@ export const UsuarioService = {
     }
 
     const usuario = await UsuarioModel.findByIdAndUpdate(id, {
-      foto: undefined,
+      fotoPath: undefined,
     });
 
     if (!usuario) {

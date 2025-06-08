@@ -3,7 +3,6 @@ import z from 'zod';
 export const perfilUsuarioResponse = z.object({
   id: z.string(),
   nome: z.string(),
-  fotoPerfil: z.string().nullish(),
 });
 
 export const comentarioResponse = z.object({

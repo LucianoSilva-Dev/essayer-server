@@ -5,7 +5,6 @@ export const getUsuarioResponse = z.object({
   id: z.string(),
   nome: z.string(),
   cargo: userCargo,
-  foto: z.string().optional(),
 });
 
 export const createUsuarioResponse = z.object({
