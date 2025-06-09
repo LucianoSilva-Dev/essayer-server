@@ -105,6 +105,6 @@ export const RequisicaoMudancaSenhaRoutes: FastifyPluginAsyncZod = async (
   app.get(
     '/:id',
     RequisicaoMudancaSenhaSchema.get,
-    RequisicaoUsuarioController.get,
+    RequisicaoMudancaSenhaController.get,
   );
 };

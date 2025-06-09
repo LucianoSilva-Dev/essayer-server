@@ -67,7 +67,7 @@ export const RequisicaoProfessorService = {
       return {
         success: false,
         status: 404,
-        message: `Usuário com id ${req.id} não existe.`,
+        message: `Usuário com id ${req.requisitante} não existe.`,
       };
     }
 

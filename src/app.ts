@@ -60,7 +60,7 @@ class App {
       prefix: '/requisicao-senha',
     });
     this.app.register(RequisicaoUsuarioRoutes, {
-      prefix: 'requisicao-usuario',
+      prefix: '/requisicao-usuario',
     });
   }
 }
