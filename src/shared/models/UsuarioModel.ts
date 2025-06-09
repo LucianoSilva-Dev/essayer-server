@@ -6,7 +6,12 @@ const UsuarioSchema = new Schema(
     senha: { type: String, required: true },
     email: { type: String, required: true },
     cargo: { type: String, required: true },
-    foto: String,
+    fotoPath: String,
+    requisicao: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'RequisicaoUsuario',
+    },
   },
   { timestamps: true },
 );

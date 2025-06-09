@@ -1,6 +1,7 @@
-import { isDeepStrictEqual } from 'node:util';
+import { EMAIL } from '../Env';
 import { RequisicaoProfessorModel } from '../models/RequisicaoProfessorModel';
 import { UsuarioModel } from '../models/UsuarioModel';
+import { Transporter } from '../Transporter';
 
 export const RequisicaoProfessorService = {
   getAll: async () => {
@@ -32,13 +33,25 @@ export const RequisicaoProfessorService = {
     };
   },
 
-  updateStatus: async (idReq: string, idRevisor: string, status: string) => {
+  updateStatus: async (
+    idReq: string,
+    idRevisor: string,
+    status: string,
+    motivo?: string,
+  ) => {
+    const approved = status === 'aprovado';
+
+    if (!approved && !motivo) {
+      return {
+        success: false,
+        status: 400,
+        message: 'É necessário apontar o motivo da recusa.',
+      };
+    }
+
     const req = await RequisicaoProfessorModel.findByIdAndUpdate(idReq, {
       $set: { status: status, revisor: idRevisor },
-    })
-      .select('lattes requisitante revisor status')
-      .populate('requisitante', 'nome')
-      .populate('revisor', 'nome');
+    }).select('lattes requisitante revisor status');
 
     if (!req) {
       return {
@@ -48,7 +61,27 @@ export const RequisicaoProfessorService = {
       };
     }
 
-    if (status === 'aprovado') {
+    const usuario = await UsuarioModel.findById(req.requisitante);
+
+    if (!usuario) {
+      return {
+        success: false,
+        status: 404,
+        message: `Usuário com id ${req.requisitante} não existe.`,
+      };
+    }
+
+    Transporter.sendMail({
+      from: `Incita <${EMAIL}>`,
+      to: usuario.email,
+      subject: 'Requisição de cadastro de professor',
+      template: approved ? 'aprovado' : 'recusado',
+      context: {
+        motivo: motivo,
+      },
+    });
+
+    if (approved) {
       await UsuarioModel.findOneAndUpdate(req.requisitante, {
         cargo: 'professor',
       });
@@ -56,7 +89,7 @@ export const RequisicaoProfessorService = {
 
     return {
       success: true,
-      message: "Status atualizado com sucesso.",
+      message: 'Status atualizado com sucesso.',
     };
   },
 };

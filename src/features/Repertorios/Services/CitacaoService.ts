@@ -43,7 +43,7 @@ export const CitacaoService: Service = {
   get: async (citacaoId: string, userId?: string) => {
     const citacao = await CitacaoModel.findById(citacaoId)
       .populate('criador', '_id nome email')
-      .populate('comentarios.usuario', '_id nome foto');
+      .populate('comentarios.usuario', '_id nome');
 
     if (!citacao) {
       return {

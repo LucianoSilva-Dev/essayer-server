@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import type { GetAllRepertorioQueryBody } from '../Types';
 
 export const montarFiltros = (
@@ -30,12 +31,28 @@ export const montarFiltros = (
     query.criador = queryBody.criador;
   }
 
-  if (queryBody.favoritadoPeloUsuario) {
-    query.favoritos = userId;
+  if (typeof queryBody.favoritadoPeloUsuario === 'boolean' && userId) {
+    const userObjectId = new Types.ObjectId(userId);
+    switch (queryBody.favoritadoPeloUsuario) {
+      case true:
+        query.favoritos = userObjectId;
+        break;
+      case false:
+        query.favoritos = { $nin: [userObjectId] };
+        break;
+    }
   }
 
-  if (queryBody.likeDoUsuario) {
-    query.likes = userId;
+  if (typeof queryBody.likeDoUsuario === 'boolean' && userId) {
+    const userObjectId = new Types.ObjectId(userId);
+    switch (queryBody.likeDoUsuario) {
+      case true:
+        query.likes = userObjectId;
+        break;
+      case false:
+        query.likes = { $nin: [userObjectId] };
+        break;
+    }
   }
 
   return query;

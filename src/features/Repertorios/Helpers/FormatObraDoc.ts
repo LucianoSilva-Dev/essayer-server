@@ -34,7 +34,6 @@ export function formatObraDoc(
     criador: {
       id: criador._id.toString(),
       nome: criador.nome,
-      fotoPerfil: criador.foto,
     },
   };
   return formattedObra;

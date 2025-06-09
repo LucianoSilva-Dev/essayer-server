@@ -44,7 +44,7 @@ export const ArtigoService: Service = {
   get: async (artigoId: string, userId: string) => {
     const artigo = await ArtigoModel.findById(artigoId)
       .populate('criador', '_id nome email')
-      .populate('comentarios.usuario', '_id nome foto');
+      .populate('comentarios.usuario', '_id nome');
 
     if (!artigo) {
       return {

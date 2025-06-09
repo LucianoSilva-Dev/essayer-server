@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código de Verificação</title>
+    <style type="text/css">
+        /* Estilos inline para compatibilidade com clientes de e-mail */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f5f8fa;
+            margin: 0;
+            padding: 0;
+            color: #333333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #075F70;
+            padding: 20px;
+            text-align: center;
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 30px;
+            text-align: center;
+        }
+        .main {
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            margin: 20px 0;
+            padding: 15px;
+            color: #1a365d;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .message {
+            margin-bottom: 30px;
+            line-height: 1.5;
+            color: #4a5568;
+        }
+        .footer {
+            padding: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #718096;
+            background-color: #edf2f7;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #CA9C60;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .button:hover {
+            background-color: #86673e;
+        }
+        /* Responsivo */
+        @media only screen and (max-width: 600px) {
+            .container {
+                margin: 10px;
+            }
+            .content {
+                padding: 20px;
+            }
+            .main {
+                font-size: 24px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            Requisição recusada!
+        </div>
+        <div class="content">            
+            <div class="main">CONTA REPROVADA</div>
+            
+            <p class="message" style="color: #e53e3e; font-weight: bold;">Justificativa: {{motivo}}</p>
+            
+            <p class="message">Entre em contato com nosso suporte para mais informações.</p>
+            
+            <a href="#" class="button">Acessar Sistema</a>
+        </div>
+        <div class="footer">
+            © 2025 Incita. Todos os direitos reservados.
+        </div>
+    </div>
+
+</body>
+</html>
