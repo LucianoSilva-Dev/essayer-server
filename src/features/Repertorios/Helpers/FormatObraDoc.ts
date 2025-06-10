@@ -25,6 +25,7 @@ export function formatObraDoc(
     ...resto,
     id: _id.toString(),
     tipoRepertorio: 'Obra',
+    totalLikes: repertorio.likes.length,
     likeDoUsuario: userId
       ? repertorio.likes.includes(new Types.ObjectId(userId))
       : false,

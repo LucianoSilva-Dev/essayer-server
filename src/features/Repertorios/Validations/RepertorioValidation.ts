@@ -6,6 +6,7 @@ import { HasUniqueItens } from '../Helpers/HasUniqueItens';
 export const getAllRepertorioObraDoc = z.object({
   tipoRepertorio: z.literal('Obra'),
   id: z.string(),
+  totalLikes: z.number(),
   titulo: z.string(),
   sinopse: z.string(),
   autor: z.string(),
@@ -19,6 +20,7 @@ export const getAllRepertorioObraDoc = z.object({
 export const getAllRepertorioArtigoDoc = z.object({
   tipoRepertorio: z.literal('Artigo'),
   id: z.string(),
+  totalLikes: z.number(),
   titulo: z.string(),
   fonte: z.string(),
   resumo: z.string(),
@@ -31,6 +33,7 @@ export const getAllRepertorioArtigoDoc = z.object({
 export const getAllRepertorioCitacaoDoc = z.object({
   tipoRepertorio: z.literal('Citacao'),
   id: z.string(),
+  totalLikes: z.number(),
   frase: z.string(),
   autor: z.string(),
   fonte: z.string().optional(),

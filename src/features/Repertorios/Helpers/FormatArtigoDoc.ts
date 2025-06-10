@@ -24,6 +24,7 @@ export function formatArtigoDoc(
     ...resto,
     id: _id.toString(),
     tipoRepertorio: 'Artigo',
+    totalLikes: repertorio.likes.length,
     likeDoUsuario: userId
       ? repertorio.likes.includes(new Types.ObjectId(userId))
       : false,

@@ -24,6 +24,7 @@ export function formatCitacaoDoc(
     ...resto,
     id: _id.toString(),
     tipoRepertorio: 'Citacao',
+    totalLikes: repertorio.likes.length,
     likeDoUsuario: userId
       ? repertorio.likes.includes(new Types.ObjectId(userId))
       : false,
