@@ -10,6 +10,7 @@ export const getCitacaoResponse = z.object({
   totalLikes: z.number(),
   comentarios: comentarioResponse.array(),
   subtopicos: z.array(z.string()),
+  topico: z.string(),
   favoritadoPorUsuario: z.boolean(),
   likeDoUsuario: z.boolean(),
 });
@@ -30,6 +31,10 @@ export const createCitacaoBodyValidation = z.object({
       }),
     )
     .min(1, 'O campo subtopicos precisa conter ao menos um subtópico.'),
+  topico: z.string({
+    invalid_type_error: 'O campo topico precisa ser um texto.',
+    required_error: 'O campo topico é obrigatório.',
+  }),
   fonte: z
     .string({
       invalid_type_error: 'O campo fonte precisa ser um texto.',

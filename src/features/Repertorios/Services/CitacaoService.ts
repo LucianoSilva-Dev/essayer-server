@@ -11,7 +11,7 @@ import { Types } from 'mongoose';
 
 export const CitacaoService: Service = {
   create: async (createCitacaoData: CreateCitacaoBody, userId: string) => {
-    const { frase, autor, fonte, subtopicos } = createCitacaoData;
+    const { frase, autor, fonte, subtopicos, topico } = createCitacaoData;
 
     const citacao = new CitacaoModel({
       frase,
@@ -19,6 +19,7 @@ export const CitacaoService: Service = {
       fonte,
       criador: userId,
       subtopicos,
+      topico
     });
     await citacao.save();
 
@@ -68,6 +69,7 @@ export const CitacaoService: Service = {
         texto: comentario.texto,
       })),
       subtopicos: citacao.subtopicos,
+      topico: citacao.topico
     };
 
     return { success: true, data: response };

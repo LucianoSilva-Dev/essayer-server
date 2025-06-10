@@ -15,12 +15,12 @@ export const ObraController: Controller = {
     reply.send(response.data);
   },
   obraCreate: async (request, reply) => {
-    const { titulo, sinopse, autor, tipoObra, subtopicos } =
+    const { titulo, sinopse, autor, tipoObra, subtopicos, topico } =
       request.body as CreateObraBody;
     const { id: userId } = request.user as { id: string };
 
     const response = await ObraService.create(
-      { titulo, sinopse, autor, tipoObra, subtopicos },
+      { titulo, sinopse, autor, tipoObra, subtopicos, topico },
       userId,
     );
 

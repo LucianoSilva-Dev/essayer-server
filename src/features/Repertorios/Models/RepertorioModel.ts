@@ -24,6 +24,7 @@ export const RepertorioDBSchema = new Schema<Repertorio>(
     favoritos: [{ type: Schema.Types.ObjectId, ref: 'Usuario' }],
     comentarios: [ComentarioSubDocSchema],
     subtopicos: [{ type: String, required: true }],
+    topico: { type: String, required: true },
     tipoRepertorio: { type: String, required: true },
   },
   { timestamps: true, discriminatorKey: 'tipoRepertorio' },

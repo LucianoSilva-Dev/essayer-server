@@ -15,12 +15,12 @@ export const CitacaoController: Controller = {
     reply.send(response.data);
   },
   citacaoCreate: async (request, reply) => {
-    const { fonte, autor, frase, subtopicos } =
+    const { fonte, autor, frase, subtopicos, topico } =
       request.body as CreateCitacaoBody;
     const { id: userId } = request.user as RequestUserData;
 
     const response = await CitacaoService.create(
-      { fonte, autor, frase, subtopicos },
+      { fonte, autor, frase, subtopicos, topico },
       userId,
     );
 

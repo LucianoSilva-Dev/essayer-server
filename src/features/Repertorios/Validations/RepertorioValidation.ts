@@ -13,6 +13,7 @@ export const getAllRepertorioObraDoc = z.object({
   criador: perfilUsuarioResponse,
   tipoObra: z.enum(['livro', 'filme', 'música', 'teatro']),
   subtopicos: z.array(z.string()),
+  topico: z.string(),
   favoritadoPeloUsuario: z.boolean(),
   likeDoUsuario: z.boolean(),
 });
@@ -26,6 +27,7 @@ export const getAllRepertorioArtigoDoc = z.object({
   resumo: z.string(),
   criador: perfilUsuarioResponse,
   subtopicos: z.array(z.string()),
+  topico: z.string(),
   favoritadoPeloUsuario: z.boolean(),
   likeDoUsuario: z.boolean(),
 });
@@ -39,6 +41,7 @@ export const getAllRepertorioCitacaoDoc = z.object({
   fonte: z.string().optional(),
   criador: perfilUsuarioResponse,
   subtopicos: z.array(z.string()),
+  topico: z.string(),
   favoritadoPeloUsuario: z.boolean(),
   likeDoUsuario: z.boolean(),
 });

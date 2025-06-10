@@ -78,6 +78,7 @@ export type Repertorio = {
   favoritos: Types.ObjectId[];
   comentarios: ComentarioSubDoc[];
   subtopicos: string[];
+  topico: string;
   tipoRepertorio: string;
   createdAt: Date;
   updatedAt: Date;

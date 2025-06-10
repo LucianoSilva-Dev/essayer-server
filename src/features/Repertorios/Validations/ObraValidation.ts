@@ -10,6 +10,7 @@ export const getObraResponse = z.object({
   totalLikes: z.number(),
   comentarios: comentarioResponse.array(),
   subtopicos: z.array(z.string()),
+  topico: z.string(),
   tipoObra: z.enum(['livro', 'filme', 'música', 'teatro']),
   favoritadoPorUsuario: z.boolean(),
   likeDoUsuario: z.boolean(),
@@ -36,6 +37,11 @@ export const createObraBodyValidation = z.object({
       }),
     )
     .min(1, 'O campo subtopicos precisa conter ao menos um subtópico.'),
+
+  topico: z.string({
+      invalid_type_error: 'O campo topico precisa ser um texto.',
+      required_error: 'O campo topico é obrigatório.',
+    }),
 });
 
 export const updateObraBodyValidation = z
