@@ -25,6 +25,7 @@ export const getAllRepertorioArtigoDoc = z.object({
   titulo: z.string(),
   fonte: z.string(),
   resumo: z.string(),
+  autor: z.string(),
   criador: perfilUsuarioResponse,
   subtopicos: z.array(z.string()),
   topico: z.string(),
