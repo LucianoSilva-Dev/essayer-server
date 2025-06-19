@@ -1,3 +1,4 @@
+// Backend/src/features/Repertorios/Helpers/MontarFiltros.ts
 import { Types } from 'mongoose';
 import type { GetAllRepertorioQueryBody } from '../Types';
 
@@ -8,8 +9,11 @@ export const montarFiltros = (
   // biome-ignore lint/suspicious/noExplicitAny: No need to be strict here
   const query: any = {};
 
+  // Se tipoRepertorio for um array, usa $in. Se for string, usa diretamente.
   if (queryBody.tipoRepertorio) {
-    query.tipoRepertorio = queryBody.tipoRepertorio;
+    query.tipoRepertorio = Array.isArray(queryBody.tipoRepertorio)
+      ? { $in: queryBody.tipoRepertorio }
+      : queryBody.tipoRepertorio;
   }
 
   if (queryBody.conteudo) {
@@ -20,11 +24,22 @@ export const montarFiltros = (
       { sinopse: regex },
       { autor: regex },
       { fonte: regex },
+      { frase: regex }, // Adicionado para citações
     ];
   }
 
+  // Se subtopicos for um array, usa $all. Se for string, usa diretamente.
   if (queryBody.subtopicos) {
-    query.subtopicos = { $all: queryBody.subtopicos };
+    query.subtopicos = Array.isArray(queryBody.subtopicos)
+      ? { $all: queryBody.subtopicos }
+      : queryBody.subtopicos;
+  }
+
+  // Se topico for um array, usa $in. Se for string, usa diretamente.
+  if (queryBody.topico) {
+    query.topico = Array.isArray(queryBody.topico)
+      ? { $in: queryBody.topico }
+      : queryBody.topico;
   }
 
   if (queryBody.criador) {

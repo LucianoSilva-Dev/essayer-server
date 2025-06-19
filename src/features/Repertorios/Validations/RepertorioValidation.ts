@@ -1,3 +1,4 @@
+// Backend/src/features/Repertorios/Validations/RepertorioValidation.ts
 import z from 'zod';
 import { paginacaoResponse, perfilUsuarioResponse } from './Commom';
 import { isValidObjectId } from 'mongoose';
@@ -39,7 +40,7 @@ export const getAllRepertorioCitacaoDoc = z.object({
   totalLikes: z.number(),
   frase: z.string(),
   autor: z.string(),
-  fonte: z.string().optional(),
+  fonte: z.string().optional(), // Fonte é opcional
   criador: perfilUsuarioResponse,
   subtopicos: z.array(z.string()),
   topico: z.string(),
@@ -101,23 +102,35 @@ export const getAllRepertorioQueryValidation = z.object({
     .nonempty('O campo conteudo não pode estar vazio')
     .optional(),
 
+  // Subtopicos agora pode vir como uma string única ou array de strings
   subtopicos: z
-    .preprocess(
-      (val) => {
-        if (typeof val === 'string') return [val];
-        if (Array.isArray(val)) return val;
-        return []; // fallback seguro
-      },
-      z
-        .array(
-          z.string({
-            required_error:
-              'O campo subtopicos precisa conter ao menos um subtópico',
-            invalid_type_error: 'O campo subtopicos só pode conter texto',
-          }),
-        )
-        .min(1, 'O campo subtopicos precisa conter ao menos um subtópico'),
-    )
+    .union([
+      z.string({
+        required_error: "O campo subtopicos precisa conter ao menos um subtópico",
+        invalid_type_error: "O campo subtopicos só pode conter texto",
+      }).transform(val => [val]), // Converte string para array de uma única string
+      z.array(
+        z.string({
+          required_error:
+            'O campo subtopicos precisa conter ao menos um subtópico',
+          invalid_type_error: 'O campo subtopicos só pode conter texto',
+        }),
+      ).min(1, 'O campo subtopicos precisa conter ao menos um subtópico'),
+    ])
+    .optional(),
+
+  // Topico agora pode vir como uma string única ou array de strings
+  topico: z
+    .union([
+      z.string({
+        invalid_type_error: 'O campo topico precisa ser um texto',
+      }).nonempty('O campo topico não pode estar vazio'),
+      z.array(
+        z.string({
+          invalid_type_error: 'O campo topico precisa ser um texto',
+        }).nonempty('O campo topico não pode estar vazio'),
+      ).min(1, 'O campo topico precisa conter ao menos um item'),
+    ])
     .optional(),
 
   criador: z
@@ -159,7 +172,7 @@ export const getAllRepertorioQueryValidation = z.object({
   ),
 
   // Ordenação
-  ordernarPor: z.enum(['MaxLikes', 'MinLikes', 'Newest', 'Oldest']).optional(),
+  ordenarPor: z.enum(['MaxLikes', 'MinLikes', 'Newest', 'Oldest']).optional(),
 
   // paginação
   offset: z
