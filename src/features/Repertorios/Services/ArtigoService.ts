@@ -11,7 +11,7 @@ import { montarInfosRepertorio } from '../Helpers/MontarInfosRepertorio';
 
 export const ArtigoService: Service = {
   create: async (createArtigoData: CreateArtigoBody, userId: string) => {
-    const { autor, fonte, resumo, subtopicos, titulo, topico } = createArtigoData;
+    const { autor, fonte, resumo, subtopicos, titulo, topicos } = createArtigoData;
 
     const artigo = new ArtigoModel({
       autor,
@@ -19,7 +19,7 @@ export const ArtigoService: Service = {
       resumo,
       criador: userId,
       subtopicos,
-      topico,
+      topicos,
       titulo,
     });
     await artigo.save();
@@ -71,7 +71,7 @@ export const ArtigoService: Service = {
         texto: comentario.texto,
       })),
       subtopicos: artigo.subtopicos,
-      topico: artigo.topico
+      topicos: artigo.topicos
     };
 
     return { success: true, data: response };

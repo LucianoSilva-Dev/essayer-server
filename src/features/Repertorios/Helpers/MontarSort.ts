@@ -2,7 +2,7 @@ import type { GetAllRepertorioQueryBody } from '../Types';
 
 export function montarSort(queryBody: GetAllRepertorioQueryBody) {
   const sort: any = {};
-  switch (queryBody.ordernarPor) {
+  switch (queryBody.ordenarPor) {
     case 'MaxLikes':
       sort.likes = -1;
       break;

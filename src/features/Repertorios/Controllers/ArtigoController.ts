@@ -15,12 +15,12 @@ export const ArtigoController: Controller = {
     reply.send(response.data);
   },
   artigoCreate: async (request, reply) => {
-    const { titulo, resumo, autor, fonte, subtopicos, topico } =
+    const { titulo, resumo, autor, fonte, subtopicos, topicos } =
       request.body as CreateArtigoBody;
     const { id: userId } = request.user as RequestUserData;
 
     const response = await ArtigoService.create(
-      { titulo, resumo, autor, fonte, subtopicos, topico },
+      { titulo, resumo, autor, fonte, subtopicos, topicos },
       userId,
     );
 
@@ -31,12 +31,12 @@ export const ArtigoController: Controller = {
     reply.status(201).send({ message: response.data });
   },
   artigoUpdate: async (request, reply) => {
-    const { titulo, resumo, autor, fonte, subtopicos } =
+    const { titulo, resumo, autor, fonte, subtopicos, topicos } =
       request.body as UpdateArtigoBody;
     const { id: artigoId } = request.params as { id: string };
 
     const response = await ArtigoService.update(
-      { titulo, resumo, autor, fonte, subtopicos },
+      { titulo, resumo, autor, fonte, subtopicos, topicos },
       artigoId,
     );
 

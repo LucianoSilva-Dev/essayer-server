@@ -11,7 +11,7 @@ import { montarInfosRepertorio } from '../Helpers/MontarInfosRepertorio';
 
 export const ObraService: Service = {
   create: async (createObraData: CreateObraBody, userId: string) => {
-    const { titulo, sinopse, autor, tipoObra, subtopicos, topico } = createObraData;
+    const { titulo, sinopse, autor, tipoObra, subtopicos, topicos } = createObraData;
     const obra = new ObraModel({
       titulo,
       sinopse,
@@ -19,7 +19,7 @@ export const ObraService: Service = {
       criador: userId,
       tipoObra,
       subtopicos,
-      topico
+      topicos
     });
     await obra.save();
     return { success: true, data: 'Obra criada com sucesso.' };
@@ -64,7 +64,7 @@ export const ObraService: Service = {
       })),
       subtopicos: obra.subtopicos,
       tipoObra: obra.tipoObra,
-      topico: obra.topico
+      topicos: obra.topicos
     };
     return { success: true, data: response };
   },

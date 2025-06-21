@@ -10,7 +10,7 @@ export const getCitacaoResponse = z.object({
   totalLikes: z.number(),
   comentarios: comentarioResponse.array(),
   subtopicos: z.array(z.string()),
-  topico: z.string(),
+  topicos: z.array(z.string()),
   favoritadoPorUsuario: z.boolean(),
   likeDoUsuario: z.boolean(),
 });
@@ -31,10 +31,13 @@ export const createCitacaoBodyValidation = z.object({
       }),
     )
     .min(1, 'O campo subtopicos precisa conter ao menos um subtópico.'),
-  topico: z.string({
-    invalid_type_error: 'O campo topico precisa ser um texto.',
-    required_error: 'O campo topico é obrigatório.',
-  }),
+  topicos: z
+    .array(
+      z.string({
+        invalid_type_error: 'O campo topicos precisa ser um texto.',
+      }),
+    )
+    .min(1, 'O campo topicos precisa conter ao menos um tópico.'),
   fonte: z
     .string({
       invalid_type_error: 'O campo fonte precisa ser um texto.',
@@ -68,6 +71,14 @@ export const updateCitacaoBodyValidation = z
         }),
       )
       .min(1, 'O campo subtopicos precisa conter ao menos um subtópico.')
+      .optional(),
+    topicos: z
+      .array(
+        z.string({
+          invalid_type_error: 'O campo topicos precisa ser um texto.',
+        }),
+      )
+      .min(1, 'O campo topicos precisa conter ao menos um subtópico.')
       .optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {

@@ -15,12 +15,12 @@ export const ObraController: Controller = {
     reply.send(response.data);
   },
   obraCreate: async (request, reply) => {
-    const { titulo, sinopse, autor, tipoObra, subtopicos, topico } =
+    const { titulo, sinopse, autor, tipoObra, subtopicos, topicos } =
       request.body as CreateObraBody;
     const { id: userId } = request.user as { id: string };
 
     const response = await ObraService.create(
-      { titulo, sinopse, autor, tipoObra, subtopicos, topico },
+      { titulo, sinopse, autor, tipoObra, subtopicos, topicos },
       userId,
     );
 
@@ -31,12 +31,12 @@ export const ObraController: Controller = {
     reply.status(201).send({ message: response.data });
   },
   obraUpdate: async (request, reply) => {
-    const { autor, sinopse, subtopicos, tipoObra, titulo } =
+    const { autor, sinopse, subtopicos, tipoObra, titulo, topicos } =
       request.body as UpdateObraBody;
     const { id: obraId } = request.params as { id: string };
 
     const response = await ObraService.update(
-      { titulo, sinopse, autor, tipoObra, subtopicos },
+      { titulo, sinopse, autor, tipoObra, subtopicos, topicos },
       obraId,
     );
 

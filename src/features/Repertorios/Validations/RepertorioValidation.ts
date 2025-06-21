@@ -14,7 +14,7 @@ export const getAllRepertorioObraDoc = z.object({
   criador: perfilUsuarioResponse,
   tipoObra: z.enum(['livro', 'filme', 'música', 'teatro']),
   subtopicos: z.array(z.string()),
-  topico: z.string(),
+  topicos: z.array(z.string()),
   favoritadoPeloUsuario: z.boolean(),
   likeDoUsuario: z.boolean(),
 });
@@ -29,7 +29,7 @@ export const getAllRepertorioArtigoDoc = z.object({
   autor: z.string(),
   criador: perfilUsuarioResponse,
   subtopicos: z.array(z.string()),
-  topico: z.string(),
+  topicos: z.array(z.string()),
   favoritadoPeloUsuario: z.boolean(),
   likeDoUsuario: z.boolean(),
 });
@@ -43,7 +43,7 @@ export const getAllRepertorioCitacaoDoc = z.object({
   fonte: z.string().optional(), // Fonte é opcional
   criador: perfilUsuarioResponse,
   subtopicos: z.array(z.string()),
-  topico: z.string(),
+  topicos: z.array(z.string()),
   favoritadoPeloUsuario: z.boolean(),
   likeDoUsuario: z.boolean(),
 });
@@ -119,18 +119,19 @@ export const getAllRepertorioQueryValidation = z.object({
     ])
     .optional(),
 
-  // Topico agora pode vir como uma string única ou array de strings
-  topico: z
+  // Topicos agora pode vir como uma string única ou array de strings
+  topicos: z
     .union([
       z.string({
-        invalid_type_error: 'O campo topico precisa ser um texto',
-      }).nonempty('O campo topico não pode estar vazio'),
+        invalid_type_error: 'O campo topicos precisa ser um texto',
+      }).nonempty('O campo topicos não pode estar vazio'),
       z.array(
         z.string({
-          invalid_type_error: 'O campo topico precisa ser um texto',
-        }).nonempty('O campo topico não pode estar vazio'),
-      ).min(1, 'O campo topico precisa conter ao menos um item'),
+          invalid_type_error: 'O campo topicos precisa ser um texto',
+        }).nonempty('O campo topicos não pode estar vazio'),
+      ).min(1, 'O campo topicos precisa conter ao menos um item'),
     ])
+    .transform((val) => (Array.isArray(val) ? val : [val])) // Normaliza para sempre ser um array
     .optional(),
 
   criador: z

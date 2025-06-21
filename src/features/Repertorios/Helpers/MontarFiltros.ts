@@ -28,18 +28,14 @@ export const montarFiltros = (
     ];
   }
 
-  // Se subtopicos for um array, usa $all. Se for string, usa diretamente.
+  // Se subtopicos for um array, usa $all.
   if (queryBody.subtopicos) {
-    query.subtopicos = Array.isArray(queryBody.subtopicos)
-      ? { $all: queryBody.subtopicos }
-      : queryBody.subtopicos;
+    query.subtopicos = { $all: queryBody.subtopicos };
   }
 
-  // Se topico for um array, usa $in. Se for string, usa diretamente.
-  if (queryBody.topico) {
-    query.topico = Array.isArray(queryBody.topico)
-      ? { $in: queryBody.topico }
-      : queryBody.topico;
+  // Se topicos for um array, usa $all para garantir que todos os topicos sejam correspondidos.
+  if (queryBody.topicos) {
+    query.topicos = { $all: queryBody.topicos };
   }
 
   if (queryBody.criador) {
