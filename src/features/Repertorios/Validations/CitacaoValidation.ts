@@ -9,9 +9,10 @@ export const getCitacaoResponse = z.object({
   criador: perfilUsuarioResponse,
   totalLikes: z.number(),
   comentarios: comentarioResponse.array(),
+  totalComentarios: z.number(),
   subtopicos: z.array(z.string()),
   topicos: z.array(z.string()),
-  favoritadoPorUsuario: z.boolean(),
+  favoritadoPeloUsuario: z.boolean(),
   likeDoUsuario: z.boolean(),
 });
 

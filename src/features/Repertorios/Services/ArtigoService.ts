@@ -65,6 +65,8 @@ export const ArtigoService: Service = {
       autor: artigo.autor,
       fonte: artigo.fonte,
       criador: artigo.criador as unknown as PerfilUsuario,
+      favoritadoPeloUsuario: artigo.favoritos.includes(new Types.ObjectId(userId)),
+      totalComentarios: artigo.comentarios.length,
       comentarios: artigo.comentarios.map((comentario) => ({
         id: comentario._id.toString(),
         usuario: comentario.usuario as unknown as PerfilUsuario,

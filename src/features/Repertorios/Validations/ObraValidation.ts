@@ -5,14 +5,15 @@ export const getObraResponse = z.object({
   id: z.string(),
   titulo: z.string(),
   sinopse: z.string(),
-  autor: z.string().optional(),
+  autor: z.string(),
   criador: perfilUsuarioResponse,
   totalLikes: z.number(),
   comentarios: comentarioResponse.array(),
+  totalComentarios: z.number(),
   subtopicos: z.array(z.string()),
   topicos: z.array(z.string()),
   tipoObra: z.enum(['livro', 'filme', 'música', 'teatro']),
-  favoritadoPorUsuario: z.boolean(),
+  favoritadoPeloUsuario: z.boolean(),
   likeDoUsuario: z.boolean(),
 });
 

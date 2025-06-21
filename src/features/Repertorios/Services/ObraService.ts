@@ -19,7 +19,7 @@ export const ObraService: Service = {
       criador: userId,
       tipoObra,
       subtopicos,
-      topicos
+      topicos,
     });
     await obra.save();
     return { success: true, data: 'Obra criada com sucesso.' };
@@ -52,11 +52,13 @@ export const ObraService: Service = {
 
     const response: ObraResponse = {
       id: obra._id.toString(),
+      ...repertorioInfo,
       titulo: obra.titulo,
       sinopse: obra.sinopse,
       autor: obra.autor,
       criador: obra.criador as unknown as PerfilUsuario,
-      ...repertorioInfo,
+      favoritadoPeloUsuario: obra.favoritos.includes(new Types.ObjectId(userId)),
+      totalComentarios: obra.comentarios.length,
       comentarios: obra.comentarios.map((comentario) => ({
         id: comentario._id.toString(),
         usuario: comentario.usuario as unknown as PerfilUsuario,
