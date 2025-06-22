@@ -24,6 +24,7 @@ import type {
   getAllRepertorioArtigoDoc,
   getAllRepertorioCitacaoDoc,
   createComentarioBodyValidation,
+  updateComentarioBodyValidation, // ADICIONADO
 } from './Validations/RepertorioValidation';
 
 // Citacao
@@ -66,6 +67,10 @@ export type GetAllRepertorioDocuments = z.infer<
 export type CreateComentarioBody = z.infer<
   typeof createComentarioBodyValidation
 >;
+export type UpdateComentarioBody = z.infer<
+  typeof updateComentarioBodyValidation
+>;
+
 export type ComentarioSubDoc = {
   _id: Types.ObjectId,
   usuario: Types.ObjectId

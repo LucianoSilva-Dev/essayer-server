@@ -1,6 +1,6 @@
 import type { Controller, RequestUserData } from '../../../shared/Types';
 import { RepertorioService } from '../Services/RepertorioService';
-import type { CreateComentarioBody, GetAllRepertorioQueryBody } from '../Types';
+import type { CreateComentarioBody, GetAllRepertorioQueryBody, UpdateComentarioBody } from '../Types';
 
 export const RepertorioController: Controller = {
   get_all: async (request, reply) => {
@@ -20,7 +20,9 @@ export const RepertorioController: Controller = {
   },
   delete: async (request, reply) => {
     const { id: repertorioId } = request.params as { id: string };
-    const response = await RepertorioService.delete(repertorioId);
+    const { id: userId, cargo } = request.user as RequestUserData;
+
+    const response = await RepertorioService.delete(repertorioId, userId, cargo);
     if (!response.success) {
       return reply.status(response.status).send({ error: response.message });
     }
@@ -43,10 +45,23 @@ export const RepertorioController: Controller = {
 
     return reply.send({ message: response.data });
   },
+  comentarioUpdate: async (request, reply) => {
+    const { id: repertorioId, comentarioId } = request.params as { id: string, comentarioId: string };
+    const { texto } = request.body as UpdateComentarioBody;
+    const { id: userId, cargo } = request.user as RequestUserData;
+
+    const response = await RepertorioService.updateComentario(repertorioId, comentarioId, userId, cargo, {texto});
+    if (!response.success) {
+      return reply.status(response.status).send({ error: response.message });
+    }
+
+    return reply.send({ message: response.data });
+  },
   comentarioDelete: async (request, reply) => {
     const { id: repertorioId, comentarioId } = request.params as { id: string, comentarioId: string };
+    const { id: userId, cargo} = request.user as RequestUserData;
 
-    const response = await RepertorioService.deleteComentario(repertorioId, comentarioId);
+    const response = await RepertorioService.deleteComentario(repertorioId, comentarioId, userId, cargo);
     if (!response.success) {
       return reply.status(response.status).send({ error: response.message });
     }

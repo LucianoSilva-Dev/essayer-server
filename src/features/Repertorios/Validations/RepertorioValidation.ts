@@ -1,4 +1,3 @@
-// Backend/src/features/Repertorios/Validations/RepertorioValidation.ts
 import z from 'zod';
 import { paginacaoResponse, perfilUsuarioResponse } from './Commom';
 import { isValidObjectId } from 'mongoose';
@@ -69,6 +68,13 @@ export const createComentarioBodyValidation = z.object({
     invalid_type_error: 'O campo texto do comentario não é um texto',
   }),
 });
+export const updateComentarioBodyValidation = z.object({
+  texto: z.string({
+    required_error: 'O campo texto do comentario é obrigatório',
+    invalid_type_error: 'O campo texto do comentario não é um texto',
+  }),
+});
+
 
 export const getAllRepertorioQueryValidation = z.object({
   // opções de filtragem

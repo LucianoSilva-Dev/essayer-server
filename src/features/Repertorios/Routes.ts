@@ -24,6 +24,11 @@ export const RepertorioRoutes: FastifyPluginAsyncZod = async (app) => {
     RepertorioSchema.createComentario,
     RepertorioController.comentarioCreate,
   );
+  app.put(
+    '/:id/comentario/:comentarioId',
+    RepertorioSchema.updateComentario,
+    RepertorioController.comentarioUpdate,
+  )
   app.delete(
     '/:id/comentario/:comentarioId',
     RepertorioSchema.deleteComentario,

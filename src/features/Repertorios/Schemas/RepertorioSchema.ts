@@ -1,3 +1,4 @@
+// Backend/src/features/Repertorios/Validations/RepertorioValidation.ts
 import { genericError, schemaValidationError } from '../../../shared/Schemas';
 import type { EntitySchema } from '../../../shared/Types';
 import {
@@ -13,6 +14,7 @@ import {
   createComentarioBodyValidation,
   getAllRepertorioQueryValidation,
   getAllRepertorioResponse,
+  updateComentarioBodyValidation, // ADICIONADO
 } from '../Validations/RepertorioValidation';
 
 export const RepertorioSchema: EntitySchema = {
@@ -48,7 +50,7 @@ export const RepertorioSchema: EntitySchema = {
   },
 
   createComentario: {
-    preHandler: authProfessor,
+    preHandler: authMiddleware, // Alterado para permitir qualquer usuário logado
     schema: {
       security: [{ jwtAuth: [] }],
       body: createComentarioBodyValidation,
@@ -63,8 +65,24 @@ export const RepertorioSchema: EntitySchema = {
       summary: 'Cria um comentário no repertório selecionado',
     },
   },
+  updateComentario: {
+    preHandler: authMiddleware,
+    schema: {
+      security: [{ jwtAuth: [] }],
+      body: updateComentarioBodyValidation,
+      response: {
+        200: genericSuccessResponse,
+        400: schemaValidationError,
+        401: genericError,
+        403: genericError,
+        404: genericError,
+        500: genericError,
+      },
+      summary: 'Atualiza um comentário do repertório selecionado',
+    }
+  },
   deleteComentario: {
-    preHandler: authProfessor,
+    preHandler: authMiddleware, // Alterado para permitir qualquer usuário logado
     schema: {
       security: [{ jwtAuth: [] }],
       response: {
