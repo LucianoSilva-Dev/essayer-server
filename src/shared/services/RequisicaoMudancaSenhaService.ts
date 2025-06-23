@@ -5,20 +5,20 @@ import { EMAIL } from '../Env';
 import { UsuarioModel } from '../models/UsuarioModel';
 
 export const RequisicaoMudancaSenhaService = {
-  create: async (id: string) => {
+  create: async (email: string) => {
     const code = randomBytes(6).toString('base64');
-    const usuario = await UsuarioModel.findById(id).select('email');
+    const usuario = await UsuarioModel.findOne({email});
 
     if (!usuario) {
       return {
         succes: false,
         status: 404,
-        message: `Usuário com id ${id} não existe.`,
+        message: `Usuário com email ${email} não existe.`,
       };
     }
 
     const req = await RequisicaoMudancaSenhaModel.create({
-      requisitante: id,
+      requisitante: usuario.id,
       codigo: code,
     });
 

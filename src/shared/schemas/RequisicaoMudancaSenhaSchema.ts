@@ -1,14 +1,14 @@
 import { authMiddleware } from '../middlewares/Authentication';
 import { genericError, schemaValidationError } from '../Schemas';
 import type { EntitySchema } from '../Types';
-import { createRequisicaoMudancaSenhaResponse, getRequisicaoMudancaSenhaResponse, validateRequisicaoMudancaSenhaBodyValidation } from '../validations/RequisicaoMudancaSenhaValidation';
+import { createRequisicaoMudancaSenhaResponse, getRequisicaoMudancaSenhaResponse, validateRequisicaoMudancaSenhaBodyValidation, createRequisicaoMudancaSenhaBodyValidation } from '../validations/RequisicaoMudancaSenhaValidation';
 import { genericSuccessResponse, idValidation } from '../Validations';
 
 export const RequisicaoMudancaSenhaSchema: EntitySchema = {
   create: {
-    preHandler: authMiddleware,
     schema: {
       security: [{ jwtAuth: [] }],
+      body: createRequisicaoMudancaSenhaBodyValidation,
       response: {
         201: createRequisicaoMudancaSenhaResponse,
         400: schemaValidationError,

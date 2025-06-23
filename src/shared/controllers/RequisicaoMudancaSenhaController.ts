@@ -1,11 +1,11 @@
 import { RequisicaoMudancaSenhaService } from '../services/RequisicaoMudancaSenhaService';
-import type { Controller, RequestUserData, validateRequisicaoMudancaSenhaBody } from '../Types';
+import type { Controller, createRequisicaoMudancaSenhaBody, RequestUserData, validateRequisicaoMudancaSenhaBody } from '../Types';
 
 export const RequisicaoMudancaSenhaController: Controller = {
   create: async (request, reply) => {
-    const { id } = request.user as RequestUserData;
+    const { email } = request.body as createRequisicaoMudancaSenhaBody;
 
-    const response = await RequisicaoMudancaSenhaService.create(id);
+    const response = await RequisicaoMudancaSenhaService.create(email);
 
     if (!response.success) {
       return reply
