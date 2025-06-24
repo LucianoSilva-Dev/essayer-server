@@ -88,4 +88,5 @@ export const montarFiltros = (
   }
 
   return query;
+}
 };
