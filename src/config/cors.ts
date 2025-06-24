@@ -4,5 +4,11 @@ export const corsConfig: FastifyCorsOptions = {
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   optionsSuccessStatus: 204,
-  preflightContinue: false
+  preflightContinue: false,
+  allowedHeaders: [
+    'content-type',
+    'accept',
+    'content-type',
+    'authorization'
+  ],
 };

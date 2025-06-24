@@ -53,7 +53,28 @@ export const montarFiltros = (
         break;
     }
   }
+  if (typeof queryBody.favoritadoPeloUsuario === 'boolean' && userId) {
+    const userObjectId = new Types.ObjectId(userId);
+    switch (queryBody.favoritadoPeloUsuario) {
+      case true:
+        query.favoritos = userObjectId;
+        break;
+      case false:
+        query.favoritos = { $nin: [userObjectId] };
+        break;
+    }
+  }
 
+  if (typeof queryBody.likeDoUsuario === 'boolean' && userId) {
+    const userObjectId = new Types.ObjectId(userId);
+    switch (queryBody.likeDoUsuario) {
+      case true:
+        query.likes = userObjectId;
+        break;
+      case false:
+        query.likes = { $nin: [userObjectId] };
+        break;
+    }
   if (typeof queryBody.likeDoUsuario === 'boolean' && userId) {
     const userObjectId = new Types.ObjectId(userId);
     switch (queryBody.likeDoUsuario) {

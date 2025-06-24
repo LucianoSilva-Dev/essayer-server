@@ -5,6 +5,16 @@ export const createRequisicaoMudancaSenhaResponse = z.object({
   id: z.string(),
 });
 
+export const createRequisicaoMudancaSenhaBodyValidation = z.object({
+  email: z
+    .string({
+      required_error: 'O campo email é obrigatório.',
+      invalid_type_error: 'O campo email precisa ser um texto.',
+    })
+    .email('Email inválido')
+    .nonempty('O campo email não pode estar vazio.'),
+})
+
 export const validateRequisicaoMudancaSenhaBodyValidation = z.object({
   codigo: z
     .string({

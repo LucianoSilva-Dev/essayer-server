@@ -19,7 +19,7 @@ import type {
 } from './validations/UsuarioValidation';
 import type { updateStatusBodyValidation } from './validations/RequisicaoProfessorValidation';
 import type { userCargo } from './Validations';
-import type { validateRequisicaoMudancaSenhaBodyValidation } from './validations/RequisicaoMudancaSenhaValidation';
+import type { createRequisicaoMudancaSenhaBodyValidation, validateRequisicaoMudancaSenhaBodyValidation } from './validations/RequisicaoMudancaSenhaValidation';
 import type { validateRequisicaoUsuarioBodyValidation } from './validations/RequisicaoUsuarioValidation';
 
 export type RouteSchema = RouteShorthandOptions<
@@ -72,3 +72,4 @@ export type validateRequisicaoMudancaSenhaBody = z.infer<
 >;
 export type validateRequisicaoUsuarioBody = z.infer<typeof validateRequisicaoUsuarioBodyValidation>
 export type updateSenhaBody = z.infer<typeof updateSenhaBodyValidation>
+export type createRequisicaoMudancaSenhaBody = z.infer<typeof createRequisicaoMudancaSenhaBodyValidation>

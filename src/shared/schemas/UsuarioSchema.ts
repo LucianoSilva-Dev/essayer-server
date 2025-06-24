@@ -77,7 +77,6 @@ export const UsuarioSchema: EntitySchema = {
   },
 
   updateSenha: {
-    preHandler: authMiddleware,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
