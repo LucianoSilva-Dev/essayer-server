@@ -21,7 +21,6 @@ export const RequisicaoMudancaSenhaSchema: EntitySchema = {
     },
   },
   validate: {
-    preHandler: authMiddleware,
     schema: {
         security: [{ jwtAuth: [] }],
         params: idValidation,
