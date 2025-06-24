@@ -5,14 +5,13 @@
   "main": "src/server.ts",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "debug": "tsx watch --inspect src/server.ts",
-    "build": "npx tsc",
-    "start": "node ./dist/server.js"
+    "debug": "tsx watch --inspect src/server.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.6.5",
+  "type": "module",
   "dependencies": {
     "@fastify/cors": "^11.0.0",
     "@fastify/jwt": "^9.1.0",
