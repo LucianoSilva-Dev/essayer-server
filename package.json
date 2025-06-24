@@ -5,7 +5,9 @@
   "main": "src/server.ts",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "debug": "tsx watch --inspect src/server.ts"
+    "debug": "tsx watch --inspect src/server.ts",
+    "build": "npx tsc",
+    "start": "node ./dist/server.js"
   },
   "keywords": [],
   "author": "",
