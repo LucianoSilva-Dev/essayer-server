@@ -267,14 +267,6 @@ export const UsuarioService = {
   fotoUpdate: async (id: string, img: SavedMultipartFile) => {
     const destiny = `${process.cwd()}\\profilePictures\\${id}\\`;
 
-    if (!fs.pathExistsSync(destiny)) {
-      return {
-        success: false,
-        status: 404,
-        message: `Usuário com id ${id} não possui foto.`,
-      };
-    }
-
     const usuario = await UsuarioModel.findByIdAndUpdate(id, {
       fotoPath: destiny + img.filename,
     });
