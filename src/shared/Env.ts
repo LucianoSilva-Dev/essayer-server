@@ -5,6 +5,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const SMTP_KEY = process.env.SMTP_KEY;
 const SMTP_SECRET = process.env.SMTP_SECRET;
 const EMAIL = process.env.EMAIL
+const HOST = process.env.HOST
 
 if (!JWT_SECRET) {
   console.error('JWT_SECRET is not defined');
@@ -30,4 +31,9 @@ if (!SMTP_KEY || !SMTP_SECRET || !EMAIL){
   process.exit(1);
 }
 
-export { JWT_SECRET, SERVER_PORT, MONGO_CONN_STR, SMTP_KEY, SMTP_SECRET, EMAIL };
+if (!HOST){
+  console.error("HOST is not defined.");
+  process.exit(1);
+}
+
+export { JWT_SECRET, SERVER_PORT, HOST, MONGO_CONN_STR, SMTP_KEY, SMTP_SECRET, EMAIL };
