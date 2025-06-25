@@ -75,17 +75,18 @@ export const montarFiltros = (
         query.likes = { $nin: [userObjectId] };
         break;
     }
-  if (typeof queryBody.likeDoUsuario === 'boolean' && userId) {
-    const userObjectId = new Types.ObjectId(userId);
-    switch (queryBody.likeDoUsuario) {
-      case true:
-        query.likes = userObjectId;
-        break;
-      case false:
-        query.likes = { $nin: [userObjectId] };
-        break;
+    if (typeof queryBody.likeDoUsuario === 'boolean' && userId) {
+      const userObjectId = new Types.ObjectId(userId);
+      switch (queryBody.likeDoUsuario) {
+        case true:
+          query.likes = userObjectId;
+          break;
+        case false:
+          query.likes = { $nin: [userObjectId] };
+          break;
+      }
     }
-  }
 
-  return query;
+    return query;
+  }
 };

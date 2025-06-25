@@ -6,8 +6,8 @@ import { Transporter } from '../Transporter';
 export const RequisicaoProfessorService = {
   getAll: async () => {
     const reqs = await RequisicaoProfessorModel.find()
-      .select('_id lattes requisitante revisor status')
-      .populate('requisitante', 'nome')
+      .select('_id lattes requisitante revisor status createdAt')
+      .populate('requisitante', 'nome email id')
       .populate('revisor', 'nome');
 
     return reqs;
@@ -15,8 +15,8 @@ export const RequisicaoProfessorService = {
 
   get: async (id: string) => {
     const req = await RequisicaoProfessorModel.findById(id)
-      .select('lattes requisitante revisor status')
-      .populate('requisitante', 'nome')
+      .select('lattes requisitante revisor status createdAt')
+      .populate('requisitante', 'nome email id')
       .populate('revisor', 'nome');
 
     if (!req) {
@@ -84,6 +84,7 @@ export const RequisicaoProfessorService = {
     if (approved) {
       await UsuarioModel.findOneAndUpdate(req.requisitante, {
         cargo: 'professor',
+        lattes: req.lattes
       });
     }
 

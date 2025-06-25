@@ -12,6 +12,7 @@ const UsuarioSchema = new Schema(
       required: true,
       ref: 'RequisicaoUsuario',
     },
+    lattes: String
   },
   { timestamps: true },
 );

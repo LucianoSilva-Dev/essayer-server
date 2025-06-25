@@ -5,11 +5,14 @@ export const getUsuarioResponse = z.object({
   id: z.string(),
   nome: z.string(),
   cargo: userCargo,
+  email: z.string(),
+  createdAt: z.date(),
+  lattes: z.string().optional(),
 });
 
 export const createUsuarioResponse = z.object({
-  id: z.string()
-})
+  id: z.string(),
+});
 
 export const createUsuarioBodyValidation = z.object({
   nome: z
@@ -52,6 +55,12 @@ export const updateUsuarioBodyValidation = z
       .email('Email inválido')
       .nonempty('O campo email não pode estar vazio.')
       .optional(),
+    lattes: z
+      .string({
+        invalid_type_error: 'O campo lattes precisa ser um texto.',
+      })
+      .nonempty('O campo email não pode estar vazio.')
+      .optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: 'Forneça ao menos um campo para atualizar.',
@@ -59,15 +68,15 @@ export const updateUsuarioBodyValidation = z
 
 export const updateSenhaBodyValidation = z.object({
   senha: z
-      .string({
-        invalid_type_error: 'O campo senha precisa ser um texto.',
-      })
-      .regex(
-        /^(?=.*[a-z])(?=.*\d).{8,24}$/,
-        'A senha deve ter de 8 a 24 caracteres, ao menos uma letra minúscula e um número.',
-      )
-      .nonempty('O campo senha não pode estar vazio.')
-})
+    .string({
+      invalid_type_error: 'O campo senha precisa ser um texto.',
+    })
+    .regex(
+      /^(?=.*[a-z])(?=.*\d).{8,24}$/,
+      'A senha deve ter de 8 a 24 caracteres, ao menos uma letra minúscula e um número.',
+    )
+    .nonempty('O campo senha não pode estar vazio.'),
+});
 
 export const professorCreateBodyValidation = z.object({
   lattes: z

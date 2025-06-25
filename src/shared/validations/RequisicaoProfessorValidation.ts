@@ -5,11 +5,14 @@ export const getRequisicaoProfessorResponse = z.object({
   lattes: z.string(),
   requisitante: z.object({
     nome: z.string(),
+    email: z.string(),
+    id: z.string(),
   }).nullable(),
   revisor: z.object({
     nome: z.string(),
   }).optional().nullable(),
   status: z.string().optional(),
+  createdAt: z.date()
 });
 
 export const updateStatusBodyValidation = z.object({

@@ -15,7 +15,7 @@ import path from 'node:path';
 export const UsuarioService = {
   get: async (id: string) => {
     const usuario = await UsuarioModel.findById(id).select(
-      'nome email senha cargo',
+      'nome email senha cargo lattes createdAt',
     );
 
     if (!usuario) {
@@ -101,7 +101,7 @@ export const UsuarioService = {
 
     if (email) {
       const userEmail = await UsuarioModel.findOne({ email: email });
-      if (userEmail) {
+      if (userEmail && userEmail.id !== id) {
         return {
           success: false,
           status: 404,
