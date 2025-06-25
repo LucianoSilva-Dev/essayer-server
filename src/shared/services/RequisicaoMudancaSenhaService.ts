@@ -7,13 +7,34 @@ import { UsuarioModel } from '../models/UsuarioModel';
 export const RequisicaoMudancaSenhaService = {
   create: async (email: string) => {
     const code = randomBytes(6).toString('base64');
-    const usuario = await UsuarioModel.findOne({email});
-
+    const usuario = await UsuarioModel.findOne({ email });
+    
     if (!usuario) {
       return {
         succes: false,
         status: 404,
         message: `Usuário com email ${email} não existe.`,
+      };
+    }
+    
+    const requisicao = await RequisicaoMudancaSenhaModel.findOne({ requisitante: usuario.id });
+
+    if (requisicao) {
+      const config = {
+        from: `Incita <${EMAIL}>`,
+        to: usuario?.email,
+        subject: 'Mudança de Senha',
+        template: 'codigo',
+        context: {
+          codigo: requisicao.codigo,
+        },
+      };
+
+      Transporter.sendMail(config);
+
+      return {
+        success: true,
+        data: 'Código reenviado',
       };
     }
 
@@ -22,15 +43,17 @@ export const RequisicaoMudancaSenhaService = {
       codigo: code,
     });
 
-    Transporter.sendMail({
+    const config = {
       from: `Incita <${EMAIL}>`,
       to: usuario?.email,
       subject: 'Mudança de Senha',
       template: 'codigo',
       context: {
-        codigo: code
-      }
-    });
+        codigo: code,
+      },
+    };
+
+    Transporter.sendMail(config);
 
     return {
       success: true,

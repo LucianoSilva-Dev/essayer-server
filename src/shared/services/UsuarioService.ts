@@ -36,6 +36,11 @@ export const UsuarioService = {
     const { nome, email, senha } = usuarioData;
 
     const usuario = await UsuarioModel.findOne({ email });
+    const requisicao = await RequisicaoUsuarioModel.findOne({ email });
+
+    const hashedSenha = crypto.hashSync(senha, 10);
+    const code = randomBytes(6).toString('base64');
+
     if (usuario) {
       return {
         success: false,
@@ -44,8 +49,24 @@ export const UsuarioService = {
       };
     }
 
-    const hashedSenha = crypto.hashSync(senha, 10);
-    const code = randomBytes(6).toString('base64');
+    if (requisicao) {
+      const config = {
+        from: `Incita <${EMAIL}>`,
+        to: email,
+        subject: 'Cadastro Incita',
+        template: 'codigo',
+        context: {
+          codigo: requisicao.codigo,
+        },
+      };
+
+      Transporter.sendMail(config);
+
+      return {
+        success: true,
+        data: 'Código reenviado',
+      };
+    }
 
     const req = await RequisicaoUsuarioModel.create({
       nome,
@@ -54,7 +75,7 @@ export const UsuarioService = {
       codigo: code,
     });
 
-    Transporter.sendMail({
+    const config = {
       from: `Incita <${EMAIL}>`,
       to: email,
       subject: 'Cadastro Incita',
@@ -62,7 +83,9 @@ export const UsuarioService = {
       context: {
         codigo: code,
       },
-    });
+    };
+
+    Transporter.sendMail(config);
 
     return {
       success: true,
@@ -86,12 +109,14 @@ export const UsuarioService = {
       requisitante: id,
     });
 
-    Transporter.sendMail({
+    const config = {
       from: `Incita <${EMAIL}>`,
       to: usuario.email,
       subject: 'Requisição Recebida!',
       template: 'notificacao',
-    });
+    };
+
+    Transporter.sendMail(config);
 
     return { success: true, message: 'Requisição criada com sucesso.' };
   },
@@ -181,7 +206,7 @@ export const UsuarioService = {
       };
     }
 
-    const usuario = await UsuarioModel.findById(id)
+    const usuario = await UsuarioModel.findById(id);
 
     if (!usuario) {
       return {
