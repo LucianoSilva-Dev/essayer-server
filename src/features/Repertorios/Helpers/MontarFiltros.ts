@@ -28,31 +28,20 @@ export const montarFiltros = (
     ];
   }
 
-  // Se subtopicos for um array, usa $all.
+  // Se subtopicos for um array, usa $in.
   if (queryBody.subtopicos) {
-    query.subtopicos = { $all: queryBody.subtopicos };
+    query.subtopicos = { $in: queryBody.subtopicos };
   }
 
-  // Se topicos for um array, usa $all para garantir que todos os topicos sejam correspondidos.
+  // Se topicos for um array, usa $in para garantir que qualquer um dos topicos seja correspondido.
   if (queryBody.topicos) {
-    query.topicos = { $all: queryBody.topicos };
+    query.topicos = { $in: queryBody.topicos };
   }
 
   if (queryBody.criador) {
     query.criador = queryBody.criador;
   }
 
-  if (typeof queryBody.favoritadoPeloUsuario === 'boolean' && userId) {
-    const userObjectId = new Types.ObjectId(userId);
-    switch (queryBody.favoritadoPeloUsuario) {
-      case true:
-        query.favoritos = userObjectId;
-        break;
-      case false:
-        query.favoritos = { $nin: [userObjectId] };
-        break;
-    }
-  }
   if (typeof queryBody.favoritadoPeloUsuario === 'boolean' && userId) {
     const userObjectId = new Types.ObjectId(userId);
     switch (queryBody.favoritadoPeloUsuario) {
@@ -75,18 +64,7 @@ export const montarFiltros = (
         query.likes = { $nin: [userObjectId] };
         break;
     }
-    if (typeof queryBody.likeDoUsuario === 'boolean' && userId) {
-      const userObjectId = new Types.ObjectId(userId);
-      switch (queryBody.likeDoUsuario) {
-        case true:
-          query.likes = userObjectId;
-          break;
-        case false:
-          query.likes = { $nin: [userObjectId] };
-          break;
-      }
-    }
-
-    return query;
   }
+
+  return query;
 };
