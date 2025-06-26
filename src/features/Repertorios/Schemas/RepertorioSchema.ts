@@ -50,7 +50,7 @@ export const RepertorioSchema: EntitySchema = {
   },
 
   createComentario: {
-    preHandler: authMiddleware, // Alterado para permitir qualquer usuário logado
+    preHandler: authProfessor,
     schema: {
       security: [{ jwtAuth: [] }],
       body: createComentarioBodyValidation,
@@ -66,7 +66,7 @@ export const RepertorioSchema: EntitySchema = {
     },
   },
   updateComentario: {
-    preHandler: authMiddleware,
+    preHandler: authProfessor,
     schema: {
       security: [{ jwtAuth: [] }],
       body: updateComentarioBodyValidation,
@@ -82,7 +82,7 @@ export const RepertorioSchema: EntitySchema = {
     }
   },
   deleteComentario: {
-    preHandler: authMiddleware, // Alterado para permitir qualquer usuário logado
+    preHandler: authProfessor,
     schema: {
       security: [{ jwtAuth: [] }],
       response: {
