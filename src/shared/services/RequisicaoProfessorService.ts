@@ -71,7 +71,7 @@ export const RequisicaoProfessorService = {
       };
     }
 
-    Transporter.sendMail({
+    const config = {
       from: `Incita <${EMAIL}>`,
       to: usuario.email,
       subject: 'Requisição de cadastro de professor',
@@ -79,7 +79,9 @@ export const RequisicaoProfessorService = {
       context: {
         motivo: motivo,
       },
-    });
+    }
+
+    Transporter.sendMail(config);
 
     if (approved) {
       await UsuarioModel.findOneAndUpdate(req.requisitante, {
