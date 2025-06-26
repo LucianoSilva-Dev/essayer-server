@@ -64,7 +64,7 @@ export const UsuarioService = {
 
       return {
         success: true,
-        data: 'Código reenviado',
+        data: requisicao.id,
       };
     }
 

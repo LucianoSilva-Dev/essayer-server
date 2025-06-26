@@ -34,7 +34,7 @@ export const RequisicaoMudancaSenhaService = {
 
       return {
         success: true,
-        data: 'Código reenviado',
+        data: requisicao.id,
       };
     }
 
