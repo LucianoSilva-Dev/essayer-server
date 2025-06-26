@@ -121,6 +121,18 @@ export const UsuarioController: Controller = {
     const { id } = request.params as { id: string };
     const { id: requisitor } = request.user as RequestUserData;
     const files = await request.saveRequestFiles();
+    const file = files[0];
+
+    if (!file) {
+      return reply.status(400).send({ errors: ['Nenhum arquivo foi enviado.'] });
+    }
+
+    const allowedMimetypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedMimetypes.includes(file.mimetype)) {
+      return reply.status(415).send({
+        error: 'Tipo de arquivo não suportado. Use JPG, PNG ou WEBP.',
+      });
+    }
 
     if (requisitor !== id) {
       return reply.status(403).send({
@@ -128,7 +140,7 @@ export const UsuarioController: Controller = {
       });
     }
 
-    const response = await UsuarioService.fotoCreate(id, files[0]);
+    const response = await UsuarioService.fotoCreate(id, file);
 
     if (!response.success) {
       return reply
@@ -143,6 +155,18 @@ export const UsuarioController: Controller = {
     const { id } = request.params as { id: string };
     const { id: requisitor } = request.user as RequestUserData;
     const files = await request.saveRequestFiles();
+    const file = files[0];
+
+    if (!file) {
+      return reply.status(400).send({ errors: ['Nenhum arquivo foi enviado.'] });
+    }
+
+    const allowedMimetypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedMimetypes.includes(file.mimetype)) {
+      return reply.status(415).send({
+        error: 'Tipo de arquivo não suportado. Use JPG, PNG ou WEBP.',
+      });
+    }
 
     if (requisitor !== id) {
       return reply.status(403).send({
@@ -150,7 +174,7 @@ export const UsuarioController: Controller = {
       });
     }
 
-    const response = await UsuarioService.fotoUpdate(id, files[0]);
+    const response = await UsuarioService.fotoUpdate(id, file);
 
     if (!response.success) {
       return reply
