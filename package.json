@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/server.ts",
+  "engines": {
+    "node": ">=22.15.0"
+  },
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "debug": "tsx watch --inspect src/server.ts",
