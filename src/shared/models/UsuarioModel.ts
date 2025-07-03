@@ -7,6 +7,7 @@ const UsuarioSchema = new Schema(
     email: { type: String, required: true },
     cargo: { type: String, required: true },
     fotoPath: String,
+    fotoPublicId: String,
     requisicao: {
       type: Schema.Types.ObjectId,
       required: true,

@@ -4,13 +4,11 @@ import type { createUsuarioBody, updateUsuarioBody } from '../Types';
 import { RequisicaoProfessorModel } from '../models/RequisicaoProfessorModel';
 import type { SavedMultipartFile } from '@fastify/multipart';
 import { Transporter } from '../Transporter';
-
-import fs from 'fs-extra';
 import { EMAIL } from '../Env';
 import { RequisicaoUsuarioModel } from '../models/RequisicaoUsuarioModel';
 import { randomBytes } from 'node:crypto';
 import { RequisicaoMudancaSenhaModel } from '../models/RequisicaoMudancaSenhaModel';
-import path from 'node:path';
+import { cloudinary } from '../../config/cloudinary';
 
 export const UsuarioService = {
   get: async (id: string) => {
@@ -189,23 +187,14 @@ export const UsuarioService = {
       };
     }
 
-    const destiny = `${process.cwd()}/profilePictures/${id}/`;
-    fs.removeSync(destiny);
+    if (usuario.fotoPublicId) {
+      await cloudinary.uploader.destroy(usuario.fotoPublicId);
+    }
 
     return { success: true, message: 'Usuário deletado com sucesso.' };
   },
 
   fotoGet: async (id: string) => {
-    const destiny = `${process.cwd()}\\profilePictures\\${id}\\`;
-
-    if (!fs.pathExistsSync(destiny)) {
-      return {
-        success: false,
-        status: 404,
-        message: `Usuário com id ${id} não possui foto.`,
-      };
-    }
-
     const usuario = await UsuarioModel.findById(id);
 
     if (!usuario) {
@@ -217,8 +206,6 @@ export const UsuarioService = {
     }
 
     if (!usuario.fotoPath) {
-      fs.removeSync(destiny);
-
       return {
         success: false,
         status: 404,
@@ -226,22 +213,11 @@ export const UsuarioService = {
       };
     }
 
-    const dir = path.dirname(usuario.fotoPath);
-    const name = path.basename(usuario.fotoPath);
-
-    const caminhoRelativo = path.relative(
-      path.join(process.cwd(), 'profilePictures'), // root
-      path.join(dir, name),
-    );
-    return { success: true, data: caminhoRelativo };
+    return { success: true, data: usuario.fotoPath };
   },
 
   fotoCreate: async (id: string, img: SavedMultipartFile) => {
-    const destiny = `${process.cwd()}\\profilePictures\\${id}\\`;
-
-    const usuario = await UsuarioModel.findByIdAndUpdate(id, {
-      $set: { fotoPath: destiny + img.filename },
-    });
+    const usuario = await UsuarioModel.findById(id);
 
     if (!usuario) {
       return {
@@ -251,7 +227,7 @@ export const UsuarioService = {
       };
     }
 
-    if (fs.pathExistsSync(destiny)) {
+    if (usuario.fotoPath) {
       return {
         success: false,
         status: 409,
@@ -259,17 +235,28 @@ export const UsuarioService = {
       };
     }
 
-    fs.moveSync(img.filepath, destiny + img.filename);
+    const { secure_url, public_id } = await cloudinary.uploader.upload(
+      img.filepath,
+      {
+        folder: `profilePictures/${id}`,
+        transformation: {
+          width: 250,
+          height: 250,
+          crop: 'thumb',
+          gravity: 'face',
+        },
+      },
+    );
+
+    await usuario.updateOne({
+      $set: { fotoPath: secure_url, fotoPublicId: public_id },
+    });
 
     return { success: true, message: 'Imagem salva com sucesso.' };
   },
 
   fotoUpdate: async (id: string, img: SavedMultipartFile) => {
-    const destiny = `${process.cwd()}\\profilePictures\\${id}\\`;
-
-    const usuario = await UsuarioModel.findByIdAndUpdate(id, {
-      fotoPath: destiny + img.filename,
-    });
+    const usuario = await UsuarioModel.findById(id);
 
     if (!usuario) {
       return {
@@ -279,16 +266,42 @@ export const UsuarioService = {
       };
     }
 
-    fs.removeSync(destiny);
-    fs.moveSync(img.filepath, destiny + img.filename);
+    if (usuario.fotoPublicId) {
+      await cloudinary.uploader.destroy(usuario.fotoPublicId);
+    }
+
+    const { secure_url, public_id } = await cloudinary.uploader.upload(
+      img.filepath,
+      {
+        folder: `profilePictures/${id}`,
+        transformation: {
+          width: 250,
+          height: 250,
+          crop: 'thumb',
+          gravity: 'face',
+        },
+      },
+    );
+
+    await usuario.updateOne({
+      $set: { fotoPath: secure_url, fotoPublicId: public_id },
+    });
 
     return { success: true, message: 'Imagem atualizada com sucesso.' };
   },
 
   fotoDelete: async (id: string) => {
-    const destiny = `${process.cwd()}\\profilePictures\\${id}\\`;
+    const usuario = await UsuarioModel.findById(id);
 
-    if (!fs.pathExistsSync(destiny)) {
+    if (!usuario) {
+      return {
+        success: false,
+        status: 404,
+        message: `Usuário com id ${id} não existe.`,
+      };
+    }
+
+    if (!usuario.fotoPublicId) {
       return {
         success: false,
         status: 404,
@@ -296,19 +309,11 @@ export const UsuarioService = {
       };
     }
 
-    const usuario = await UsuarioModel.findByIdAndUpdate(id, {
-      fotoPath: undefined,
+    await cloudinary.uploader.destroy(usuario.fotoPublicId);
+
+    await usuario.updateOne({
+      $unset: { fotoPath: '', fotoPublicId: '' },
     });
-
-    if (!usuario) {
-      return {
-        success: false,
-        status: 404,
-        message: `Usuário com id ${id} não existe.`,
-      };
-    }
-
-    fs.removeSync(destiny);
 
     return { success: true, message: 'Imagem deletada com sucesso.' };
   },

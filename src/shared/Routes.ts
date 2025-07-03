@@ -9,20 +9,10 @@ import { RequisicaoUsuarioController } from './controllers/RequisicaoUsuarioCont
 import { RequisicaoMudancaSenhaController } from './controllers/RequisicaoMudancaSenhaController';
 import { RequisicaoMudancaSenhaSchema } from './schemas/RequisicaoMudancaSenhaSchema';
 import { RequisicaoUsuarioSchema } from './schemas/RequisicaoUsuarioSchema';
-import fastifyStatic from '@fastify/static';
-import path from 'node:path';
 
 export const UsuarioRoutes: FastifyPluginAsyncZod = async (app) => {
   AddEntityWiseTags(app, ['Usuario']);
   app.register(authPlugin);
-  // permite que o "reply" seja decorado com o método "sendFile" sem
-  // servir arquivos estáticos automaticamentes
-  app.register(fastifyStatic, {
-    root: path.join(process.cwd(), 'profilePictures'),
-    prefix: '/foto/',
-    serve: false,
-    decorateReply: true,
-  });
 
   app.get('/:id', UsuarioSchema.get, UsuarioController.get);
 
