@@ -72,10 +72,10 @@ export type UpdateComentarioBody = z.infer<
 >;
 
 export type ComentarioSubDoc = {
-  _id: Types.ObjectId,
-  usuario: Types.ObjectId
-  texto: string
-}
+  _id: Types.ObjectId;
+  usuario: Types.ObjectId;
+  texto: string;
+};
 export type Repertorio = {
   autor: string;
   criador: Types.ObjectId;
@@ -96,12 +96,14 @@ export type PopulatedRepertorio = Omit<
   criador: {
     _id: Types.ObjectId;
     nome: string;
+    fotoPath: string | null;
   };
   comentarios: Types.DocumentArray<{
     _id: Types.ObjectId;
     usuario: {
       _id: Types.ObjectId;
       nome: string;
+      fotoPath: string | null;
     };
     texto: string;
   }>;

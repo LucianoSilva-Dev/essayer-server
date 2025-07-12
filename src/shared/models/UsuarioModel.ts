@@ -6,14 +6,14 @@ const UsuarioSchema = new Schema(
     senha: { type: String, required: true },
     email: { type: String, required: true },
     cargo: { type: String, required: true },
-    fotoPath: String,
+    fotoPath: { type: String, default: null },
     fotoPublicId: String,
     requisicao: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: 'RequisicaoUsuario',
     },
-    lattes: String
+    lattes: String,
   },
   { timestamps: true },
 );

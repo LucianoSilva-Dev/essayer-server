@@ -34,6 +34,7 @@ export function formatCitacaoDoc(
     criador: {
       id: criador._id.toString(),
       nome: criador.nome,
+      fotoPath: criador.fotoPath
     },
   };
   return formattedCitacao;

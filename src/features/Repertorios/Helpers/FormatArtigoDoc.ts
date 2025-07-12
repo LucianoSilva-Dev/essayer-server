@@ -34,7 +34,8 @@ export function formatArtigoDoc(
     criador: {
       id: criador._id.toString(),
       nome: criador.nome,
-    },
+      fotoPath: criador.fotoPath,
+    }
   };
   return formattedArtigo;
 }
