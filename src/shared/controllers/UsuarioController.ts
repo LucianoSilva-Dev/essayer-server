@@ -113,8 +113,8 @@ export const UsuarioController: Controller = {
         .send({ error: response.message });
     }
 
-    const foto = response.data as string;
-    return reply.sendFile(foto);
+    const fotoUrl = response.data as string;
+    return reply.status(200).send({ fotoUrl });
   },
 
   fotoCreate: async (request, reply) => {

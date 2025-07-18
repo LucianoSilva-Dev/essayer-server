@@ -16,7 +16,7 @@ Transporter.use(
   'compile',
   hbs({
     viewEngine: {
-      defaultLayout: false,
+      defaultLayout: '',
     },
     viewPath: 'src/shared/templates',
     extName: '.hbs',

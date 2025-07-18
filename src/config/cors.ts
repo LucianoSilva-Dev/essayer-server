@@ -9,6 +9,9 @@ export const corsConfig: FastifyCorsOptions = {
     'content-type',
     'accept',
     'content-type',
-    'authorization'
+    'authorization',
+    'cache-control',
+    'expires',
+    'pragma'
   ],
 };

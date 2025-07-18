@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/server.ts",
+  "engines": {
+    "node": ">=22.15.0"
+  },
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "debug": "tsx watch --inspect src/server.ts",
@@ -13,7 +16,6 @@
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.6.5",
-  "type": "module",
   "dependencies": {
     "@fastify/cors": "^11.0.0",
     "@fastify/jwt": "^9.1.0",
@@ -22,6 +24,7 @@
     "@fastify/swagger": "^9.4.2",
     "@fastify/swagger-ui": "^5.2.2",
     "bcryptjs": "^3.0.2",
+    "cloudinary": "^2.7.0",
     "dotenv": "^16.4.7",
     "fastify": "^5.2.1",
     "fastify-plugin": "^5.0.1",
@@ -29,7 +32,7 @@
     "fs-extra": "^11.3.0",
     "mongoose": "^8.12.1",
     "nodemailer": "^7.0.3",
-    "nodemailer-express-handlebars": "^7.0.0",
+    "nodemailer-express-handlebars": "^5.0.0",
     "nodemailer-mailjet-transport": "^1.0.4",
     "zod": "^3.24.2",
     "zod-form-data": "^2.0.7"
