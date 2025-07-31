@@ -27,7 +27,7 @@ export const UsuarioController: Controller = {
   create: async (request, reply) => {
     const { nome, email, senha } = request.body as createUsuarioBody;
 
-    const response = await UsuarioService.create({ nome, email, senha });
+    const response = await UsuarioService.create({ nome, email: email.toLocaleLowerCase(), senha });
 
     if (!response.success) {
       return reply
@@ -57,7 +57,7 @@ export const UsuarioController: Controller = {
       });
     }
 
-    const response = await UsuarioService.update(id, { nome, email });
+    const response = await UsuarioService.update(id, { nome, email: email?.toLocaleLowerCase() });
 
     if (!response.success) {
       return reply
