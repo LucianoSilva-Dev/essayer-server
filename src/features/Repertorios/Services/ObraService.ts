@@ -37,7 +37,7 @@ export const ObraService: Service = {
   },
   get: async (obraId: string, userId?: string) => {
     const obra = await ObraModel.findById(obraId)
-      .populate('criador', '_id nome email')
+      .populate('criador', '_id nome email fotoPath')
       .populate('comentarios.usuario', '_id nome fotoPath');
 
     if (!obra) {
