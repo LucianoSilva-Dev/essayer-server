@@ -123,7 +123,7 @@ export const UsuarioService = {
     const { email } = usuarioData;
 
     if (email) {
-      const userEmail = await UsuarioModel.findOne({ email: email });
+      const userEmail = await UsuarioModel.findOne({ email: email.toLocaleLowerCase() });
       if (userEmail && userEmail.id !== id) {
         return {
           success: false,
