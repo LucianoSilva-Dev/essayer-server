@@ -8,7 +8,7 @@ import { UsuarioModel } from '../../shared/models/UsuarioModel';
 export const AuthService = {
   login: async (userCredentials: userLoginBody, reply: FastifyReply) => {
     const { email, senha } = userCredentials;
-    const user = await UsuarioModel.findOne({ email });
+    const user = await UsuarioModel.findOne({ email: email.toLocaleLowerCase() });
     if (!user) {
       return { auth: false, token: null };
     }
@@ -17,7 +17,7 @@ export const AuthService = {
       return { auth: false, token: null };
     }
 
-    const jwt = await reply.jwtSign({ id: user._id, cargo: user.cargo });
+    const jwt = await reply.jwtSign({ id: user._id, cargo: user.cargo, nome: user.nome });
     return { auth: true, token: jwt };
   },
 

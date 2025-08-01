@@ -60,6 +60,7 @@ export type UserCargo = z.infer<typeof userCargo>;
 export type RequestUserData = {
   id: string;
   cargo: UserCargo;
+  nome: string;
   iat: number;
 };
 
