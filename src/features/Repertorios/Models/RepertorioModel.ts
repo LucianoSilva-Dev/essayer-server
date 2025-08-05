@@ -20,11 +20,7 @@ export const RepertorioDBSchema = new Schema<Repertorio>(
   {
     autor: { type: String, required: true },
     criador: { type: Schema.Types.ObjectId, required: true, ref: 'Usuario' },
-    likes: {
-      type: [{ type: Schema.Types.ObjectId, ref: 'Usuario'}],
-      set: (arr: Types.ObjectId[]) => 
-        [...new Set(arr.map(id => id.toString()))].map(id => new Types.ObjectId(id)),
-    },  
+    likes: [{ type: Schema.Types.ObjectId, ref: 'Usuario'}],
     favoritos: [{ type: Schema.Types.ObjectId, ref: 'Usuario' }],
     comentarios: [ComentarioSubDocSchema],
     subtopicos: [{ type: String, required: true }],
@@ -33,6 +29,12 @@ export const RepertorioDBSchema = new Schema<Repertorio>(
   },
   { timestamps: true, discriminatorKey: 'tipoRepertorio' },
 );
+
+RepertorioDBSchema.pre('save', function (next) {
+  this.likes = [...new Set(this.likes.map((id: Types.ObjectId) => id.toString()))]
+    .map((id: string) => new Types.ObjectId(id));
+  next();
+});
 
 // TMethodsAndOverrides
 export type THydratedRepertorioDocument = HydratedDocument<
