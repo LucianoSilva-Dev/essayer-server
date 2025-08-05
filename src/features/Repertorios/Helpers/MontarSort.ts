@@ -4,10 +4,10 @@ export function montarSort(queryBody: GetAllRepertorioQueryBody) {
   const sort: any = {};
   switch (queryBody.ordenarPor) {
     case 'MaxLikes':
-      sort.likes = -1;
+      sort.likes = 1;
       break;
     case 'MinLikes':
-      sort.likes = 1;
+      sort.likes = -1;
       break;
     case 'Newest':
       sort.createdAt = -1;
