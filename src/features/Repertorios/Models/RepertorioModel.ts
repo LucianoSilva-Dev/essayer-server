@@ -1,7 +1,7 @@
 import {
   type HydratedDocument,
   Schema,
-  type Types,
+  Types,
   model,
   type Model,
 } from 'mongoose';
@@ -20,7 +20,11 @@ export const RepertorioDBSchema = new Schema<Repertorio>(
   {
     autor: { type: String, required: true },
     criador: { type: Schema.Types.ObjectId, required: true, ref: 'Usuario' },
-    likes: [{ type: Schema.Types.ObjectId, ref: 'Usuario' }],
+    likes: {
+      type: [{ type: Schema.Types.ObjectId, ref: 'Usuario'}],
+      set: (arr: Types.ObjectId[]) => 
+        [...new Set(arr.map(id => id.toString()))].map(id => new Types.ObjectId(id)),
+    },  
     favoritos: [{ type: Schema.Types.ObjectId, ref: 'Usuario' }],
     comentarios: [ComentarioSubDocSchema],
     subtopicos: [{ type: String, required: true }],
