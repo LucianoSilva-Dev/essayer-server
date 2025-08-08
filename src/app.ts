@@ -16,14 +16,7 @@ import { appErrorHandler } from './shared/plugins/appErrorHandler';
 
 import { appConfig } from './config/app';
 
-import {
-  RequisicaoMudancaSenhaRoutes,
-  RequisicaoProfessorRoutes,
-  RequisicaoUsuarioRoutes,
-  RepertorioRoutes,
-  AuthRoutes,
-  UsersRoutes,
-} from '@/routes';
+import routes from '@/routes';
 
 class App {
   readonly app: FastifyInstance;
@@ -49,18 +42,7 @@ class App {
   }
 
   private routes() {
-    this.app.register(AuthRoutes, { prefix: '/auth' });
-    this.app.register(UsersRoutes, { prefix: '/usuario' });
-    this.app.register(RequisicaoProfessorRoutes, {
-      prefix: '/requisicao-professor',
-    });
-    this.app.register(RepertorioRoutes, { prefix: '/repertorio' });
-    this.app.register(RequisicaoMudancaSenhaRoutes, {
-      prefix: '/requisicao-senha',
-    });
-    this.app.register(RequisicaoUsuarioRoutes, {
-      prefix: '/requisicao-usuario',
-    });
+    this.app.register(routes);
   }
 }
 

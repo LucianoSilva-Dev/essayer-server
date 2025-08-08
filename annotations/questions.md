@@ -1,0 +1,1 @@
+Porque tem tanta coisa em baixo nível?
