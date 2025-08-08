@@ -19,7 +19,10 @@ import type {
 } from './validations/UsuarioValidation';
 import type { updateStatusBodyValidation } from './validations/RequisicaoProfessorValidation';
 import type { userCargo } from './Validations';
-import type { createRequisicaoMudancaSenhaBodyValidation, validateRequisicaoMudancaSenhaBodyValidation } from './validations/RequisicaoMudancaSenhaValidation';
+import type {
+  createRequisicaoMudancaSenhaBodyValidation,
+  validateRequisicaoMudancaSenhaBodyValidation,
+} from './validations/RequisicaoMudancaSenhaValidation';
 import type { validateRequisicaoUsuarioBodyValidation } from './validations/RequisicaoUsuarioValidation';
 
 export type RouteSchema = RouteShorthandOptions<
@@ -64,6 +67,8 @@ export type RequestUserData = {
   iat: number;
 };
 
+/* TODO: Isso aqui em baixo é tudo porcaria. Colocar na definição do DTO */
+
 export type createUsuarioBody = z.infer<typeof createUsuarioBodyValidation>;
 export type updateUsuarioBody = z.infer<typeof updateUsuarioBodyValidation>;
 export type professorCreateBody = z.infer<typeof professorCreateBodyValidation>;
@@ -71,6 +76,10 @@ export type updateStatusBody = z.infer<typeof updateStatusBodyValidation>;
 export type validateRequisicaoMudancaSenhaBody = z.infer<
   typeof validateRequisicaoMudancaSenhaBodyValidation
 >;
-export type validateRequisicaoUsuarioBody = z.infer<typeof validateRequisicaoUsuarioBodyValidation>
-export type updateSenhaBody = z.infer<typeof updateSenhaBodyValidation>
-export type createRequisicaoMudancaSenhaBody = z.infer<typeof createRequisicaoMudancaSenhaBodyValidation>
+export type validateRequisicaoUsuarioBody = z.infer<
+  typeof validateRequisicaoUsuarioBodyValidation
+>;
+export type updateSenhaBody = z.infer<typeof updateSenhaBodyValidation>;
+export type createRequisicaoMudancaSenhaBody = z.infer<
+  typeof createRequisicaoMudancaSenhaBodyValidation
+>;
