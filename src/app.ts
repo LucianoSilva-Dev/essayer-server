@@ -14,15 +14,16 @@ import fastifyMultipart from '@fastify/multipart';
 
 import { appErrorHandler } from './shared/plugins/appErrorHandler';
 
-import { AuthRoutes } from './features/Auth/Routes';
-import { RepertorioRoutes } from './features/Repertorios/Routes';
 import { appConfig } from './config/app';
+
 import {
   RequisicaoMudancaSenhaRoutes,
   RequisicaoProfessorRoutes,
   RequisicaoUsuarioRoutes,
-  UsuarioRoutes,
-} from './shared/Routes';
+  RepertorioRoutes,
+  AuthRoutes,
+  UsersRoutes,
+} from '@/routes';
 
 class App {
   readonly app: FastifyInstance;
@@ -49,7 +50,7 @@ class App {
 
   private routes() {
     this.app.register(AuthRoutes, { prefix: '/auth' });
-    this.app.register(UsuarioRoutes, { prefix: '/usuario' });
+    this.app.register(UsersRoutes, { prefix: '/usuario' });
     this.app.register(RequisicaoProfessorRoutes, {
       prefix: '/requisicao-professor',
     });
