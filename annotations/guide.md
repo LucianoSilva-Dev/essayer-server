@@ -1,0 +1,3 @@
+- [ ] Agrupar todas as rotas em @/routes
+- [ ] Verificar as rotas redundantes
+- [ ] Ver os Controladores
