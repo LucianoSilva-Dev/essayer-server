@@ -37,8 +37,8 @@ src
 ├── features
 │   └── MinhaFeature
 │       ├── Controllers
-│       │   ├── CreateController.ts // Lógica para uma ação específica
-│       │   ├── GetController.ts    // Outra ação
+│       │   ├── Create.ts // Lógica para uma ação específica
+│       │   ├── Get.ts    // Outra ação
 │       │   └── MinhaFeatureController.ts // Agrupa e exporta as ações
 │       ├── Helpers
 │       │   └── MeuHelper.ts
@@ -48,9 +48,8 @@ src
 │       ├── Schemas
 │       │   └── MeuSchema.ts
 │       ├── Services
-│       │   ├── Actions
-│       │   │   ├── CreateService.ts
-│       │   │   └── GetService.ts
+│       │   │   ├── Create.ts
+│       │   │   └── Get.ts
 │       │   └── MeuService.ts
 │       ├── Types.ts
 │       └── Validations
@@ -165,12 +164,12 @@ export const getCitacao: RouteHandlerMethod = async (request, reply) => {
 **Exemplo de agregador:**  
 `src/features/Repertorios/Controllers/CitacaoController.ts`
 ```ts
-import { getCitacao } from './GetCitacao';
-import { createCitacao } from './CreateCitacao';
+import { get } from './Get';
+import { create } from './Create';
 
 export const CitacaoController = {
-  getCitacao,
-  createCitacao,
+  get,
+  create,
 };
 ```
 
@@ -206,8 +205,8 @@ export const get = async (citacaoId: string) => {
 **Exemplo de agregador:**  
 `src/features/Repertorios/Services/CitacaoService.ts`
 ```ts
-import { create } from './CreateService';
-import { get } from './GetService';
+import { create } from './Create';
+import { get } from './Get';
 
 export const CitacaoService = {
   create,
