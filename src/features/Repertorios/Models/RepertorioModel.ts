@@ -30,12 +30,6 @@ export const RepertorioDBSchema = new Schema<Repertorio>(
   { timestamps: true, discriminatorKey: 'tipoRepertorio' },
 );
 
-RepertorioDBSchema.pre('save', function (next) {
-  this.likes = [...new Set(this.likes.map((id: Types.ObjectId) => id.toString()))]
-    .map((id: string) => new Types.ObjectId(id));
-  next();
-});
-
 // TMethodsAndOverrides
 export type THydratedRepertorioDocument = HydratedDocument<
   Repertorio,

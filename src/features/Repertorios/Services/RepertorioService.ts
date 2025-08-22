@@ -72,8 +72,8 @@ export const RepertorioService: Service = {
       return {
         success: false,
         status: 403,
-        message: 'Você não tem permissão para deletar este repertório.'
-      }
+        message: 'Você não tem permissão para deletar este repertório.',
+      };
     }
 
     await RepertorioModel.findByIdAndDelete(repertorioId);
@@ -103,7 +103,13 @@ export const RepertorioService: Service = {
 
     return { success: true, data: 'Comentario criado com sucesso.' };
   },
-  updateComentario: async(repertorioId: string, comentarioId: string, userId: string, userRole: UserCargo, comentarioBody: UpdateComentarioBody) => {
+  updateComentario: async (
+    repertorioId: string,
+    comentarioId: string,
+    userId: string,
+    userRole: UserCargo,
+    comentarioBody: UpdateComentarioBody,
+  ) => {
     const repertorio = await RepertorioModel.findById(repertorioId);
     if (!repertorio) {
       return {
@@ -121,13 +127,13 @@ export const RepertorioService: Service = {
         message: `Comentario com ID "${comentarioId}" não existe no repertorio de id ${repertorioId}`,
       };
     }
-    
+
     if (comentario.usuario.toString() !== userId) {
       return {
         success: false,
         status: 403,
-        message: 'Você não tem permissão para editar este comentário.'
-      }
+        message: 'Você não tem permissão para editar este comentário.',
+      };
     }
 
     comentario.texto = comentarioBody.texto;
@@ -135,7 +141,12 @@ export const RepertorioService: Service = {
 
     return { success: true, data: 'Comentário atualizado com sucesso.' };
   },
-  deleteComentario: async (repertorioId: string, comentarioId: string, userId: string, userRole: UserCargo) => {
+  deleteComentario: async (
+    repertorioId: string,
+    comentarioId: string,
+    userId: string,
+    userRole: UserCargo,
+  ) => {
     const repertorio = await RepertorioModel.findById(repertorioId);
     if (!repertorio) {
       return {
@@ -158,8 +169,8 @@ export const RepertorioService: Service = {
       return {
         success: false,
         status: 403,
-        message: 'Você não tem permissão para deletar este comentário.'
-      }
+        message: 'Você não tem permissão para deletar este comentário.',
+      };
     }
 
     await comentario.deleteOne();
@@ -169,24 +180,18 @@ export const RepertorioService: Service = {
   },
 
   createLike: async (repertorioId: string, userId: string) => {
-    const repertorio = await RepertorioModel.findById(repertorioId);
-    if (!repertorio) {
+    const repertorio = await RepertorioModel.findByIdAndUpdate(repertorioId, {
+      $addToSet: { likes: userId },
+    });
+
+    if(!repertorio) {
       return {
         success: false,
         status: 404,
-        message: `Repertório com ID "${repertorioId}" não existe.`,
+        message: 'Repertorio não encontrado',
       };
     }
 
-    if (repertorio.likes.includes(new Types.ObjectId(userId))) {
-      return {
-        success: false,
-        status: 409,
-        message: 'Você já deu like nesse repertório.',
-      };
-    }
-
-    repertorio.likes.push(new Types.ObjectId(userId));
     await repertorio.save();
 
     return { success: true, data: 'Like adicionado com sucesso.' };
