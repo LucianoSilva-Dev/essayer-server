@@ -30,16 +30,15 @@ O projeto segue uma arquitetura baseada em **funcionalidades (feature-based)**, 
 ## 3. Estrutura de Arquivos e Convenções de Nomenclatura
 
 - Nomes de arquivos em **PascalCase**.  
-- Controllers e Services divididos em **arquivos de ação única** (na pasta `Actions`) e depois agregados em um arquivo principal.
+- Controllers e Services divididos em **arquivos de ação única** e depois agregados em um arquivo principal.
 
 ```
 src
 ├── features
 │   └── MinhaFeature
 │       ├── Controllers
-│       │   ├── Actions
-│       │   │   ├── CreateController.ts // Lógica para uma ação específica
-│       │   │   └── GetController.ts    // Outra ação
+│       │   ├── CreateController.ts // Lógica para uma ação específica
+│       │   ├── GetController.ts    // Outra ação
 │       │   └── MinhaFeatureController.ts // Agrupa e exporta as ações
 │       ├── Helpers
 │       │   └── MeuHelper.ts
@@ -140,11 +139,11 @@ export const CitacaoSchema: EntitySchema = {
 
 ### 4.3 Controllers (`Controllers/`)
 
-- Arquivos de **ação única** dentro de `Actions/`.  
+- Arquivos de **ação única**.  
 - Arquivo agregador exporta todas as ações.  
 
 **Exemplo de ação:**  
-`src/features/Repertorios/Controllers/Actions/GetCitacao.ts`
+`src/features/Repertorios/Controllers/GetCitacao.ts`
 ```ts
 import type { RouteHandlerMethod } from 'fastify';
 import type { RequestUserData } from '../../../../shared/Types';
@@ -166,8 +165,8 @@ export const getCitacao: RouteHandlerMethod = async (request, reply) => {
 **Exemplo de agregador:**  
 `src/features/Repertorios/Controllers/CitacaoController.ts`
 ```ts
-import { getCitacao } from './Actions/GetCitacao';
-import { createCitacao } from './Actions/CreateCitacao';
+import { getCitacao } from './GetCitacao';
+import { createCitacao } from './CreateCitacao';
 
 export const CitacaoController = {
   getCitacao,
@@ -185,7 +184,7 @@ export const CitacaoController = {
   - **Erro:** `{ success: false, status: number, message: string }`  
 
 **Exemplo de ação:**  
-`src/features/Repertorios/Services/Actions/GetService.ts`
+`src/features/Repertorios/Services/GetService.ts`
 ```ts
 import { CitacaoModel } from '../../Models/CitacaoModel';
 
@@ -207,8 +206,8 @@ export const get = async (citacaoId: string) => {
 **Exemplo de agregador:**  
 `src/features/Repertorios/Services/CitacaoService.ts`
 ```ts
-import { create } from './Actions/CreateService';
-import { get } from './Actions/GetService';
+import { create } from './CreateService';
+import { get } from './GetService';
 
 export const CitacaoService = {
   create,
