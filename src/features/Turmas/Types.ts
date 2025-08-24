@@ -26,8 +26,6 @@ export type Turma = {
   updatedAt: Date;
 };
 
-
-
 export type CreateTurmaBody = z.infer<typeof createTurmaBodyValidation>;
 export type UpdateTurmaBody = z.infer<typeof updateTurmaBodyValidation>;
 export type SolicitarEntradaBody = z.infer<

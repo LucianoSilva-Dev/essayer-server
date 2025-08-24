@@ -127,15 +127,15 @@ export const TurmaController: Controller = {
     reply.send(response.data);
   },
 
-  // getAllAtividades: async (request, reply) => {
-  //   const { id: turmaId } = request.params as { id: string };
-  //   const { id: userId } = request.user as RequestUserData;
-  //   const response = await TurmaService.getAllAtividades(turmaId, userId);
-  //   if (!response.success) {
-  //       return reply.status(response.status).send({ error: response.message });
-  //   }
-  //   reply.send(response.data);
-  // },
+  getAllAtividades: async (request, reply) => {
+    const { id: turmaId } = request.params as { id: string };
+    const { id: userId } = request.user as RequestUserData;
+    const response = await TurmaService.getAllAtividades(turmaId, userId);
+    if (!response.success) {
+        return reply.status(response.status).send({ error: response.message });
+    }
+    reply.send(response.data);
+  },
   
   removerAluno: async (request, reply) => {
     const { id: turmaId, alunoId } = request.params as { id: string; alunoId: string };

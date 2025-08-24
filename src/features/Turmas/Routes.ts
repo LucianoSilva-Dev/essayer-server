@@ -15,7 +15,7 @@ export const TurmaRoutes: FastifyPluginAsyncZod = async (app) => {
   app.get('/:id', TurmaSchema.getById, TurmaController.getById);
   app.put('/:id', TurmaSchema.update, TurmaController.update);
   app.delete('/:id', TurmaSchema.delete, TurmaController.delete);
-  // app.get('/:id/atividades', TurmaSchema.getAllAtividades, TurmaController.getAllAtividades);
+  app.get('/:id/atividades', TurmaSchema.getAllAtividades, TurmaController.getAllAtividades);
   
   // Codigo Convite
   app.get('/:id/convite', TurmaSchema.getCodigoConvite, TurmaController.getCodigoConvite);

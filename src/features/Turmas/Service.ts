@@ -4,6 +4,7 @@ import { TurmaModel } from './Model';
 import type {
   CreateTurmaBody,
   GetAlunosResponse,
+  GetAtividadesResponse,
   GetTurmaResponse,
   GetTurmasCriadasResponse,
   GetTurmasResponse,
@@ -12,14 +13,13 @@ import type {
 } from './Types';
 import { Types } from 'mongoose';
 import { gerarCodigoConvite } from './Helpers/gerarCodigoConvite';
-
-// NOTA: Importe o AtividadeModel quando ele for criado.
-// import { AtividadeModel } from '../../Atividades/Models/AtividadeModel';
+import { AtividadeModel } from '../../shared/Atividade/Model';
+import type { Atividade } from '../../shared/Atividade/Types';
 
 export const TurmaService = {
   create: async (data: CreateTurmaBody, criadorId: string) => {
     try {
-      const codigoConvite = gerarCodigoConvite()
+      const codigoConvite = gerarCodigoConvite();
 
       const turma = new TurmaModel({
         ...data,
@@ -28,10 +28,13 @@ export const TurmaService = {
       });
       await turma.save();
       return { success: true } as const;
-    }
-    catch (e) {
-      console.log(e)
-      return { success: false, status: 500, message: "Internal Server Error" } as const
+    } catch (e) {
+      console.log(e);
+      return {
+        success: false,
+        status: 500,
+        message: 'Internal Server Error',
+      } as const;
     }
   },
 
@@ -293,7 +296,7 @@ export const TurmaService = {
 
   regenerarCodigoConvite: async (turmaId: string, userId: string) => {
     try {
-      const codigo = gerarCodigoConvite()
+      const codigo = gerarCodigoConvite();
 
       const turma = await TurmaModel.findOneAndUpdate(
         { _id: turmaId, criador: userId },
@@ -307,30 +310,52 @@ export const TurmaService = {
         } as const;
       }
       return { success: true, data: { codigo } } as const;
+    } catch (e) {
+      console.log(e);
+      return {
+        success: false,
+        status: 500,
+        message: 'Internal Server Error',
+      } as const;
     }
-    catch (e) {
-      console.log(e)
-      return { success: false, status: 500, message: "Internal Server Error" } as const
-    }
-    
   },
 
-  // getAllAtividades: async (turmaId: string, userId: string) => {
-  //   const isMember = await TurmaModel.exists({ _id: turmaId, membros: userId });
-  //   if (!isMember) {
-  //     return {
-  //       success: false,
-  //       status: 403,
-  //       message: 'Acesso negado. Você não é membro desta turma.',
-  //     } as const;
-  //   }
+  getAllAtividades: async (turmaId: string, userId: string) => {
+    const isMember = await TurmaModel.exists({
+      _id: turmaId,
+      $or: [{ membros: userId }, { criador: userId }],
+    });
+    if (!isMember) {
+      return {
+        success: false,
+        status: 404,
+        message: 'Turma não encontrada ou você não pode acessa-la.',
+      } as const;
+    }
 
-  //   // TODO: Descomente e ajuste esta lógica quando o AtividadeModel for implementado
-  //   // const atividades = await AtividadeModel.find({ turma: turmaId }).select('id titulo descricao dataLimite tipoAtividade');
-  //   // return { success: true, data: atividades };
+    const atividades = await AtividadeModel.find({ turma: turmaId })
+      .select('_id tipoAtividade titulo descricao dataLimite')
+      .lean<
+        Pick<
+          Atividade,
+          '_id' | 'tipoAtividade' | 'titulo' | 'descricao' | 'dataLimite'
+        >[]
+      >();
 
-  //   return { success: true, data: [] } as const; // Retorno provisório
-  // },
+    const atividadesResponse: GetAtividadesResponse = atividades.map(
+      (atividade) => {
+        return {
+          ...atividade,
+          id: atividade._id.toString(),
+          dataLimite: atividade.dataLimite
+            ? atividade.dataLimite.toISOString()
+            : null,
+        };
+      },
+    );
+
+    return { success: true, data: atividadesResponse } as const;
+  },
 
   removerAluno: async (turmaId: string, alunoId: string, userId: string) => {
     const turma = await TurmaModel.findOneAndUpdate(

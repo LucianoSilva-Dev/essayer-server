@@ -72,9 +72,9 @@ export const regenerarCodigoResponse = z.object({
 export const getAtividadesResponse = z.array(
   z.object({
     id: z.string(),
+    tipoAtividade: z.enum(['Redacao']),
     titulo: z.string(),
     descricao: z.string(),
-    dataLimite: z.date().optional(),
-    tipoAtividade: z.string(),
+    dataLimite: z.string().datetime().nullable()
   }),
 );

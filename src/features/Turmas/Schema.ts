@@ -37,9 +37,9 @@ export const TurmaSchema: EntitySchema = {
     preHandler: authMiddleware,
     schema: {
       security: [{ jwtAuth: [] }],
-      response: { 
-        200: getTurmasResponse, 
-        401: genericError 
+      response: {
+        200: getTurmasResponse,
+        401: genericError,
       },
       summary:
         'Lista turmas em que o usuário (aluno/professor) está matriculado',
@@ -193,7 +193,7 @@ export const TurmaSchema: EntitySchema = {
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
-      response: { 200: getAtividadesResponse, 403: genericError },
+      response: { 200: getAtividadesResponse, 404: genericError },
       summary: 'Obtém todas as atividades de uma turma',
     },
   },
