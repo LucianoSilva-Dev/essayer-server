@@ -23,6 +23,7 @@ import {
   RequisicaoUsuarioRoutes,
   UsuarioRoutes,
 } from './shared/Routes';
+import { TurmaRoutes } from './features/Turmas/Routes';
 
 class App {
   readonly app: FastifyInstance;
@@ -60,6 +61,7 @@ class App {
     this.app.register(RequisicaoUsuarioRoutes, {
       prefix: '/requisicao-usuario',
     });
+    this.app.register(TurmaRoutes, { prefix: '/turma' })
   }
 }
 

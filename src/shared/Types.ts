@@ -21,6 +21,8 @@ import type { updateStatusBodyValidation } from './validations/RequisicaoProfess
 import type { userCargo } from './Validations';
 import type { createRequisicaoMudancaSenhaBodyValidation, validateRequisicaoMudancaSenhaBodyValidation } from './validations/RequisicaoMudancaSenhaValidation';
 import type { validateRequisicaoUsuarioBodyValidation } from './validations/RequisicaoUsuarioValidation';
+import type { PerfilUsuario } from '../features/Repertorios/Types';
+import type { Types } from 'mongoose';
 
 export type RouteSchema = RouteShorthandOptions<
   RawServerDefault,
@@ -63,6 +65,16 @@ export type RequestUserData = {
   nome: string;
   iat: number;
 };
+
+export type PopulatedPerfilUsuario = Omit<PerfilUsuario, 'id'> & {
+  _id: Types.ObjectId
+}
+
+export type Populate<
+  BaseType,
+  // biome-ignore lint/suspicious/noExplicitAny: pode deixar assim pai, confia na call
+    Population extends Partial<Record<keyof BaseType, any>>
+> = Omit<BaseType, keyof Population> & Population;
 
 export type createUsuarioBody = z.infer<typeof createUsuarioBodyValidation>;
 export type updateUsuarioBody = z.infer<typeof updateUsuarioBodyValidation>;
