@@ -6,6 +6,7 @@ const SMTP_KEY = process.env.SMTP_KEY;
 const SMTP_SECRET = process.env.SMTP_SECRET;
 const EMAIL = process.env.EMAIL
 const HOST = process.env.HOST
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY
 
 if (!JWT_SECRET) {
   console.error('JWT_SECRET is not defined');
@@ -45,6 +46,11 @@ if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_API_KEY || !CLOUDINARY_API_SECRET) {
 	process.exit(1);
 }
 
+if (!GEMINI_API_KEY) {
+	console.log('GEMINI API KEY is not defined')
+	process.exit(1)
+}
+
 export {
 	JWT_SECRET,
 	SERVER_PORT,
@@ -56,4 +62,5 @@ export {
 	CLOUDINARY_CLOUD_NAME,
 	CLOUDINARY_API_KEY,
 	CLOUDINARY_API_SECRET,
+	GEMINI_API_KEY
 };
