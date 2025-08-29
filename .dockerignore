@@ -1,0 +1,12 @@
+.gitignore
+.github
+.vscode
+.env*
+
+node_modules
+dist
+biome.json
+pnpm*
+
+*.pdf
+*.md
