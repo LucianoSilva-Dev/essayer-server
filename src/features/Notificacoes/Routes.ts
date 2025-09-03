@@ -9,4 +9,5 @@ export const NotificacaoRoutes: FastifyPluginAsyncZod = async (app) => {
   app.register(authPlugin);
 
   app.get('/', NotificacaoSchema.getAll, NotificacaoController.getAll);
+  app.put('/', NotificacaoSchema.changeStatus, NotificacaoController.changeStatus)
 };

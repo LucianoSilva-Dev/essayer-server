@@ -1,3 +1,4 @@
+import type { Types } from 'mongoose';
 import type {
   GetAllNotificacaoTarefaCorrigidaDoc,
   GetAllNotificacaoTarefaEnviadaDoc,
@@ -14,6 +15,7 @@ import { isNotificacaoOfType } from './TypeGuard';
 
 export function mapGetAllNotificacaoResponse(
   notificacoes: Notificacao[],
+  userId: Types.ObjectId
 ): GetAllNotificacoesResponse {
   return notificacoes.map((notificacao) => {
     if (
@@ -24,6 +26,7 @@ export function mapGetAllNotificacaoResponse(
     ) {
       const TarefaEnviada: GetAllNotificacaoTarefaEnviadaDoc = {
         tarefaId: notificacao.atividade._id.toString(),
+        lido: notificacao.lidoPor.filter((value) => value === userId).length > 0,
         tipoNotificacao: TiposNotificacao.TarefaEnviada,
       };
       return TarefaEnviada;
@@ -37,6 +40,7 @@ export function mapGetAllNotificacaoResponse(
     ) {
       const TarefaFechada: GetAllNotificacaoTarefaFechadaDoc = {
         tarefaId: notificacao.atividade._id.toString(),
+        lido: notificacao.lidoPor.filter((value) => value === userId).length > 0,
         tipoNotificacao: TiposNotificacao.TarefaFechada,
       };
 
@@ -51,6 +55,7 @@ export function mapGetAllNotificacaoResponse(
     ) {
       const TarefaCorrigida: GetAllNotificacaoTarefaCorrigidaDoc = {
         tarefaId: notificacao.atividade._id.toString(),
+        lido: notificacao.lidoPor.filter((value) => value === userId).length > 0,
         tipoNotificacao: TiposNotificacao.TarefaCorrigida,
       };
 

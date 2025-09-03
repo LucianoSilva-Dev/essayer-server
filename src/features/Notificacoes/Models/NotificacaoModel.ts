@@ -10,6 +10,7 @@ import { TiposNotificacao } from '../Types';
 const NotificacaoSchema = new Schema<Notificacao>(
   {
     remetentes: [{ type: Types.ObjectId, required: true, ref: 'Usuario' }],
+    lidoPor: [{ type: Types.ObjectId, required: true, ref: 'Usuario' }],
     data: { type: Date, required: true, default: Date.now },
     tipoNotificacao: { type: String, required: true },
   },
