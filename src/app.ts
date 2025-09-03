@@ -25,6 +25,7 @@ import {
 } from './shared/Routes';
 import { TurmaRoutes } from './features/Turmas/Routes';
 import { AtividadeRoutes } from './features/Atividade/Routes';
+import { NotificacaoRoutes } from './features/Notificacoes/Routes';
 
 class App {
   readonly app: FastifyInstance;
@@ -64,6 +65,7 @@ class App {
     });
     this.app.register(TurmaRoutes, { prefix: '/turma' })
     this.app.register(AtividadeRoutes, { prefix: '/atividade' })
+    this.app.register(NotificacaoRoutes, { prefix: '/notificacao' })
   }
 }
 

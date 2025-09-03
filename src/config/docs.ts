@@ -12,7 +12,8 @@ export const fastifySwaggerConfig: FastifyDynamicSwaggerOptions = {
       { name: 'Auth', description: 'Authentication related end-points' },
       { name: 'Repertório', description: 'Rotas relacionadas aos repertórios' },
       { name: 'Turma', description: 'Rotas relacionadas as Turmas' },
-      { name: 'Atividade', description: 'Rotas relacionadas as Atividades'}
+      { name: 'Atividade', description: 'Rotas relacionadas as Atividades'},
+      { name: 'Notificações', description: 'Rotas relacionadas as Notificações' }
     ],
     components: {
       securitySchemes: {
