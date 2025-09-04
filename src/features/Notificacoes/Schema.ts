@@ -2,7 +2,8 @@ import { z } from "zod";
 import { authMiddleware } from "../../shared/middlewares/Authentication";
 import { genericError } from "../../shared/Schemas";
 import type { EntitySchema } from "../../shared/Types";
-import { changeStatusNotificacaoBodyValidation, getAllNotificacaoResponse } from "./Validations";
+import { changeStatusNotificacaoBodyValidation, getAllNotificacaoResponse, listenNotificacaoUserIdValidation } from "./Validations";
+import { idValidation } from "../../shared/Validations";
 
 export const NotificacaoSchema: EntitySchema = {
   getAll: {
@@ -30,6 +31,15 @@ export const NotificacaoSchema: EntitySchema = {
         500: genericError,
       },
       summary: 'Marca notificações de um usuario como lidas',
+    },
+  },
+
+  listen: {
+    preHandler: authMiddleware,
+    schema: {
+      params: listenNotificacaoUserIdValidation,
+      security: [{ jwtAuth: [] }],
+      summary: 'Escuta novas notificações',
     },
   },
 

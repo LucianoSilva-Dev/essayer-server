@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { TiposNotificacao } from './Types';
+import { isValidObjectId } from 'mongoose';
 
 export const getAllNotificacaoTarefaEnviadaDoc = z.object({
   tipoNotificacao: z.literal(TiposNotificacao.TarefaEnviada),
@@ -32,12 +33,21 @@ export const getAllNotificacaoResponse = z.array(
 
 // Rota changeStatus
 export const changeStatusNotificacaoBodyValidation = z.object({
-  notificacaoIds: z
-    .array(
-      z
-        .string({
-          invalid_type_error: 'O array "ids" pode conter apenas strings',
-        })
-        .nonempty({ message: 'O id da notificação não pode ser vazio' }),
-    )
+  notificacaoIds: z.array(
+    z
+      .string({
+        invalid_type_error: 'O array "ids" pode conter apenas strings',
+      })
+      .nonempty({ message: 'O id da notificação não pode ser vazio' }),
+  ),
+});
+
+// Rota listen
+export const listenNotificacaoUserIdValidation = z.object({
+  userId: z
+    .string({
+      required_error: 'O campo userId é obrigatório.',
+      invalid_type_error: 'O campo userId deve ser um texto.',
+    })
+    .refine((userId) => isValidObjectId(userId), 'userId inválido.'),
 });

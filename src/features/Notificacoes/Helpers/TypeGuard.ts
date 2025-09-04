@@ -1,4 +1,3 @@
-import type { HydratedDocument } from 'mongoose';
 import type { Notificacao, TiposNotificacao } from '../Types';
 
 export function isNotificacaoOfType<T extends Notificacao>(

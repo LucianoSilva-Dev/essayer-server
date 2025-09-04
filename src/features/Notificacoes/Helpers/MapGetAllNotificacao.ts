@@ -1,8 +1,5 @@
 import type { Types } from 'mongoose';
 import type {
-  GetAllNotificacaoTarefaCorrigidaDoc,
-  GetAllNotificacaoTarefaEnviadaDoc,
-  GetAllNotificacaoTarefaFechadaDoc,
   NotificacaoTarefaCorrigida,
   NotificacaoTarefaFechada,
   GetAllNotificacoesResponse,
@@ -12,10 +9,13 @@ import type {
 
 import { TiposNotificacao } from '../Types';
 import { isNotificacaoOfType } from './TypeGuard';
+import { formatTarefaEnviada } from './FormatTarefaEnviada';
+import { formatTarefaFechada } from './FormatTarefaFechada';
+import { formatTarefaCorrigida } from './FormatTarefaCorrigida';
 
 export function mapGetAllNotificacaoResponse(
   notificacoes: Notificacao[],
-  userId: Types.ObjectId
+  userId: Types.ObjectId,
 ): GetAllNotificacoesResponse {
   return notificacoes.map((notificacao) => {
     if (
@@ -23,43 +23,23 @@ export function mapGetAllNotificacaoResponse(
         notificacao,
         TiposNotificacao.TarefaEnviada,
       )
-    ) {
-      const TarefaEnviada: GetAllNotificacaoTarefaEnviadaDoc = {
-        tarefaId: notificacao.atividade._id.toString(),
-        lido: notificacao.lidoPor.filter((value) => value === userId).length > 0,
-        tipoNotificacao: TiposNotificacao.TarefaEnviada,
-      };
-      return TarefaEnviada;
-    }
+    )
+      return formatTarefaEnviada(notificacao, userId);
 
     if (
       isNotificacaoOfType<NotificacaoTarefaFechada>(
         notificacao,
-        TiposNotificacao.TarefaEnviada,
+        TiposNotificacao.TarefaFechada,
       )
-    ) {
-      const TarefaFechada: GetAllNotificacaoTarefaFechadaDoc = {
-        tarefaId: notificacao.atividade._id.toString(),
-        lido: notificacao.lidoPor.filter((value) => value === userId).length > 0,
-        tipoNotificacao: TiposNotificacao.TarefaFechada,
-      };
-
-      return TarefaFechada;
-    }
+    )
+      return formatTarefaFechada(notificacao, userId);
 
     if (
       isNotificacaoOfType<NotificacaoTarefaCorrigida>(
         notificacao,
-        TiposNotificacao.TarefaEnviada,
+        TiposNotificacao.TarefaCorrigida,
       )
-    ) {
-      const TarefaCorrigida: GetAllNotificacaoTarefaCorrigidaDoc = {
-        tarefaId: notificacao.atividade._id.toString(),
-        lido: notificacao.lidoPor.filter((value) => value === userId).length > 0,
-        tipoNotificacao: TiposNotificacao.TarefaCorrigida,
-      };
-
-      return TarefaCorrigida;
-    }
+    )
+      return formatTarefaCorrigida(notificacao, userId);
   });
 }
