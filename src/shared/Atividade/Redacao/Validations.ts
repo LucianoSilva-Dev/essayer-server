@@ -29,8 +29,9 @@ export const createRedacaoBodyValidation = z.object({
     })
     .nonempty('O campo tema não pode estar vazio.'),
   dataLimite: z
-    .date({
-      invalid_type_error: 'O campo dataLimite precisar ser uma data.',
+    .string()
+    .datetime({
+      message: 'O campo dataLimite precisar ser uma data.',
     })
     .optional(),
   tempoLimiteEmMinutos: z
@@ -71,8 +72,9 @@ export const updateRedacaoBodyValidation = z
       .nonempty()
       .optional(),
     dataLimite: z
-      .date({
-        invalid_type_error: 'O campo dataLimite precisar ser uma data.',
+      .string()
+      .datetime({
+        message: 'O campo dataLimite precisar ser uma data.',
       })
       .optional(),
     tempoLimiteEmMinutos: z

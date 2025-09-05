@@ -1,21 +1,25 @@
 import { z } from 'zod';
 import { TiposNotificacao } from './Types';
 import { isValidObjectId } from 'mongoose';
+import { tiposAtividade } from '../../shared/Atividade/Validations';
 
 export const getAllNotificacaoTarefaEnviadaDoc = z.object({
   tipoNotificacao: z.literal(TiposNotificacao.TarefaEnviada),
+  tipoAtividade: tiposAtividade,
   lido: z.boolean(),
   tarefaId: z.string(),
 });
 
 export const getAllNotificacaoTarefaFechadaDoc = z.object({
   tipoNotificacao: z.literal(TiposNotificacao.TarefaFechada),
+  tipoAtividade: tiposAtividade,
   lido: z.boolean(),
   tarefaId: z.string(),
 });
 
 export const getAllNotificacaoTarefaCorrigidaDoc = z.object({
   tipoNotificacao: z.literal(TiposNotificacao.TarefaCorrigida),
+  tipoAtividade: tiposAtividade,
   lido: z.boolean(),
   tarefaId: z.string(),
 });

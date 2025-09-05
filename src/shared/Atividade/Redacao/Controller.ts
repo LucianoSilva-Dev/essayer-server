@@ -1,3 +1,5 @@
+import { AppEventEmitter } from '../../Events/Emitter';
+import { TarefaEnviadaEventPayload } from '../../Events/Types';
 import type { Controller, RequestUserData } from '../../Types';
 import { RedacaoService } from './Service';
 import type {
@@ -19,7 +21,10 @@ export const RedacaoController: Controller = {
         .send({ error: response.message });
     }
 
-    return reply.status(201).send();
+    reply.status(201).send();
+
+    // acionaremos a notificação após enviar a resposta ao cliente, para não gerar mais atrasos
+    AppEventEmitter.emit('tarefa:enviada', response.data as TarefaEnviadaEventPayload)
   },
   get: async (request, reply) => {
     const { id } = request.params as { id: string };

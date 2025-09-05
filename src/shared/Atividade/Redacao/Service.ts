@@ -2,6 +2,7 @@ import { Types } from 'mongoose';
 import { RedacaoAtividadeModel } from './Model';
 import type { CreateRedacaoBody, UpdateRedacaoBody } from './Types';
 import { TurmaModel } from '../../../features/Turmas/Model';
+import { TarefaEnviadaEventPayload } from '../../Events/Types';
 
 export const RedacaoService = {
   create: async (data: CreateRedacaoBody, requisitante: string) => {
@@ -14,11 +15,20 @@ export const RedacaoService = {
           status: 403,
           message:
             'Turma não existe ou você não tem permissão para criar uma atividade nela.',
-        };
+        } as const;
       }
 
-      await RedacaoAtividadeModel.create(data);
-      return { success: true };
+      const atividade = await RedacaoAtividadeModel.create(data);
+      const notificacaoPayload: TarefaEnviadaEventPayload = {
+        atividade,
+        remetentes: turma.membros
+      }
+
+      return {
+        success: true,
+        data: notificacaoPayload
+      } as const
+      
     } catch (e) {
       console.log(e);
       return {
