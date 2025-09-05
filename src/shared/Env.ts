@@ -1,11 +1,25 @@
 import { configDotenv } from 'dotenv';
 configDotenv();
 
-const JWT_SECRET = process.env.JWT_SECRET;
-const SMTP_KEY = process.env.SMTP_KEY;
-const SMTP_SECRET = process.env.SMTP_SECRET;
-const EMAIL = process.env.EMAIL
-const HOST = process.env.HOST
+const JWT_SECRET = process.env.JWT_SECRET as string;
+const SMTP_KEY = process.env.SMTP_KEY as string;
+const SMTP_SECRET = process.env.SMTP_SECRET as string;
+const EMAIL = process.env.EMAIL as string
+const HOST = process.env.HOST as string
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY as string
+
+const REDIS_HOST = process.env.REDIS_HOST as string
+const REDIS_PORT = process.env.REDIS_PORT as unknown as number
+
+if (!REDIS_HOST) {
+	console.error('REDIS_HOST is not defined')
+	process.exit(1)
+}
+
+if (!REDIS_PORT) {
+	console.error('REDIS_PORT is not defined')
+	process.exit(1)
+}
 
 if (!JWT_SECRET) {
   console.error('JWT_SECRET is not defined');
@@ -45,6 +59,11 @@ if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_API_KEY || !CLOUDINARY_API_SECRET) {
 	process.exit(1);
 }
 
+if (!GEMINI_API_KEY) {
+	console.error('GEMINI API KEY is not defined')
+	process.exit(1)
+}
+
 export {
 	JWT_SECRET,
 	SERVER_PORT,
@@ -56,4 +75,7 @@ export {
 	CLOUDINARY_CLOUD_NAME,
 	CLOUDINARY_API_KEY,
 	CLOUDINARY_API_SECRET,
+	GEMINI_API_KEY,
+	REDIS_HOST,
+	REDIS_PORT,
 };

@@ -24,7 +24,8 @@ import {
   UsuarioRoutes,
 } from './shared/Routes';
 import { TurmaRoutes } from './features/Turmas/Routes';
-import { AtividadeRoutes } from './shared/Atividade/Routes';
+import { AtividadeRoutes } from './features/Atividade/Routes';
+import { NotificacaoRoutes } from './features/Notificacoes/Routes';
 import { RedacaoLivreRoutes } from './features/RedacaoLivre/Routes';
 
 class App {
@@ -66,6 +67,7 @@ class App {
     this.app.register(TurmaRoutes, { prefix: '/turma' });
     this.app.register(AtividadeRoutes, { prefix: '/atividade' });
     this.app.register(RedacaoLivreRoutes, {prefix: '/usuario/redacao'})
+    this.app.register(NotificacaoRoutes, { prefix: '/notificacao' })
   }
 }
 

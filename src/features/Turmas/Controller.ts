@@ -11,6 +11,8 @@ export const TurmaController: Controller = {
     }
     
     reply.status(201).send();
+
+    
   },
 
   getAll: async (request, reply) => {
