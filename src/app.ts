@@ -24,7 +24,7 @@ import {
   UsuarioRoutes,
 } from './shared/Routes';
 import { TurmaRoutes } from './features/Turmas/Routes';
-import { AtividadeRoutes } from './features/Atividade/Routes';
+import { AtividadeRoutes } from './shared/Atividade/Routes';
 import { NotificacaoRoutes } from './features/Notificacoes/Routes';
 import { RedacaoLivreRoutes } from './features/RedacaoLivre/Routes';
 
