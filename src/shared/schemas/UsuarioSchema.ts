@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import { authMiddleware } from '../middlewares/Authentication';
 import { genericError, schemaValidationError } from '../Schemas';
 import type { EntitySchema } from '../Types';

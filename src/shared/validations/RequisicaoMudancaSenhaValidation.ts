@@ -21,7 +21,7 @@ export const validateRequisicaoMudancaSenhaBodyValidation = z.object({
       required_error: 'O campo codigo é obrigatório.',
       invalid_type_error: 'O campo codigo precisa ser um texto.',
     })
-    .nonempty('O campo codigo não pode estar vazio'),
+    .nonempty('O campo codigo não pode estar vazio.'),
 });
 
 export const mudarSenhaBodyValidation = z.object({

@@ -8,7 +8,6 @@ import type {
   updateSenhaBody,
   updateUsuarioBody,
 } from '../Types';
-import path from 'node:path';
 
 export const UsuarioController: Controller = {
   get: async (request, reply) => {

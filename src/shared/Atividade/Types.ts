@@ -8,10 +8,22 @@ export type Atividade = {
   titulo: string;
   descricao: string;
   dataLimite: Date | null;
-  turma: Types.ObjectId;
+  turma: {
+    _id: Types.ObjectId;
+    nome: string;
+    criador: Types.ObjectId;
+    membros: Types.ObjectId[];
+  };
+  respostas: {
+    id: Types.ObjectId;
+    aluno: Types.ObjectId;
+    texto?: string;
+    dataEnvio?: Date;
+    feedback?: string;
+  }[];
   tipoAtividade: TiposAtividade; // Discriminator key
   createdAt: Date;
   updatedAt: Date;
 };
 
-export type TiposAtividade = z.infer<typeof tiposAtividade>
+export type TiposAtividade = z.infer<typeof tiposAtividade>;

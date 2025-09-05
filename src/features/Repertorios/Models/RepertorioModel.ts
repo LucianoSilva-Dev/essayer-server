@@ -1,7 +1,7 @@
 import {
   type HydratedDocument,
   Schema,
-  Types,
+  type Types,
   model,
   type Model,
 } from 'mongoose';
