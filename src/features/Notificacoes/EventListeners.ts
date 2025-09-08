@@ -82,7 +82,6 @@ export async function streamNotificacaoTarefaEnviadaListener(
 ) {
   const notificacao: GetAllNotificacaoTarefaEnviadaDoc = {
     tipoNotificacao: TiposNotificacao.TarefaEnviada,
-    tipoAtividade: payload.atividade.tipoAtividade,
     lido: false,
     tarefaId: payload.atividade._id.toString(),
   };
@@ -103,7 +102,6 @@ export async function streamNotificacaoTarefaFechadaListener(
 ) {
   const notificacao: GetAllNotificacaoTarefaFechadaDoc = {
     tipoNotificacao: TiposNotificacao.TarefaFechada,
-    tipoAtividade: payload.atividade.tipoAtividade,
     lido: false,
     tarefaId: payload.atividade._id.toString(),
   };
@@ -124,7 +122,6 @@ export async function streamNotificacaoTarefaCorrigidaListener(
 ) {
   const notificacao: GetAllNotificacaoTarefaCorrigidaDoc = {
     tipoNotificacao: TiposNotificacao.TarefaCorrigida,
-    tipoAtividade: payload.atividade.tipoAtividade,
     lido: false,
     tarefaId: payload.atividade._id.toString(),
   };

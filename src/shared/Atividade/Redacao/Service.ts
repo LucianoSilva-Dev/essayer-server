@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 import { RedacaoAtividadeModel } from './Model';
 import type { CreateRedacaoBody, UpdateRedacaoBody } from './Types';
 import { TurmaModel } from '../../../features/Turmas/Model';
-import { TarefaEnviadaEventPayload } from '../../Events/Types';
+import type { TarefaEnviadaEventPayload } from '../../Events/Types';
 
 export const RedacaoService = {
   create: async (data: CreateRedacaoBody, requisitante: string) => {

@@ -1,8 +1,7 @@
 import type { Types } from "mongoose"
-import type { Atividade, TiposAtividade } from "../Atividade/Types"
+import type { Atividade } from "../Atividade/Types"
 
 export type TarefaEnviadaEventPayload = {
-    tipoAtividade: TiposAtividade
     atividade: Atividade
     remetentes: Types.ObjectId[]
 }
