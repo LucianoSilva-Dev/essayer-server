@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { authMiddleware } from "../../shared/middlewares/Authentication";
+import { authMiddleware, sseAuthMiddleware } from "../../shared/middlewares/Authentication";
 import { genericError } from "../../shared/Schemas";
 import type { EntitySchema } from "../../shared/Types";
 import { changeStatusNotificacaoBodyValidation, getAllNotificacaoResponse, listenNotificacaoUserIdValidation } from "./Validations";
@@ -35,7 +35,7 @@ export const NotificacaoSchema: EntitySchema = {
   },
 
   listen: {
-    preHandler: authMiddleware,
+    preHandler: sseAuthMiddleware,
     schema: {
       params: listenNotificacaoUserIdValidation,
       security: [{ jwtAuth: [] }],

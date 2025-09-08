@@ -23,6 +23,7 @@ import type { createRequisicaoMudancaSenhaBodyValidation, validateRequisicaoMuda
 import type { validateRequisicaoUsuarioBodyValidation } from './validations/RequisicaoUsuarioValidation';
 import type { PerfilUsuario } from '../features/Repertorios/Types';
 import type { Types } from 'mongoose';
+import type { sseGenericError, sseValidationError } from './Schemas';
 
 export type RouteSchema = RouteShorthandOptions<
   RawServerDefault,
@@ -86,3 +87,7 @@ export type validateRequisicaoMudancaSenhaBody = z.infer<
 export type validateRequisicaoUsuarioBody = z.infer<typeof validateRequisicaoUsuarioBodyValidation>
 export type updateSenhaBody = z.infer<typeof updateSenhaBodyValidation>
 export type createRequisicaoMudancaSenhaBody = z.infer<typeof createRequisicaoMudancaSenhaBodyValidation>
+
+// Server Sent Events(sse) Errors
+export type SSEGenericError = z.infer<typeof sseGenericError>
+export type SSEValidationError = z.infer<typeof sseValidationError>
