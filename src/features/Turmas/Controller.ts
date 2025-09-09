@@ -1,3 +1,4 @@
+import { AppEventEmitter } from '../../shared/Events/Emitter';
 import type { Controller, RequestUserData } from '../../shared/Types';
 import { TurmaService } from './Service';
 import type { CreateTurmaBody, UpdateTurmaBody, SolicitarEntradaBody } from './Types';
@@ -11,8 +12,6 @@ export const TurmaController: Controller = {
     }
     
     reply.status(201).send();
-
-    
   },
 
   getAll: async (request, reply) => {

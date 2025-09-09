@@ -44,5 +44,8 @@ export const sseAuthMiddleware = async (
       event: sseGenericError.event,
       data: JSON.stringify(sseGenericError.data),
     });
+
+    reply.sseContext.source.end() // Fecha a conexão sse
+    return reply // Encerra o fluxo da request, impedindo avança ao controller
   }
 };

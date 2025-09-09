@@ -2,8 +2,7 @@ import { z } from "zod";
 import { authMiddleware, sseAuthMiddleware } from "../../shared/middlewares/Authentication";
 import { genericError } from "../../shared/Schemas";
 import type { EntitySchema } from "../../shared/Types";
-import { changeStatusNotificacaoBodyValidation, getAllNotificacaoResponse, listenNotificacaoUserIdValidation } from "./Validations";
-import { idValidation } from "../../shared/Validations";
+import { changeStatusNotificacaoBodyValidation, getAllNotificacaoResponse } from "./Validations";
 
 export const NotificacaoSchema: EntitySchema = {
   getAll: {
@@ -37,7 +36,6 @@ export const NotificacaoSchema: EntitySchema = {
   listen: {
     preHandler: sseAuthMiddleware,
     schema: {
-      params: listenNotificacaoUserIdValidation,
       security: [{ jwtAuth: [] }],
       summary: 'Escuta novas notificações',
     },
