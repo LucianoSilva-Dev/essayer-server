@@ -1,4 +1,5 @@
 import { model, Schema } from 'mongoose';
+import { CorrecaoRedacaoIASchema } from '../../shared/CorrecaoRedacaoIA/Model';
 
 const RedacaoLiveSchema = new Schema(
   {
@@ -8,6 +9,7 @@ const RedacaoLiveSchema = new Schema(
     duracao: Number,
     dataRealizacao: Date,
     finalizada: { type: Boolean, default: false },
+    correcoesIA: [CorrecaoRedacaoIASchema]
   },
   { timestamps: true },
 );

@@ -14,8 +14,6 @@ export const getRedacaoLivreResponse = z.object({
   tema: z.string(),
   texto: z.string().optional(),
   duracao: z.number().optional(),
-  dataRealizacao: z.date().optional(),
-  finalizada: z.boolean(),
   updatedAt: z.date(),
 });
 
@@ -30,12 +28,6 @@ export const updateRedacaoLivreBodyValidation = z
     duracao: z
       .number({
         invalid_type_error: 'O campo duracao precisa ser um número.',
-      })
-      .optional(),
-    finalizada: z
-      .boolean({
-        invalid_type_error:
-          'O campo finalizada precisa ser verdadeiro ou falso.',
       })
       .optional(),
   })
