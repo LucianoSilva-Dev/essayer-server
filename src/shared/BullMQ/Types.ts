@@ -1,3 +1,4 @@
+import type { Types } from "mongoose";
 import type { GeminiModels } from "../AI/Types";
 
 
@@ -6,7 +7,9 @@ import type { GeminiModels } from "../AI/Types";
  */
 export type AppJobMap = {
   'redacao:corrigir': {
-    tema: string,
+    redacaoLivreId: string
+    usuario: string
+    tema: string
     texto: string
     _model?: GeminiModels['PRO'] | GeminiModels['FLASH']
   };

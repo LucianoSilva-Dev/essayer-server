@@ -1,6 +1,7 @@
 import { Schema } from 'mongoose';
+import type { CorrecaoRedacaoIA } from './Types';
 
-export const CorrecaoRedacaoIASchema = new Schema(
+export const CorrecaoRedacaoIASchema = new Schema<CorrecaoRedacaoIA>(
   {
     texto: String,
     notaC1: { type: Number, required: true },
@@ -8,12 +9,11 @@ export const CorrecaoRedacaoIASchema = new Schema(
     notaC3: { type: Number, required: true },
     notaC4: { type: Number, required: true },
     notaC5: { type: Number, required: true },
-    feedbackGeral: { type: Number, required: true },
-    feedbackC1: Number,
-    feedbackC2: Number,
-    feedbackC3: Number,
-    feedbackC4: Number,
-    feedbackC5: Number,
+    feedbackC1: String,
+    feedbackC2: String,
+    feedbackC3: String,
+    feedbackC4: String,
+    feedbackC5: String,
   },
   { timestamps: true },
 )

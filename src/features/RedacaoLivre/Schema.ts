@@ -78,5 +78,26 @@ export const RedacaoLivreSchema: EntitySchema = {
       },
       summary: "Exclui uma redação livre."
     }
-  }
+  },
+   corrigir: {
+    preHandler: authMiddleware,
+    schema: {
+      security: [{jwtAuth: []}],
+      response: {
+        200: z.array(getRedacaoLivreResponse),
+        403: genericError,
+        404: genericError,
+        500: genericError
+      },
+      summary: "Recupera todas as redações livres do aluno."
+    }
+  },
+  listenCorrecao: {
+    preHandler: authMiddleware,
+    schema: {
+      security: [{ jwtAuth: [] }],
+      params: idValidation,
+      summary: "E"
+    }
+  },
 }

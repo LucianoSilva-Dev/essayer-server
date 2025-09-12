@@ -15,5 +15,5 @@ function getNextLimitResetTimestampSeconds(): number {
     });
     
     // Retorna timestamp unix convertido para segundos
-    return nextMidnightInPacific.getTime() / 1000;
+    return Math.ceil(nextMidnightInPacific.getTime() / 1000);
 }
