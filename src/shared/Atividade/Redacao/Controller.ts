@@ -1,5 +1,5 @@
 import { AppEventEmitter } from '../../Events/Emitter';
-import { TarefaEnviadaEventPayload } from '../../Events/Types';
+import { TarefaCorrigidaEventPayload, TarefaEnviadaEventPayload } from '../../Events/Types';
 import type { Controller, RequestUserData } from '../../Types';
 import { RedacaoService } from './Service';
 import type {
@@ -81,7 +81,9 @@ export const RedacaoController: Controller = {
         .send({ error: response.message });
     }
 
-    return reply.status(200).send();
+    reply.status(200).send();
+
+    AppEventEmitter.emit('tarefa:enviada', response.data as TarefaEnviadaEventPayload)
   },
   feedback: async (request, reply) => {
     const { id } = request.params as { id: string };
@@ -96,6 +98,8 @@ export const RedacaoController: Controller = {
         .send({ error: response.message });
     }
 
-    return reply.status(200).send({message: "Feedback enviado com sucesso!"});
+    reply.status(200).send({message: "Feedback enviado com sucesso!"});
+
+    AppEventEmitter.emit('tarefa:corrigida', response.data as TarefaCorrigidaEventPayload)
   },
 };
