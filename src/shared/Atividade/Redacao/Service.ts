@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 import { RedacaoAtividadeModel } from './Model';
 import type { CreateRedacaoBody, UpdateRedacaoBody } from './Types';
 import { TurmaModel } from '../../../features/Turmas/Model';
-import type { TarefaEnviadaEventPayload } from '../../Events/Types';
+import type { TarefaCorrigidaEventPayload, TarefaEnviadaEventPayload } from '../../Events/Types';
 
 export const RedacaoService = {
   create: async (data: CreateRedacaoBody, requisitante: string) => {
@@ -28,7 +28,7 @@ export const RedacaoService = {
         success: true,
         data: notificacaoPayload
       } as const
-      
+
     } catch (e) {
       console.log(e);
       return {
@@ -134,10 +134,12 @@ export const RedacaoService = {
   send: async (id: string, texto: string, requisitante: string) => {
     try {
       const atividade = await RedacaoAtividadeModel.findById(id).select({
-        respostas: { aluno: requisitante },
-      });
+        respostas: { aluno: 1, dataEnvio: 1, _id: 1 }
+      }).populate('turma', 'criador');
 
-      if (!atividade || !atividade.respostas[0].dataEnvio) {
+      const resposta = atividade?.respostas.find(res => res.aluno.toString() === requisitante)
+
+      if (!atividade || resposta?.dataEnvio) {
         return {
           success: false,
           status: 404,
@@ -145,7 +147,7 @@ export const RedacaoService = {
         };
       }
 
-      await RedacaoAtividadeModel.updateOne(
+      await RedacaoAtividadeModel.findOneAndUpdate(
         { _id: id, 'respostas.aluno': requisitante },
         {
           $set: {
@@ -155,7 +157,12 @@ export const RedacaoService = {
         },
       );
 
-      return { success: true };
+      const notificacaoPayload: TarefaEnviadaEventPayload = {
+        atividade,
+        remetentes: [atividade.turma.criador]
+      }
+
+      return { success: true, data: notificacaoPayload };
     } catch (e) {
       console.log(e);
       return {
@@ -169,7 +176,7 @@ export const RedacaoService = {
     try {
       const atividade = await RedacaoAtividadeModel.findOne({
         'respostas._id': id,
-      }).populate('turma', 'criador');
+      }).populate('turma', '_id nome criador membros');
 
       if (!atividade || atividade.turma.criador.toString() !== requisitante) {
         return {
@@ -185,7 +192,14 @@ export const RedacaoService = {
         { $set: { 'respostas.$.feedback': feedback } },
       );
 
-      return { success: true };
+      const resposta = atividade.respostas.find(res => res.id.toString() === id)
+
+      const notificacaoPayload: TarefaCorrigidaEventPayload = {
+        atividade,
+        remetentes: resposta ? [resposta.aluno] : []
+      }
+
+      return { success: true, data: notificacaoPayload };
     } catch (e) {
       console.log(e);
       return {
