@@ -40,18 +40,6 @@ export const NotificacaoController: Controller = {
   },
 
   listen: async (request, reply) => {
-    const { id: jwtUserId } = request.user as RequestUserData;
-    const { userId: reqUserId } = request.params as { userId: string };
-
-    if (jwtUserId !== reqUserId)
-      return reply.sse({
-        event: 'error',
-        data: JSON.stringify({
-          code: 403,
-          message: 'Não você não pode escutar notificações de outra pessoa.',
-        }),
-      });
-
     const tarefaEnviadaListenerWrapper = (payload: TarefaEnviadaEventPayload) =>
       streamNotificacaoTarefaEnviadaListener(payload, reply);
 

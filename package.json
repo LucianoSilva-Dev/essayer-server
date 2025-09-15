@@ -17,6 +17,8 @@
   "license": "ISC",
   "packageManager": "pnpm@10.6.5",
   "dependencies": {
+    "@bull-board/api": "^6.12.7",
+    "@bull-board/fastify": "^6.12.7",
     "@fastify/cors": "^11.0.0",
     "@fastify/jwt": "^9.1.0",
     "@fastify/multipart": "^9.0.3",

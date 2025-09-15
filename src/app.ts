@@ -27,6 +27,20 @@ import { TurmaRoutes } from './features/Turmas/Routes';
 import { AtividadeRoutes } from './shared/Atividade/Routes';
 import { NotificacaoRoutes } from './features/Notificacoes/Routes';
 import { RedacaoLivreRoutes } from './features/RedacaoLivre/Routes';
+import FastifySSEPlugin from 'fastify-sse-v2';
+import { FastifyAdapter } from '@bull-board/fastify';
+import { createBullBoard } from '@bull-board/api';
+import { BullMQAdapter } from '@bull-board/api/bullMQAdapter'
+import { CorrigirRedacaoQueue } from './shared/CorrecaoRedacaoIA/Queue';
+
+const serverAdapter = new FastifyAdapter();
+
+  createBullBoard({
+    queues: [new BullMQAdapter(CorrigirRedacaoQueue)],
+    serverAdapter,
+  });
+
+  serverAdapter.setBasePath('/bull-board');
 
 class App {
   readonly app: FastifyInstance;
@@ -48,6 +62,7 @@ class App {
     this.app.register(fastifySwagger, fastifySwaggerConfig);
     this.app.register(fastifySwaggerUi, fastifySwaggerUiConfig);
     this.app.register(fastifyMultipart, fastifyMultipartConfig);
+    this.app.register(FastifySSEPlugin)
     this.app.setErrorHandler(appErrorHandler);
   }
 
@@ -68,6 +83,7 @@ class App {
     this.app.register(AtividadeRoutes, { prefix: '/atividade' });
     this.app.register(RedacaoLivreRoutes, {prefix: '/usuario/redacao'})
     this.app.register(NotificacaoRoutes, { prefix: '/notificacao' })
+    this.app.register(serverAdapter.registerPlugin(), { prefix: '/bull-board' });
   }
 }
 
