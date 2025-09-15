@@ -1,4 +1,3 @@
-import { randomBytes } from 'node:crypto';
 import type { Populate, PopulatedPerfilUsuario } from '../../shared/Types';
 import { TurmaModel } from './Model';
 import type {

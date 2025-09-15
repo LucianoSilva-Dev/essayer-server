@@ -1,6 +1,7 @@
 import app from './app';
 import mongoose from 'mongoose';
 import { HOST, MONGO_CONN_STR, SERVER_PORT } from './shared/Env';
+import { correcaoRedacaoWorker } from './shared/CorrecaoRedacaoIA/Worker/Index';
 
 function startServer() {
   app.listen({ port: SERVER_PORT, host: HOST }, (err, address) => {
@@ -10,6 +11,9 @@ function startServer() {
     }
     console.log(`Server listening at ${address}`);
   });
+
+  // starta o worker
+  correcaoRedacaoWorker.run()
 }
 
 mongoose

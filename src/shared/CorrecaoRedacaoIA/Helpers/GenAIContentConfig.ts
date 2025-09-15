@@ -2,6 +2,7 @@ import { type GenerateContentParameters, Type } from '@google/genai';
 import type { GeminiModels } from '../../AI/Types';
 import { formatRedacaoPrompt } from './FormatRedacaoPrompt';
 import { correcaoRedacaoSystemInstructions } from '../Prompts';
+import { geminiModelsData } from '../../AI/Constants';
 
 export function generateAIContentConfig(
   model: GeminiModels['FLASH'] | GeminiModels['PRO'],
@@ -12,6 +13,7 @@ export function generateAIContentConfig(
     model: model.name,
     contents: formatRedacaoPrompt(tema, redacao),
     config: {
+      thinkingConfig: model.name === geminiModelsData.FLASH.name ? { thinkingBudget: 0 } : undefined,
       systemInstruction: correcaoRedacaoSystemInstructions,
       responseMimeType: 'application/json',
       responseSchema: {

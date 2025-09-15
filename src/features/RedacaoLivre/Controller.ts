@@ -1,3 +1,4 @@
+import { geminiModelsData } from '../../shared/AI/Constants';
 import { CorrigirRedacaoQueue } from '../../shared/CorrecaoRedacaoIA/Queue';
 import { AppEventEmitter } from '../../shared/Events/Emitter';
 import type { RedacaoIACorrigidaEventPayload } from '../../shared/Events/Types';
@@ -40,16 +41,16 @@ export const RedacaoLivreController: Controller = {
     const { id: redacaoLivreId } = request.params as { id: string };
 
     const redacao = await RedacaoLivreModel.findById(redacaoLivreId)
-    if(!redacao) {
-      return reply.status(404).send({message: 'Redação não encontrada.'})
+    if (!redacao) {
+      return reply.status(404).send({ message: 'Redação não encontrada.' })
     }
 
     if (redacao.aluno.toString() !== alunoId) {
-      return reply.status(403).send({message: 'Você não pode corrigir redações de outras pessoas, bobinho.'})
+      return reply.status(403).send({ message: 'Você não pode corrigir redações de outras pessoas, bobinho.' })
     }
 
     CorrigirRedacaoQueue.add('corrigirRedacao', {
-      redacaoLivreId, 
+      redacaoLivreId,
       tema: redacao.tema,
       usuario: alunoId,
       texto: redacao.texto ?? ''
@@ -62,7 +63,7 @@ export const RedacaoLivreController: Controller = {
     const { id: redacaoLivreId } = request.params as { id: string };
 
     const redacao = await RedacaoLivreModel.findById(redacaoLivreId)
-    if(!redacao) {
+    if (!redacao) {
       return reply.sse({
         event: 'error',
         data: JSON.stringify({
@@ -82,15 +83,17 @@ export const RedacaoLivreController: Controller = {
       });
     }
 
-    const wrapper = (payload: RedacaoIACorrigidaEventPayload) => {
-      return streamCorrecaoRedacaoIA(payload, redacaoLivreId, reply)
-    }
+    const wrapper = (payload: RedacaoIACorrigidaEventPayload) =>
+      streamCorrecaoRedacaoIA(payload, redacaoLivreId, reply)
 
     AppEventEmitter.on('redacao:ia:corrigida', wrapper)
 
+    request.raw.on('close', () => {
+      AppEventEmitter.off('redacao:ia:corrigida', wrapper)
+    })
   },
   get: async (request, reply) => {
-    const { id } = request.params as {id: string};
+    const { id } = request.params as { id: string };
     const { id: requisitante } = request.user as RequestUserData;
 
     const response = await RedacaoLivreService.get(id, requisitante);
@@ -103,7 +106,7 @@ export const RedacaoLivreController: Controller = {
     return reply.status(200).send(response.data);
   },
   update: async (request, reply) => {
-    const { id } = request.params as {id: string};
+    const { id } = request.params as { id: string };
     const { id: requisitante } = request.user as RequestUserData;
     const body = request.body as UpdateRedacaoLivreBody
 
@@ -117,7 +120,7 @@ export const RedacaoLivreController: Controller = {
     return reply.status(200).send();
   },
   delete: async (request, reply) => {
-    const { id } = request.params as {id: string};
+    const { id } = request.params as { id: string };
     const { id: requisitante } = request.user as RequestUserData;
 
     const response = await RedacaoLivreService.delete(id, requisitante);

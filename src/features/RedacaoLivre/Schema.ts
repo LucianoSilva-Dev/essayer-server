@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { authMiddleware } from "../../shared/middlewares/Authentication";
+import { authMiddleware, sseAuthMiddleware } from "../../shared/middlewares/Authentication";
 import type { EntitySchema } from "../../shared/Types";
 import { genericError, schemaValidationError } from "../../shared/Schemas";
 import { idValidation } from "../../shared/Validations";
@@ -89,15 +89,15 @@ export const RedacaoLivreSchema: EntitySchema = {
         404: genericError,
         500: genericError
       },
-      summary: "Recupera todas as redações livres do aluno."
+      summary: "Encaminha a redação especificada para a correção com IA."
     }
   },
   listenCorrecao: {
-    preHandler: authMiddleware,
+    preHandler: sseAuthMiddleware,
     schema: {
       security: [{ jwtAuth: [] }],
-      params: idValidation,
-      summary: "E"
+      // params: idValidation,
+      summary: "Escuta por um evento de correção da redação especificada."
     }
   },
 }

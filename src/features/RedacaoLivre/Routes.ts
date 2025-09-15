@@ -13,6 +13,6 @@ export const RedacaoLivreRoutes: FastifyPluginAsyncZod = async (app) => {
   app.get('/:id', RedacaoLivreSchema.get, RedacaoLivreController.get);
   app.put('/:id', RedacaoLivreSchema.update, RedacaoLivreController.update);
   app.delete('/:id', RedacaoLivreSchema.delete, RedacaoLivreController.delete);
-  app.post(':id/corrigir', RedacaoLivreSchema.corrigir, RedacaoLivreController.corrigir)
-  app.get(':id/correcao/listen', RedacaoLivreSchema.listenCorrecao, RedacaoLivreController.listenCorrecao)
+  app.post('/:id/corrigir', RedacaoLivreSchema.corrigir, RedacaoLivreController.corrigir)
+  app.get('/:id/correcao/listen', RedacaoLivreSchema.listenCorrecao, RedacaoLivreController.listenCorrecao)
 };
