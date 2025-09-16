@@ -61,6 +61,7 @@ export const RedacaoLivreController: Controller = {
   listenCorrecao: async (request, reply) => {
     const { id: alunoId } = request.user as RequestUserData;
     const { id: redacaoLivreId } = request.params as { id: string };
+    reply.sse({ comment: '' }) // evita fechar a conexão automaticamente
 
     const redacao = await RedacaoLivreModel.findById(redacaoLivreId)
     if (!redacao) {
@@ -90,6 +91,7 @@ export const RedacaoLivreController: Controller = {
 
     request.raw.on('close', () => {
       AppEventEmitter.off('redacao:ia:corrigida', wrapper)
+      reply.sseContext.source.end()
     })
   },
   get: async (request, reply) => {
