@@ -40,15 +40,18 @@ export const NotificacaoController: Controller = {
   },
 
   listen: async (request, reply) => {
+    const { id: userId } = request.user as RequestUserData
+    reply.sse({ comment: '' }) // evita fechar a conexão automaticamente
+
     const tarefaEnviadaListenerWrapper = (payload: TarefaEnviadaEventPayload) =>
-      streamNotificacaoTarefaEnviadaListener(payload, reply);
+      streamNotificacaoTarefaEnviadaListener(payload, userId, reply);
 
     const tarefaFechadaListenerWrapper = (payload: TarefaFechadaEventPayload) =>
-      streamNotificacaoTarefaFechadaListener(payload, reply);
+      streamNotificacaoTarefaFechadaListener(payload, userId, reply);
 
     const tarefaCorrigidaListenerWrapper = (
       payload: TarefaCorrigidaEventPayload,
-    ) => streamNotificacaoTarefaCorrigidaListener(payload, reply);
+    ) => streamNotificacaoTarefaCorrigidaListener(payload, userId, reply);
 
     AppEventEmitter.on('tarefa:enviada', tarefaEnviadaListenerWrapper);
     AppEventEmitter.on('tarefa:fechada', tarefaFechadaListenerWrapper);
@@ -58,6 +61,7 @@ export const NotificacaoController: Controller = {
       AppEventEmitter.off('tarefa:enviada', tarefaEnviadaListenerWrapper);
       AppEventEmitter.off('tarefa:fechada', tarefaFechadaListenerWrapper);
       AppEventEmitter.off('tarefa:corrigida', tarefaCorrigidaListenerWrapper);
+      reply.sseContext.source.end()
     });
   },
 };

@@ -1,21 +1,20 @@
-import type { Types } from 'mongoose';
 import type { Atividade } from '../Atividade/Types';
 import type { CorrecaoRedacaoIAResponse } from '../CorrecaoRedacaoIA/Types';
 
 // Notificações Sobre tarefas
 export type TarefaEnviadaEventPayload = {
   atividade: Atividade;
-  remetentes: Types.ObjectId[];
+  remetentes: string[];
 };
 
 export type TarefaFechadaEventPayload = {
   atividade: Atividade;
-  remetentes: Types.ObjectId[];
+  remetentes: string[];
 };
 
 export type TarefaCorrigidaEventPayload = {
   atividade: Atividade;
-  remetentes: Types.ObjectId[];
+  remetentes: string[];
 };
 
 // Correção de IA

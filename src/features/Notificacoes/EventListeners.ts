@@ -78,61 +78,58 @@ export async function createNotificacaoTarefaCorrigidaListener(
 
 export async function streamNotificacaoTarefaEnviadaListener(
   payload: TarefaEnviadaEventPayload,
+  userId: string,
   reply: FastifyReply,
 ) {
+  if (!payload.remetentes.includes(userId)) return
+
   const notificacao: GetAllNotificacaoTarefaEnviadaDoc = {
     tipoNotificacao: TiposNotificacao.TarefaEnviada,
     lido: false,
     tarefaId: payload.atividade._id.toString(),
   };
 
-  reply.sse(
-    (async function* () {
-      yield {
-        event: TiposNotificacao.TarefaEnviada,
-        data: JSON.stringify(notificacao),
-      };
-    })(),
-  );
+  reply.sse({
+    event: TiposNotificacao.TarefaEnviada,
+    data: JSON.stringify(notificacao),
+  })
 }
 
 export async function streamNotificacaoTarefaFechadaListener(
   payload: TarefaFechadaEventPayload,
+  userId: string,
   reply: FastifyReply,
 ) {
+  if (!payload.remetentes.includes(userId)) return
+
   const notificacao: GetAllNotificacaoTarefaFechadaDoc = {
     tipoNotificacao: TiposNotificacao.TarefaFechada,
     lido: false,
     tarefaId: payload.atividade._id.toString(),
   };
 
-  reply.sse(
-    (async function* () {
-      yield {
-        event: TiposNotificacao.TarefaFechada,
-        data: JSON.stringify(notificacao),
-      };
-    })(),
-  );
+  reply.sse({
+    event: TiposNotificacao.TarefaFechada,
+    data: JSON.stringify(notificacao),
+  })
 }
 
 export async function streamNotificacaoTarefaCorrigidaListener(
   payload: TarefaCorrigidaEventPayload,
+  userId: string,
   reply: FastifyReply,
 ) {
+  if (!payload.remetentes.includes(userId)) return
+  
   const notificacao: GetAllNotificacaoTarefaCorrigidaDoc = {
     tipoNotificacao: TiposNotificacao.TarefaCorrigida,
     lido: false,
     tarefaId: payload.atividade._id.toString(),
   };
 
-  reply.sse(
-    (async function* () {
-      yield {
-        event: TiposNotificacao.TarefaCorrigida,
-        data: JSON.stringify(notificacao),
-      };
-    })(),
-  );
+  reply.sse({
+    event: TiposNotificacao.TarefaCorrigida,
+    data: JSON.stringify(notificacao),
+  })
 }
 // ---- Eventos que enviam notificacoes ao frontend ----
