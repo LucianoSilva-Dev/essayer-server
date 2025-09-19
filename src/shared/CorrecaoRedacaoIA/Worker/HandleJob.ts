@@ -4,7 +4,7 @@ import { geminiModelsData } from '../../AI/Constants';
 import type { AppJobMap } from '../../BullMQ/Types';
 import { AppEventEmitter } from '../../Events/Emitter';
 import { checkModelAvailability } from './CheckModelAvailability';
-import { processCorrecao } from './processCorrecao';
+import { processCorrecao } from './ProcessCorrecao';
 import type { GeminiModels } from '../../AI/Types';
 
 async function attemptCorrection(model: GeminiModels['PRO'] | GeminiModels['FLASH'], job: Job<AppJobMap['redacao:corrigir']>) {

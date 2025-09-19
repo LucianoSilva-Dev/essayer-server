@@ -1,6 +1,7 @@
 import { redisClient } from '../../Redis/Provider';
 import { getModelRPDKey, getModelRPMKey, getModelUnavailableKey } from '../Helpers/GetRedisKeys';
 import type { GeminiModels } from '../../AI/Types';
+import { getNextLimitResetTimestampSeconds } from '../Helpers/GetNextLimitResetTimestamp';
 
 export async function checkModelAvailability(model: GeminiModels['PRO'] | GeminiModels['FLASH']): Promise<boolean> {
   const dailyCountKey = getModelRPDKey(model.name);
@@ -40,6 +41,7 @@ export async function incrementRateLimitCounters(model: GeminiModels['PRO'] | Ge
     multi.incr(minuteCountKey);
     // Define o TTL apenas se a chave não tiver um
     multi.expire(minuteCountKey, 60, 'NX');
+    multi.expireat(dailyCountKey, getNextLimitResetTimestampSeconds(), 'NX')
 
     await multi.exec();
 }
