@@ -161,11 +161,20 @@ export const TurmaService = {
 
   solicitarEntrada: async (codigoConvite: string, alunoId: string) => {
     const turma = await TurmaModel.findOne({ codigoConvite });
+
     if (!turma) {
       return {
         success: false,
         status: 404,
         message: 'Código de convite inválido',
+      } as const;
+    }
+
+    if (turma.membros.length >= 120) {
+      return {
+        success: false,
+        status: 400,
+        message: 'Turma já atingiu o limite máximo de participantes.',
       } as const;
     }
 
@@ -212,6 +221,14 @@ export const TurmaService = {
         success: false,
         status: 404,
         message: 'Turma não encontrada ou você não é o criador.',
+      } as const;
+    }
+
+    if (turma.membros.length >= 120) {
+      return {
+        success: false,
+        status: 400,
+        message: 'Turma já atingiu o limite máximo de participantes.',
       } as const;
     }
 
