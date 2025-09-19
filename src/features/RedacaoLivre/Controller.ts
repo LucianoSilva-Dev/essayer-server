@@ -1,9 +1,8 @@
-import { geminiModelsData } from '../../shared/AI/Constants';
 import { CorrigirRedacaoQueue } from '../../shared/CorrecaoRedacaoIA/Queue';
 import { AppEventEmitter } from '../../shared/Events/Emitter';
-import type { RedacaoIACorrigidaEventPayload } from '../../shared/Events/Types';
+import type { RedacaoComAtrasoEventPayload, RedacaoIACorrigidaEventPayload } from '../../shared/Events/Types';
 import type { Controller, RequestUserData } from '../../shared/Types';
-import { registerCorrecaoIAListener, streamCorrecaoRedacaoIA } from './EventListeners';
+import { registerCorrecaoIAListener, streamCorrecaoRedacaoIA, streamCorrecaoRedacaoIADelay } from './EventListeners';
 import { RedacaoLivreModel } from './Model';
 import { RedacaoLivreService } from './Service';
 import type { CreateRedacaoLivreBody, UpdateRedacaoLivreBody } from './Types';
@@ -61,7 +60,7 @@ export const RedacaoLivreController: Controller = {
   listenCorrecao: async (request, reply) => {
     const { id: alunoId } = request.user as RequestUserData;
     const { id: redacaoLivreId } = request.params as { id: string };
-    reply.sse({ comment: '' }) // evita fechar a conexão automaticamente
+    reply.sse({ comment: '' })
 
     const redacao = await RedacaoLivreModel.findById(redacaoLivreId)
     if (!redacao) {
@@ -84,13 +83,18 @@ export const RedacaoLivreController: Controller = {
       });
     }
 
-    const wrapper = (payload: RedacaoIACorrigidaEventPayload) =>
+    const redacaoCorrigidaWrapper = (payload: RedacaoIACorrigidaEventPayload) =>
       streamCorrecaoRedacaoIA(payload, redacaoLivreId, reply)
 
-    AppEventEmitter.on('redacao:ia:corrigida', wrapper)
+    const redacaoDelayWrapper = (payload: RedacaoComAtrasoEventPayload) => 
+      streamCorrecaoRedacaoIADelay(payload, redacaoLivreId, reply)
+
+    AppEventEmitter.on('redacao:ia:corrigida', redacaoCorrigidaWrapper)
+    AppEventEmitter.on('redacao:ia:delay', redacaoDelayWrapper)
 
     request.raw.on('close', () => {
-      AppEventEmitter.off('redacao:ia:corrigida', wrapper)
+      AppEventEmitter.off('redacao:ia:corrigida', redacaoCorrigidaWrapper)
+      AppEventEmitter.off('redacao:ia:delay', redacaoDelayWrapper)
       reply.sseContext.source.end()
     })
   },

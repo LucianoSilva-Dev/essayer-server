@@ -24,7 +24,6 @@ export const updateTurmaBodyValidation = z
     message: 'Forneça ao menos um campo para atualizar.',
   });
 
-// Validation for entry request
 export const solicitarEntradaBodyValidation = z.object({
   codigoConvite: z
     .string({ required_error: 'O código de convite é obrigatório.' })

@@ -1,7 +1,13 @@
 import { redisClient } from '../../Redis/Provider';
-import { getModelRPDKey, getModelRPMKey, getModelUnavailableKey } from '../Helpers/GetRedisKeys';
+import { getCurrentModelNameKey, getModelRPDKey, getModelRPMKey, getModelUnavailableKey } from '../Helpers/GetRedisKeys';
 import type { GeminiModels } from '../../AI/Types';
 import { getNextLimitResetTimestampSeconds } from '../Helpers/GetNextLimitResetTimestamp';
+import { geminiModelsData } from '../../AI/Constants';
+
+async function toggleCurrentModel(model: GeminiModels['PRO'] | GeminiModels['FLASH']) {
+  const modelToToggle = model.name === geminiModelsData.PRO.name ? geminiModelsData.FLASH.name : geminiModelsData.PRO.name
+  await redisClient.set(getCurrentModelNameKey(), modelToToggle)
+}
 
 export async function checkModelAvailability(model: GeminiModels['PRO'] | GeminiModels['FLASH']): Promise<boolean> {
   const dailyCountKey = getModelRPDKey(model.name);
@@ -16,16 +22,19 @@ export async function checkModelAvailability(model: GeminiModels['PRO'] | Gemini
 
   if (isUnavailable === 'true') {
     console.warn(`Modelo ${model.name} está temporariamente indisponível.`);
+    await toggleCurrentModel(model)
     return false;
   }
 
   if (Number(dailyCount) >= model.RPD) {
     console.warn(`Limite diário atingido para o modelo: ${model.name}`);
+    await toggleCurrentModel(model)
     return false;
   }
 
   if (Number(minuteCount) >= model.RPM) {
     console.warn(`Limite por minuto atingido para o modelo: ${model.name}`);
+    await toggleCurrentModel(model)
     return false;
   }
   
@@ -39,7 +48,6 @@ export async function incrementRateLimitCounters(model: GeminiModels['PRO'] | Ge
     const multi = redisClient.multi();
     multi.incr(dailyCountKey);
     multi.incr(minuteCountKey);
-    // Define o TTL apenas se a chave não tiver um
     multi.expire(minuteCountKey, 60, 'NX');
     multi.expireat(dailyCountKey, getNextLimitResetTimestampSeconds(), 'NX')
 

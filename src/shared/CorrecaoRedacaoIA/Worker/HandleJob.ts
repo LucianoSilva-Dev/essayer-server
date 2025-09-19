@@ -6,6 +6,8 @@ import { AppEventEmitter } from '../../Events/Emitter';
 import { checkModelAvailability } from './CheckModelAvailability';
 import { processCorrecao } from './ProcessCorrecao';
 import type { GeminiModels } from '../../AI/Types';
+import { getCurrentModelNameKey } from '../Helpers/GetRedisKeys';
+import { redisClient } from '../../Redis/Provider';
 
 async function attemptCorrection(model: GeminiModels['PRO'] | GeminiModels['FLASH'], job: Job<AppJobMap['redacao:corrigir']>) {
     const isAvailable = await checkModelAvailability(model);
@@ -28,19 +30,20 @@ async function attemptCorrection(model: GeminiModels['PRO'] | GeminiModels['FLAS
 export async function handleJob(job: Job<AppJobMap['redacao:corrigir']>) {
     const { usuario, redacaoLivreId } = job.data;
 
-    const primaryModel = geminiModelsData.FLASH;
-    const fallbackModel = geminiModelsData.PRO;
+    const currentModel = (await redisClient.get(getCurrentModelNameKey())) === geminiModelsData.PRO.name ?
+        geminiModelsData.PRO : geminiModelsData.FLASH
 
-    const primaryResult = await attemptCorrection(primaryModel, job);
+    const fallbackModel = currentModel.name === geminiModelsData.FLASH.name ? geminiModelsData.PRO : geminiModelsData.FLASH;
+
+    const primaryResult = await attemptCorrection(currentModel, job);
     if (primaryResult.success) return
 
-    console.log(`Falha com o modelo ${primaryModel.name}, tentando com o ${fallbackModel.name}...`);
+    console.log(`Falha com o modelo ${currentModel.name}, tentando com o ${fallbackModel.name}...`);
 
     const fallbackResult = await attemptCorrection(fallbackModel, job);
     if (fallbackResult.success) return
-    
-    console.error(`Ambos os modelos (${primaryModel.name} e ${fallbackModel.name}) falharam. Job será atrasado.`);
-    AppEventEmitter.emit('redacao:ia:delay', { redacaoLivreId, remetente: usuario });
 
+    console.error(`Ambos os modelos (${currentModel.name} e ${fallbackModel.name}) falharam. Job será atrasado.`);
+    AppEventEmitter.emit('redacao:ia:delay', { redacaoLivreId, remetente: usuario });
     throw new Error(`Falha na correção da redação ${redacaoLivreId} após tentativas com ambos os modelos.`);
 }

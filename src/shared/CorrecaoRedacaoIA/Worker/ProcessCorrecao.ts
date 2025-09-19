@@ -24,8 +24,6 @@ export async function processCorrecao(
             generateAIContentConfig(model, tema, texto),
         );
         const correcaoOBJ = JSON.parse(response.text ?? '');
-        console.log('\n\nResposta da IA:');
-        console.log(`${JSON.stringify(response.text, null, 2)}`);
         const correcao = correcaoRedacaoResponse.parse(correcaoOBJ);
 
         AppEventEmitter.emit('redacao:ia:corrigida', {
