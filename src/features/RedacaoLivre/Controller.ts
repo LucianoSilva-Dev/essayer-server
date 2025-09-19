@@ -53,7 +53,7 @@ export const RedacaoLivreController: Controller = {
       tema: redacao.tema,
       usuario: alunoId,
       texto: redacao.texto ?? ''
-    })
+    }, { jobId: redacaoLivreId })
 
     reply.status(200).send()
   },
@@ -86,7 +86,7 @@ export const RedacaoLivreController: Controller = {
     const redacaoCorrigidaWrapper = (payload: RedacaoIACorrigidaEventPayload) =>
       streamCorrecaoRedacaoIA(payload, redacaoLivreId, reply)
 
-    const redacaoDelayWrapper = (payload: RedacaoComAtrasoEventPayload) => 
+    const redacaoDelayWrapper = (payload: RedacaoComAtrasoEventPayload) =>
       streamCorrecaoRedacaoIADelay(payload, redacaoLivreId, reply)
 
     AppEventEmitter.on('redacao:ia:corrigida', redacaoCorrigidaWrapper)
