@@ -1,19 +1,7 @@
-import { toDate } from 'date-fns-tz';
-import { addDays, set } from 'date-fns';
+import { DateTime } from 'luxon';
 
-// Função para calcular o timestamp da próxima meia-noite no Pacífico
-function getNextLimitResetTimestampSeconds(): number {
-    const timeZone = 'America/Los_Angeles';
-    
-    const nowInPacific = toDate(new Date(), { timeZone });
-    const tomorrowInPacific = addDays(nowInPacific, 1);
-    const nextMidnightInPacific = set(tomorrowInPacific, {
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-        milliseconds: 0
-    });
-    
-    // Retorna timestamp unix convertido para segundos
-    return Math.ceil(nextMidnightInPacific.getTime() / 1000);
+export function getNextLimitResetTimestampSeconds() {
+  const nowPacific = DateTime.now().setZone("America/Los_Angeles");
+  const nextMidnightPacific = nowPacific.plus({ days: 1 }).startOf("day");
+  return nextMidnightPacific.toSeconds();
 }
