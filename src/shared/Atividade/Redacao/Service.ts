@@ -21,7 +21,7 @@ export const RedacaoService = {
       const atividade = await RedacaoAtividadeModel.create(data);
       const notificacaoPayload: TarefaEnviadaEventPayload = {
         atividade,
-        remetentes: turma.membros
+        remetentes: turma.membros.map((id) => id.toString())
       }
 
       return {
@@ -159,7 +159,7 @@ export const RedacaoService = {
 
       const notificacaoPayload: TarefaEnviadaEventPayload = {
         atividade,
-        remetentes: [atividade.turma.criador]
+        remetentes: [atividade.turma.criador.toString()]
       }
 
       return { success: true, data: notificacaoPayload };
@@ -196,7 +196,7 @@ export const RedacaoService = {
 
       const notificacaoPayload: TarefaCorrigidaEventPayload = {
         atividade,
-        remetentes: resposta ? [resposta.aluno] : []
+        remetentes: resposta ? [resposta.aluno.toString()] : []
       }
 
       return { success: true, data: notificacaoPayload };
