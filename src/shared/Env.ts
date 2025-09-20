@@ -11,6 +11,9 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY as string
 const REDIS_HOST = process.env.REDIS_HOST as string
 const REDIS_PORT = process.env.REDIS_PORT as unknown as number
 
+const AUTH_USERNAME = process.env.AUTH_USERNAME as string
+const AUTH_PASSWORD = process.env.AUTH_PASSWORD as string
+
 if (!REDIS_HOST) {
 	console.error('REDIS_HOST is not defined')
 	process.exit(1)
@@ -64,6 +67,11 @@ if (!GEMINI_API_KEY) {
 	process.exit(1)
 }
 
+if (!AUTH_PASSWORD || ! AUTH_USERNAME) {
+	console.error('Basic auth credentials not defined')
+	process.exit(1)
+}
+
 export {
 	JWT_SECRET,
 	SERVER_PORT,
@@ -78,4 +86,6 @@ export {
 	GEMINI_API_KEY,
 	REDIS_HOST,
 	REDIS_PORT,
+	AUTH_PASSWORD,
+	AUTH_USERNAME
 };
