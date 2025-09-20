@@ -10,6 +10,8 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY as string
 
 const REDIS_HOST = process.env.REDIS_HOST as string
 const REDIS_PORT = process.env.REDIS_PORT as unknown as number
+const REDIS_USERNAME = process.env.REDIS_USERNAME
+const REDIS_PASSWORD = process.env.REDIS_PASSWORD
 
 const AUTH_USERNAME = process.env.AUTH_USERNAME as string
 const AUTH_PASSWORD = process.env.AUTH_PASSWORD as string
@@ -86,6 +88,8 @@ export {
 	GEMINI_API_KEY,
 	REDIS_HOST,
 	REDIS_PORT,
+	REDIS_USERNAME,
+	REDIS_PASSWORD,
 	AUTH_PASSWORD,
 	AUTH_USERNAME
 };
