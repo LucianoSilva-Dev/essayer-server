@@ -6,5 +6,6 @@ export const redisClient = new IORedis({
   port: REDIS_PORT,
   username: REDIS_USERNAME ?? undefined,
   password: REDIS_PASSWORD ?? undefined,
+  family: 0, // permite host ipv4 e ipv6
   maxRetriesPerRequest: null,
 });
