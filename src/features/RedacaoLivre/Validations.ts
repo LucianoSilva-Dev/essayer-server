@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { correcaoRedacaoResponse } from '../../shared/CorrecaoRedacaoIA/Validations';
 
 export const createRedacaoLivreBodyValidation = z.object({
   tema: z
@@ -14,6 +15,9 @@ export const getRedacaoLivreResponse = z.object({
   tema: z.string(),
   texto: z.string().optional(),
   duracao: z.number().optional(),
+  correcoesIA: z
+    .array(z.object({ ...correcaoRedacaoResponse.shape, createdAt: z.date() }))
+    .optional(),
   updatedAt: z.date(),
 });
 

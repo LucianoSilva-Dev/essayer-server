@@ -48,6 +48,9 @@ export const RedacaoLivreService = {
         };
       }
 
+      // Ordena as correções de IA de forma descrescente com base na data de atualização
+      redacao.correcoesIA.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+
       return { success: true, data: redacao };
     } catch (e) {
       console.log(e);
