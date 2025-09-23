@@ -27,7 +27,6 @@
     "@fastify/swagger": "^9.4.2",
     "@fastify/swagger-ui": "^5.2.2",
     "@google/genai": "^1.15.0",
-    "@types/luxon": "^3.7.1",
     "bcryptjs": "^3.0.2",
     "bullmq": "^5.58.5",
     "cloudinary": "^2.7.0",
@@ -50,10 +49,10 @@
     "typescript": "^5.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.2.4",
     "@types/bcrypt": "^5.0.2",
-    "@types/bun": "latest",
     "@types/fs-extra": "^11.0.4",
+    "@types/luxon": "^3.7.1",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.13.14",
     "@types/nodemailer": "^6.4.17",
