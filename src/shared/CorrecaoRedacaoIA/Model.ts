@@ -1,14 +1,19 @@
 import { Schema } from 'mongoose';
-import type { CorrecaoRedacaoIA } from './Types';
+import { EnumCorrecaoRedacaoStatus, type CorrecaoRedacaoIA } from './Types';
 
 export const CorrecaoRedacaoIASchema = new Schema<CorrecaoRedacaoIA>(
   {
-    texto: String,
-    notaC1: { type: Number, required: true },
-    notaC2: { type: Number, required: true },
-    notaC3: { type: Number, required: true },
-    notaC4: { type: Number, required: true },
-    notaC5: { type: Number, required: true },
+    texto: { type: String, required: true },
+    status: {
+      type: String,
+      required: true,
+      enum: EnumCorrecaoRedacaoStatus,
+    },
+    notaC1: Number,
+    notaC2: Number,
+    notaC3: Number,
+    notaC4: Number,
+    notaC5: Number,
     feedbackC1: String,
     feedbackC2: String,
     feedbackC3: String,
@@ -16,4 +21,4 @@ export const CorrecaoRedacaoIASchema = new Schema<CorrecaoRedacaoIA>(
     feedbackC5: String,
   },
   { timestamps: true },
-)
+);

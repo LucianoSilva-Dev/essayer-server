@@ -3,7 +3,7 @@ import { authMiddleware, sseAuthMiddleware } from "../../shared/middlewares/Auth
 import type { EntitySchema } from "../../shared/Types";
 import { genericError, schemaValidationError } from "../../shared/Schemas";
 import { idValidation } from "../../shared/Validations";
-import { createRedacaoLivreBodyValidation, getRedacaoLivreResponse, updateRedacaoLivreBodyValidation } from "./Validations";
+import { createRedacaoLivreBodyValidation, getAllRedacaoLivreResponse, getRedacaoLivreResponse, updateRedacaoLivreBodyValidation } from "./Validations";
 
 export const RedacaoLivreSchema: EntitySchema = {
   create: {
@@ -25,7 +25,7 @@ export const RedacaoLivreSchema: EntitySchema = {
     schema: {
       security: [{jwtAuth: []}],
       response: {
-        200: z.array(getRedacaoLivreResponse),
+        200: z.array(getAllRedacaoLivreResponse),
         400: schemaValidationError,
         403: genericError,
         500: genericError
@@ -83,10 +83,12 @@ export const RedacaoLivreSchema: EntitySchema = {
     preHandler: authMiddleware,
     schema: {
       security: [{jwtAuth: []}],
+      params: idValidation,
       response: {
-        200: z.array(getRedacaoLivreResponse),
+        200: z.void(),
         403: genericError,
         404: genericError,
+        409: genericError,
         500: genericError
       },
       summary: "Encaminha a redação especificada para a correção com IA."
@@ -96,8 +98,25 @@ export const RedacaoLivreSchema: EntitySchema = {
     preHandler: sseAuthMiddleware,
     schema: {
       security: [{ jwtAuth: [] }],
-      // params: idValidation,
+      params: idValidation,
       summary: "Escuta por um evento de correção da redação especificada."
     }
+  },
+  deleteCorrecao: {
+    preHandler: authMiddleware,
+    schema: {
+      security: [{ jwtAuth: [] }],
+      params: z.object({
+        id: idValidation.shape.id,
+        correcaoId: idValidation.shape.id,
+      }),
+      response: {
+        204: z.void(),
+        403: genericError,
+        404: genericError,
+        500: genericError,
+      },
+      summary: 'Exclui uma correção de IA de uma redação livre.',
+    },
   },
 }

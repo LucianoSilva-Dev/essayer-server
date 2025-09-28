@@ -1,5 +1,6 @@
+import type { GetCorrecaoRedacaoResponse } from '../../features/RedacaoLivre/Types';
 import type { Atividade } from '../Atividade/Types';
-import type { CorrecaoRedacaoIAResponse } from '../CorrecaoRedacaoIA/Types';
+import type { CorrecaoRedacaoAIValidation } from '../CorrecaoRedacaoIA/Types';
 
 // Notificações Sobre tarefas
 export type TarefaEnviadaEventPayload = {
@@ -20,7 +21,14 @@ export type TarefaCorrigidaEventPayload = {
 // Correção de IA
 export type RedacaoIACorrigidaEventPayload = {
   redacaoLivreId: string;
-  correcao: CorrecaoRedacaoIAResponse;
+  correcaoId: string;
+  correcao: CorrecaoRedacaoAIValidation;
+  remetente: string;
+};
+
+export type RedacaoIAPersistidaEventPayload = {
+  redacaoLivreId: string;
+  correcao: GetCorrecaoRedacaoResponse;
   remetente: string;
 };
 
@@ -34,5 +42,6 @@ export type AppEventMap = {
   'tarefa:fechada': TarefaFechadaEventPayload;
   'tarefa:corrigida': TarefaCorrigidaEventPayload;
   'redacao:ia:corrigida': RedacaoIACorrigidaEventPayload;
+  'redacao:ia:persistida': RedacaoIAPersistidaEventPayload;
   'redacao:ia:delay': RedacaoComAtrasoEventPayload;
 };

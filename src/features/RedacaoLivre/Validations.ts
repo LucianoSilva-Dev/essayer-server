@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { correcaoRedacaoResponse } from '../../shared/CorrecaoRedacaoIA/Validations';
+import { correcaoRedacaoAIValidation } from '../../shared/CorrecaoRedacaoIA/Validations';
+import { EnumCorrecaoRedacaoStatus } from '../../shared/CorrecaoRedacaoIA/Types';
 
 export const createRedacaoLivreBodyValidation = z.object({
   tema: z
@@ -10,14 +11,29 @@ export const createRedacaoLivreBodyValidation = z.object({
     .nonempty('O campo tema não pode estar vazio.'),
 });
 
+export const getCorrecaoRedacaoResponse = z.object({
+  ...correcaoRedacaoAIValidation.shape,
+  id: z.string(),
+  createdAt: z.date(),
+  status: z.nativeEnum(EnumCorrecaoRedacaoStatus)
+});
+
 export const getRedacaoLivreResponse = z.object({
   id: z.string(),
   tema: z.string(),
   texto: z.string().optional(),
   duracao: z.number().optional(),
   correcoesIA: z
-    .array(z.object({ ...correcaoRedacaoResponse.shape, createdAt: z.date() }))
+    .array(getCorrecaoRedacaoResponse)
     .optional(),
+  updatedAt: z.date(),
+});
+
+export const getAllRedacaoLivreResponse = z.object({
+  id: z.string(),
+  tema: z.string(),
+  texto: z.string().optional(),
+  duracao: z.number().optional(),
   updatedAt: z.date(),
 });
 

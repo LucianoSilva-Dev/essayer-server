@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const correcaoRedacaoResponse = z.object({
+export const correcaoRedacaoAIValidation = z.object({
     notaC1: z.number().int(),
     notaC2: z.number().int(),
     notaC3: z.number().int(),

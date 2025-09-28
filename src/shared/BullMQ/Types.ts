@@ -3,6 +3,7 @@ import type { GeminiModels } from "../AI/Types";
 export type AppJobMap = {
   'redacao:corrigir': {
     redacaoLivreId: string
+    correcaoId: string
     usuario: string
     tema: string
     texto: string

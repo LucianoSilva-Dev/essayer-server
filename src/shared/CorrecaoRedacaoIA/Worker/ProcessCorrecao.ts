@@ -1,6 +1,6 @@
 import { googleGenAI } from '../../AI/Provider';
 import { generateAIContentConfig } from '../Helpers/GenAIContentConfig';
-import { correcaoRedacaoResponse } from '../Validations';
+import { correcaoRedacaoAIValidation } from '../Validations';
 import { AppEventEmitter } from '../../Events/Emitter';
 import type { GeminiModels } from '../../AI/Types';
 import type { AppJobMap } from '../../BullMQ/Types';
@@ -14,7 +14,7 @@ export async function processCorrecao(
     model: GeminiModels['PRO'] | GeminiModels['FLASH'],
     jobData: AppJobMap['redacao:corrigir'],
 ) {
-    const { tema, texto, usuario, redacaoLivreId } = jobData;
+    const { tema, texto, usuario, redacaoLivreId, correcaoId } = jobData;
 
     try {
         // Incrementa os contadores apenas antes da tentativa de requisição
@@ -24,11 +24,12 @@ export async function processCorrecao(
             generateAIContentConfig(model, tema, texto),
         );
         const correcaoOBJ = JSON.parse(response.text ?? '');
-        const correcao = correcaoRedacaoResponse.parse(correcaoOBJ);
+        const correcao = correcaoRedacaoAIValidation.parse(correcaoOBJ);
 
         AppEventEmitter.emit('redacao:ia:corrigida', {
             correcao,
             redacaoLivreId,
+            correcaoId,
             remetente: usuario,
         });
     } catch (e) {
