@@ -2,11 +2,11 @@ import type { Populate, PopulatedPerfilUsuario } from '../../shared/Types';
 import { TurmaModel } from './Model';
 import type {
   CreateTurmaBody,
+  getAllAtividadesQueryBody,
+  GetAllTurmaQueryBody,
   GetAlunosResponse,
   GetAtividadesResponse,
   GetTurmaResponse,
-  GetTurmasCriadasResponse,
-  GetTurmasResponse,
   Turma,
   UpdateTurmaBody,
 } from './Types';
@@ -37,17 +37,21 @@ export const TurmaService = {
     }
   },
 
-  getAll: async (userId: string) => {
-    const turmas = await TurmaModel.find({
-      membros: userId,
-    })
-      .populate<{ criador: PopulatedPerfilUsuario }>(
-        'criador',
-        '_id nome fotoPath',
-      )
-      .lean();
+  getAll: async (userId: string, queryBody: GetAllTurmaQueryBody) => {
+    const [turmas, totalDocuments] = await Promise.all([
+      TurmaModel.find({ membros: userId })
+        .skip(queryBody.offset)
+        .limit(queryBody.limit)
+        .populate<{ criador: PopulatedPerfilUsuario }>(
+          'criador',
+          '_id nome fotoPath',
+        )
+        .lean(),
 
-    const turmasResponse: GetTurmasResponse = turmas.map((turma) => {
+      TurmaModel.countDocuments({ membros: userId }),
+    ]);
+
+    const turmasResponse = turmas.map((turma) => {
       return {
         id: turma._id.toString(),
         criador: {
@@ -60,22 +64,78 @@ export const TurmaService = {
       };
     });
 
-    return { success: true, data: turmasResponse } as const;
+    const nextOffset = Math.min(
+      queryBody.offset + queryBody.limit,
+      totalDocuments,
+    );
+    const prevOffset = Math.max(queryBody.offset - queryBody.limit, 0);
+
+    return {
+      success: true,
+      data: {
+        documentos: turmasResponse,
+        paginacao: {
+          offset: queryBody.offset,
+          limit: queryBody.limit,
+          nextPageUrl:
+            nextOffset >= totalDocuments
+              ? null
+              : `/offset=${nextOffset}&limit=${queryBody.limit}`,
+          previousPageUrl:
+            // biome-ignore lint/suspicious/noDoubleEquals: Embora o tipo seja 'number', o offset é uma string(?)
+            queryBody.offset == 0
+              ? null
+              : `/offset=${prevOffset}&limit=${queryBody.limit}`,
+          totalDocuments,
+        },
+      },
+    } as const;
   },
 
-  getCriadas: async (userId: string) => {
-    const turmas = await TurmaModel.find({ criador: userId })
-      .select('_id nome escola')
-      .lean<Pick<Turma, '_id' | 'nome' | 'escola'>[]>();
+  getCriadas: async (userId: string, queryBody: GetAllTurmaQueryBody) => {
+    const [turmas, totalDocuments] = await Promise.all([
+      TurmaModel.find({ criador: userId })
+        .skip(queryBody.offset)
+        .limit(queryBody.limit)
+        .select('_id nome escola')
+        .lean<Pick<Turma, '_id' | 'nome' | 'escola'>[]>(),
 
-    const turmasCriadas: GetTurmasCriadasResponse = turmas.map((turma) => {
+      TurmaModel.countDocuments({ criador: userId }),
+    ]);
+
+    const turmasCriadas = turmas.map((turma) => {
       return {
         id: turma._id.toString(),
         ...turma,
       };
     });
 
-    return { success: true, data: turmasCriadas } as const;
+    const nextOffset = Math.min(
+      queryBody.offset + queryBody.limit,
+      totalDocuments,
+    );
+    const prevOffset = Math.max(queryBody.offset - queryBody.limit, 0);
+
+    return { 
+      success: true, 
+      data: {
+        documentos: turmasCriadas,
+        paginacao: {
+          offset: queryBody.offset,
+          limit: queryBody.limit,
+          nextPageUrl:
+            nextOffset >= totalDocuments
+              ? null
+              : `/offset=${nextOffset}&limit=${queryBody.limit}`,
+          previousPageUrl:
+            // biome-ignore lint/suspicious/noDoubleEquals: Embora o tipo seja 'number', o offset é uma string(?)
+            queryBody.offset == 0
+              ? null
+              : `/offset=${prevOffset}&limit=${queryBody.limit}`,
+          totalDocuments,
+        }
+      } 
+    } as const;
   },
 
   getById: async (turmaId: string, userId: string) => {
@@ -336,7 +396,7 @@ export const TurmaService = {
     }
   },
 
-  getAllAtividades: async (turmaId: string, userId: string) => {
+  getAllAtividades: async (turmaId: string, userId: string, queryBody: getAllAtividadesQueryBody) => {
     const isMember = await TurmaModel.exists({
       _id: turmaId,
       $or: [{ membros: userId }, { criador: userId }],
@@ -349,7 +409,9 @@ export const TurmaService = {
       } as const;
     }
 
-    const atividades = await AtividadeModel.find({ turma: turmaId })
+    const filtro = queryBody.titulo ? {turma: turmaId, titulo: new RegExp(queryBody.titulo, 'i')} : { turma: turmaId }
+
+    const atividades = await AtividadeModel.find(filtro)
       .select('_id tipoAtividade titulo descricao dataLimite')
       .lean<
         Pick<

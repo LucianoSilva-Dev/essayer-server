@@ -12,6 +12,8 @@ import type {
   regenerarCodigoResponse,
   getAtividadesResponse,
   getTurmasCriadasResponse,
+  getAllTurmaQueryValidation,
+  getAllAtividadesQueryValidation,
 } from './Validation';
 
 export type Turma = {
@@ -42,3 +44,5 @@ export type GetAlunosPendentesResponse = z.infer<
 export type GetAlunosResponse = z.infer<typeof getAlunosResponse>;
 export type RegenerarCodigoResponse = z.infer<typeof regenerarCodigoResponse>;
 export type GetAtividadesResponse = z.infer<typeof getAtividadesResponse>;
+export type GetAllTurmaQueryBody = z.infer<typeof getAllTurmaQueryValidation>
+export type getAllAtividadesQueryBody = z.infer<typeof getAllAtividadesQueryValidation>

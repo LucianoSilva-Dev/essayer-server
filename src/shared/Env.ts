@@ -69,10 +69,10 @@ if (!GEMINI_API_KEY) {
 	process.exit(1)
 }
 
-if (!AUTH_PASSWORD || ! AUTH_USERNAME) {
-	console.error('Basic auth credentials not defined')
-	process.exit(1)
-}
+// if (!AUTH_PASSWORD || ! AUTH_USERNAME) {
+// 	console.error('Basic auth credentials not defined')
+// 	process.exit(1)
+// }
 
 export {
 	JWT_SECRET,

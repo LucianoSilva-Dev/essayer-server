@@ -13,6 +13,11 @@ export const AtividadeRoutes: FastifyPluginAsyncZod = async (app) => {
   app.post('/redacao', RedacaoSchema.create, RedacaoController.create);
   app.get('/redacao/:id', RedacaoSchema.get, RedacaoController.get);
   app.put('/redacao/:id', RedacaoSchema.update, RedacaoController.update);
+  app.get(
+    '/redacao/:id/respostas',
+    RedacaoSchema.getAllRespostasRedacao,
+    RedacaoController.getAllRespostasRedacao,
+  );
 
   app.post(
     '/redacao/:id/iniciar',

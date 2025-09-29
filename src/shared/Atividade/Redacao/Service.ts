@@ -1,8 +1,15 @@
 import { Types } from 'mongoose';
 import { RedacaoAtividadeModel } from './Model';
-import type { CreateRedacaoBody, UpdateRedacaoBody } from './Types';
+import type {
+  CreateRedacaoBody,
+  getAllRespostasRedacaoQueryBody,
+  UpdateRedacaoBody,
+} from './Types';
 import { TurmaModel } from '../../../features/Turmas/Model';
-import type { TarefaCorrigidaEventPayload, TarefaEnviadaEventPayload } from '../../Events/Types';
+import type {
+  TarefaCorrigidaEventPayload,
+  TarefaEnviadaEventPayload,
+} from '../../Events/Types';
 
 export const RedacaoService = {
   create: async (data: CreateRedacaoBody, requisitante: string) => {
@@ -21,14 +28,13 @@ export const RedacaoService = {
       const atividade = await RedacaoAtividadeModel.create(data);
       const notificacaoPayload: TarefaEnviadaEventPayload = {
         atividade,
-        remetentes: turma.membros.map((id) => id.toString())
-      }
+        remetentes: turma.membros.map((id) => id.toString()),
+      };
 
       return {
         success: true,
-        data: notificacaoPayload
-      } as const
-
+        data: notificacaoPayload,
+      } as const;
     } catch (e) {
       console.log(e);
       return {
@@ -133,11 +139,15 @@ export const RedacaoService = {
   },
   send: async (id: string, texto: string, requisitante: string) => {
     try {
-      const atividade = await RedacaoAtividadeModel.findById(id).select({
-        respostas: { aluno: 1, dataEnvio: 1, _id: 1 }
-      }).populate('turma', 'criador');
+      const atividade = await RedacaoAtividadeModel.findById(id)
+        .select({
+          respostas: { aluno: 1, dataEnvio: 1, _id: 1 },
+        })
+        .populate('turma', 'criador');
 
-      const resposta = atividade?.respostas.find(res => res.aluno.toString() === requisitante)
+      const resposta = atividade?.respostas.find(
+        (res) => res.aluno.toString() === requisitante,
+      );
 
       if (!atividade || resposta?.dataEnvio) {
         return {
@@ -159,8 +169,8 @@ export const RedacaoService = {
 
       const notificacaoPayload: TarefaEnviadaEventPayload = {
         atividade,
-        remetentes: [atividade.turma.criador.toString()]
-      }
+        remetentes: [atividade.turma.criador.toString()],
+      };
 
       return { success: true, data: notificacaoPayload };
     } catch (e) {
@@ -192,12 +202,14 @@ export const RedacaoService = {
         { $set: { 'respostas.$.feedback': feedback } },
       );
 
-      const resposta = atividade.respostas.find(res => res.id.toString() === id)
+      const resposta = atividade.respostas.find(
+        (res) => res.id.toString() === id,
+      );
 
       const notificacaoPayload: TarefaCorrigidaEventPayload = {
         atividade,
-        remetentes: resposta ? [resposta.aluno.toString()] : []
-      }
+        remetentes: resposta ? [resposta.aluno.toString()] : [],
+      };
 
       return { success: true, data: notificacaoPayload };
     } catch (e) {
@@ -208,5 +220,105 @@ export const RedacaoService = {
         message: 'Internal Server Error',
       };
     }
+  },
+  getAllRespostasRedacao: async (
+    id: string,
+    requisitante: string,
+    queryBody: getAllRespostasRedacaoQueryBody,
+  ) => {
+    const ativs = await RedacaoAtividadeModel.aggregate([
+      { $match: { _id: new Types.ObjectId(id) } },
+      {
+        $project: {
+          turma: 1,
+          respostasEnviadas: {
+            $filter: {
+              input: '$respostas',
+              as: 'resp',
+              cond: { $ifNull: ['$$resp.dataEnvio', false] },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          turma: 1,
+          respostasEnviadas: 1,
+          totalResp: { $size: '$respostasEnviadas' },
+        },
+      },
+      {
+        $unwind: {
+          path: '$respostasEnviadas',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'usuarios',
+          localField: 'respostasEnviadas.aluno',
+          foreignField: '_id',
+          as: 'alunoInfo'
+        }
+      },
+      { $skip: queryBody.offset },
+      { $limit: queryBody.limit },
+    ]);
+
+    console.log("\n\n\n\n\n ======================================= \n\n\n\n\n");
+    console.dir(ativs, {depth: null});
+    console.log("\n\n\n\n\n ======================================= \n\n\n\n\n");
+
+    const turma = await TurmaModel.findById(ativs[0].turma);
+
+    if (!turma || turma?.criador.toString() !== requisitante) {
+      return {
+        success: false,
+        status: 403,
+        message:
+          'Você não tem permissão para acessar essa turma ou a turma não existe.',
+      };
+    }
+
+    const totalDocuments = ativs[0].totalResp;
+
+    const respostas = ativs[0].respostasEnviadas
+      ? ativs.map((resp) => {
+          return {
+            ...resp.respostasEnviadas,
+            _id: resp.respostasEnviadas._id.toString(),
+            aluno: {id: resp.alunoInfo[0]._id.toString(), ...resp.alunoInfo[0]}
+          };
+        })
+      : [];
+
+    const nextOffset = Math.min(
+      queryBody.offset + queryBody.limit,
+      totalDocuments,
+    );
+    const prevOffset = Math.max(queryBody.offset - queryBody.limit, 0);
+
+    console.log(respostas);
+
+    return {
+      success: true,
+      data: {
+        documentos: respostas,
+        paginacao: {
+          offset: queryBody.offset,
+          limit: queryBody.limit,
+          nextPageUrl:
+            nextOffset >= totalDocuments
+              ? null
+              : `/offset=${nextOffset}&limit=${queryBody.limit}`,
+          previousPageUrl:
+            // biome-ignore lint/suspicious/noDoubleEquals: Embora o tipo seja 'number', o offset é uma string(?)
+            queryBody.offset == 0
+              ? null
+              : `/offset=${prevOffset}&limit=${queryBody.limit}`,
+          totalDocuments,
+        },
+      },
+    } as const;
   },
 };

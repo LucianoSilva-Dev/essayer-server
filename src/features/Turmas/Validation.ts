@@ -39,22 +39,41 @@ export const getTurmaResponse = z.object({
   membros: z.array(perfilUsuarioResponse),
 });
 
-export const getTurmasResponse = z.array(
-  z.object({
-    id: z.string(),
-    nome: z.string(),
-    escola: z.string().nullable().default(null),
-    criador: perfilUsuarioResponse,
-  }),
-);
+export const getTurmasResponse = z.object({
+  documentos: z.array(
+    z.object({
+      id: z.string(),
+      nome: z.string(),
+      escola: z.string().nullable().default(null),
+      criador: perfilUsuarioResponse,
+    }),
+  ),
 
-export const getTurmasCriadasResponse = z.array(
-  z.object({
-    id: z.string(),
-    nome: z.string(),
-    escola: z.string().nullable().default(null),
+  paginacao: z.object({
+    offset: z.coerce.number().int().min(0),
+    limit: z.coerce.number().int().min(1).max(15),
+    nextPageUrl: z.string().nullable(),
+    previousPageUrl: z.string().nullable(),
+    totalDocuments: z.number().int(),
   }),
-);
+});
+
+export const getTurmasCriadasResponse = z.object({
+  documentos: z.array(
+    z.object({
+      id: z.string(),
+      nome: z.string(),
+      escola: z.string().nullable().default(null),
+    }),
+  ),
+  paginacao: z.object({
+    offset: z.coerce.number().int().min(0),
+    limit: z.coerce.number().int().min(1).max(15),
+    nextPageUrl: z.string().nullable(),
+    previousPageUrl: z.string().nullable(),
+    totalDocuments: z.number().int(),
+  }),
+});
 
 export const getCodigoConviteResponse = z.object({
   codigoConvite: z.string(),
@@ -74,6 +93,31 @@ export const getAtividadesResponse = z.array(
     tipoAtividade: z.enum(['Redacao']),
     titulo: z.string(),
     descricao: z.string(),
-    dataLimite: z.string().datetime().nullable()
+    dataLimite: z.string().datetime().nullable(),
   }),
 );
+
+export const getAllTurmaQueryValidation = z.object({
+  offset: z
+    .number({ coerce: true })
+    .int()
+    .min(0)
+    .nullish()
+    .transform((val) => val ?? 0),
+  limit: z
+    .number({ coerce: true })
+    .int()
+    .min(1)
+    .max(15)
+    .nullish()
+    .transform((val) => val ?? 15),
+});
+
+export const getAllAtividadesQueryValidation = z.object({
+  titulo: z
+    .string({
+      invalid_type_error: 'O campo titulo precisa ser um texto',
+    })
+    .nonempty('O campo titulo não pode estar vazio')
+    .optional(),
+});

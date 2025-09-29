@@ -1,11 +1,12 @@
 import { AppEventEmitter } from '../../Events/Emitter';
-import { TarefaCorrigidaEventPayload, TarefaEnviadaEventPayload } from '../../Events/Types';
+import type { TarefaCorrigidaEventPayload, TarefaEnviadaEventPayload } from '../../Events/Types';
 import type { Controller, RequestUserData } from '../../Types';
 import { RedacaoService } from './Service';
 import type {
   CreateRedacaoBody,
   EnviarRedacaoBody,
   FeedbackRedacaoBody,
+  getAllRespostasRedacaoQueryBody,
   UpdateRedacaoBody,
 } from './Types';
 
@@ -102,4 +103,19 @@ export const RedacaoController: Controller = {
 
     AppEventEmitter.emit('tarefa:corrigida', response.data as TarefaCorrigidaEventPayload)
   },
+  getAllRespostasRedacao: async (request, reply) => {
+    const {id} = request.params as {id: string}
+    const {id: requisitante} = request.user as RequestUserData
+    const queryBody = request.query as getAllRespostasRedacaoQueryBody
+
+    const response = await RedacaoService.getAllRespostasRedacao(id, requisitante, queryBody)
+
+    if (!response.success) {
+      return reply
+        .status(response.status as number)
+        .send({ error: response.message });
+    }
+
+    reply.status(200).send(response.data);
+  }
 };
