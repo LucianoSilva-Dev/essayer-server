@@ -1,6 +1,14 @@
 import type z from 'zod';
 import type { correcaoRedacaoResponse } from "./Validations"
 
+export enum UnavailabilityReason {
+  APIUnavailable = 'API Unavailable',
+  RPDExceeded = 'RPD Exceeded',
+  RPMExceeded = 'RPM Exceeded',
+  Generic429HttpError = 'Generic 429 Http Error',
+  GenericError = 'Generic Error'
+}
+
 export type CorrecaoRedacaoIA = {
     texto: string
     notaC1: number
