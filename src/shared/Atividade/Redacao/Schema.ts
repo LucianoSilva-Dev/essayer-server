@@ -7,6 +7,8 @@ import {
   createRedacaoBodyValidation,
   enviarRedacaoBodyValidation,
   feedbackRedacaoBodyValidation,
+  getAllRespostasRedacaoQueryValidation,
+  getAllRespostasRedacaoResponse,
   getRedacaoResponse,
   updateRedacaoBodyValidation,
 } from './Validations';
@@ -105,4 +107,20 @@ export const RedacaoSchema: EntitySchema = {
       summary: 'Adiciona ou atualiza o feedback de uma resposta.',
     },
   },
+  getAllRespostasRedacao: {
+    preHandler: authProfessor,
+    schema: {
+      security: [{jwtAuth: []}],
+      params: idValidation,
+      querystring: getAllRespostasRedacaoQueryValidation,
+      response: {
+        200: getAllRespostasRedacaoResponse,
+        400: schemaValidationError,
+        403: genericError,
+        404: genericError,
+        500: genericError
+      },
+      summary: "Resgata todas as respostas de uma atividade."
+    }
+  }
 };

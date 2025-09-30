@@ -1,5 +1,6 @@
 import { isValidObjectId } from 'mongoose';
 import { z } from 'zod';
+import { perfilUsuarioResponse } from '../../../features/Repertorios/Validations/Commom';
 
 export const createRedacaoBodyValidation = z.object({
   titulo: z
@@ -126,4 +127,39 @@ export const feedbackRedacaoBodyValidation = z.object({
       invalid_type_error: 'O campo feedback precisa ser um texto.',
     })
     .nonempty('O campo feedback não pode estar vazio.'),
+});
+
+export const getAllRespostasRedacaoQueryValidation = z.object({
+  offset: z
+    .number({ coerce: true })
+    .int()
+    .min(0)
+    .nullish()
+    .transform((val) => val ?? 0),
+  limit: z
+    .number({ coerce: true })
+    .int()
+    .min(1)
+    .max(15)
+    .nullish()
+    .transform((val) => val ?? 15),
+});
+
+export const getAllRespostasRedacaoResponse = z.object({
+  documentos: z.array(
+    z.object({
+      _id: z.string(),
+      texto: z.string().optional(),
+      dataEnvio: z.date(),
+      feedback: z.string().optional(),
+      aluno: perfilUsuarioResponse
+    }),
+  ),
+  paginacao: z.object({
+    offset: z.coerce.number().int().min(0),
+    limit: z.coerce.number().int().min(1).max(15),
+    nextPageUrl: z.string().nullable(),
+    previousPageUrl: z.string().nullable(),
+    totalDocuments: z.number().int(),
+  }),
 });

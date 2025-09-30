@@ -13,6 +13,8 @@ import {
   regenerarCodigoResponse,
   getAtividadesResponse,
   getTurmasCriadasResponse,
+  getAllTurmaQueryValidation,
+  getAllAtividadesQueryValidation,
 } from './Validation';
 import { idValidation, genericSuccessResponse } from '../../shared/Validations';
 import { authProfessor } from '../../shared/middlewares/Authorization';
@@ -37,6 +39,7 @@ export const TurmaSchema: EntitySchema = {
     preHandler: authMiddleware,
     schema: {
       security: [{ jwtAuth: [] }],
+      querystring: getAllTurmaQueryValidation,
       response: {
         200: getTurmasResponse,
         401: genericError,
@@ -49,6 +52,7 @@ export const TurmaSchema: EntitySchema = {
     preHandler: authProfessor,
     schema: {
       security: [{ jwtAuth: [] }],
+      querystring: getAllTurmaQueryValidation,
       response: {
         200: getTurmasCriadasResponse,
         401: genericError,
@@ -193,6 +197,7 @@ export const TurmaSchema: EntitySchema = {
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
+      querystring: getAllAtividadesQueryValidation,
       response: { 200: getAtividadesResponse, 404: genericError },
       summary: 'Obtém todas as atividades de uma turma',
     },

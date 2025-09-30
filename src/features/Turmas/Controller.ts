@@ -1,33 +1,45 @@
-import { AppEventEmitter } from '../../shared/Events/Emitter';
 import type { Controller, RequestUserData } from '../../shared/Types';
 import { TurmaService } from './Service';
-import type { CreateTurmaBody, UpdateTurmaBody, SolicitarEntradaBody } from './Types';
+import type {
+  CreateTurmaBody,
+  UpdateTurmaBody,
+  SolicitarEntradaBody,
+  GetAllTurmaQueryBody,
+  getAllAtividadesQueryBody,
+} from './Types';
 
 export const TurmaController: Controller = {
   create: async (request, reply) => {
     const { id: userId } = request.user as RequestUserData;
-    const response = await TurmaService.create(request.body as CreateTurmaBody, userId);
+    const response = await TurmaService.create(
+      request.body as CreateTurmaBody,
+      userId,
+    );
     if (!response.success) {
       return reply.status(response.status).send({ error: response.message });
     }
-    
+
     reply.status(201).send();
   },
 
   getAll: async (request, reply) => {
     const { id: userId } = request.user as RequestUserData;
-    const response = await TurmaService.getAll(userId);
+    const queryBody = request.query as GetAllTurmaQueryBody;
 
-    reply.status(200).send(response.data)
+    const response = await TurmaService.getAll(userId, queryBody);
+
+    reply.status(200).send(response.data);
   },
 
   getCriadas: async (request, reply) => {
     const { id: userId } = request.user as RequestUserData;
-    const response = await TurmaService.getCriadas(userId);
-   
+    const queryBody = request.query as GetAllTurmaQueryBody;
+
+    const response = await TurmaService.getCriadas(userId, queryBody);
+
     reply.status(200).send(response.data);
   },
-  
+
   getById: async (request, reply) => {
     const { id: turmaId } = request.params as { id: string };
     const { id: userId } = request.user as RequestUserData;
@@ -41,7 +53,11 @@ export const TurmaController: Controller = {
   update: async (request, reply) => {
     const { id: turmaId } = request.params as { id: string };
     const { id: userId } = request.user as RequestUserData;
-    const response = await TurmaService.update(turmaId, request.body as UpdateTurmaBody, userId);
+    const response = await TurmaService.update(
+      turmaId,
+      request.body as UpdateTurmaBody,
+      userId,
+    );
     if (!response.success) {
       return reply.status(response.status).send({ error: response.message });
     }
@@ -57,43 +73,52 @@ export const TurmaController: Controller = {
     }
     reply.status(204).send();
   },
-  
+
   solicitarEntrada: async (request, reply) => {
     const { codigoConvite } = request.body as SolicitarEntradaBody;
     const { id: alunoId } = request.user as RequestUserData;
-    const response = await TurmaService.solicitarEntrada(codigoConvite, alunoId);
+    const response = await TurmaService.solicitarEntrada(
+      codigoConvite,
+      alunoId,
+    );
     if (!response.success) {
-        return reply.status(response.status).send({ error: response.message });
+      return reply.status(response.status).send({ error: response.message });
     }
     reply.status(200).send();
   },
-  
+
   getPedidos: async (request, reply) => {
     const { id: turmaId } = request.params as { id: string };
     const { id: userId } = request.user as RequestUserData;
     const response = await TurmaService.getPedidos(turmaId, userId);
     if (!response.success) {
-        return reply.status(response.status).send({ error: response.message });
+      return reply.status(response.status).send({ error: response.message });
     }
     reply.send(response.data);
   },
-  
+
   aprovarPedido: async (request, reply) => {
-    const { id: turmaId, alunoId } = request.params as { id: string; alunoId: string };
+    const { id: turmaId, alunoId } = request.params as {
+      id: string;
+      alunoId: string;
+    };
     const { id: userId } = request.user as RequestUserData;
     const response = await TurmaService.aprovarPedido(turmaId, alunoId, userId);
     if (!response.success) {
-        return reply.status(response.status).send({ error: response.message });
+      return reply.status(response.status).send({ error: response.message });
     }
     reply.status(200).send();
   },
-  
+
   recusarPedido: async (request, reply) => {
-    const { id: turmaId, alunoId } = request.params as { id: string; alunoId: string };
+    const { id: turmaId, alunoId } = request.params as {
+      id: string;
+      alunoId: string;
+    };
     const { id: userId } = request.user as RequestUserData;
     const response = await TurmaService.recusarPedido(turmaId, alunoId, userId);
     if (!response.success) {
-        return reply.status(response.status).send({ error: response.message });
+      return reply.status(response.status).send({ error: response.message });
     }
     reply.status(204).send();
   },
@@ -103,7 +128,7 @@ export const TurmaController: Controller = {
     const { id: userId } = request.user as RequestUserData;
     const response = await TurmaService.getAllAlunos(turmaId, userId);
     if (!response.success) {
-        return reply.status(response.status).send({ error: response.message });
+      return reply.status(response.status).send({ error: response.message });
     }
     reply.send(response.data);
   },
@@ -113,7 +138,7 @@ export const TurmaController: Controller = {
     const { id: userId } = request.user as RequestUserData;
     const response = await TurmaService.getCodigoConvite(turmaId, userId);
     if (!response.success) {
-        return reply.status(response.status).send({ error: response.message });
+      return reply.status(response.status).send({ error: response.message });
     }
     reply.send(response.data);
   },
@@ -123,7 +148,7 @@ export const TurmaController: Controller = {
     const { id: userId } = request.user as RequestUserData;
     const response = await TurmaService.regenerarCodigoConvite(turmaId, userId);
     if (!response.success) {
-        return reply.status(response.status).send({ error: response.message });
+      return reply.status(response.status).send({ error: response.message });
     }
     reply.send(response.data);
   },
@@ -131,20 +156,29 @@ export const TurmaController: Controller = {
   getAllAtividades: async (request, reply) => {
     const { id: turmaId } = request.params as { id: string };
     const { id: userId } = request.user as RequestUserData;
-    const response = await TurmaService.getAllAtividades(turmaId, userId);
+    const queryBody = request.query as getAllAtividadesQueryBody;
+
+    const response = await TurmaService.getAllAtividades(
+      turmaId,
+      userId,
+      queryBody,
+    );
     if (!response.success) {
-        return reply.status(response.status).send({ error: response.message });
+      return reply.status(response.status).send({ error: response.message });
     }
     reply.send(response.data);
   },
-  
+
   removerAluno: async (request, reply) => {
-    const { id: turmaId, alunoId } = request.params as { id: string; alunoId: string };
+    const { id: turmaId, alunoId } = request.params as {
+      id: string;
+      alunoId: string;
+    };
     const { id: userId } = request.user as RequestUserData;
     const response = await TurmaService.removerAluno(turmaId, alunoId, userId);
-     if (!response.success) {
-        return reply.status(response.status).send({ error: response.message });
+    if (!response.success) {
+      return reply.status(response.status).send({ error: response.message });
     }
     reply.status(204).send();
-  }
+  },
 };
