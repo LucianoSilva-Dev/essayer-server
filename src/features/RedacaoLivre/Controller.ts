@@ -13,7 +13,11 @@ import {
 } from './EventListeners';
 import { RedacaoLivreModel } from './Model';
 import { RedacaoLivreService } from './Service';
-import type { CreateRedacaoLivreBody, UpdateRedacaoLivreBody } from './Types';
+import type {
+  CorrigirRedacaoBody,
+  CreateRedacaoLivreBody,
+  UpdateRedacaoLivreBody,
+} from './Types';
 
 AppEventEmitter.on('redacao:ia:corrigida', registerCorrecaoIAListener);
 
@@ -86,6 +90,7 @@ export const RedacaoLivreController: Controller = {
   corrigir: async (request, reply) => {
     const { id: alunoId } = request.user as RequestUserData;
     const { id: redacaoLivreId } = request.params as { id: string };
+    const { tema, textoRedacao } = request.body as CorrigirRedacaoBody;
 
     const redacao = await RedacaoLivreModel.findById(redacaoLivreId);
     if (!redacao) {
@@ -98,35 +103,33 @@ export const RedacaoLivreController: Controller = {
       });
     }
 
-    if (!redacao.texto) {
+    const job = await CorrigirRedacaoQueue.getJob(redacaoLivreId);
+    const jobState = await job?.getState();
+
+    if (jobState !== undefined && jobState !== 'failed') {
       return reply
-        .status(400)
-        .send({ errors: ['Você não pode corrigir uma redação vazia.'] });
+        .status(409)
+        .send({ error: 'A correção desta redação já está em andamento.' });
     }
 
-    const job = await CorrigirRedacaoQueue.getJob(redacaoLivreId)
-    const jobState = await job?.getState()
-
-    if(jobState !== undefined && jobState !== 'failed') {
-      return reply.status(409).send({ error: 'A correção desta redação já está em andamento.' })
-    }
-
-    const correcao = redacao.correcoesIA.create({
-      texto: redacao.texto,
-      status: EnumCorrecaoRedacaoStatus.Pendente,
-    }).toObject()
+    const correcao = redacao.correcoesIA
+      .create({
+        texto: textoRedacao,
+        status: EnumCorrecaoRedacaoStatus.Pendente,
+      })
+      .toObject();
 
     redacao.correcoesIA.push(correcao);
-    await redacao.save()
+    await redacao.save();
 
     CorrigirRedacaoQueue.add(
       'corrigirRedacao',
       {
         redacaoLivreId,
         correcaoId: correcao._id.toString(),
-        tema: redacao.tema,
+        tema,
         usuario: alunoId,
-        texto: redacao.texto,
+        texto: textoRedacao,
       },
       { jobId: redacaoLivreId },
     );
@@ -183,6 +186,26 @@ export const RedacaoLivreController: Controller = {
     };
 
     const response = await RedacaoLivreService.deleteCorrecao(
+      id,
+      correcaoId,
+      requisitante,
+    );
+    if (!response.success) {
+      return reply
+        .status(response.status as number)
+        .send({ error: response.message });
+    }
+
+    return reply.status(204).send();
+  },
+  retryCorrecao: async (request, reply) => {
+    const { id: requisitante } = request.user as RequestUserData;
+    const { id, correcaoId } = request.params as {
+      id: string;
+      correcaoId: string;
+    };
+
+    const response = await RedacaoLivreService.retryCorrecao(
       id,
       correcaoId,
       requisitante,

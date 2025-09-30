@@ -29,8 +29,6 @@ export async function registerCorrecaoIAListener(
   });
 
   await redacaoLivre.save();
-  
-  if (!correcao) throw new Error('Não foi possivel atualizar a correção.');
 
   const correcaoObj = correcao.toObject();
   const correcaoResponse = getCorrecaoRedacaoResponse.parse({

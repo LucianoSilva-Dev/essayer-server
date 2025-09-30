@@ -16,4 +16,5 @@ export const RedacaoLivreRoutes: FastifyPluginAsyncZod = async (app) => {
   app.post('/:id/corrigir', RedacaoLivreSchema.corrigir, RedacaoLivreController.corrigir)
   app.get('/:id/correcao/listen', RedacaoLivreSchema.listenCorrecao, RedacaoLivreController.listenCorrecao)
   app.delete('/:id/correcao/:correcaoId', RedacaoLivreSchema.deleteCorrecao, RedacaoLivreController.deleteCorrecao)
+  app.post('/:id/correcao/:correcaoId/retry', RedacaoLivreSchema.retryCorrecao, RedacaoLivreController.retryCorrecao);
 };
