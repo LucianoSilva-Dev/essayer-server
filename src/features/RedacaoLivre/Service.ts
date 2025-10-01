@@ -59,8 +59,6 @@ export const RedacaoLivreService = {
         };
       }
 
-      // Marca todas as correções atuais como antigas (já leu)
-
       // Ordena as correções de IA de forma descrescente com base na data de atualização
       redacao.correcoesIA.sort(
         (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
@@ -143,7 +141,7 @@ export const RedacaoLivreService = {
       }
 
       // Exclui o job da fila redis caso ele esteja lá
-      CorrigirRedacaoQueue.remove(id);
+      CorrigirRedacaoQueue.remove(correcaoId);
 
       return { success: true };
     } catch (e) {
@@ -191,7 +189,7 @@ export const RedacaoLivreService = {
         };
       }
 
-      const job = await CorrigirRedacaoQueue.getJob(redacao._id.toString());
+      const job = await CorrigirRedacaoQueue.getJob(correcaoId);
       const jobState = await job?.getState();
 
       if (!job || jobState !== 'failed') {

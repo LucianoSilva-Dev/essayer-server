@@ -119,6 +119,7 @@ export const RedacaoLivreController: Controller = {
       })
       .toObject();
 
+    const correcaoId = correcao._id.toString()
     redacao.correcoesIA.push(correcao);
     await redacao.save();
 
@@ -126,12 +127,12 @@ export const RedacaoLivreController: Controller = {
       'corrigirRedacao',
       {
         redacaoLivreId,
-        correcaoId: correcao._id.toString(),
+        correcaoId,
         tema,
         usuario: alunoId,
         texto: textoRedacao,
       },
-      { jobId: redacaoLivreId },
+      { jobId: correcaoId },
     );
 
     reply.status(200).send();
