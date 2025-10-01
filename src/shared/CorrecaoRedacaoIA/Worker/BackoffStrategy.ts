@@ -9,12 +9,11 @@ import type { GeminiModels } from '../../AI/Types';
 export const customBackoffStrategy: BackoffStrategy = async (
   attempts,
   _type,
-  _err,
+  err,
   job,
 ) => {
-  const defaultDelay = 100;
-  // const reason = err?.cause as UnavailabilityReason | undefined;
-  const reason = null as unknown as UnavailabilityReason;
+  const defaultDelay = 2000;
+  const reason = err?.cause as UnavailabilityReason | undefined;
   const model = job?.data._lastUsedModel as
     | GeminiModels['PRO']
     | GeminiModels['FLASH'];
