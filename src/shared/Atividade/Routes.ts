@@ -19,6 +19,8 @@ export const AtividadeRoutes: FastifyPluginAsyncZod = async (app) => {
     RedacaoController.getAllRespostasRedacao,
   );
 
+  app.get('/recentes', AtividadeSchema.recentes, AtividadeController.recentes);
+
   app.post(
     '/redacao/:id/iniciar',
     RedacaoSchema.start,

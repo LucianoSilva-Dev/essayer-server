@@ -16,4 +16,18 @@ export const AtividadeController: Controller = {
 
     return reply.status(204).send()
   },
+
+  recentes: async (request, reply) => {
+    const { id: professor } = request.user as RequestUserData;
+
+    const response = await AtividadeService.recentes(professor);
+
+    if (!response.success) {
+      return reply
+        .status(response.status as number)
+        .send({ error: response.message });
+    }
+
+    return reply.status(200).send(response.data);
+  }
 };

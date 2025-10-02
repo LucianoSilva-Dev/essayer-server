@@ -253,6 +253,8 @@ export const RedacaoService = {
           preserveNullAndEmptyArrays: true,
         },
       },
+      { $skip: queryBody.offset },
+      { $limit: queryBody.limit },
       {
         $lookup: {
           from: 'usuarios',
@@ -261,13 +263,7 @@ export const RedacaoService = {
           as: 'alunoInfo'
         }
       },
-      { $skip: queryBody.offset },
-      { $limit: queryBody.limit },
     ]);
-
-    console.log("\n\n\n\n\n ======================================= \n\n\n\n\n");
-    console.dir(ativs, {depth: null});
-    console.log("\n\n\n\n\n ======================================= \n\n\n\n\n");
 
     const turma = await TurmaModel.findById(ativs[0].turma);
 
@@ -284,12 +280,12 @@ export const RedacaoService = {
 
     const respostas = ativs[0].respostasEnviadas
       ? ativs.map((resp) => {
-          return {
-            ...resp.respostasEnviadas,
-            _id: resp.respostasEnviadas._id.toString(),
-            aluno: {id: resp.alunoInfo[0]._id.toString(), ...resp.alunoInfo[0]}
-          };
-        })
+        return {
+          ...resp.respostasEnviadas,
+          _id: resp.respostasEnviadas._id.toString(),
+          aluno: { id: resp.alunoInfo[0]._id.toString(), ...resp.alunoInfo[0] }
+        };
+      })
       : [];
 
     const nextOffset = Math.min(
