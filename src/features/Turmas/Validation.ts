@@ -61,6 +61,7 @@ export const getTurmasResponse = z.object({
     nextPageUrl: z.string().nullable(),
     previousPageUrl: z.string().nullable(),
     totalDocuments: z.number().int(),
+    pagesUrl: z.array(z.string())
   }),
 });
 
@@ -79,6 +80,7 @@ export const getTurmasCriadasResponse = z.object({
     nextPageUrl: z.string().nullable(),
     previousPageUrl: z.string().nullable(),
     totalDocuments: z.number().int(),
+    pagesUrl: z.array(z.string())
   }),
 });
 

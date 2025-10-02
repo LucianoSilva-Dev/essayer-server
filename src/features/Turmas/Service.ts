@@ -83,8 +83,7 @@ export const TurmaService = {
               ? null
               : `/offset=${nextOffset}&limit=${queryBody.limit}`,
           previousPageUrl:
-            // biome-ignore lint/suspicious/noDoubleEquals: Embora o tipo seja 'number', o offset é uma string(?)
-            queryBody.offset == 0
+            queryBody.offset === 0
               ? null
               : `/offset=${prevOffset}&limit=${queryBody.limit}`,
           totalDocuments,
@@ -117,6 +116,12 @@ export const TurmaService = {
     );
     const prevOffset = Math.max(queryBody.offset - queryBody.limit, 0);
 
+    const totalPages = Math.ceil(totalDocuments / queryBody.limit)
+
+    const pages = Array.from({length: totalPages}, (_, i) => `offset=${i * queryBody.limit}&limit=${queryBody.limit}`)
+
+    console.log(pages)
+
     return {
       success: true,
       data: {
@@ -129,11 +134,11 @@ export const TurmaService = {
               ? null
               : `/offset=${nextOffset}&limit=${queryBody.limit}`,
           previousPageUrl:
-            // biome-ignore lint/suspicious/noDoubleEquals: Embora o tipo seja 'number', o offset é uma string(?)
-            queryBody.offset == 0
+            queryBody.offset === 0
               ? null
               : `/offset=${prevOffset}&limit=${queryBody.limit}`,
           totalDocuments,
+          pagesUrl: pages
         },
       },
     } as const;
