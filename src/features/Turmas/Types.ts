@@ -19,6 +19,7 @@ import type {
 export type Turma = {
   _id: Types.ObjectId;
   nome: string;
+  iconeId: string;
   escola: string | null;
   criador: Types.ObjectId;
   membros: Types.ObjectId[];

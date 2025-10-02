@@ -6,6 +6,9 @@ export const createTurmaBodyValidation = z.object({
   nome: z
     .string({ required_error: 'O campo nome é obrigatório.' })
     .nonempty('O campo nome não pode estar vazio'),
+  iconeId: z
+    .string({ required_error: 'O campo iconeId é obrigatório.' })
+    .nonempty('O campo iconeId não pode estar vazio'),
   escola: z
     .string({ invalid_type_error: 'O campo escola precisa ser um texto' })
     .nullish(),
@@ -15,6 +18,7 @@ export const createTurmaBodyValidation = z.object({
 export const updateTurmaBodyValidation = z
   .object({
     nome: z.string().nonempty('O campo nome não pode estar vazio').optional(),
+    iconeId: z.string().nonempty('O campo iconeId não pode estar vazio').optional(),
     escola: z
       .string()
       .nonempty('O campo escola não pode estar vazio')
@@ -34,6 +38,7 @@ export const solicitarEntradaBodyValidation = z.object({
 export const getTurmaResponse = z.object({
   id: z.string(),
   nome: z.string(),
+  iconeId: z.string(),
   escola: z.string().nullable().default(null),
   criador: perfilUsuarioResponse,
   membros: z.array(perfilUsuarioResponse),
@@ -44,6 +49,7 @@ export const getTurmasResponse = z.object({
     z.object({
       id: z.string(),
       nome: z.string(),
+      iconeId: z.string(),
       escola: z.string().nullable().default(null),
       criador: perfilUsuarioResponse,
     }),
@@ -63,6 +69,7 @@ export const getTurmasCriadasResponse = z.object({
     z.object({
       id: z.string(),
       nome: z.string(),
+      iconeId: z.string(),
       escola: z.string().nullable().default(null),
     }),
   ),

@@ -61,6 +61,7 @@ export const TurmaService = {
         },
         escola: turma.escola,
         nome: turma.nome,
+        iconeId: turma.iconeId,
       };
     });
 
@@ -97,8 +98,8 @@ export const TurmaService = {
       TurmaModel.find({ criador: userId })
         .skip(queryBody.offset)
         .limit(queryBody.limit)
-        .select('_id nome escola')
-        .lean<Pick<Turma, '_id' | 'nome' | 'escola'>[]>(),
+        .select('_id nome escola iconeId')
+        .lean<Pick<Turma, '_id' | 'nome' | 'escola' | 'iconeId'>[]>(),
 
       TurmaModel.countDocuments({ criador: userId }),
     ]);
@@ -116,8 +117,8 @@ export const TurmaService = {
     );
     const prevOffset = Math.max(queryBody.offset - queryBody.limit, 0);
 
-    return { 
-      success: true, 
+    return {
+      success: true,
       data: {
         documentos: turmasCriadas,
         paginacao: {
@@ -133,8 +134,8 @@ export const TurmaService = {
               ? null
               : `/offset=${prevOffset}&limit=${queryBody.limit}`,
           totalDocuments,
-        }
-      } 
+        },
+      },
     } as const;
   },
 
@@ -156,7 +157,7 @@ export const TurmaService = {
               membros: PopulatedPerfilUsuario[];
             }
           >,
-          '_id' | 'nome' | 'escola' | 'criador' | 'membros'
+          '_id' | 'nome' | 'escola' | 'criador' | 'membros' | 'iconeId'
         >
       >();
 
@@ -396,7 +397,11 @@ export const TurmaService = {
     }
   },
 
-  getAllAtividades: async (turmaId: string, userId: string, queryBody: getAllAtividadesQueryBody) => {
+  getAllAtividades: async (
+    turmaId: string,
+    userId: string,
+    queryBody: getAllAtividadesQueryBody,
+  ) => {
     const isMember = await TurmaModel.exists({
       _id: turmaId,
       $or: [{ membros: userId }, { criador: userId }],
@@ -409,7 +414,9 @@ export const TurmaService = {
       } as const;
     }
 
-    const filtro = queryBody.titulo ? {turma: turmaId, titulo: new RegExp(queryBody.titulo, 'i')} : { turma: turmaId }
+    const filtro = queryBody.titulo
+      ? { turma: turmaId, titulo: new RegExp(queryBody.titulo, 'i') }
+      : { turma: turmaId };
 
     const atividades = await AtividadeModel.find(filtro)
       .select('_id tipoAtividade titulo descricao dataLimite')
