@@ -14,6 +14,7 @@ import { Types } from 'mongoose';
 import { gerarCodigoConvite } from './Helpers/gerarCodigoConvite';
 import { AtividadeModel } from '../../shared/Atividade/Model';
 import type { Atividade } from '../../shared/Atividade/Types';
+import { perfilUsuarioResponse } from '../Repertorios/Validations/Commom';
 
 export const TurmaService = {
   create: async (data: CreateTurmaBody, criadorId: string) => {
@@ -118,7 +119,7 @@ export const TurmaService = {
 
     const totalPages = Math.ceil(totalDocuments / queryBody.limit)
 
-    const pages = Array.from({length: totalPages}, (_, i) => `offset=${i * queryBody.limit}&limit=${queryBody.limit}`)
+    const pages = Array.from({ length: totalPages }, (_, i) => `offset=${i * queryBody.limit}&limit=${queryBody.limit}`)
 
     console.log(pages)
 
@@ -339,8 +340,8 @@ export const TurmaService = {
       .populate<{ membros: PopulatedPerfilUsuario[] }>(
         'membros',
         'id nome fotoPath',
-      )
-      .select('membros');
+      ).select('membros').lean()
+
 
     if (!turma) {
       return {
@@ -354,10 +355,11 @@ export const TurmaService = {
       (membro) => {
         return {
           id: membro._id.toString(),
-          ...membro,
-        };
+          ...membro
+        }
       },
     );
+
     return { success: true, data: getAllAlunosResponse } as const;
   },
 

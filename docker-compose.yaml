@@ -1,6 +1,6 @@
 services:
   essayer-server:
-    image: "lucianosilvadev/backend-incita:1.2"
+    build: .
     container_name: essayer-server-app
     restart: unless-stopped
     env_file:

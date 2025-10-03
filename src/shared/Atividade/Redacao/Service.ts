@@ -231,20 +231,16 @@ export const RedacaoService = {
       {
         $project: {
           turma: 1,
-          respostasEnviadas: {
-            $filter: {
-              input: '$respostas',
-              as: 'resp',
-              cond: { $ifNull: ['$$resp.dataEnvio', false] },
-            },
-          },
-        },
-      },
-      {
-        $project: {
-          turma: 1,
           respostasEnviadas: 1,
-          totalResp: { $size: '$respostasEnviadas' },
+          totalResp: {
+            $size: {
+              $filter: {
+                input: '$respostas',
+                as: 'resp',
+                cond: { $ifNull: ['$$resp.dataEnvio', false] },
+              },
+            }
+          },
         },
       },
       {

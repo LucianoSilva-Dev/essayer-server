@@ -40,25 +40,20 @@ export const AtividadeService = {
         { $limit: 4 },
         {
           $project: {
-            membros: 1, 
-            atividades: 1,
-            respostasEnviadas: {
-              $filter: {
-                input: '$atividades.respostas',
-                as: 'resp',
-                cond: {
-                  $ifNull: ['$$resp.dataEnvio', false]
-                }
-              }
-            }
-          }
-        },
-        {
-          $project: {
             _id: '$atividades._id',
             titulo: '$atividades.titulo',
             descricao: '$atividades.descricao',
-            respostas: { $size: '$respostasEnviadas' },
+            respostas: {
+              $size: {
+                $filter: {
+                  input: '$atividades.respostas',
+                  as: 'resp',
+                  cond: {
+                    $ifNull: ['$$resp.dataEnvio', false]
+                  }
+                }
+              }
+            },
             createdAt: '$atividades.createdAt',
             totalAlunos: { $size: '$membros' }
           }
