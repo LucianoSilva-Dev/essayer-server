@@ -161,5 +161,6 @@ export const getAllRespostasRedacaoResponse = z.object({
     nextPageUrl: z.string().nullable(),
     previousPageUrl: z.string().nullable(),
     totalDocuments: z.number().int(),
+    pagesUrl: z.array(z.string())
   }),
 });

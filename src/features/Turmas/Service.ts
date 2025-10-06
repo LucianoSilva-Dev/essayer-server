@@ -14,7 +14,6 @@ import { Types } from 'mongoose';
 import { gerarCodigoConvite } from './Helpers/gerarCodigoConvite';
 import { AtividadeModel } from '../../shared/Atividade/Model';
 import type { Atividade } from '../../shared/Atividade/Types';
-import { perfilUsuarioResponse } from '../Repertorios/Validations/Commom';
 
 export const TurmaService = {
   create: async (data: CreateTurmaBody, criadorId: string) => {
@@ -72,6 +71,9 @@ export const TurmaService = {
     );
     const prevOffset = Math.max(queryBody.offset - queryBody.limit, 0);
 
+    const totalPages = Math.ceil(totalDocuments / queryBody.limit)
+    const pages = Array.from({ length: totalPages }, (_, i) => `offset=${i * queryBody.limit}&limit=${queryBody.limit}`)
+
     return {
       success: true,
       data: {
@@ -88,6 +90,7 @@ export const TurmaService = {
               ? null
               : `/offset=${prevOffset}&limit=${queryBody.limit}`,
           totalDocuments,
+          pagesUrl: pages
         },
       },
     } as const;
@@ -118,10 +121,7 @@ export const TurmaService = {
     const prevOffset = Math.max(queryBody.offset - queryBody.limit, 0);
 
     const totalPages = Math.ceil(totalDocuments / queryBody.limit)
-
     const pages = Array.from({ length: totalPages }, (_, i) => `offset=${i * queryBody.limit}&limit=${queryBody.limit}`)
-
-    console.log(pages)
 
     return {
       success: true,

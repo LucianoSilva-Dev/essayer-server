@@ -231,15 +231,15 @@ export const RedacaoService = {
       {
         $project: {
           turma: 1,
-          respostasEnviadas: 1,
+          respostasEnviadas: {
+            $filter: {
+              input: '$respostas',
+              as: 'resp',
+              cond: { $ifNull: ['$$resp.dataEnvio', false] },
+            },
+          },
           totalResp: {
-            $size: {
-              $filter: {
-                input: '$respostas',
-                as: 'resp',
-                cond: { $ifNull: ['$$resp.dataEnvio', false] },
-              },
-            }
+            $size: '$respostasEnviadas'
           },
         },
       },
@@ -290,7 +290,8 @@ export const RedacaoService = {
     );
     const prevOffset = Math.max(queryBody.offset - queryBody.limit, 0);
 
-    console.log(respostas);
+    const totalPages = Math.ceil(totalDocuments / queryBody.limit)
+    const pages = Array.from({ length: totalPages }, (_, i) => `offset=${i * queryBody.limit}&limit=${queryBody.limit}`)
 
     return {
       success: true,
@@ -309,6 +310,7 @@ export const RedacaoService = {
               ? null
               : `/offset=${prevOffset}&limit=${queryBody.limit}`,
           totalDocuments,
+          pagesUrl: pages
         },
       },
     } as const;
