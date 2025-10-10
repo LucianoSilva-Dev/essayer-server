@@ -45,9 +45,8 @@ export const RedacaoService = {
     }
   },
   get: async (id: string, requisitante: string) => {
-
     try {
-      const ativ = await RedacaoAtividadeModel.aggregate([
+      const atv = await RedacaoAtividadeModel.aggregate([
         { $match: { _id: new Types.ObjectId(id) } },
         {
           $lookup: {
@@ -57,22 +56,47 @@ export const RedacaoService = {
             as: 'turmas'
           }
         },
+        { $unwind: '$turmas' },
         {
           $project: {
-            _id: 1,
+            _id: 0,
+            id: { $toString: '$_id' },
             titulo: 1,
             descricao: 1,
             dataLimite: 1,
             tema: 1,
             tempoLimiteEmMinutos: 1,
-            repertoriosApoio: 1,
-            respostas: 1,
-            turma: '$turmas',
+            repertoriosApoio: {
+              $map: {
+                input: '$repertoriosApoio',
+                as: 'rep',
+                in: { $toString: '$$rep' }
+              }
+            },
+            respostas: {
+              $map: {
+                input: '$respostas',
+                as: 'resp',
+                in: {
+                  id: { $toString: '$$resp._id' },
+                  aluno: { $toString: '$$resp.aluno' },
+                  texto: '$$resp.texto',
+                  dataEnvio: '$$resp.dataEnvio',
+                  feedback: '$$resp.feedback',
+                }
+              },
+            },
+            turma: {
+              id: { $toString: '$turmas._id' },
+              nome: '$turmas.nome',
+              criador: { $toString: '$turmas.criador' },
+              membros: '$turmas.membros'
+            },
           }
         }
       ])
 
-      const atividade = ativ[0]
+      const atividade = atv[0]
 
       if (!atividade) {
         return {
@@ -83,8 +107,8 @@ export const RedacaoService = {
       }
 
       if (
-        atividade.turma[0].criador.toString() !== requisitante &&
-        !atividade.turma[0].membros.includes(new Types.ObjectId(requisitante))
+        atividade.turma.criador !== requisitante &&
+        !atividade.turma.membros.includes(new Types.ObjectId(requisitante))
       ) {
         return {
           success: false,
@@ -93,26 +117,9 @@ export const RedacaoService = {
         };
       }
 
-      const ativResponse = {
-        ...atividade,
-        id: atividade._id.toString(),
-        repertoriosApoio: atividade.repertoriosApoio.map((r: { toString: () => any; }) => r.toString()),
-        turma: {
-          ...atividade.turma[0],
-          id: atividade.turma[0]._id.toString(),
-          criador: atividade.turma[0].criador.toString(),
-          membros: atividade.turma[0].membros.map((m: { _id: { toString: () => any; }; }) => m._id.toString())
-        },
-        respostas: atividade.respostas.map((resp: { _id: { toString: () => any; }; aluno: { toString: () => any; }; }) => ({
-          ...resp,
-          id: resp._id.toString(),
-          aluno: resp.aluno.toString()
-        }))
-      }
-
       return {
         success: true,
-        data: ativResponse,
+        data: atividade,
       };
     } catch (e) {
       console.log(e); return {
@@ -273,93 +280,106 @@ export const RedacaoService = {
     requisitante: string,
     queryBody: getAllRespostasRedacaoQueryBody,
   ) => {
-    const ativs = await RedacaoAtividadeModel.aggregate([
-      { $match: { _id: new Types.ObjectId(id) } },
-      {
-        $project: {
-          turma: 1,
-          respostasEnviadas: {
-            $filter: {
-              input: '$respostas',
-              as: 'resp',
-              cond: { $ifNull: ['$$resp.dataEnvio', false] },
+    try {
+      const ativs = await RedacaoAtividadeModel.aggregate([
+        { $match: { _id: new Types.ObjectId(id) } },
+        {
+          $addFields: {
+            respostasEnviadas: {
+              $filter: {
+                input: '$respostas',
+                as: 'resp',
+                cond: { $ifNull: ['$$resp.dataEnvio', false] },
+              },
+            }
+          }
+        },
+        {
+          $project: {
+            turma: 1,
+            respostasEnviadas: 1,
+            totalResp: {
+              $size: '$respostasEnviadas'
             },
           },
-          totalResp: {
-            $size: '$respostasEnviadas'
+        },
+        {
+          $unwind: {
+            path: '$respostasEnviadas',
+            preserveNullAndEmptyArrays: true,
           },
         },
-      },
-      {
-        $unwind: {
-          path: '$respostasEnviadas',
-          preserveNullAndEmptyArrays: true,
+        { $skip: queryBody.offset },
+        { $limit: queryBody.limit },
+        {
+          $lookup: {
+            from: 'usuarios',
+            localField: 'respostasEnviadas.aluno',
+            foreignField: '_id',
+            as: 'alunoInfo'
+          }
         },
-      },
-      { $skip: queryBody.offset },
-      { $limit: queryBody.limit },
-      {
-        $lookup: {
-          from: 'usuarios',
-          localField: 'respostasEnviadas.aluno',
-          foreignField: '_id',
-          as: 'alunoInfo'
-        }
-      },
-    ]);
+      ]);
 
-    const turma = await TurmaModel.findById(ativs[0].turma);
+      const turma = await TurmaModel.findById(ativs[0].turma);
 
-    if (!turma || turma?.criador.toString() !== requisitante) {
+      if (!turma || turma?.criador.toString() !== requisitante) {
+        return {
+          success: false,
+          status: 403,
+          message:
+            'Você não tem permissão para acessar essa turma ou a turma não existe.',
+        };
+      }
+
+      const totalDocuments = ativs[0].totalResp;
+
+      const respostas = ativs[0].respostasEnviadas
+        ? ativs.map((resp) => {
+          return {
+            ...resp.respostasEnviadas,
+            _id: resp.respostasEnviadas._id.toString(),
+            aluno: { id: resp.alunoInfo[0]._id.toString(), ...resp.alunoInfo[0] }
+          };
+        })
+        : [];
+
+      const nextOffset = Math.min(
+        queryBody.offset + queryBody.limit,
+        totalDocuments,
+      );
+      const prevOffset = Math.max(queryBody.offset - queryBody.limit, 0);
+
+      const totalPages = Math.ceil(totalDocuments / queryBody.limit)
+      const pages = Array.from({ length: totalPages }, (_, i) => `offset=${i * queryBody.limit}&limit=${queryBody.limit}`)
+
       return {
+        success: true,
+        data: {
+          documentos: respostas,
+          paginacao: {
+            offset: queryBody.offset,
+            limit: queryBody.limit,
+            nextPageUrl:
+              nextOffset >= totalDocuments
+                ? null
+                : `/offset=${nextOffset}&limit=${queryBody.limit}`,
+            previousPageUrl:
+              // biome-ignore lint/suspicious/noDoubleEquals: Embora o tipo seja 'number', o offset é uma string(?)
+              queryBody.offset == 0
+                ? null
+                : `/offset=${prevOffset}&limit=${queryBody.limit}`,
+            totalDocuments,
+            pagesUrl: pages
+          },
+        },
+      } as const;
+    } catch (e) {
+      console.log(e); return {
         success: false,
-        status: 403,
-        message:
-          'Você não tem permissão para acessar essa turma ou a turma não existe.',
+        status: 500,
+        message: 'Internal Server Error',
       };
     }
-
-    const totalDocuments = ativs[0].totalResp;
-
-    const respostas = ativs[0].respostasEnviadas
-      ? ativs.map((resp) => {
-        return {
-          ...resp.respostasEnviadas,
-          _id: resp.respostasEnviadas._id.toString(),
-          aluno: { id: resp.alunoInfo[0]._id.toString(), ...resp.alunoInfo[0] }
-        };
-      })
-      : [];
-
-    const nextOffset = Math.min(
-      queryBody.offset + queryBody.limit,
-      totalDocuments,
-    );
-    const prevOffset = Math.max(queryBody.offset - queryBody.limit, 0);
-
-    const totalPages = Math.ceil(totalDocuments / queryBody.limit)
-    const pages = Array.from({ length: totalPages }, (_, i) => `offset=${i * queryBody.limit}&limit=${queryBody.limit}`)
-
-    return {
-      success: true,
-      data: {
-        documentos: respostas,
-        paginacao: {
-          offset: queryBody.offset,
-          limit: queryBody.limit,
-          nextPageUrl:
-            nextOffset >= totalDocuments
-              ? null
-              : `/offset=${nextOffset}&limit=${queryBody.limit}`,
-          previousPageUrl:
-            // biome-ignore lint/suspicious/noDoubleEquals: Embora o tipo seja 'number', o offset é uma string(?)
-            queryBody.offset == 0
-              ? null
-              : `/offset=${prevOffset}&limit=${queryBody.limit}`,
-          totalDocuments,
-          pagesUrl: pages
-        },
-      },
-    } as const;
   },
 };

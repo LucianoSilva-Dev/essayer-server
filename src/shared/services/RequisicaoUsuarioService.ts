@@ -25,7 +25,7 @@ export const RequisicaoUsuarioService = {
       nome: req.nome,
       senha: req.senha,
       email: req.email,
-      cargo: 'admin',
+      cargo: 'aluno',
       requisicao: req._id,
     });
 
