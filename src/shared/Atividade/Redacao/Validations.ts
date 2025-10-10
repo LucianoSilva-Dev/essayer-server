@@ -106,6 +106,7 @@ export const getRedacaoResponse = z.object({
         id: z.string(),
         texto: z.string().optional(),
         dataEnvio: z.date().optional(),
+        feedback: z.string().optional(),
       }),
     )
     .optional(),

@@ -50,7 +50,7 @@ export const RedacaoService = {
         'titulo descricao dataLimite turma tema tempoLimiteEmMinutos repertoriosApoio respostas',
       )
       .populate('turma', 'id nome criador membros')
-      .populate('respostas', 'id aluno texto dataEnvio');
+      .populate('respostas', 'id aluno texto dataEnvio feedback');
 
     if (!atividade) {
       return {
