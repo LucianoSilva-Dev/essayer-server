@@ -84,6 +84,17 @@ export const updateRedacaoBodyValidation = z
           'O campo tempoLimiteEmMinutos precisa ser um número.',
       })
       .optional(),
+    repertoriosApoio: z
+      .array(
+        z
+          .string({
+            invalid_type_error: 'O campo repertoriosApoio só pode conter textos.',
+          })
+          .refine((val) => isValidObjectId(val), {
+            message: 'O campo repertoriosApoio não é um ID válido.',
+          }),
+      )
+      .optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: 'Forneça ao menos um campo para atualizar.',
@@ -99,11 +110,12 @@ export const getRedacaoResponse = z.object({
   }),
   tema: z.string(),
   tempoLimiteEmMinutos: z.number().optional(),
-  repertoriosApoio: z.array(z.object({ id: z.string() })).optional(),
+  repertoriosApoio: z.array(z.string()).optional(),
   respostas: z
     .array(
       z.object({
         id: z.string(),
+        aluno: z.string(),
         texto: z.string().optional(),
         dataEnvio: z.date().optional(),
         feedback: z.string().optional(),

@@ -45,36 +45,83 @@ export const RedacaoService = {
     }
   },
   get: async (id: string, requisitante: string) => {
-    const atividade = await RedacaoAtividadeModel.findById(id)
-      .select(
-        'titulo descricao dataLimite turma tema tempoLimiteEmMinutos repertoriosApoio respostas',
-      )
-      .populate('turma', 'id nome criador membros')
-      .populate('respostas', 'id aluno texto dataEnvio feedback');
 
-    if (!atividade) {
+    try {
+      const ativ = await RedacaoAtividadeModel.aggregate([
+        { $match: { _id: new Types.ObjectId(id) } },
+        {
+          $lookup: {
+            from: 'turmas',
+            localField: 'turma',
+            foreignField: '_id',
+            as: 'turmas'
+          }
+        },
+        {
+          $project: {
+            _id: 1,
+            titulo: 1,
+            descricao: 1,
+            dataLimite: 1,
+            tema: 1,
+            tempoLimiteEmMinutos: 1,
+            repertoriosApoio: 1,
+            respostas: 1,
+            turma: '$turmas',
+          }
+        }
+      ])
+
+      const atividade = ativ[0]
+
+      if (!atividade) {
+        return {
+          success: false,
+          status: 404,
+          message: `Atividade com o id ${id} não existe.`,
+        };
+      }
+
+      if (
+        atividade.turma[0].criador.toString() !== requisitante &&
+        !atividade.turma[0].membros.includes(new Types.ObjectId(requisitante))
+      ) {
+        return {
+          success: false,
+          status: 403,
+          message: 'Você não tem permissão para visualizar essa atividade.',
+        };
+      }
+
+      const ativResponse = {
+        ...atividade,
+        id: atividade._id.toString(),
+        repertoriosApoio: atividade.repertoriosApoio.map((r: { toString: () => any; }) => r.toString()),
+        turma: {
+          ...atividade.turma[0],
+          id: atividade.turma[0]._id.toString(),
+          criador: atividade.turma[0].criador.toString(),
+          membros: atividade.turma[0].membros.map((m: { _id: { toString: () => any; }; }) => m._id.toString())
+        },
+        respostas: atividade.respostas.map((resp: { _id: { toString: () => any; }; aluno: { toString: () => any; }; }) => ({
+          ...resp,
+          id: resp._id.toString(),
+          aluno: resp.aluno.toString()
+        }))
+      }
+
       return {
+        success: true,
+        data: ativResponse,
+      };
+    } catch (e) {
+      console.log(e); return {
         success: false,
-        status: 404,
-        message: `Atividade com o id ${id} não existe.`,
+        status: 500,
+        message: 'Internal Server Error',
       };
     }
 
-    if (
-      atividade.turma.criador.toString() !== requisitante &&
-      !atividade.turma.membros.includes(new Types.ObjectId(requisitante))
-    ) {
-      return {
-        success: false,
-        status: 403,
-        message: 'Você não tem permissão para visualizar essa atividade.',
-      };
-    }
-
-    return {
-      success: true,
-      data: atividade,
-    };
   },
   update: async (id: string, data: UpdateRedacaoBody, requisitante: string) => {
     try {
