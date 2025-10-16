@@ -1,6 +1,6 @@
 import type { Controller, RequestUserData } from '../../../shared/Types';
 import { RepertorioService } from '../Services/RepertorioService';
-import type { CreateComentarioBody, GetAllRepertorioQueryBody, UpdateComentarioBody } from '../Types';
+import type { CreateComentarioBody, GetAllRepertorioQueryBody, UpdateComentarioBody, FixComentarioBody } from '../Types';
 
 export const RepertorioController: Controller = {
   get_all: async (request, reply) => {
@@ -31,13 +31,13 @@ export const RepertorioController: Controller = {
 
   comentarioCreate: async (request, reply) => {
     const { id: repertorioId } = request.params as { id: string };
-    const { texto } = request.body as CreateComentarioBody;
+    const { texto, fixar } = request.body as CreateComentarioBody;
     const { id: userId } = (request.user as RequestUserData) || '';
 
     const response = await RepertorioService.createComentario(
       repertorioId,
       userId,
-      { texto },
+      { texto, fixar },
     );
     if (!response.success) {
       return reply.status(response.status).send({ error: response.message });
@@ -50,7 +50,7 @@ export const RepertorioController: Controller = {
     const { texto } = request.body as UpdateComentarioBody;
     const { id: userId, cargo } = request.user as RequestUserData;
 
-    const response = await RepertorioService.updateComentario(repertorioId, comentarioId, userId, cargo, {texto});
+    const response = await RepertorioService.updateComentario(repertorioId, comentarioId, userId, cargo, { texto });
     if (!response.success) {
       return reply.status(response.status).send({ error: response.message });
     }
@@ -59,9 +59,22 @@ export const RepertorioController: Controller = {
   },
   comentarioDelete: async (request, reply) => {
     const { id: repertorioId, comentarioId } = request.params as { id: string, comentarioId: string };
-    const { id: userId, cargo} = request.user as RequestUserData;
+    const { id: userId, cargo } = request.user as RequestUserData;
 
     const response = await RepertorioService.deleteComentario(repertorioId, comentarioId, userId, cargo);
+    if (!response.success) {
+      return reply.status(response.status).send({ error: response.message });
+    }
+
+    return reply.send({ message: response.data });
+  },
+
+  comentarioFix: async (request, reply) => {
+    const { id: repertorioId, comentarioId } = request.params as { id: string, comentarioId: string };
+    const { fixar } = request.body as FixComentarioBody;
+    const { id: userId, cargo } = request.user as RequestUserData;
+
+    const response = await RepertorioService.fixarComentario(repertorioId, comentarioId, userId, cargo, { fixar });
     if (!response.success) {
       return reply.status(response.status).send({ error: response.message });
     }

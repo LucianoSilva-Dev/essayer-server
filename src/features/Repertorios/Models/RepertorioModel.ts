@@ -10,6 +10,7 @@ import type { ComentarioSubDoc, Repertorio } from '../Types';
 const ComentarioSubDocSchema = new Schema({
   texto: { type: String, required: true },
   usuario: { type: Schema.Types.ObjectId, ref: 'Usuario' },
+  fixado: { type: Boolean, default: false },
 });
 
 // O seguinte model é usado como um modelo base para outros tipos de repertórios,
@@ -20,7 +21,7 @@ export const RepertorioDBSchema = new Schema<Repertorio>(
   {
     autor: { type: String, required: true },
     criador: { type: Schema.Types.ObjectId, required: true, ref: 'Usuario' },
-    likes: [{ type: Schema.Types.ObjectId, ref: 'Usuario'}],
+    likes: [{ type: Schema.Types.ObjectId, ref: 'Usuario' }],
     favoritos: [{ type: Schema.Types.ObjectId, ref: 'Usuario' }],
     comentarios: [ComentarioSubDocSchema],
     subtopicos: [{ type: String, required: true }],

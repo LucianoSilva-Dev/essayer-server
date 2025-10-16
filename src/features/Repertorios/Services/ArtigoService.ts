@@ -8,6 +8,7 @@ import type {
 } from '../Types';
 import type { Service } from '../../../shared/Types';
 import { montarInfosRepertorio } from '../Helpers/MontarInfosRepertorio';
+import { mapAndSortComments } from '../Helpers/MapAndSortComments';
 
 export const ArtigoService: Service = {
   create: async (createArtigoData: CreateArtigoBody, userId: string) => {
@@ -67,11 +68,7 @@ export const ArtigoService: Service = {
       criador: artigo.criador as unknown as PerfilUsuario,
       favoritadoPeloUsuario: artigo.favoritos.includes(new Types.ObjectId(userId)),
       totalComentarios: artigo.comentarios.length,
-      comentarios: artigo.comentarios.map((comentario) => ({
-        id: comentario._id.toString(),
-        usuario: comentario.usuario as unknown as PerfilUsuario,
-        texto: comentario.texto,
-      })),
+      comentarios: mapAndSortComments(artigo.comentarios),
       subtopicos: artigo.subtopicos,
       topicos: artigo.topicos
     };

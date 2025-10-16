@@ -5,6 +5,7 @@ import { montarPaginação } from '../Helpers/MontarPaginacao';
 import { RepertorioModel } from '../Models/RepertorioModel';
 import type {
   CreateComentarioBody,
+  FixComentarioBody,
   GetAllRepertorioQueryBody,
   GetAllRepertorioResponse,
   PopulatedRepertorio,
@@ -97,6 +98,7 @@ export const RepertorioService: Service = {
     const comentario = repertorio.comentarios.create({
       usuario: userId,
       texto: comentarioBody.texto,
+      fixado: comentarioBody.fixar || false,
     });
     repertorio.comentarios.push(comentario);
     await repertorio.save();
@@ -184,7 +186,7 @@ export const RepertorioService: Service = {
       $addToSet: { likes: userId },
     });
 
-    if(!repertorio) {
+    if (!repertorio) {
       return {
         success: false,
         status: 404,
@@ -268,5 +270,47 @@ export const RepertorioService: Service = {
     await repertorio.save();
 
     return { success: true, data: 'Repertório removido dos favoritos.' };
+  },
+
+  fixarComentario: async (
+    repertorioId: string,
+    comentarioId: string,
+    userId: string,
+    userRole: UserCargo,
+    body: FixComentarioBody,
+  ) => {
+    const repertorio = await RepertorioModel.findById(repertorioId);
+    if (!repertorio) {
+      return {
+        success: false,
+        status: 404,
+        message: `Repertório com ID "${repertorioId}" não existe.`,
+      };
+    }
+
+    const comentario = repertorio.comentarios.id(comentarioId);
+    if (!comentario) {
+      return {
+        success: false,
+        status: 404,
+        message: `Comentario com ID "${comentarioId}" não existe no repertorio de id ${repertorioId}`,
+      };
+    }
+
+    if (repertorio.criador.toString() !== userId && userRole !== 'admin') {
+      return {
+        success: false,
+        status: 403,
+        message: 'Você não tem permissão para fixar/desfixar este comentário.',
+      };
+    }
+
+    comentario.fixado = !!body.fixar;
+    await repertorio.save();
+
+    return {
+      success: true,
+      data: `Comentário ${body.fixar ? 'fixado' : 'desfixado'} com sucesso.`
+    };
   },
 };

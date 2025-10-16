@@ -8,6 +8,7 @@ import type {
   UpdateObraBody,
 } from '../Types';
 import { montarInfosRepertorio } from '../Helpers/MontarInfosRepertorio';
+import { mapAndSortComments } from '../Helpers/MapAndSortComments';
 
 export const ObraService: Service = {
   create: async (createObraData: CreateObraBody, userId: string) => {
@@ -38,7 +39,7 @@ export const ObraService: Service = {
   get: async (obraId: string, userId?: string) => {
     const obra = await ObraModel.findById(obraId)
       .populate('criador', '_id nome email fotoPath')
-      .populate('comentarios.usuario', '_id nome fotoPath');
+      .populate('comentarios.usuario', '_id nome fotoPath')
 
     if (!obra) {
       return {
@@ -59,11 +60,7 @@ export const ObraService: Service = {
       criador: obra.criador as unknown as PerfilUsuario,
       favoritadoPeloUsuario: obra.favoritos.includes(new Types.ObjectId(userId)),
       totalComentarios: obra.comentarios.length,
-      comentarios: obra.comentarios.map((comentario) => ({
-        id: comentario._id.toString(),
-        usuario: comentario.usuario as unknown as PerfilUsuario,
-        texto: comentario.texto,
-      })),
+      comentarios: mapAndSortComments(obra.comentarios),
       subtopicos: obra.subtopicos,
       tipoObra: obra.tipoObra,
       topicos: obra.topicos

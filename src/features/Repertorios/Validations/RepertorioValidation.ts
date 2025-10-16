@@ -62,11 +62,19 @@ export const getAllRepertorioResponse = z.object({
   paginacao: paginacaoResponse,
 });
 
+export const fixComentarioBodyValidation = z.object({
+  fixar: z.boolean({
+    required_error: 'O campo fixar é obrigatório',
+    invalid_type_error: 'O campo fixar só pode ser verdadeiro ou falso',
+  }),
+});
+
 export const createComentarioBodyValidation = z.object({
   texto: z.string({
     required_error: 'O campo texto do comentario é obrigatório',
     invalid_type_error: 'O campo texto do comentario não é um texto',
   }),
+  fixar: fixComentarioBodyValidation.shape.fixar.optional(),
 });
 export const updateComentarioBodyValidation = z.object({
   texto: z.string({

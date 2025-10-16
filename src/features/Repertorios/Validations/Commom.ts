@@ -1,4 +1,4 @@
-import z from 'zod';
+import z, { boolean } from 'zod';
 
 export const perfilUsuarioResponse = z.object({
   id: z.string(),
@@ -10,6 +10,7 @@ export const comentarioResponse = z.object({
   id: z.string(),
   usuario: perfilUsuarioResponse,
   texto: z.string(),
+  fixado: boolean(),
 });
 
 export const paginacaoResponse = z.object({

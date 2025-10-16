@@ -12,10 +12,12 @@ import {
 import { authProfessor } from '../../../shared/middlewares/Authorization';
 import {
   createComentarioBodyValidation,
+  fixComentarioBodyValidation,
   getAllRepertorioQueryValidation,
   getAllRepertorioResponse,
   updateComentarioBodyValidation, // ADICIONADO
 } from '../Validations/RepertorioValidation';
+import z from 'zod';
 
 export const RepertorioSchema: EntitySchema = {
   get_all: {
@@ -94,6 +96,23 @@ export const RepertorioSchema: EntitySchema = {
         500: genericError,
       },
       summary: 'Remove um comentário do repertório selecionado',
+    },
+  },
+
+  fixComentario: {
+    preHandler: authProfessor,
+    schema: {
+      security: [{ jwtAuth: [] }],
+      body: fixComentarioBodyValidation,
+      response: {
+        200: genericSuccessResponse,
+        400: schemaValidationError,
+        401: genericError,
+        403: genericError,
+        404: genericError,
+        500: genericError,
+      },
+      summary: 'Fixar ou desfazer fixação de um comentário (apenas criador do repertório ou admin)',
     },
   },
 

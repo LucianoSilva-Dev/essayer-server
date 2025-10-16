@@ -1,4 +1,5 @@
 import type { Service } from '../../../shared/Types';
+import { mapAndSortComments } from '../Helpers/MapAndSortComments';
 import { montarInfosRepertorio } from '../Helpers/MontarInfosRepertorio';
 import { CitacaoModel } from '../Models/CitacaoModel';
 import type {
@@ -65,11 +66,7 @@ export const CitacaoService: Service = {
       criador: citacao.criador as unknown as PerfilUsuario,
       favoritadoPeloUsuario: citacao.favoritos.includes(new Types.ObjectId(userId)),
       totalComentarios: citacao.comentarios.length,
-      comentarios: citacao.comentarios.map((comentario) => ({
-        id: comentario._id.toString(),
-        usuario: comentario.usuario as unknown as PerfilUsuario,
-        texto: comentario.texto,
-      })),
+      comentarios: mapAndSortComments(citacao.comentarios),
       subtopicos: citacao.subtopicos,
       topicos: citacao.topicos
     };

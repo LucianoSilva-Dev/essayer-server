@@ -35,6 +35,13 @@ export const RepertorioRoutes: FastifyPluginAsyncZod = async (app) => {
     RepertorioController.comentarioDelete,
   );
 
+  // fix/unfix comentario
+  app.put(
+    '/:id/comentario/:comentarioId/fixar',
+    RepertorioSchema.fixComentario,
+    RepertorioController.comentarioFix,
+  );
+
   //likes
   app.post(
     '/:id/like',
