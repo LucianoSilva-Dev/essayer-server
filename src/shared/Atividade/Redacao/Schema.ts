@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { authMiddleware } from '../../middlewares/Authentication';
-import { authProfessor } from '../../middlewares/Authorization';
+import { authProfessor, authProfessorCreate } from '../../middlewares/Authorization';
 import { genericError, schemaValidationError } from '../../Schemas';
 import type { EntitySchema } from '../../Types';
 import {
@@ -16,7 +16,7 @@ import { genericSuccessResponse, idValidation } from '../../Validations';
 
 export const RedacaoSchema: EntitySchema = {
   create: {
-    preHandler: authProfessor,
+    preHandler: authProfessorCreate,
     schema: {
       security: [{ jwtAuth: [] }],
       body: createRedacaoBodyValidation,
@@ -45,7 +45,7 @@ export const RedacaoSchema: EntitySchema = {
     },
   },
   update: {
-    preHandler: authProfessor,
+    preHandler: authProfessorCreate,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,

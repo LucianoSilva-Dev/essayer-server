@@ -9,7 +9,7 @@ import {
   authMiddleware,
   optionalAuthMiddleware,
 } from '../../../shared/middlewares/Authentication';
-import { authProfessor } from '../../../shared/middlewares/Authorization';
+import { authProfessor, authProfessorCreate } from '../../../shared/middlewares/Authorization';
 import {
   createComentarioBodyValidation,
   fixComentarioBodyValidation,
@@ -17,7 +17,6 @@ import {
   getAllRepertorioResponse,
   updateComentarioBodyValidation, // ADICIONADO
 } from '../Validations/RepertorioValidation';
-import z from 'zod';
 
 export const RepertorioSchema: EntitySchema = {
   get_all: {
@@ -52,7 +51,7 @@ export const RepertorioSchema: EntitySchema = {
   },
 
   createComentario: {
-    preHandler: authProfessor,
+    preHandler: authProfessorCreate,
     schema: {
       security: [{ jwtAuth: [] }],
       body: createComentarioBodyValidation,
@@ -68,7 +67,7 @@ export const RepertorioSchema: EntitySchema = {
     },
   },
   updateComentario: {
-    preHandler: authProfessor,
+    preHandler: authProfessorCreate,
     schema: {
       security: [{ jwtAuth: [] }],
       body: updateComentarioBodyValidation,

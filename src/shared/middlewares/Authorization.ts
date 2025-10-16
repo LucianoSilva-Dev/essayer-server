@@ -1,5 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import type { RequestUserData } from '../Types';
+import { UsuarioModel } from '../models/UsuarioModel';
 
 export const authProfessor = async (
   request: FastifyRequest,
@@ -13,6 +14,30 @@ export const authProfessor = async (
     if (cargo === 'aluno') {
       reply.status(403).send({ error: 'Necessário login como professor.' });
     }
+  } catch (err) {
+    reply.status(401).send({ error: 'Login necessário.' });
+  }
+};
+
+export const authProfessorCreate = async (
+  request: FastifyRequest,
+  reply: FastifyReply,
+) => {
+  try {
+    await request.jwtVerify();
+
+    const { cargo, id } = request.user as RequestUserData;
+
+    if (cargo === 'aluno') {
+      reply.status(403).send({ error: 'Necessário login como professor.' });
+    }
+
+    const user = await UsuarioModel.findById(id)
+
+    if (!user) {
+      reply.status(404).send({ error: 'usuário não existe.' })
+    }
+
   } catch (err) {
     reply.status(401).send({ error: 'Login necessário.' });
   }

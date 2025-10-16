@@ -40,7 +40,7 @@ export const AtividadeService = {
         { $limit: 4 },
         {
           $project: {
-            _id: '$atividades._id',
+            id: { $toString: '$atividades._id' },
             titulo: '$atividades.titulo',
             descricao: '$atividades.descricao',
             respostas: {
@@ -60,14 +60,7 @@ export const AtividadeService = {
         }
       ])
 
-      const formatedAtivs = atividades.map((atividade) => {
-        return {
-          id: atividade._id.toString(),
-          ...atividade
-        }
-      })
-
-      return { success: true, data: formatedAtivs }
+      return { success: true, data: atividades }
     } catch (e) {
       console.log(e)
       return {

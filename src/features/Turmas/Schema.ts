@@ -17,12 +17,12 @@ import {
   getAllAtividadesQueryValidation,
 } from './Validation';
 import { idValidation, genericSuccessResponse } from '../../shared/Validations';
-import { authProfessor } from '../../shared/middlewares/Authorization';
+import { authProfessor, authProfessorCreate } from '../../shared/middlewares/Authorization';
 import { authMiddleware } from '../../shared/middlewares/Authentication';
 
 export const TurmaSchema: EntitySchema = {
   create: {
-    preHandler: authProfessor,
+    preHandler: authProfessorCreate,
     schema: {
       security: [{ jwtAuth: [] }],
       body: createTurmaBodyValidation,
@@ -76,7 +76,7 @@ export const TurmaSchema: EntitySchema = {
     },
   },
   update: {
-    preHandler: authProfessor,
+    preHandler: authProfessorCreate,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,

@@ -8,7 +8,7 @@ import {
   authMiddleware,
   optionalAuthMiddleware,
 } from '../../../shared/middlewares/Authentication';
-import { authProfessor } from '../../../shared/middlewares/Authorization';
+import { authProfessor, authProfessorCreate } from '../../../shared/middlewares/Authorization';
 import {
   createArtigoBodyValidation,
   getArtigoResponse,
@@ -32,7 +32,7 @@ export const ArtigoSchema: EntitySchema = {
     },
   },
   create: {
-    preHandler: authProfessor,
+    preHandler: authProfessorCreate,
     schema: {
       security: [{ jwtAuth: [] }],
       body: createArtigoBodyValidation,
@@ -47,7 +47,7 @@ export const ArtigoSchema: EntitySchema = {
     },
   },
   update: {
-    preHandler: authProfessor,
+    preHandler: authProfessorCreate,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,

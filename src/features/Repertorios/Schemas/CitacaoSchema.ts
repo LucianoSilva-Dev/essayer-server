@@ -13,7 +13,7 @@ import {
   authMiddleware,
   optionalAuthMiddleware,
 } from '../../../shared/middlewares/Authentication';
-import { authProfessor } from '../../../shared/middlewares/Authorization';
+import { authProfessor, authProfessorCreate } from '../../../shared/middlewares/Authorization';
 
 export const CitacaoSchema: EntitySchema = {
   get: {
@@ -32,7 +32,7 @@ export const CitacaoSchema: EntitySchema = {
     },
   },
   create: {
-    preHandler: authProfessor,
+    preHandler: authProfessorCreate,
     schema: {
       security: [{ jwtAuth: [] }],
       body: createCitacaoBodyValidation,
@@ -47,7 +47,7 @@ export const CitacaoSchema: EntitySchema = {
     },
   },
   update: {
-    preHandler: authProfessor,
+    preHandler: authProfessorCreate,
     schema: {
       security: [{ jwtAuth: [] }],
       params: idValidation,
