@@ -1,6 +1,6 @@
 import { EMAIL } from '../Env';
-import { RequisicaoProfessorModel } from '../models/RequisicaoProfessorModel';
-import { UsuarioModel } from '../models/UsuarioModel';
+import { RequisicaoProfessorModel } from './Model';
+import { UsuarioModel } from '../Usuario/Model';
 import { Transporter } from '../Transporter';
 
 export const RequisicaoProfessorService = {

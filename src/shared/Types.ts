@@ -11,16 +11,7 @@ import type {
 } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import type { z } from 'zod';
-import type {
-  createUsuarioBodyValidation,
-  professorCreateBodyValidation,
-  updateSenhaBodyValidation,
-  updateUsuarioBodyValidation,
-} from './validations/UsuarioValidation';
-import type { updateStatusBodyValidation } from './validations/RequisicaoProfessorValidation';
 import type { userCargo } from './Validations';
-import type { createRequisicaoMudancaSenhaBodyValidation, validateRequisicaoMudancaSenhaBodyValidation } from './validations/RequisicaoMudancaSenhaValidation';
-import type { validateRequisicaoUsuarioBodyValidation } from './validations/RequisicaoUsuarioValidation';
 import type { PerfilUsuario } from '../features/Repertorios/Types';
 import type { Types } from 'mongoose';
 import type { sseGenericError, sseValidationError } from './Schemas';
@@ -74,19 +65,8 @@ export type PopulatedPerfilUsuario = Omit<PerfilUsuario, 'id'> & {
 export type Populate<
   BaseType,
   // biome-ignore lint/suspicious/noExplicitAny: pode deixar assim pai, confia na call
-    Population extends Partial<Record<keyof BaseType, any>>
+  Population extends Partial<Record<keyof BaseType, any>>
 > = Omit<BaseType, keyof Population> & Population;
-
-export type createUsuarioBody = z.infer<typeof createUsuarioBodyValidation>;
-export type updateUsuarioBody = z.infer<typeof updateUsuarioBodyValidation>;
-export type professorCreateBody = z.infer<typeof professorCreateBodyValidation>;
-export type updateStatusBody = z.infer<typeof updateStatusBodyValidation>;
-export type validateRequisicaoMudancaSenhaBody = z.infer<
-  typeof validateRequisicaoMudancaSenhaBodyValidation
->;
-export type validateRequisicaoUsuarioBody = z.infer<typeof validateRequisicaoUsuarioBodyValidation>
-export type updateSenhaBody = z.infer<typeof updateSenhaBodyValidation>
-export type createRequisicaoMudancaSenhaBody = z.infer<typeof createRequisicaoMudancaSenhaBodyValidation>
 
 // Server Sent Events(sse) Errors
 export type SSEGenericError = z.infer<typeof sseGenericError>

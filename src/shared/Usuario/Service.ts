@@ -1,14 +1,14 @@
-import { UsuarioModel } from '../models/UsuarioModel';
+import { UsuarioModel } from './Model';
 import crypto from 'bcryptjs';
-import type { createUsuarioBody, updateUsuarioBody } from '../Types';
-import { RequisicaoProfessorModel } from '../models/RequisicaoProfessorModel';
+import { RequisicaoProfessorModel } from '../RequisicaoProfessor/Model';
 import type { SavedMultipartFile } from '@fastify/multipart';
 import { Transporter } from '../Transporter';
 import { EMAIL } from '../Env';
-import { RequisicaoUsuarioModel } from '../models/RequisicaoUsuarioModel';
+import { RequisicaoUsuarioModel } from '../RequisicaoUsuario/Model';
 import { randomBytes } from 'node:crypto';
-import { RequisicaoMudancaSenhaModel } from '../models/RequisicaoMudancaSenhaModel';
+import { RequisicaoMudancaSenhaModel } from '../RequisicaoMudancaSenha/Model';
 import { cloudinary } from '../../config/cloudinary';
+import type { CreateUsuarioBody, UpdateUsuarioBody } from './Types';
 
 export const UsuarioService = {
   get: async (id: string) => {
@@ -30,7 +30,7 @@ export const UsuarioService = {
     };
   },
 
-  create: async (usuarioData: createUsuarioBody) => {
+  create: async (usuarioData: CreateUsuarioBody) => {
     const { nome, email, senha } = usuarioData;
 
     const usuario = await UsuarioModel.findOne({ email });
@@ -119,7 +119,7 @@ export const UsuarioService = {
     return { success: true, message: 'Requisição criada com sucesso.' };
   },
 
-  update: async (id: string, usuarioData: updateUsuarioBody) => {
+  update: async (id: string, usuarioData: UpdateUsuarioBody) => {
     const { email } = usuarioData;
 
     if (email) {
@@ -317,4 +317,20 @@ export const UsuarioService = {
 
     return { success: true, message: 'Imagem deletada com sucesso.' };
   },
+
+  perfil: async (id: string) => {
+    const usuario = await UsuarioModel.findById(id).select(
+      'nome fotoPath',
+    );
+
+    if (!usuario) {
+      return {
+        success: false,
+        status: 404,
+        message: `Usuário com id ${id} não existe.`,
+      };
+    }
+
+    return { success: true, data: usuario }
+  }
 };

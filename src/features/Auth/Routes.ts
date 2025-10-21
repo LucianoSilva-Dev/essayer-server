@@ -9,6 +9,5 @@ export const AuthRoutes: FastifyPluginAsyncZod = async (app) => {
   // used to enable reply.jwtSign for the handlers
   app.register(authPlugin);
 
-  app.post('/register', AuthSchema.register, AuthController.register);
   app.post('/login', AuthSchema.login, AuthController.login);
 };

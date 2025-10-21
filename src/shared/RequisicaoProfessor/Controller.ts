@@ -1,5 +1,6 @@
-import { RequisicaoProfessorService } from '../services/RequisicaoProfessorService';
-import type { Controller, RequestUserData, updateStatusBody } from '../Types';
+import { RequisicaoProfessorService } from './Service';
+import type { Controller, RequestUserData } from '../Types';
+import { UpdateStatusBody } from './Types';
 
 export const RequisicaoProfessorController: Controller = {
   getAll: async (request, reply) => {
@@ -21,7 +22,7 @@ export const RequisicaoProfessorController: Controller = {
   },
 
   updateStatus: async (request, reply) => {
-    const { status, motivo } = request.body as updateStatusBody;
+    const { status, motivo } = request.body as UpdateStatusBody;
     const { id: idReq } = request.params as { id: string };
     const { id: idRevisor, cargo } = request.user as RequestUserData;
 

@@ -1,3 +1,4 @@
+import { perfilUsuarioResponse } from '../../features/Repertorios/Validations/Commom';
 import { authMiddleware } from '../middlewares/Authentication';
 import { genericError, schemaValidationError } from '../Schemas';
 import type { EntitySchema } from '../Types';
@@ -9,7 +10,7 @@ import {
   professorCreateBodyValidation,
   updateSenhaBodyValidation,
   updateUsuarioBodyValidation,
-} from '../validations/UsuarioValidation';
+} from './Validation';
 
 export const UsuarioSchema: EntitySchema = {
   get: {
@@ -174,4 +175,18 @@ export const UsuarioSchema: EntitySchema = {
       summary: 'Exclui a foto de um usuário',
     },
   },
+
+  perfil: {
+    schema: {
+      security: [{ jwtAuth: [] }],
+      params: idValidation,
+      response: {
+        200: perfilUsuarioResponse,
+        400: schemaValidationError,
+        404: genericError,
+        500: genericError,
+      },
+      summary: 'Recupera o perfil de um usuário',
+    }
+  }
 };

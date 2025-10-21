@@ -69,5 +69,45 @@ export const AtividadeService = {
         message: 'Internal Server Error',
       };
     }
+  },
+
+  getAllAtividadesAluno: async (id: string) => {
+    try {
+      const atividades = await TurmaModel.aggregate([
+        { $match: { membros: new Types.ObjectId(id) } },
+        {
+          $lookup: {
+            from: 'atividades',
+            localField: '_id',
+            foreignField: 'turma',
+            as: 'atividades'
+          }
+        },
+        { $unwind: '$atividades' },
+        {
+          $project: {
+            id: { $toString: '$atividades._id' },
+            titulo: '$atividades.titulo',
+            descricao: '$atividades.descricao',
+            dataLimite: '$atividades.dataLimite',
+            tipoAtividade: '$atividades.tipoAtividade',
+            turma: {
+              id: { $toString: '$_id' },
+              nome: '$nome',
+              iconeId: '$iconeId'
+            }
+          }
+        }
+      ])  
+
+      return { success: true, data: atividades }
+    } catch (e) {
+      console.log(e)
+      return {
+        success: false,
+        status: 500,
+        message: 'Internal Server Error',
+      };
+    }
   }
-};
+}

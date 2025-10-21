@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import type { RequestUserData } from '../Types';
-import { UsuarioModel } from '../models/UsuarioModel';
+import { UsuarioModel } from '../Usuario/Model';
 
 export const authProfessor = async (
   request: FastifyRequest,

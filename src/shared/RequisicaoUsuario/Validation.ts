@@ -10,7 +10,7 @@ export const validateRequisicaoUsuarioBodyValidation = z.object({
 });
 
 export const getRequisicaoUsuarioResponse = z.object({
-  _id: z.string(),
+  id: z.string(),
   nome: z.string(),
   senha: z.string(),
   email: z.string(),

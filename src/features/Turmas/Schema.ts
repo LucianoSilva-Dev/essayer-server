@@ -15,6 +15,8 @@ import {
   getTurmasCriadasResponse,
   getAllTurmaQueryValidation,
   getAllAtividadesQueryValidation,
+  getAtividadesCriadorResponse,
+  getAllFeedbacksResponse,
 } from './Validation';
 import { idValidation, genericSuccessResponse } from '../../shared/Validations';
 import { authProfessor, authProfessorCreate } from '../../shared/middlewares/Authorization';
@@ -199,7 +201,17 @@ export const TurmaSchema: EntitySchema = {
       params: idValidation,
       querystring: getAllAtividadesQueryValidation,
       response: { 200: getAtividadesResponse, 404: genericError },
-      summary: 'Obtém todas as atividades de uma turma',
+      summary: 'Obtém todas as atividades de uma turma em que é membro',
+    },
+  },
+  getAllAtividadesCriador: {
+    preHandler: authMiddleware,
+    schema: {
+      security: [{ jwtAuth: [] }],
+      params: idValidation,
+      querystring: getAllAtividadesQueryValidation,
+      response: { 200: getAtividadesCriadorResponse, 404: genericError },
+      summary: 'Obtém todas as atividades de uma turma em que é o criador',
     },
   },
   removerAluno: {
@@ -214,4 +226,18 @@ export const TurmaSchema: EntitySchema = {
       summary: 'Professor remove um aluno da turma',
     },
   },
+  getAllFeedbacks: {
+    preHandler: authMiddleware,
+    schema: {
+      security: [{ jwtAuth: [] }],
+      params: idValidation,
+      response: {
+        200: getAllFeedbacksResponse,
+        400: schemaValidationError,
+        401: genericError,
+        500: genericError,
+      },
+      summary: 'Obtém todos os feedbacks de atividades da turma',
+    }
+  }
 };

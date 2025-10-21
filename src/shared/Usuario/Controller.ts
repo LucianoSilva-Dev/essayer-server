@@ -1,13 +1,10 @@
-import { formatObraDoc } from '../../features/Repertorios/Helpers/FormatObraDoc';
-import { UsuarioService } from '../services/UsuarioService';
+import { UsuarioService } from './Service';
 import type {
   Controller,
-  createUsuarioBody,
-  professorCreateBody,
   RequestUserData,
-  updateSenhaBody,
-  updateUsuarioBody,
 } from '../Types';
+import type { CreateUsuarioBody, ProfessorCreateBody, UpdateSenhaBody, UpdateUsuarioBody } from './Types';
+
 
 export const UsuarioController: Controller = {
   get: async (request, reply) => {
@@ -24,7 +21,7 @@ export const UsuarioController: Controller = {
   },
 
   create: async (request, reply) => {
-    const { nome, email, senha } = request.body as createUsuarioBody;
+    const { nome, email, senha } = request.body as CreateUsuarioBody;
 
     const response = await UsuarioService.create({ nome, email: email.toLocaleLowerCase(), senha });
 
@@ -38,7 +35,7 @@ export const UsuarioController: Controller = {
   },
 
   professorCreate: async (request, reply) => {
-    const { lattes } = request.body as professorCreateBody;
+    const { lattes } = request.body as ProfessorCreateBody;
     const { id } = request.user as RequestUserData;
 
     const response = await UsuarioService.professorCreate(id, lattes);
@@ -46,7 +43,7 @@ export const UsuarioController: Controller = {
   },
 
   update: async (request, reply) => {
-    const { nome, email } = request.body as updateUsuarioBody;
+    const { nome, email } = request.body as UpdateUsuarioBody;
     const { id } = request.params as { id: string };
     const { id: requisitor } = request.user as RequestUserData;
 
@@ -68,7 +65,7 @@ export const UsuarioController: Controller = {
   },
 
   updateSenha: async (request, reply) => {
-    const { senha } = request.body as updateSenhaBody;
+    const { senha } = request.body as UpdateSenhaBody;
     const { id } = request.params as { id: string };
 
     const response = await UsuarioService.updateSenha(id, senha);
@@ -86,7 +83,7 @@ export const UsuarioController: Controller = {
     const { id } = request.params as { id: string };
     const { id: requisitante, cargo } = request.user as RequestUserData;
 
-    if (requisitante !== id && cargo !== 'admin') {
+    if (requisitante !== id || cargo !== 'admin') {
       return reply.status(403).send({
         error: 'Não é possível editar a conta de outro usuário.',
       });
@@ -204,4 +201,18 @@ export const UsuarioController: Controller = {
 
     return reply.status(200).send({ message: response.message });
   },
+
+  perfil: async (request, reply) => {
+    const { id } = request.params as { id: string };
+
+    const response = await UsuarioService.perfil(id);
+
+    if (!response.success) {
+      return reply
+        .status(response.status as number)
+        .send({ error: response.message });
+    }
+
+    return reply.status(200).send(response.data);
+  }
 };

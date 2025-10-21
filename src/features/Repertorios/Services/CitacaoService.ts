@@ -24,7 +24,7 @@ export const CitacaoService: Service = {
     });
     await citacao.save();
 
-    return { success: true, data: 'citação criada com sucesso.' };
+    return { success: true, data: citacao._id.toString() };
   },
   update: async (updateCitacaoData: UpdateCitacaoBody, citacaoId: string) => {
     const citacao = await CitacaoModel.findByIdAndUpdate(

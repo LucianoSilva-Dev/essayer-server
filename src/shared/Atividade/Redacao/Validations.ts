@@ -161,11 +161,12 @@ export const getAllRespostasRedacaoQueryValidation = z.object({
 export const getAllRespostasRedacaoResponse = z.object({
   documentos: z.array(
     z.object({
-      _id: z.string(),
+      id: z.string(),
       texto: z.string().optional(),
       dataEnvio: z.date(),
       feedback: z.string().optional(),
-      aluno: perfilUsuarioResponse
+      aluno: perfilUsuarioResponse,
+      tempoEmMinutos: z.number(),
     }),
   ),
   paginacao: z.object({

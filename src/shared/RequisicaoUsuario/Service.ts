@@ -1,5 +1,5 @@
-import { RequisicaoUsuarioModel } from '../models/RequisicaoUsuarioModel';
-import { UsuarioModel } from '../models/UsuarioModel';
+import { RequisicaoUsuarioModel } from './Model';
+import { UsuarioModel } from '../Usuario/Model';
 
 export const RequisicaoUsuarioService = {
   validate: async (id: string, code: string) => {

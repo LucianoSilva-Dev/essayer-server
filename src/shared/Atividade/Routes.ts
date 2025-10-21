@@ -34,4 +34,5 @@ export const AtividadeRoutes: FastifyPluginAsyncZod = async (app) => {
   );
 
   app.delete('/:id', AtividadeSchema.delete, AtividadeController.delete);
+  app.get('/', AtividadeSchema.getAllAtividadesAluno, AtividadeController.getAllAtividadesAluno);
 };

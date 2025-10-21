@@ -253,7 +253,7 @@ export const RedacaoService = {
 
       await RedacaoAtividadeModel.updateOne(
         { 'respostas._id': id },
-        { $set: { 'respostas.$.feedback': feedback } },
+        { $set: { 'respostas.$.feedback': { texto: feedback } } },
       );
 
       const resposta = atividade.respostas.find(
@@ -319,11 +319,39 @@ export const RedacaoService = {
             as: 'alunoInfo'
           }
         },
+        { $unwind: '$alunoInfo' },
+        {
+          $lookup: {
+            from: 'turmas',
+            localField: 'turma',
+            foreignField: '_id',
+            as: 'turmaInfo'
+          }
+        },
+        { $unwind: '$turmaInfo' },
+        {
+          $project: {
+            _id: 0,
+            id: { $toString: '$respostasEnviadas._id' },
+            texto: '$respostasEnviadas.texto',
+            dataEnvio: '$respostasEnviadas.dataEnvio',
+            feedback: '$respostasEnviadas.feedback',
+            aluno: {
+              id: { $toString: '$alunoInfo._id' },
+              nome: '$alunoInfo.nome',
+              fotoPath: '$alunoInfo.fotoPath',
+            },
+            criador: { $toString: '$turmaInfo.criador' },
+            totalResp: 1,
+            createdAt: '$respostasEnviadas.createdAt',
+            tempoEmMinutos: { $divide: [{ $subtract: ['$respostasEnviadas.dataEnvio', '$respostasEnviadas.createdAt'] }, 1000 * 60] },
+          }
+        }
       ]);
 
-      const turma = await TurmaModel.findById(ativs[0].turma);
+      const atividade = ativs[0];
 
-      if (!turma || turma?.criador.toString() !== requisitante) {
+      if (atividade.criador !== requisitante) {
         return {
           success: false,
           status: 403,
@@ -332,17 +360,7 @@ export const RedacaoService = {
         };
       }
 
-      const totalDocuments = ativs[0].totalResp;
-
-      const respostas = ativs[0].respostasEnviadas
-        ? ativs.map((resp) => {
-          return {
-            ...resp.respostasEnviadas,
-            _id: resp.respostasEnviadas._id.toString(),
-            aluno: { id: resp.alunoInfo[0]._id.toString(), ...resp.alunoInfo[0] }
-          };
-        })
-        : [];
+      const totalDocuments = atividade.totalResp;
 
       const nextOffset = Math.min(
         queryBody.offset + queryBody.limit,
@@ -356,7 +374,7 @@ export const RedacaoService = {
       return {
         success: true,
         data: {
-          documentos: respostas,
+          documentos: ativs,
           paginacao: {
             offset: queryBody.offset,
             limit: queryBody.limit,
@@ -365,8 +383,7 @@ export const RedacaoService = {
                 ? null
                 : `/offset=${nextOffset}&limit=${queryBody.limit}`,
             previousPageUrl:
-              // biome-ignore lint/suspicious/noDoubleEquals: Embora o tipo seja 'number', o offset é uma string(?)
-              queryBody.offset == 0
+              queryBody.offset === 0
                 ? null
                 : `/offset=${prevOffset}&limit=${queryBody.limit}`,
             totalDocuments,

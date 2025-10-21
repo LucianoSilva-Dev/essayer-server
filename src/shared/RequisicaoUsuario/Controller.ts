@@ -1,10 +1,11 @@
-import { RequisicaoUsuarioService } from '../services/RequisicaoUsuarioService';
-import type { Controller, validateRequisicaoUsuarioBody } from '../Types';
+import { RequisicaoUsuarioService } from './Service';
+import type { Controller } from '../Types';
+import { ValidateRequisicaoUsuarioBody } from './Types';
 
 export const RequisicaoUsuarioController: Controller = {
   validate: async (request, reply) => {
     const { id } = request.params as { id: string };
-    const { codigo } = request.body as validateRequisicaoUsuarioBody;
+    const { codigo } = request.body as ValidateRequisicaoUsuarioBody;
 
     const response = await RequisicaoUsuarioService.validate(id, codigo);
     if (!response.success) {
@@ -16,7 +17,7 @@ export const RequisicaoUsuarioController: Controller = {
     return reply.status(200).send({ message: response.message });
   },
   get: async (request, reply) => {
-    const {id} = request.params as {id: string}
+    const { id } = request.params as { id: string }
 
     const response = await RequisicaoUsuarioService.get(id)
     if (!response.success) {

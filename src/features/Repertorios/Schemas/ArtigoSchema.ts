@@ -5,15 +5,15 @@ import {
   idValidation,
 } from '../../../shared/Validations';
 import {
-  authMiddleware,
   optionalAuthMiddleware,
 } from '../../../shared/middlewares/Authentication';
-import { authProfessor, authProfessorCreate } from '../../../shared/middlewares/Authorization';
+import { authProfessorCreate } from '../../../shared/middlewares/Authorization';
 import {
   createArtigoBodyValidation,
   getArtigoResponse,
   updateArtigoBodyValidation,
 } from '../Validations/ArtigoValidation';
+import { createRepertorioResponse } from '../Validations/RepertorioValidation';
 
 export const ArtigoSchema: EntitySchema = {
   get: {
@@ -37,7 +37,7 @@ export const ArtigoSchema: EntitySchema = {
       security: [{ jwtAuth: [] }],
       body: createArtigoBodyValidation,
       response: {
-        201: genericSuccessResponse,
+        201: createRepertorioResponse,
         400: schemaValidationError,
         401: genericError,
         403: genericError,

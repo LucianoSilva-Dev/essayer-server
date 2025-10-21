@@ -5,7 +5,7 @@ import { genericSuccessResponse, idValidation } from '../Validations';
 import {
   getRequisicaoProfessorResponse,
   updateStatusBodyValidation,
-} from '../validations/RequisicaoProfessorValidation';
+} from './Validation';
 import { authAdmin, authProfessor } from '../middlewares/Authorization';
 
 export const RequisicaoProfessorSchema: EntitySchema = {

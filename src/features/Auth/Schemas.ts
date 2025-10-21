@@ -4,15 +4,10 @@ import { genericError, schemaValidationError } from '../../shared/Schemas';
 import z from 'zod';
 import {
   userLoginBodyValidation,
-  userRegisterBodyValidation,
 } from './Validations';
 
 export const userLoginResponse = z.object({
   token: z.string(),
-});
-
-export const userRegisterResponse = z.object({
-  message: z.string(),
 });
 
 export const AuthSchema: EntitySchema = {
@@ -24,19 +19,7 @@ export const AuthSchema: EntitySchema = {
         400: schemaValidationError,
         401: genericError,
       },
-      summary: 'Login a user with email and password',
-    }
-  },
-
-  register: {
-    schema: {
-      body: userRegisterBodyValidation,
-      response: {
-        201: userRegisterResponse,
-        400: schemaValidationError,
-        409: genericError,
-      },
-      summary: 'Register a new user with email, name and password',
+      summary: 'Faz o login de um usuario, usando email e senha.',
     }
   },
 };

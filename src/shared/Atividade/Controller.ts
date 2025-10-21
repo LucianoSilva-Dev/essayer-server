@@ -29,5 +29,19 @@ export const AtividadeController: Controller = {
     }
 
     return reply.status(200).send(response.data);
+  },
+
+  getAllAtividadesAluno: async (request, reply) => {
+    const {id} = request.user as RequestUserData;
+
+    const response = await AtividadeService.getAllAtividadesAluno(id);
+
+    if (!response.success) {
+      return reply
+        .status(response.status as number)
+        .send({ error: response.message });
+    }
+
+    return reply.status(200).send(response.data);
   }
 };

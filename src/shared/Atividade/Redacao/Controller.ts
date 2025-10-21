@@ -27,6 +27,7 @@ export const RedacaoController: Controller = {
     // acionaremos a notificação após enviar a resposta ao cliente, para não gerar mais atrasos
     AppEventEmitter.emit('tarefa:enviada', response.data as TarefaEnviadaEventPayload)
   },
+  
   get: async (request, reply) => {
     const { id } = request.params as { id: string };
     const { id: requisitante } = request.user as RequestUserData;
@@ -40,6 +41,7 @@ export const RedacaoController: Controller = {
 
     return reply.status(200).send(response.data);
   },
+
   update: async (request, reply) => {
     const body = request.body as UpdateRedacaoBody;
     const { id } = request.params as { id: string };
@@ -55,6 +57,7 @@ export const RedacaoController: Controller = {
 
     return reply.status(200).send();
   },
+
   start: async (request, reply) => {
     const { id } = request.params as { id: string };
     const { id: requisitante } = request.user as RequestUserData;
@@ -69,6 +72,7 @@ export const RedacaoController: Controller = {
 
     return reply.status(200).send();
   },
+
   send: async (request, reply) => {
     const { id } = request.params as { id: string };
     const { texto } = request.body as EnviarRedacaoBody;
@@ -86,6 +90,7 @@ export const RedacaoController: Controller = {
 
     AppEventEmitter.emit('tarefa:enviada', response.data as TarefaEnviadaEventPayload)
   },
+
   feedback: async (request, reply) => {
     const { id } = request.params as { id: string };
     const { feedback } = request.body as FeedbackRedacaoBody;
@@ -103,6 +108,7 @@ export const RedacaoController: Controller = {
 
     AppEventEmitter.emit('tarefa:corrigida', response.data as TarefaCorrigidaEventPayload)
   },
+
   getAllRespostasRedacao: async (request, reply) => {
     const {id} = request.params as {id: string}
     const {id: requisitante} = request.user as RequestUserData

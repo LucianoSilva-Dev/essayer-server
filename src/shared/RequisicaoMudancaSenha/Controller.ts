@@ -1,9 +1,10 @@
-import { RequisicaoMudancaSenhaService } from '../services/RequisicaoMudancaSenhaService';
-import type { Controller, createRequisicaoMudancaSenhaBody, RequestUserData, validateRequisicaoMudancaSenhaBody } from '../Types';
+import { RequisicaoMudancaSenhaService } from './Service';
+import type { Controller } from '../Types';
+import { CreateRequisicaoMudancaSenhaBody, ValidateRequisicaoMudancaSenhaBody } from './Types';
 
 export const RequisicaoMudancaSenhaController: Controller = {
   create: async (request, reply) => {
-    const { email } = request.body as createRequisicaoMudancaSenhaBody;
+    const { email } = request.body as CreateRequisicaoMudancaSenhaBody;
 
     const response = await RequisicaoMudancaSenhaService.create(email);
 
@@ -17,7 +18,7 @@ export const RequisicaoMudancaSenhaController: Controller = {
   },
   validate: async (request, reply) => {
     const { id } = request.params as { id: string };
-    const { codigo } = request.body as validateRequisicaoMudancaSenhaBody;
+    const { codigo } = request.body as ValidateRequisicaoMudancaSenhaBody;
 
     const response = await RequisicaoMudancaSenhaService.validate(id, codigo);
     if (!response.success) {

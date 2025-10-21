@@ -16,6 +16,7 @@ export const TurmaRoutes: FastifyPluginAsyncZod = async (app) => {
   app.put('/:id', TurmaSchema.update, TurmaController.update);
   app.delete('/:id', TurmaSchema.delete, TurmaController.delete);
   app.get('/:id/atividades', TurmaSchema.getAllAtividades, TurmaController.getAllAtividades);
+  app.get('/:id/atividades/criador', TurmaSchema.getAllAtividadesCriador, TurmaController.getAllAtividadesCriador);
   
   // Codigo Convite
   app.get('/:id/convite', TurmaSchema.getCodigoConvite, TurmaController.getCodigoConvite);
@@ -28,4 +29,6 @@ export const TurmaRoutes: FastifyPluginAsyncZod = async (app) => {
   app.delete('/:id/pedidos/:alunoId/recusar', TurmaSchema.recusarPedido, TurmaController.recusarPedido);
   app.get('/:id/alunos', TurmaSchema.getAllAlunos, TurmaController.getAllAlunos);
   app.delete('/:id/alunos/:alunoId', TurmaSchema.removerAluno, TurmaController.removerAluno);
+
+  app.get('/:id/atividades/feedbacks', TurmaSchema.getAllFeedbacks, TurmaController.getAllFeedbacks);
 };

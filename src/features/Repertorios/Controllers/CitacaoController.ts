@@ -28,7 +28,7 @@ export const CitacaoController: Controller = {
       return reply.status(response.status).send({ message: response.message });
     }
 
-    reply.status(201).send({ message: response.data });
+    reply.status(201).send({ id: response.data });
   },
   citacaoUpdate: async (request, reply) => {
     const { fonte, autor, frase, subtopicos, topicos } =

@@ -1,5 +1,5 @@
 import type { Controller } from '../../shared/Types';
-import type { userLoginBody, userRegisterBody } from './Types';
+import type { userLoginBody } from './Types';
 import { AuthService } from './Service';
 
 export const AuthController: Controller = {
@@ -13,18 +13,5 @@ export const AuthController: Controller = {
     }
 
     return reply.status(200).send({ token: response.token });
-  },
-
-  register: async (request, reply) => {
-    const response = await AuthService.register(
-      request.body as userRegisterBody,
-    );
-    if (!response.success) {
-      return reply
-        .status(response.statusCode as number)
-        .send({ error: response.error });
-    }
-
-    return reply.status(201).send({ message: response.message });
   },
 };

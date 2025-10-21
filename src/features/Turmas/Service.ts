@@ -1,24 +1,20 @@
-import type { Populate, PopulatedPerfilUsuario } from '../../shared/Types';
+import type { PopulatedPerfilUsuario } from '../../shared/Types';
 import { TurmaModel } from './Model';
 import type {
   CreateTurmaBody,
   getAllAtividadesQueryBody,
   GetAllTurmaQueryBody,
   GetAlunosResponse,
-  GetAtividadesResponse,
-  GetTurmaResponse,
   Turma,
   UpdateTurmaBody,
 } from './Types';
 import { Types } from 'mongoose';
 import { gerarCodigoConvite } from './Helpers/gerarCodigoConvite';
-import { AtividadeModel } from '../../shared/Atividade/Model';
-import type { Atividade } from '../../shared/Atividade/Types';
 
 export const TurmaService = {
   create: async (data: CreateTurmaBody, criadorId: string) => {
     try {
-      const codigoConvite = gerarCodigoConvite();
+      const codigoConvite = await gerarCodigoConvite();
 
       const turma = new TurmaModel({
         ...data,
@@ -145,27 +141,62 @@ export const TurmaService = {
     } as const;
   },
 
-  getById: async (turmaId: string, userId: string) => {
-    const turma = await TurmaModel.findOne({
-      _id: turmaId,
-      $or: [{ membros: userId }, { criador: userId }],
-    })
-      .populate<{
-        criador: PopulatedPerfilUsuario;
-        membros: PopulatedPerfilUsuario[];
-      }>(['criador', 'membros'])
-      .lean<
-        Pick<
-          Populate<
-            Turma,
-            {
-              criador: PopulatedPerfilUsuario;
-              membros: PopulatedPerfilUsuario[];
+  getById: async (turmaId: string, id: string) => {
+    const userId = new Types.ObjectId(id)
+
+    const turmaSearch = await TurmaModel.aggregate([
+      {
+        $match: {
+          _id: new Types.ObjectId(turmaId),
+          $or: [{ membros: userId }, { criador: userId }]
+        }
+      },
+      {
+        $lookup: {
+          from: 'usuarios',
+          localField: 'criador',
+          foreignField: '_id',
+          as: 'criador'
+        }
+      },
+      { $unwind: '$criador' },
+      {
+        $lookup: {
+          from: 'usuarios',
+          localField: 'membros',
+          foreignField: '_id',
+          as: 'membros'
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          id: { $toString: '$_id' },
+          nome: 1,
+          escola: 1,
+          iconeId: 1,
+          criador: {
+            id: { $toString: '$criador._id' },
+            nome: '$criador.nome',
+            fotoPath: '$criador.fotoPath'
+          },
+          membros: {
+            $map: {
+              input: '$membros',
+              as: 'membro',
+              in: {
+                id: { $toString: '$$membro._id' },
+                nome: '$$membro.nome',
+                fotoPath: '$$membro.fotoPath'
+              }
             }
-          >,
-          '_id' | 'nome' | 'escola' | 'criador' | 'membros' | 'iconeId'
-        >
-      >();
+          },
+          totalMembros: { $size: '$membros' }
+        }
+      }
+    ])
+
+    const turma = turmaSearch[0];
 
     if (!turma) {
       return {
@@ -175,22 +206,7 @@ export const TurmaService = {
       } as const;
     }
 
-    const getTurmaByIdResponse: GetTurmaResponse = {
-      ...turma,
-      id: turma._id.toString(),
-      criador: {
-        id: turma.criador._id.toString(),
-        ...turma.criador,
-      },
-      membros: turma.membros.map((membro) => {
-        return {
-          id: membro._id.toString(),
-          ...membro,
-        };
-      }),
-    };
-
-    return { success: true, data: getTurmaByIdResponse } as const;
+    return { success: true, data: turma } as const;
   },
 
   update: async (turmaId: string, data: UpdateTurmaBody, userId: string) => {
@@ -380,7 +396,7 @@ export const TurmaService = {
 
   regenerarCodigoConvite: async (turmaId: string, userId: string) => {
     try {
-      const codigo = gerarCodigoConvite();
+      const codigo = await gerarCodigoConvite();
 
       const turma = await TurmaModel.findOneAndUpdate(
         { _id: turmaId, criador: userId },
@@ -409,44 +425,155 @@ export const TurmaService = {
     userId: string,
     queryBody: getAllAtividadesQueryBody,
   ) => {
-    const isMember = await TurmaModel.exists({
-      _id: turmaId,
-      $or: [{ membros: userId }, { criador: userId }],
-    });
-    if (!isMember) {
+    try {
+      const id = new Types.ObjectId(userId)
+
+      const filtro = queryBody.titulo
+        ? { 'atividades.titulo': new RegExp(queryBody.titulo, 'i') }
+        : {};
+
+      const atividades = await TurmaModel.aggregate([
+        {
+          $match: {
+            _id: new Types.ObjectId(turmaId),
+            membros: id
+          }
+        },
+        {
+          $lookup: {
+            from: 'atividades',
+            localField: '_id',
+            foreignField: 'turma',
+            as: 'atividades'
+          }
+        },
+        { $unwind: '$atividades' },
+        { $match: filtro },
+        {
+          $addFields: {
+            respostasEnviadas: {
+              $filter: {
+                input: '$atividades.respostas',
+                as: 'resp',
+                cond: {
+                  $and: [{ $eq: ['$$resp.aluno', id] }, { $ifNull: ['$$resp.dataEnvio', false] }]
+                }
+              }
+            }
+          }
+        },
+        {
+          $project: {
+            id: { $toString: '$atividades._id' },
+            titulo: '$atividades.titulo',
+            descricao: '$atividades.descricao',
+            dataLimite: '$atividades.dataLimite',
+            tipoAtividade: '$atividades.tipoAtividade',
+            status: {
+              $switch: {
+                branches: [
+                  // biome-ignore lint/suspicious/noThenProperty: É a sintaxe do $switch
+                  { case: { $gt: [{ $size: '$respostasEnviadas' }, 0] }, then: 'Concluída' },
+                  // biome-ignore lint/suspicious/noThenProperty: É a sintaxe do $switch
+                  { case: { $or: [{ $ifNull: ['$atividades.dataLimite', true] }, { $lt: ['$atividades.dataLimite', new Date()] }] }, then: 'Pendente' }
+                ],
+                default: "Encerrada"
+              }
+            }
+          }
+        }
+      ])
+
+      return { success: true, data: atividades } as const;
+    } catch (e) {
+      console.log(e);
       return {
         success: false,
-        status: 404,
-        message: 'Turma não encontrada ou você não pode acessa-la.',
-      } as const;
+        status: 500,
+        message: 'Internal Server Error',
+      }
     }
+  },
 
-    const filtro = queryBody.titulo
-      ? { turma: turmaId, titulo: new RegExp(queryBody.titulo, 'i') }
-      : { turma: turmaId };
+  getAllAtividadesCriador: async (
+    turmaId: string,
+    userId: string,
+    queryBody: getAllAtividadesQueryBody,
+  ) => {
+    try {
+      const id = new Types.ObjectId(userId)
 
-    const atividades = await AtividadeModel.find(filtro)
-      .select('_id tipoAtividade titulo descricao dataLimite')
-      .lean<
-        Pick<
-          Atividade,
-          '_id' | 'tipoAtividade' | 'titulo' | 'descricao' | 'dataLimite'
-        >[]
-      >();
+      const filtro = queryBody.titulo
+        ? { 'atividades.titulo': new RegExp(queryBody.titulo, 'i') }
+        : {};
 
-    const atividadesResponse: GetAtividadesResponse = atividades.map(
-      (atividade) => {
-        return {
-          ...atividade,
-          id: atividade._id.toString(),
-          dataLimite: atividade.dataLimite
-            ? atividade.dataLimite.toISOString()
-            : null,
-        };
-      },
-    );
+      const atividades = await TurmaModel.aggregate([
+        {
+          $match: {
+            _id: new Types.ObjectId(turmaId),
+            criador: id
+          }
+        },
+        {
+          $lookup: {
+            from: 'atividades',
+            localField: '_id',
+            foreignField: 'turma',
+            as: 'atividades'
+          }
+        },
+        { $unwind: '$atividades' },
+        { $match: filtro },
+        {
+          $addFields: {
+            usuariosResponderam: {
+              $filter: {
+                input: '$atividades.respostas',
+                as: 'resp',
+                cond: { $ifNull: ['$$resp.dataEnvio', false] }
+              }
+            }
+          }
+        },
+        {
+          $lookup: {
+            from: 'usuarios',
+            localField: 'usuariosResponderam.aluno',
+            foreignField: '_id',
+            as: 'usuariosResponderam'
+          }
+        },
+        {
+          $project: {
+            id: { $toString: '$atividades._id' },
+            titulo: '$atividades.titulo',
+            descricao: '$atividades.descricao',
+            dataLimite: '$atividades.dataLimite',
+            tipoAtividade: '$atividades.tipoAtividade',
+            usuariosResponderam: {
+              $map: {
+                input: '$usuariosResponderam',
+                as: 'usuario',
+                in: {
+                  id: { $toString: '$$usuario._id' },
+                  nome: '$$usuario.nome',
+                  fotoPath: '$$usuario.fotoPath'
+                }
+              }
+            }
+          }
+        }
+      ])
 
-    return { success: true, data: atividadesResponse } as const;
+      return { success: true, data: atividades } as const;
+    } catch (e) {
+      console.log(e);
+      return {
+        success: false,
+        status: 500,
+        message: 'Internal Server Error',
+      }
+    }
   },
 
   removerAluno: async (turmaId: string, alunoId: string, userId: string) => {
@@ -464,4 +591,46 @@ export const TurmaService = {
     }
     return { success: true } as const;
   },
+
+  getAllFeedbacks: async (turmaId: string, userId: string) => {
+    try {
+      const respostas = await TurmaModel.aggregate([
+        { $match: { _id: new Types.ObjectId(turmaId), membros: new Types.ObjectId(userId) } },
+        {
+          $lookup: {
+            from: 'atividades',
+            localField: '_id',
+            foreignField: 'turma',
+            as: 'atividades'
+          }
+        },
+        { $unwind: '$atividades' },
+        { $unwind: '$atividades.respostas' },
+        { $match: { 'atividades.respostas.feedback': { $exists: true }, 'atividades.respostas.aluno': new Types.ObjectId(userId) } },
+        {
+          $project: {
+            _id: 0,
+            id: { $toString: '$atividades.respostas.feedback._id' },
+            feedback: '$atividades.respostas.feedback.texto',
+            visto: '$atividades.respostas.feedback.visto',
+            data: '$atividades.respostas.feedback.createdAt',
+            atividade: {
+              id: { $toString: '$atividades._id' },
+              titulo: '$atividades.titulo',
+              tipoAtividade: '$atividades.tipoAtividade'
+            }
+          }
+        }
+      ])
+
+      return { success: true, data: respostas } as const;
+    } catch (e) {
+      console.log(e);
+      return {
+        success: false,
+        status: 500,
+        message: 'Internal Server Error',
+      }
+    }
+  }
 };

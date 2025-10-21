@@ -23,7 +23,7 @@ export const ObraService: Service = {
       topicos,
     });
     await obra.save();
-    return { success: true, data: 'Obra criada com sucesso.' };
+    return { success: true, data: obra._id.toString() };
   },
   update: async (updateObraData: UpdateObraBody, obraId: string) => {
     const obra = await ObraModel.findByIdAndUpdate(obraId, updateObraData);

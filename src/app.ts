@@ -17,18 +17,16 @@ import { appErrorHandler } from './shared/plugins/appErrorHandler';
 import { AuthRoutes } from './features/Auth/Routes';
 import { RepertorioRoutes } from './features/Repertorios/Routes';
 import { appConfig } from './config/app';
-import {
-  RequisicaoMudancaSenhaRoutes,
-  RequisicaoProfessorRoutes,
-  RequisicaoUsuarioRoutes,
-  UsuarioRoutes,
-} from './shared/Routes';
 import { TurmaRoutes } from './features/Turmas/Routes';
 import { AtividadeRoutes } from './shared/Atividade/Routes';
 import { NotificacaoRoutes } from './features/Notificacoes/Routes';
 import { RedacaoLivreRoutes } from './features/RedacaoLivre/Routes';
 import FastifySSEPlugin from 'fastify-sse-v2';
 import { BullBoardRoutes } from './features/BullBoard/Routes';
+import { UsuarioRoutes } from './shared/Usuario/Routes';
+import { RequisicaoUsuarioRoutes } from './shared/RequisicaoUsuario/Routes';
+import { RequisicaoMudancaSenhaRoutes } from './shared/RequisicaoMudancaSenha/Routes';
+import { RequisicaoProfessorRoutes } from './shared/RequisicaoProfessor/Routes';
 
 class App {
   readonly app: FastifyInstance;

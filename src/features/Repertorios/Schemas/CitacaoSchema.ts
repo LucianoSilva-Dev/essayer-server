@@ -10,10 +10,10 @@ import {
   idValidation,
 } from '../../../shared/Validations';
 import {
-  authMiddleware,
   optionalAuthMiddleware,
 } from '../../../shared/middlewares/Authentication';
-import { authProfessor, authProfessorCreate } from '../../../shared/middlewares/Authorization';
+import { authProfessorCreate } from '../../../shared/middlewares/Authorization';
+import { createRepertorioResponse } from '../Validations/RepertorioValidation';
 
 export const CitacaoSchema: EntitySchema = {
   get: {
@@ -37,7 +37,7 @@ export const CitacaoSchema: EntitySchema = {
       security: [{ jwtAuth: [] }],
       body: createCitacaoBodyValidation,
       response: {
-        201: genericSuccessResponse,
+        201: createRepertorioResponse,
         400: schemaValidationError,
         401: genericError,
         403: genericError,

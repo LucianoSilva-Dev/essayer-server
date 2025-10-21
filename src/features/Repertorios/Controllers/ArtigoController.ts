@@ -28,7 +28,7 @@ export const ArtigoController: Controller = {
       return reply.status(response.status).send({ message: response.message });
     }
 
-    reply.status(201).send({ message: response.data });
+    reply.status(201).send({ id: response.data });
   },
   artigoUpdate: async (request, reply) => {
     const { titulo, resumo, autor, fonte, subtopicos, topicos } =

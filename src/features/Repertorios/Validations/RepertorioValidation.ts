@@ -204,3 +204,7 @@ export const getAllRepertorioQueryValidation = z.object({
     .nullish()
     .transform((val) => val ?? 15),
 });
+
+export const createRepertorioResponse = z.object({
+  id: z.string()
+})

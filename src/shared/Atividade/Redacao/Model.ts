@@ -6,8 +6,11 @@ const RespostaRedacaoSchema = new Schema({
   aluno: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
   dataEnvio: Date,
   texto: String,
-  feedback: String,
-});
+  feedback: new Schema({
+    texto: { type: String, required: true },
+    visto: { type: Boolean, default: false },
+  }, { timestamps: true }),
+}, { timestamps: true });
 
 export const RedacaoAtividadeModel =
   AtividadeModel.discriminator<RedacaoAtividade>(

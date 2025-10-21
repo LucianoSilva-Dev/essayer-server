@@ -28,7 +28,7 @@ export const ObraController: Controller = {
       return reply.status(response.status).send({ message: response.message });
     }
 
-    reply.status(201).send({ message: response.data });
+    reply.status(201).send({ id: response.data });
   },
   obraUpdate: async (request, reply) => {
     const { autor, sinopse, subtopicos, tipoObra, titulo, topicos } =

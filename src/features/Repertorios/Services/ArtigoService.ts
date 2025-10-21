@@ -25,7 +25,7 @@ export const ArtigoService: Service = {
     });
     await artigo.save();
 
-    return { success: true, data: 'Artigo criado com sucesso.' };
+    return { success: true, data: artigo._id.toString() };
   },
   update: async (updateArtigoData: UpdateArtigoBody, artigoId: string) => {
     const artigo = await ArtigoModel.findByIdAndUpdate(

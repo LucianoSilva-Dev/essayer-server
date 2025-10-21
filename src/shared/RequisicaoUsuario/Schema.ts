@@ -5,7 +5,7 @@ import { genericSuccessResponse, idValidation } from '../Validations';
 import {
   getRequisicaoUsuarioResponse,
   validateRequisicaoUsuarioBodyValidation,
-} from '../validations/RequisicaoUsuarioValidation';
+} from './Validation';
 
 export const RequisicaoUsuarioSchema: EntitySchema = {
   validate: {

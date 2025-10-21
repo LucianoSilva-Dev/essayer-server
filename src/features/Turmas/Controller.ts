@@ -169,6 +169,22 @@ export const TurmaController: Controller = {
     reply.send(response.data);
   },
 
+  getAllAtividadesCriador: async (request, reply) => {
+    const { id: turmaId } = request.params as { id: string };
+    const { id: userId } = request.user as RequestUserData;
+    const queryBody = request.query as getAllAtividadesQueryBody;
+
+    const response = await TurmaService.getAllAtividadesCriador(
+      turmaId,
+      userId,
+      queryBody,
+    );
+    if (!response.success) {
+      return reply.status(response.status).send({ error: response.message });
+    }
+    reply.send(response.data);
+  },
+
   removerAluno: async (request, reply) => {
     const { id: turmaId, alunoId } = request.params as {
       id: string;
@@ -181,4 +197,17 @@ export const TurmaController: Controller = {
     }
     reply.status(204).send();
   },
+
+  getAllFeedbacks: async (request, reply) => {
+    const { id: turmaId } = request.params as { id: string };
+    const { id: userId } = request.user as RequestUserData;
+
+    const response = await TurmaService.getAllFeedbacks(turmaId, userId);
+
+    if (!response.success) {
+      return reply.status(response.status).send({ error: response.message });
+    }
+
+    reply.status(200).send(response.data);
+  }
 };

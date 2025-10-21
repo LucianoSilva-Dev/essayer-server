@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { perfilUsuarioResponse } from '../Repertorios/Validations/Commom';
+import { tiposAtividade } from '../../shared/Atividade/Validations';
 
 // Validation for creating a new class
 export const createTurmaBodyValidation = z.object({
@@ -42,6 +43,7 @@ export const getTurmaResponse = z.object({
   escola: z.string().nullable().default(null),
   criador: perfilUsuarioResponse,
   membros: z.array(perfilUsuarioResponse),
+  totalMembros: z.number()
 });
 
 export const getTurmasResponse = z.object({
@@ -99,10 +101,22 @@ export const regenerarCodigoResponse = z.object({
 export const getAtividadesResponse = z.array(
   z.object({
     id: z.string(),
-    tipoAtividade: z.enum(['Redacao']),
+    tipoAtividade: tiposAtividade,
     titulo: z.string(),
     descricao: z.string(),
-    dataLimite: z.string().datetime().nullable(),
+    dataLimite: z.date().nullable(),
+    status: z.string()
+  }),
+);
+
+export const getAtividadesCriadorResponse = z.array(
+  z.object({
+    id: z.string(),
+    tipoAtividade: tiposAtividade,
+    titulo: z.string(),
+    descricao: z.string(),
+    dataLimite: z.date().nullable(),
+    usuariosResponderam: z.array(perfilUsuarioResponse),
   }),
 );
 
@@ -130,3 +144,16 @@ export const getAllAtividadesQueryValidation = z.object({
     .nonempty('O campo titulo não pode estar vazio')
     .optional(),
 });
+
+export const getAllFeedbacksResponse = z.array(z.object({
+  id: z.string(),
+  feedback: z.string(),
+  visto: z.boolean(),
+  data: z.date(),
+  atividade: z.object({
+    id: z.string(),
+    titulo: z.string(),
+    tipoAtividade: tiposAtividade,
+  })
+}))
+

@@ -1,14 +1,14 @@
 import { randomBytes } from 'node:crypto';
-import { RequisicaoMudancaSenhaModel } from '../models/RequisicaoMudancaSenhaModel';
+import { RequisicaoMudancaSenhaModel } from './Model';
 import { Transporter } from '../Transporter';
 import { EMAIL } from '../Env';
-import { UsuarioModel } from '../models/UsuarioModel';
+import { UsuarioModel } from '../Usuario/Model';
 
 export const RequisicaoMudancaSenhaService = {
   create: async (email: string) => {
     const code = randomBytes(6).toString('base64');
     const usuario = await UsuarioModel.findOne({ email });
-    
+
     if (!usuario) {
       return {
         succes: false,
@@ -16,7 +16,7 @@ export const RequisicaoMudancaSenhaService = {
         message: `Usuário com email ${email} não existe.`,
       };
     }
-    
+
     const requisicao = await RequisicaoMudancaSenhaModel.findOne({ requisitante: usuario.id });
 
     if (requisicao) {
