@@ -2,6 +2,7 @@ import { createTransport } from 'nodemailer';
 import mailjetTransport from 'nodemailer-mailjet-transport';
 import { SMTP_KEY, SMTP_SECRET } from './Env';
 import hbs from 'nodemailer-express-handlebars';
+import path from 'path';
 
 export const Transporter = createTransport(
   mailjetTransport({
@@ -12,13 +13,16 @@ export const Transporter = createTransport(
   }),
 );
 
+const templatesPath = path.resolve(__dirname, 'templates');
+
 Transporter.use(
   'compile',
   hbs({
     viewEngine: {
       defaultLayout: '',
     },
-    viewPath: 'src/shared/templates',
+    // Use absolute path so templates are found regardless of cwd
+    viewPath: templatesPath,
     extName: '.hbs',
   }),
 );
