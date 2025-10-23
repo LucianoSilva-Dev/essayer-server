@@ -475,7 +475,7 @@ export const TurmaService = {
                   // biome-ignore lint/suspicious/noThenProperty: É a sintaxe do $switch
                   { case: { $gt: [{ $size: '$respostasEnviadas' }, 0] }, then: 'Concluída' },
                   // biome-ignore lint/suspicious/noThenProperty: É a sintaxe do $switch
-                  { case: { $or: [{ $ifNull: ['$atividades.dataLimite', true] }, { $lt: ['$atividades.dataLimite', new Date()] }] }, then: 'Pendente' }
+                  { case: { $or: [{ $not: { $ifNull: ['$atividades.dataLimite', false] } }, { $gt: ['$atividades.dataLimite', new Date()] }] }, then: 'Pendente' },
                 ],
                 default: "Encerrada"
               }
