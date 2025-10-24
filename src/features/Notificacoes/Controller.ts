@@ -7,6 +7,7 @@ import type {
 } from '../../shared/Events/Types';
 import type { Controller, RequestUserData } from '../../shared/Types';
 import {
+  createNotificacaoRequisicaoProfessorStatusListener,
   createNotificacaoTarefaCorrigidaListener,
   createNotificacaoTarefaEnviadaListener,
   createNotificacaoTarefaFechadaListener,
@@ -25,6 +26,7 @@ AppEventEmitter.on(
   'tarefa:corrigida',
   createNotificacaoTarefaCorrigidaListener,
 );
+AppEventEmitter.on('requisicao-professor:status', createNotificacaoRequisicaoProfessorStatusListener)
 
 export const NotificacaoController: Controller = {
   getAll: async (request, reply) => {
@@ -44,8 +46,6 @@ export const NotificacaoController: Controller = {
   listen: async (request, reply) => {
     const { id: userId } = request.user as RequestUserData
     reply.sse({ comment: '' }) // evita fechar a conexão automaticamente
-
-    console.log('Cheguei aqui');
 
     const tarefaEnviadaListenerWrapper = (payload: TarefaEnviadaEventPayload) =>
       streamNotificacaoTarefaEnviadaListener(payload, userId, reply);
