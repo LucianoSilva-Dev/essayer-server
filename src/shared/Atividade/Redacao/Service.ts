@@ -10,6 +10,7 @@ import type {
   TarefaCorrigidaEventPayload,
   TarefaEnviadaEventPayload,
 } from '../../Events/Types';
+import { AtividadeModel } from '../Model';
 
 export const RedacaoService = {
   create: async (data: CreateRedacaoBody, requisitante: string) => {
@@ -335,7 +336,7 @@ export const RedacaoService = {
             id: { $toString: '$respostasEnviadas._id' },
             texto: '$respostasEnviadas.texto',
             dataEnvio: '$respostasEnviadas.dataEnvio',
-            feedback: '$respostasEnviadas.feedback',
+            feedback: '$respostasEnviadas.feedback.texto',
             aluno: {
               id: { $toString: '$alunoInfo._id' },
               nome: '$alunoInfo.nome',
@@ -351,7 +352,7 @@ export const RedacaoService = {
 
       const atividade = ativs[0];
 
-      if (atividade.criador !== requisitante) {
+      if (!atividade || atividade.criador !== requisitante) {
         return {
           success: false,
           status: 403,
