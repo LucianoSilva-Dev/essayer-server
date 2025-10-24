@@ -123,5 +123,20 @@ export const RedacaoController: Controller = {
     }
 
     reply.status(200).send(response.data);
+  },
+
+  updateFeedbackStatus: async (request, reply) => {
+    const { id } = request.params as { id: string }
+    const { id: requisitante } = request.user as RequestUserData
+
+    const response = await RedacaoService.updateFeedbackStatus(id, requisitante)
+
+    if (!response.success) {
+      return reply
+        .status(response.status as number)
+        .send({ error: response.message });
+    }
+
+    reply.status(200).send();
   }
 };

@@ -122,5 +122,20 @@ export const RedacaoSchema: EntitySchema = {
       },
       summary: "Resgata todas as respostas de uma atividade."
     }
-  }
+  },
+  updateFeedbackStatus: {
+    preHandler: authMiddleware,
+    schema: {
+      security: [{jwtAuth: []}],
+      params: idValidation,
+      response: {
+        200: z.void(),
+        400: schemaValidationError,
+        403: genericError,
+        404: genericError,
+        500: genericError
+      },
+      summary: "Atualiza o status de 'visto' em uma resposta de redação"
+    }
+  },
 };

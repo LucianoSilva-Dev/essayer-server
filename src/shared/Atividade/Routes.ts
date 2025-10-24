@@ -32,6 +32,11 @@ export const AtividadeRoutes: FastifyPluginAsyncZod = async (app) => {
     RedacaoSchema.feedback,
     RedacaoController.feedback,
   );
+  app.put(
+    '/respostas/:id/feedback/visto',
+    RedacaoSchema.updateFeedbackStatus,
+    RedacaoController.updateFeedbackStatus,
+  );
 
   app.delete('/:id', AtividadeSchema.delete, AtividadeController.delete);
   app.get('/', AtividadeSchema.getAllAtividadesAluno, AtividadeController.getAllAtividadesAluno);

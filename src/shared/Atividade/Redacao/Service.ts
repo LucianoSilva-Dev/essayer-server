@@ -1,4 +1,9 @@
 import { Types } from 'mongoose';
+import { TurmaModel } from '../../../features/Turmas/Model';
+import type {
+  TarefaCorrigidaEventPayload,
+  TarefaEnviadaEventPayload,
+} from '../../Events/Types';
 import { RedacaoAtividadeModel } from './Model';
 import type {
   CreateRedacaoBody,
@@ -6,11 +11,6 @@ import type {
   getAllRespostasRedacaoQueryBody,
   UpdateRedacaoBody,
 } from './Types';
-import { TurmaModel } from '../../../features/Turmas/Model';
-import type {
-  TarefaCorrigidaEventPayload,
-  TarefaEnviadaEventPayload,
-} from '../../Events/Types';
 
 export const RedacaoService = {
   create: async (data: CreateRedacaoBody, requisitante: string) => {
@@ -287,6 +287,40 @@ export const RedacaoService = {
       };
     }
   },
+  updateFeedbackStatus: async (id: string, requisitante: string) => {
+    try {
+      const atividade = await RedacaoAtividadeModel.findById(id);
+
+      if (!atividade) return {
+        success: false,
+        status: 404,
+        message: 'A atividade solicitada não existe.'
+      }
+
+      const resposta = atividade.respostas.find(
+        (res) => res.aluno._id.toString() === requisitante,
+      );
+
+      if (!resposta || !resposta.feedback) return {
+        success: false,
+        status: 404,
+        message: 'A atividade não possui uma resposta do aluno ou um feedback do professor.'
+      }
+
+      resposta.feedback.visto = true
+
+      await atividade.save()
+
+      return { success: true };
+    } catch (e) {
+      console.log(e);
+      return {
+        success: false,
+        status: 500,
+        message: 'Internal Server Error',
+      };
+    }
+  },
   getAllRespostasRedacao: async (
     id: string,
     requisitante: string,
@@ -374,7 +408,7 @@ export const RedacaoService = {
 
       const atividade = ativs[0];
 
-      if(ativs.length == 0) {
+      if (ativs.length == 0) {
         return {
           success: true,
           data: {

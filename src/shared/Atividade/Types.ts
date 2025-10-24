@@ -19,7 +19,19 @@ export type Atividade = {
     aluno: Types.ObjectId;
     texto?: string;
     dataEnvio?: Date;
-    feedback?: string;
+      feedback?: {
+        notaC1: Number,
+        notaC2: Number,
+        notaC3: Number,
+        notaC4: Number,
+        notaC5: Number,
+        feedbackC1: String,
+        feedbackC2: String,
+        feedbackC3: String,
+        feedbackC4: String,
+        feedbackC5: String,
+        visto: Boolean,
+      };
   }[];
   tipoAtividade: TiposAtividade; // Discriminator key
   createdAt: Date;
