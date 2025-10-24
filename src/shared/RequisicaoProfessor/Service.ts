@@ -2,6 +2,7 @@ import { EMAIL } from '../Env';
 import { RequisicaoProfessorModel } from './Model';
 import { UsuarioModel } from '../Usuario/Model';
 import { Transporter } from '../Transporter';
+import type { RequisicaoProfessorStatusEventPayload } from '../Events/Types';
 
 export const RequisicaoProfessorService = {
   getAll: async () => {
@@ -90,9 +91,16 @@ export const RequisicaoProfessorService = {
       });
     }
 
+    const notificacaoPayload: RequisicaoProfessorStatusEventPayload = {
+      requisicaoId: req._id.toString(),
+      aprovado: approved,
+      motivo: motivo,
+      remetente: idReq,
+    }
+
     return {
       success: true,
-      message: 'Status atualizado com sucesso.',
+      data: notificacaoPayload,
     };
   },
 };

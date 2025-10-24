@@ -5,6 +5,7 @@ import type {
   getAllNotificacaoTarefaFechadaDoc,
   getAllNotificacaoTarefaCorrigidaDoc,
   changeStatusNotificacaoBodyValidation,
+  getAllNotificacaoRequisicaoProfessorStatusDoc,
 } from './Validations';
 import type { z } from 'zod';
 
@@ -12,6 +13,7 @@ export enum TiposNotificacao {
   TarefaEnviada = 'TarefaEnviada',
   TarefaFechada = 'TarefaFechada',
   TarefaCorrigida = 'TarefaCorrigida',
+  RequisicaoProfessorStatus = 'RequisicaoProfessorStatus',
 }
 
 export type Notificacao = {
@@ -34,6 +36,11 @@ export type NotificacaoTarefaCorrigida = Notificacao & {
   atividade: Types.ObjectId;
 };
 
+export type NotificacaoRequisicaoProfessorStatus = Notificacao & {
+  requisicaoId: Types.ObjectId;
+  motivo?: string;
+};
+
 // getAll
 export type GetAllNotificacoesResponse = z.infer<
   typeof getAllNotificacaoResponse
@@ -46,6 +53,10 @@ export type GetAllNotificacaoTarefaFechadaDoc = z.infer<
 >;
 export type GetAllNotificacaoTarefaCorrigidaDoc = z.infer<
   typeof getAllNotificacaoTarefaCorrigidaDoc
+>;
+
+export type GetAllNotificacaoRequisicaoProfessorStatusDoc = z.infer<
+  typeof getAllNotificacaoRequisicaoProfessorStatusDoc
 >;
 
 // changeStatus

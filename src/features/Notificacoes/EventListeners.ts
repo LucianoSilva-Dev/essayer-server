@@ -1,15 +1,18 @@
 import type { FastifyReply } from 'fastify';
 import type {
+  RequisicaoProfessorStatusEventPayload,
   TarefaCorrigidaEventPayload,
   TarefaEnviadaEventPayload,
   TarefaFechadaEventPayload,
 } from '../../shared/Events/Types';
 import {
+  NotificacaoRequisicaoProfessorStatusModel,
   NotificacaoTarefaCorrigidaModel,
   NotificacaoTarefaEnviadaModel,
   NotificacaoTarefaFechadaModel,
 } from './Models/NotificacaoModel';
 import type {
+  GetAllNotificacaoRequisicaoProfessorStatusDoc,
   GetAllNotificacaoTarefaCorrigidaDoc,
   GetAllNotificacaoTarefaEnviadaDoc,
   GetAllNotificacaoTarefaFechadaDoc,
@@ -72,6 +75,28 @@ export async function createNotificacaoTarefaCorrigidaListener(
     );
   }
 }
+
+export async function createNotificacaoRequisicaoProfessorStatusListener(
+  payload: RequisicaoProfessorStatusEventPayload,
+) {
+  const notificacaoRequisicaoProfessorStatus = await NotificacaoRequisicaoProfessorStatusModel.create({
+    tipoNotificacao: TiposNotificacao.RequisicaoProfessorStatus,
+    motivo: payload.motivo,
+    requisicaoId: payload.requisicaoId,
+    remetentes: [payload.remetente],
+    data: Date.now(),
+    lidoPor: [],
+  });
+
+  console.log(notificacaoRequisicaoProfessorStatus);
+
+  if (!notificacaoRequisicaoProfessorStatus) {
+    console.error(
+      'Erro: Não foi possivel criar a notificação de requisição de professor',
+    );
+  }
+}
+
 // ---- Eventos que registram as notificações no banco de dados ----
 
 // ---- Eventos que enviam notificacoes ao frontend ----
@@ -129,6 +154,26 @@ export async function streamNotificacaoTarefaCorrigidaListener(
 
   reply.sse({
     event: TiposNotificacao.TarefaCorrigida,
+    data: JSON.stringify(notificacao),
+  })
+}
+
+export async function streamNotificacaoRequisicaoProfessorStatusListener(
+  payload: RequisicaoProfessorStatusEventPayload,
+  userId: string,
+  reply: FastifyReply,
+) {
+  if (payload.remetente !== userId) return
+
+  const notificacao: GetAllNotificacaoRequisicaoProfessorStatusDoc = {
+    tipoNotificacao: TiposNotificacao.RequisicaoProfessorStatus,
+    lido: false,
+    requisicaoId: payload.requisicaoId,
+    motivo: payload.motivo
+  };
+
+  reply.sse({
+    event: TiposNotificacao.RequisicaoProfessorStatus,
     data: JSON.stringify(notificacao),
   })
 }

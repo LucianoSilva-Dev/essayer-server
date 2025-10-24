@@ -5,6 +5,7 @@ import type {
   GetAllNotificacoesResponse,
   Notificacao,
   NotificacaoTarefaEnviada,
+  NotificacaoRequisicaoProfessorStatus,
 } from '../Types';
 
 import { TiposNotificacao } from '../Types';
@@ -12,6 +13,7 @@ import { isNotificacaoOfType } from './TypeGuard';
 import { formatTarefaEnviada } from './FormatTarefaEnviada';
 import { formatTarefaFechada } from './FormatTarefaFechada';
 import { formatTarefaCorrigida } from './FormatTarefaCorrigida';
+import { formatRequisicaoProfessorStatus } from './FormatRequisicaoProfessorStatus';
 
 export function mapGetAllNotificacaoResponse(
   notificacoes: Notificacao[],
@@ -41,5 +43,13 @@ export function mapGetAllNotificacaoResponse(
       )
     )
       return formatTarefaCorrigida(notificacao, userId);
+
+    if (
+      isNotificacaoOfType<NotificacaoRequisicaoProfessorStatus>(
+        notificacao,
+        TiposNotificacao.RequisicaoProfessorStatus,
+      )
+    )
+      return formatRequisicaoProfessorStatus(notificacao, userId);
   });
 }

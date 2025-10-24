@@ -20,6 +20,13 @@ export const getAllNotificacaoTarefaCorrigidaDoc = z.object({
   tarefaId: z.string(),
 });
 
+export const getAllNotificacaoRequisicaoProfessorStatusDoc = z.object({
+  tipoNotificacao: z.literal(TiposNotificacao.RequisicaoProfessorStatus),
+  lido: z.boolean(),
+  requisicaoId: z.string(),
+  motivo: z.string().optional(),
+});
+
 // Rota getAll
 export const getAllNotificacaoResponse = z.array(
   z
@@ -27,6 +34,7 @@ export const getAllNotificacaoResponse = z.array(
       getAllNotificacaoTarefaEnviadaDoc,
       getAllNotificacaoTarefaFechadaDoc,
       getAllNotificacaoTarefaCorrigidaDoc,
+      getAllNotificacaoRequisicaoProfessorStatusDoc
     ])
     .optional(),
 );

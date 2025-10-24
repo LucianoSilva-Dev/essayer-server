@@ -1,5 +1,6 @@
 import { AppEventEmitter } from '../../shared/Events/Emitter';
 import type {
+  RequisicaoProfessorStatusEventPayload,
   TarefaCorrigidaEventPayload,
   TarefaEnviadaEventPayload,
   TarefaFechadaEventPayload,
@@ -9,6 +10,7 @@ import {
   createNotificacaoTarefaCorrigidaListener,
   createNotificacaoTarefaEnviadaListener,
   createNotificacaoTarefaFechadaListener,
+  streamNotificacaoRequisicaoProfessorStatusListener,
   streamNotificacaoTarefaCorrigidaListener,
   streamNotificacaoTarefaEnviadaListener,
   streamNotificacaoTarefaFechadaListener,
@@ -43,6 +45,8 @@ export const NotificacaoController: Controller = {
     const { id: userId } = request.user as RequestUserData
     reply.sse({ comment: '' }) // evita fechar a conexão automaticamente
 
+    console.log('Cheguei aqui');
+
     const tarefaEnviadaListenerWrapper = (payload: TarefaEnviadaEventPayload) =>
       streamNotificacaoTarefaEnviadaListener(payload, userId, reply);
 
@@ -50,17 +54,23 @@ export const NotificacaoController: Controller = {
       streamNotificacaoTarefaFechadaListener(payload, userId, reply);
 
     const tarefaCorrigidaListenerWrapper = (
-      payload: TarefaCorrigidaEventPayload,
+      payload: TarefaCorrigidaEventPayload
     ) => streamNotificacaoTarefaCorrigidaListener(payload, userId, reply);
+
+    const requisicaoProfessorStatusListenerWrapper = (
+      payload: RequisicaoProfessorStatusEventPayload
+    ) => streamNotificacaoRequisicaoProfessorStatusListener(payload, userId, reply);
 
     AppEventEmitter.on('tarefa:enviada', tarefaEnviadaListenerWrapper);
     AppEventEmitter.on('tarefa:fechada', tarefaFechadaListenerWrapper);
     AppEventEmitter.on('tarefa:corrigida', tarefaCorrigidaListenerWrapper);
+    AppEventEmitter.on('requisicao-professor:status', requisicaoProfessorStatusListenerWrapper);
 
     request.raw.once('close', () => {
       AppEventEmitter.off('tarefa:enviada', tarefaEnviadaListenerWrapper);
       AppEventEmitter.off('tarefa:fechada', tarefaFechadaListenerWrapper);
       AppEventEmitter.off('tarefa:corrigida', tarefaCorrigidaListenerWrapper);
+      AppEventEmitter.off('requisicao-professor:status', requisicaoProfessorStatusListenerWrapper);
       reply.sseContext.source.end()
     });
   },

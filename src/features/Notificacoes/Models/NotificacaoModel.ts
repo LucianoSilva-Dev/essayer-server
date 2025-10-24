@@ -4,6 +4,7 @@ import type {
   NotificacaoTarefaEnviada,
   NotificacaoTarefaFechada,
   Notificacao,
+  NotificacaoRequisicaoProfessorStatus,
 } from '../Types';
 import { TiposNotificacao } from '../Types';
 
@@ -51,3 +52,12 @@ export const NotificacaoTarefaCorrigidaModel =
       atividade: { type: Types.ObjectId, required: true },
     }),
   );
+
+export const NotificacaoRequisicaoProfessorStatusModel =
+  NotificacaoModel.discriminator<NotificacaoRequisicaoProfessorStatus>(
+    TiposNotificacao.RequisicaoProfessorStatus,
+    new Schema({
+      requisicaoId: { type: Types.ObjectId, required: true },
+      motivo: String,
+    })
+  )

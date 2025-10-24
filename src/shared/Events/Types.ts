@@ -18,6 +18,13 @@ export type TarefaCorrigidaEventPayload = {
   remetentes: string[];
 };
 
+export type RequisicaoProfessorStatusEventPayload = {
+  requisicaoId: string;
+  remetente: string;
+  motivo?: string;
+  aprovado: boolean;
+}
+
 // Correção de IA
 export type RedacaoIACorrigidaEventPayload = {
   redacaoLivreId: string;
@@ -44,4 +51,5 @@ export type AppEventMap = {
   'redacao:ia:corrigida': RedacaoIACorrigidaEventPayload;
   'redacao:ia:persistida': RedacaoIAPersistidaEventPayload;
   'redacao:ia:delay': RedacaoComAtrasoEventPayload;
+  'requisicao-professor:status': RequisicaoProfessorStatusEventPayload;
 };

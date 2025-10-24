@@ -1,9 +1,11 @@
 import { RequisicaoProfessorService } from './Service';
 import type { Controller, RequestUserData } from '../Types';
-import { UpdateStatusBody } from './Types';
+import type { UpdateStatusBody } from './Types';
+import { AppEventEmitter } from '../Events/Emitter';
+import type { RequisicaoProfessorStatusEventPayload } from '../Events/Types';
 
 export const RequisicaoProfessorController: Controller = {
-  getAll: async (request, reply) => {
+  getAll: async (_, reply) => {
     const response = await RequisicaoProfessorService.getAll();
     return reply.status(200).send(response);
   },
@@ -47,6 +49,8 @@ export const RequisicaoProfessorController: Controller = {
         .send({ error: response.message });
     }
 
-    return reply.status(200).send({ message: response.message });
+    reply.status(200).send({ message: 'status atualizado com sucesso!' });
+
+    AppEventEmitter.emit('requisicao-professor:status', response.data as RequisicaoProfessorStatusEventPayload);
   },
 };
