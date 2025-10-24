@@ -95,7 +95,7 @@ export const RequisicaoProfessorService = {
       requisicaoId: req._id.toString(),
       aprovado: approved,
       motivo: motivo,
-      remetente: idReq,
+      remetente: req.requisitante.toString(),
     }
 
     return {

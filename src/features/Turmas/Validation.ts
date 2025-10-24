@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { perfilUsuarioResponse } from '../Repertorios/Validations/Commom';
 import { tiposAtividade } from '../../shared/Atividade/Validations';
+import { feedbackDoc } from '../../shared/Atividade/Redacao/Validations';
 
 // Validation for creating a new class
 export const createTurmaBodyValidation = z.object({
@@ -147,7 +148,7 @@ export const getAllAtividadesQueryValidation = z.object({
 
 export const getAllFeedbacksResponse = z.array(z.object({
   id: z.string(),
-  feedback: z.string(),
+  feedback: feedbackDoc,
   visto: z.boolean(),
   data: z.date(),
   atividade: z.object({

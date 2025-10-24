@@ -2,6 +2,7 @@ import { Types } from 'mongoose';
 import { RedacaoAtividadeModel } from './Model';
 import type {
   CreateRedacaoBody,
+  FeedbackRedacaoBody,
   getAllRespostasRedacaoQueryBody,
   UpdateRedacaoBody,
 } from './Types';
@@ -10,7 +11,6 @@ import type {
   TarefaCorrigidaEventPayload,
   TarefaEnviadaEventPayload,
 } from '../../Events/Types';
-import { AtividadeModel } from '../Model';
 
 export const RedacaoService = {
   create: async (data: CreateRedacaoBody, requisitante: string) => {
@@ -83,7 +83,18 @@ export const RedacaoService = {
                   aluno: { $toString: '$$resp.aluno' },
                   texto: '$$resp.texto',
                   dataEnvio: '$$resp.dataEnvio',
-                  feedback: '$$resp.feedback',
+                  feedback: {
+                    notaC1: '$$resp.feedback.notaC1',
+                    notaC2: '$$resp.feedback.notaC2',
+                    notaC3: '$$resp.feedback.notaC3',
+                    notaC4: '$$resp.feedback.notaC4',
+                    notaC5: '$$resp.feedback.notaC5',
+                    feedbackC1: '$$resp.feedback.feedbackC1',
+                    feedbackC2: '$$resp.feedback.feedbackC2',
+                    feedbackC3: '$$resp.feedback.feedbackC3',
+                    feedbackC4: '$$resp.feedback.feedbackC4',
+                    feedbackC5: '$$resp.feedback.feedbackC5',
+                  },
                 }
               },
             },
@@ -237,7 +248,7 @@ export const RedacaoService = {
       };
     }
   },
-  feedback: async (id: string, feedback: string, requisitante: string) => {
+  feedback: async (id: string, feedback: FeedbackRedacaoBody, requisitante: string) => {
     try {
       const atividade = await RedacaoAtividadeModel.findOne({
         'respostas._id': id,
@@ -254,7 +265,7 @@ export const RedacaoService = {
 
       await RedacaoAtividadeModel.updateOne(
         { 'respostas._id': id },
-        { $set: { 'respostas.$.feedback': { texto: feedback } } },
+        { $set: { 'respostas.$.feedback': feedback } },
       );
 
       const resposta = atividade.respostas.find(
@@ -336,7 +347,18 @@ export const RedacaoService = {
             id: { $toString: '$respostasEnviadas._id' },
             texto: '$respostasEnviadas.texto',
             dataEnvio: '$respostasEnviadas.dataEnvio',
-            feedback: '$respostasEnviadas.feedback.texto',
+            feedback: {
+              notaC1: '$respostasEnviadas.feedback.notaC1',
+              notaC2: '$respostasEnviadas.feedback.notaC2',
+              notaC3: '$respostasEnviadas.feedback.notaC3',
+              notaC4: '$respostasEnviadas.feedback.notaC4',
+              notaC5: '$respostasEnviadas.feedback.notaC5',
+              feedbackC1: '$respostasEnviadas.feedback.feedbackC1',
+              feedbackC2: '$respostasEnviadas.feedback.feedbackC2',
+              feedbackC3: '$respostasEnviadas.feedback.feedbackC3',
+              feedbackC4: '$respostasEnviadas.feedback.feedbackC4',
+              feedbackC5: '$respostasEnviadas.feedback.feedbackC5',
+            },
             aluno: {
               id: { $toString: '$alunoInfo._id' },
               nome: '$alunoInfo.nome',
@@ -352,7 +374,24 @@ export const RedacaoService = {
 
       const atividade = ativs[0];
 
-      if (!atividade || atividade.criador !== requisitante) {
+      if(ativs.length == 0) {
+        return {
+          success: true,
+          data: {
+            documentos: [],
+            paginacao: {
+              offset: queryBody.offset,
+              limit: queryBody.limit,
+              nextPageUrl: null,
+              previousPageUrl: null,
+              totalDocuments: 0,
+              pagesUrl: []
+            }
+          }
+        }
+      }
+
+      if (atividade.criador !== requisitante) {
         return {
           success: false,
           status: 403,

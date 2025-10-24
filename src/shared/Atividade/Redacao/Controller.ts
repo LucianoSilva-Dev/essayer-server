@@ -27,7 +27,7 @@ export const RedacaoController: Controller = {
     // acionaremos a notificação após enviar a resposta ao cliente, para não gerar mais atrasos
     AppEventEmitter.emit('tarefa:enviada', response.data as TarefaEnviadaEventPayload)
   },
-  
+
   get: async (request, reply) => {
     const { id } = request.params as { id: string };
     const { id: requisitante } = request.user as RequestUserData;
@@ -93,7 +93,7 @@ export const RedacaoController: Controller = {
 
   feedback: async (request, reply) => {
     const { id } = request.params as { id: string };
-    const { feedback } = request.body as FeedbackRedacaoBody;
+    const feedback = request.body as FeedbackRedacaoBody;
     const { id: requisitante } = request.user as RequestUserData;
 
     const response = await RedacaoService.feedback(id, feedback, requisitante);
@@ -104,14 +104,14 @@ export const RedacaoController: Controller = {
         .send({ error: response.message });
     }
 
-    reply.status(200).send({message: "Feedback enviado com sucesso!"});
+    reply.status(200).send({ message: "Feedback enviado com sucesso!" });
 
     AppEventEmitter.emit('tarefa:corrigida', response.data as TarefaCorrigidaEventPayload)
   },
 
   getAllRespostasRedacao: async (request, reply) => {
-    const {id} = request.params as {id: string}
-    const {id: requisitante} = request.user as RequestUserData
+    const { id } = request.params as { id: string }
+    const { id: requisitante } = request.user as RequestUserData
     const queryBody = request.query as getAllRespostasRedacaoQueryBody
 
     const response = await RedacaoService.getAllRespostasRedacao(id, requisitante, queryBody)

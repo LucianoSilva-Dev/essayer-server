@@ -7,7 +7,16 @@ const RespostaRedacaoSchema = new Schema({
   dataEnvio: Date,
   texto: String,
   feedback: new Schema({
-    texto: { type: String, required: true },
+    notaC1: { type: Number, required: true },
+    notaC2: { type: Number, required: true },
+    notaC3: { type: Number, required: true },
+    notaC4: { type: Number, required: true },
+    notaC5: { type: Number, required: true },
+    feedbackC1: { type: String, required: true },
+    feedbackC2: { type: String, required: true },
+    feedbackC3: { type: String, required: true },
+    feedbackC4: { type: String, required: true },
+    feedbackC5: { type: String, required: true },
     visto: { type: Boolean, default: false },
   }, { timestamps: true }),
 }, { timestamps: true });

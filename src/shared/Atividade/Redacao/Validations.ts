@@ -100,6 +100,19 @@ export const updateRedacaoBodyValidation = z
     message: 'Forneça ao menos um campo para atualizar.',
   });
 
+export const feedbackDoc = z.object({
+  notaC1: z.number(),
+  notaC2: z.number(),
+  notaC3: z.number(),
+  notaC4: z.number(),
+  notaC5: z.number(),
+  feedbackC1: z.string(),
+  feedbackC2: z.string(),
+  feedbackC3: z.string(),
+  feedbackC4: z.string(),
+  feedbackC5: z.string(),
+})
+
 export const getRedacaoResponse = z.object({
   titulo: z.string(),
   descricao: z.string(),
@@ -118,7 +131,7 @@ export const getRedacaoResponse = z.object({
         aluno: z.string(),
         texto: z.string().optional(),
         dataEnvio: z.date().optional(),
-        feedback: z.string().optional(),
+        feedback: feedbackDoc.optional(),
       }),
     )
     .optional(),
@@ -134,12 +147,56 @@ export const enviarRedacaoBodyValidation = z.object({
 });
 
 export const feedbackRedacaoBodyValidation = z.object({
-  feedback: z
+  notaC1: z.number({
+      invalid_type_error: 'O campo notaC1 precisa ser um número.',
+      required_error: "O campo notaC1 é obrigatório."
+    }),
+  notaC2: z.number({
+      invalid_type_error: 'O campo notaC2 precisa ser um número.',
+      required_error: "O campo notaC2 é obrigatório."
+    }),
+  notaC3: z.number({
+      invalid_type_error: 'O campo notaC3 precisa ser um número.',
+      required_error: "O campo notaC3 é obrigatório."
+    }),
+  notaC4: z.number({
+      invalid_type_error: 'O campo notaC4 precisa ser um número.',
+      required_error: "O campo notaC4 é obrigatório."
+    }),
+  notaC5: z.number({
+      invalid_type_error: 'O campo notaC5 precisa ser um número.',
+      required_error: "O campo notaC5 é obrigatório."
+    }),
+  feedbackC1: z
     .string({
-      required_error: 'O campo feedback é obrigatório.',
-      invalid_type_error: 'O campo feedback precisa ser um texto.',
+      required_error: 'O campo feedbackC1 é obrigatório.',
+      invalid_type_error: 'O campo feedbackC1 precisa ser um texto.',
     })
-    .nonempty('O campo feedback não pode estar vazio.'),
+    .nonempty('O campo feedbackC1 não pode estar vazio.'),
+  feedbackC2: z
+    .string({
+      required_error: 'O campo feedbackC2 é obrigatório.',
+      invalid_type_error: 'O campo feedbackC2 precisa ser um texto.',
+    })
+    .nonempty('O campo feedbackC2 não pode estar vazio.'),
+  feedbackC3: z
+    .string({
+      required_error: 'O campo feedbackC3 é obrigatório.',
+      invalid_type_error: 'O campo feedbackC3 precisa ser um texto.',
+    })
+    .nonempty('O campo feedbackC3 não pode estar vazio.'),
+  feedbackC4: z
+    .string({
+      required_error: 'O campo feedbackC4 é obrigatório.',
+      invalid_type_error: 'O campo feedbackC4 precisa ser um texto.',
+    })
+    .nonempty('O campo feedbackC4 não pode estar vazio.'),
+  feedbackC5: z
+    .string({
+      required_error: 'O campo feedbackC5 é obrigatório.',
+      invalid_type_error: 'O campo feedbackC5 precisa ser um texto.',
+    })
+    .nonempty('O campo feedbackC5 não pode estar vazio.'),
 });
 
 export const getAllRespostasRedacaoQueryValidation = z.object({
@@ -164,7 +221,7 @@ export const getAllRespostasRedacaoResponse = z.object({
       id: z.string(),
       texto: z.string().optional(),
       dataEnvio: z.date(),
-      feedback: z.string().optional(),
+      feedback: feedbackDoc.optional(),
       aluno: perfilUsuarioResponse,
       tempoEmMinutos: z.number(),
     }),

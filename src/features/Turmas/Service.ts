@@ -611,7 +611,18 @@ export const TurmaService = {
           $project: {
             _id: 0,
             id: { $toString: '$atividades.respostas.feedback._id' },
-            feedback: '$atividades.respostas.feedback.texto',
+            feedback: {
+              notaC1: '$atividades.respostas.feedback.notaC1',
+              notaC2: '$atividades.respostas.feedback.notaC2',
+              notaC3: '$atividades.respostas.feedback.notaC3',
+              notaC4: '$atividades.respostas.feedback.notaC4',
+              notaC5: '$atividades.respostas.feedback.notaC5',
+              feedbackC1: '$atividades.respostas.feedback.feedbackC1',
+              feedbackC2: '$atividades.respostas.feedback.feedbackC2',
+              feedbackC3: '$atividades.respostas.feedback.feedbackC3',
+              feedbackC4: '$atividades.respostas.feedback.feedbackC4',
+              feedbackC5: '$atividades.respostas.feedback.feedbackC5',
+            },
             visto: '$atividades.respostas.feedback.visto',
             data: '$atividades.respostas.feedback.createdAt',
             atividade: {
