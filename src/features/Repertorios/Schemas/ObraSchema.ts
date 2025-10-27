@@ -1,25 +1,23 @@
+import { optionalAuthMiddleware } from '../../../shared/middlewares/Authentication';
+import { authProfessorCreate } from '../../../shared/middlewares/Authorization';
+import { genericError, schemaValidationError } from '../../../shared/Schemas';
 import type { EntitySchema } from '../../../shared/Types';
+import {
+  genericSuccessResponse,
+  idValidation,
+} from '../../../shared/Validations';
 import {
   createObraBodyValidation,
   getObraResponse,
   updateObraBodyValidation,
 } from '../Validations/ObraValidation';
-import {
-  genericSuccessResponse,
-  idValidation,
-} from '../../../shared/Validations';
-import { genericError, schemaValidationError } from '../../../shared/Schemas';
-import {
-  optionalAuthMiddleware,
-} from '../../../shared/middlewares/Authentication';
-import { authProfessorCreate } from '../../../shared/middlewares/Authorization';
 import { createRepertorioResponse } from '../Validations/RepertorioValidation';
 
 export const ObraSchema: EntitySchema = {
   get: {
     preHandler: optionalAuthMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }, {}],
+      security: [{ accessTokenCookieAuth: [] }, {}],
       params: idValidation,
       response: {
         200: getObraResponse,
@@ -34,7 +32,7 @@ export const ObraSchema: EntitySchema = {
   create: {
     preHandler: authProfessorCreate,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       body: createObraBodyValidation,
       response: {
         201: createRepertorioResponse,
@@ -49,7 +47,7 @@ export const ObraSchema: EntitySchema = {
   update: {
     preHandler: authProfessorCreate,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       body: updateObraBodyValidation,
       response: {

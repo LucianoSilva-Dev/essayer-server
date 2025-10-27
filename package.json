@@ -20,6 +20,7 @@
     "@bull-board/api": "^6.12.7",
     "@bull-board/fastify": "^6.12.7",
     "@fastify/basic-auth": "^6.2.0",
+    "@fastify/cookie": "^11.0.2",
     "@fastify/cors": "^11.0.0",
     "@fastify/jwt": "^9.1.0",
     "@fastify/multipart": "^9.0.3",

@@ -1,8 +1,12 @@
 import { z } from 'zod';
 import { authMiddleware } from '../../middlewares/Authentication';
-import { authProfessor, authProfessorCreate } from '../../middlewares/Authorization';
+import {
+  authProfessor,
+  authProfessorCreate,
+} from '../../middlewares/Authorization';
 import { genericError, schemaValidationError } from '../../Schemas';
 import type { EntitySchema } from '../../Types';
+import { genericSuccessResponse, idValidation } from '../../Validations';
 import {
   createRedacaoBodyValidation,
   enviarRedacaoBodyValidation,
@@ -12,13 +16,12 @@ import {
   getRedacaoResponse,
   updateRedacaoBodyValidation,
 } from './Validations';
-import { genericSuccessResponse, idValidation } from '../../Validations';
 
 export const RedacaoSchema: EntitySchema = {
   create: {
     preHandler: authProfessorCreate,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       body: createRedacaoBodyValidation,
       response: {
         201: z.void(),
@@ -32,7 +35,7 @@ export const RedacaoSchema: EntitySchema = {
   get: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: getRedacaoResponse,
@@ -47,7 +50,7 @@ export const RedacaoSchema: EntitySchema = {
   update: {
     preHandler: authProfessorCreate,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       body: updateRedacaoBodyValidation,
       response: {
@@ -63,7 +66,7 @@ export const RedacaoSchema: EntitySchema = {
   start: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: z.void(),
@@ -78,7 +81,7 @@ export const RedacaoSchema: EntitySchema = {
   send: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       body: enviarRedacaoBodyValidation,
       response: {
@@ -94,7 +97,7 @@ export const RedacaoSchema: EntitySchema = {
   feedback: {
     preHandler: authProfessor,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       body: feedbackRedacaoBodyValidation,
       response: {
@@ -110,7 +113,7 @@ export const RedacaoSchema: EntitySchema = {
   getAllRespostasRedacao: {
     preHandler: authProfessor,
     schema: {
-      security: [{jwtAuth: []}],
+      security: [{ jwtAuth: [] }],
       params: idValidation,
       querystring: getAllRespostasRedacaoQueryValidation,
       response: {
@@ -118,24 +121,24 @@ export const RedacaoSchema: EntitySchema = {
         400: schemaValidationError,
         403: genericError,
         404: genericError,
-        500: genericError
+        500: genericError,
       },
-      summary: "Resgata todas as respostas de uma atividade."
-    }
+      summary: 'Resgata todas as respostas de uma atividade.',
+    },
   },
   updateFeedbackStatus: {
     preHandler: authMiddleware,
     schema: {
-      security: [{jwtAuth: []}],
+      security: [{ jwtAuth: [] }],
       params: idValidation,
       response: {
         200: z.void(),
         400: schemaValidationError,
         403: genericError,
         404: genericError,
-        500: genericError
+        500: genericError,
       },
-      summary: "Atualiza o status de 'visto' em uma resposta de redação"
-    }
+      summary: "Atualiza o status de 'visto' em uma resposta de redação",
+    },
   },
 };

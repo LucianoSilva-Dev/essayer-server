@@ -1,28 +1,27 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import type { SSEGenericError } from '../Types';
+import { verifyTokenFromCookie } from './Utils/VerifyTokenFormCookie';
 
 export const authMiddleware = async (
   request: FastifyRequest,
   reply: FastifyReply,
 ) => {
-  try {
-    await request.jwtVerify();
-  } catch (err) {
-    reply.status(401).send({ error: 'Login necessário.' });
-  }
+  await verifyTokenFromCookie(request, reply);
 };
 
 export const optionalAuthMiddleware = async (
   request: FastifyRequest,
   reply: FastifyReply,
 ) => {
+  const token = request.cookies.accessToken;
+  if (!token) return;
   try {
-    const authHeader = request.headers.authorization;
-    if (!authHeader) return;
-
     await request.jwtVerify();
   } catch (err) {
-    reply.status(401).send({ error: 'Token JWT inválido.' });
+    console.error('Optional Auth JWT Verification Error:', err);
+    reply
+      .status(401)
+      .send({ error: 'Token de acesso inválido ou expirado (opcional).' });
   }
 };
 
@@ -30,22 +29,37 @@ export const sseAuthMiddleware = async (
   request: FastifyRequest,
   reply: FastifyReply,
 ) => {
+  const token = request.cookies.accessToken;
+
+  if (!token) {
+    const sseError: SSEGenericError = {
+      event: 'error',
+      data: {
+        statusCode: 401,
+        message: 'Login necessário.',
+      },
+    };
+    reply.sse({ event: sseError.event, data: JSON.stringify(sseError.data) });
+    reply.sseContext?.source?.end();
+    return;
+  }
+
   try {
     await request.jwtVerify();
   } catch (err) {
+    console.error('SSE Auth JWT Verification Error:', err);
     const sseGenericError: SSEGenericError = {
       event: 'error',
       data: {
         statusCode: 401,
-        message: 'Token JWT inválido.',
+        message: 'Login necessário',
       },
     };
     reply.sse({
       event: sseGenericError.event,
       data: JSON.stringify(sseGenericError.data),
     });
-
-    reply.sseContext.source.end() // Fecha a conexão sse
-    return reply // Encerra o fluxo da request, impedindo avança ao controller
+    reply.sseContext?.source?.end();
+    return;
   }
 };

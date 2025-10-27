@@ -1,13 +1,18 @@
 import { authMiddleware } from '../middlewares/Authentication';
 import { genericError, schemaValidationError } from '../Schemas';
 import type { EntitySchema } from '../Types';
-import { createRequisicaoMudancaSenhaResponse, getRequisicaoMudancaSenhaResponse, validateRequisicaoMudancaSenhaBodyValidation, createRequisicaoMudancaSenhaBodyValidation } from './Validation';
 import { genericSuccessResponse, idValidation } from '../Validations';
+import {
+  createRequisicaoMudancaSenhaBodyValidation,
+  createRequisicaoMudancaSenhaResponse,
+  getRequisicaoMudancaSenhaResponse,
+  validateRequisicaoMudancaSenhaBodyValidation,
+} from './Validation';
 
 export const RequisicaoMudancaSenhaSchema: EntitySchema = {
   create: {
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       body: createRequisicaoMudancaSenhaBodyValidation,
       response: {
         201: createRequisicaoMudancaSenhaResponse,
@@ -17,12 +22,13 @@ export const RequisicaoMudancaSenhaSchema: EntitySchema = {
         404: genericError,
         500: genericError,
       },
-      summary: "Cria uma requisição de mudança de senha e retorna o id da requisição."
+      summary:
+        'Cria uma requisição de mudança de senha e retorna o id da requisição.',
     },
   },
   validate: {
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       body: validateRequisicaoMudancaSenhaBodyValidation,
       response: {
@@ -32,15 +38,15 @@ export const RequisicaoMudancaSenhaSchema: EntitySchema = {
         403: genericError,
         404: genericError,
         422: genericError,
-        500: genericError
+        500: genericError,
       },
-      summary: "Valida o código enviado por e-mail para o usuário."
-    }
+      summary: 'Valida o código enviado por e-mail para o usuário.',
+    },
   },
   get: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: getRequisicaoMudancaSenhaResponse,
@@ -48,9 +54,9 @@ export const RequisicaoMudancaSenhaSchema: EntitySchema = {
         401: genericError,
         403: genericError,
         404: genericError,
-        500: genericError
+        500: genericError,
       },
-      summary: "Recupera requisição de mudança de senha selecionada."
-    }
+      summary: 'Recupera requisição de mudança de senha selecionada.',
+    },
   },
 };

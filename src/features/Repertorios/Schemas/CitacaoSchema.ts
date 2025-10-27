@@ -1,25 +1,23 @@
-import type { EntitySchema } from '../../../shared/Types';
+import { optionalAuthMiddleware } from '../../../shared/middlewares/Authentication';
+import { authProfessorCreate } from '../../../shared/middlewares/Authorization';
 import { genericError, schemaValidationError } from '../../../shared/Schemas';
-import {
-  createCitacaoBodyValidation,
-  getCitacaoResponse,
-  updateCitacaoBodyValidation,
-} from '../Validations/CitacaoValidation';
+import type { EntitySchema } from '../../../shared/Types';
 import {
   genericSuccessResponse,
   idValidation,
 } from '../../../shared/Validations';
 import {
-  optionalAuthMiddleware,
-} from '../../../shared/middlewares/Authentication';
-import { authProfessorCreate } from '../../../shared/middlewares/Authorization';
+  createCitacaoBodyValidation,
+  getCitacaoResponse,
+  updateCitacaoBodyValidation,
+} from '../Validations/CitacaoValidation';
 import { createRepertorioResponse } from '../Validations/RepertorioValidation';
 
 export const CitacaoSchema: EntitySchema = {
   get: {
     preHandler: optionalAuthMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }, {}],
+      security: [{ accessTokenCookieAuth: [] }, {}],
       params: idValidation,
       response: {
         200: getCitacaoResponse,
@@ -34,7 +32,7 @@ export const CitacaoSchema: EntitySchema = {
   create: {
     preHandler: authProfessorCreate,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       body: createCitacaoBodyValidation,
       response: {
         201: createRepertorioResponse,
@@ -49,7 +47,7 @@ export const CitacaoSchema: EntitySchema = {
   update: {
     preHandler: authProfessorCreate,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       body: updateCitacaoBodyValidation,
       response: {

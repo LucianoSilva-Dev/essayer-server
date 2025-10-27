@@ -1,15 +1,19 @@
 // Backend/src/features/Repertorios/Validations/RepertorioValidation.ts
+
+import {
+  authMiddleware,
+  optionalAuthMiddleware,
+} from '../../../shared/middlewares/Authentication';
+import {
+  authProfessor,
+  authProfessorCreate,
+} from '../../../shared/middlewares/Authorization';
 import { genericError, schemaValidationError } from '../../../shared/Schemas';
 import type { EntitySchema } from '../../../shared/Types';
 import {
   genericSuccessResponse,
   idValidation,
 } from '../../../shared/Validations';
-import {
-  authMiddleware,
-  optionalAuthMiddleware,
-} from '../../../shared/middlewares/Authentication';
-import { authProfessor, authProfessorCreate } from '../../../shared/middlewares/Authorization';
 import {
   createComentarioBodyValidation,
   fixComentarioBodyValidation,
@@ -22,7 +26,7 @@ export const RepertorioSchema: EntitySchema = {
   get_all: {
     preHandler: optionalAuthMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }, {}], // "{}" significa autenticacão opcional
+      security: [{ accessTokenCookieAuth: [] }, {}], // "{}" significa autenticacão opcional
       querystring: getAllRepertorioQueryValidation,
       response: {
         200: getAllRepertorioResponse,
@@ -36,7 +40,7 @@ export const RepertorioSchema: EntitySchema = {
   delete: {
     preHandler: authProfessor,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: genericSuccessResponse,
@@ -53,7 +57,7 @@ export const RepertorioSchema: EntitySchema = {
   createComentario: {
     preHandler: authProfessorCreate,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       body: createComentarioBodyValidation,
       response: {
         200: genericSuccessResponse,
@@ -69,7 +73,7 @@ export const RepertorioSchema: EntitySchema = {
   updateComentario: {
     preHandler: authProfessorCreate,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       body: updateComentarioBodyValidation,
       response: {
         200: genericSuccessResponse,
@@ -80,12 +84,12 @@ export const RepertorioSchema: EntitySchema = {
         500: genericError,
       },
       summary: 'Atualiza um comentário do repertório selecionado',
-    }
+    },
   },
   deleteComentario: {
     preHandler: authProfessor,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       response: {
         200: genericSuccessResponse,
         400: schemaValidationError,
@@ -101,7 +105,7 @@ export const RepertorioSchema: EntitySchema = {
   fixComentario: {
     preHandler: authProfessor,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       body: fixComentarioBodyValidation,
       response: {
         200: genericSuccessResponse,
@@ -111,14 +115,15 @@ export const RepertorioSchema: EntitySchema = {
         404: genericError,
         500: genericError,
       },
-      summary: 'Fixar ou desfazer fixação de um comentário (apenas criador do repertório ou admin)',
+      summary:
+        'Fixar ou desfazer fixação de um comentário (apenas criador do repertório ou admin)',
     },
   },
 
   createLike: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       response: {
         200: genericSuccessResponse,
         400: schemaValidationError,
@@ -133,7 +138,7 @@ export const RepertorioSchema: EntitySchema = {
   deleteLike: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       response: {
         200: genericSuccessResponse,
         400: schemaValidationError,
@@ -148,7 +153,7 @@ export const RepertorioSchema: EntitySchema = {
   createFavorito: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       response: {
         200: genericSuccessResponse,
         400: schemaValidationError,
@@ -163,7 +168,7 @@ export const RepertorioSchema: EntitySchema = {
   deleteFavorito: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       response: {
         200: genericSuccessResponse,
         400: schemaValidationError,

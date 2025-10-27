@@ -1,14 +1,20 @@
-import { z } from "zod";
-import { authMiddleware, sseAuthMiddleware } from "../../shared/middlewares/Authentication";
-import { genericError } from "../../shared/Schemas";
-import type { EntitySchema } from "../../shared/Types";
-import { changeStatusNotificacaoBodyValidation, getAllNotificacaoResponse } from "./Validations";
+import { z } from 'zod';
+import {
+  authMiddleware,
+  sseAuthMiddleware,
+} from '../../shared/middlewares/Authentication';
+import { genericError } from '../../shared/Schemas';
+import type { EntitySchema } from '../../shared/Types';
+import {
+  changeStatusNotificacaoBodyValidation,
+  getAllNotificacaoResponse,
+} from './Validations';
 
 export const NotificacaoSchema: EntitySchema = {
   getAll: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       response: {
         200: getAllNotificacaoResponse,
         401: genericError,
@@ -21,7 +27,7 @@ export const NotificacaoSchema: EntitySchema = {
   changeStatus: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       body: changeStatusNotificacaoBodyValidation,
       response: {
         204: z.void(),
@@ -36,9 +42,8 @@ export const NotificacaoSchema: EntitySchema = {
   listen: {
     preHandler: sseAuthMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       summary: 'Escuta novas notificações',
     },
   },
-
 };

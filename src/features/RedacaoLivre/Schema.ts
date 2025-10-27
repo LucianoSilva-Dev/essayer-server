@@ -3,8 +3,8 @@ import {
   authMiddleware,
   sseAuthMiddleware,
 } from '../../shared/middlewares/Authentication';
-import type { EntitySchema } from '../../shared/Types';
 import { genericError, schemaValidationError } from '../../shared/Schemas';
+import type { EntitySchema } from '../../shared/Types';
 import { idValidation } from '../../shared/Validations';
 import {
   corrigirRedacaoBodyValidation,
@@ -18,7 +18,7 @@ export const RedacaoLivreSchema: EntitySchema = {
   create: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       body: createRedacaoLivreBodyValidation,
       response: {
         201: z.void(),
@@ -32,7 +32,7 @@ export const RedacaoLivreSchema: EntitySchema = {
   getAll: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       response: {
         200: z.array(getAllRedacaoLivreResponse),
         400: schemaValidationError,
@@ -45,7 +45,7 @@ export const RedacaoLivreSchema: EntitySchema = {
   get: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: getRedacaoLivreResponse,
@@ -60,7 +60,7 @@ export const RedacaoLivreSchema: EntitySchema = {
   update: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       body: updateRedacaoLivreBodyValidation,
       response: {
@@ -76,7 +76,7 @@ export const RedacaoLivreSchema: EntitySchema = {
   delete: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         204: z.void(),
@@ -91,7 +91,7 @@ export const RedacaoLivreSchema: EntitySchema = {
   corrigir: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       body: corrigirRedacaoBodyValidation,
       response: {
@@ -107,7 +107,7 @@ export const RedacaoLivreSchema: EntitySchema = {
   listenCorrecao: {
     preHandler: sseAuthMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       summary: 'Escuta por um evento de correção da redação especificada.',
     },
@@ -115,7 +115,7 @@ export const RedacaoLivreSchema: EntitySchema = {
   deleteCorrecao: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: z.object({
         id: idValidation.shape.id,
         correcaoId: idValidation.shape.id,
@@ -132,7 +132,7 @@ export const RedacaoLivreSchema: EntitySchema = {
   retryCorrecao: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: z.object({
         id: idValidation.shape.id,
         correcaoId: idValidation.shape.id,

@@ -1,6 +1,6 @@
-import { jsonSchemaTransform } from "fastify-type-provider-zod";
-import type { FastifyDynamicSwaggerOptions } from "@fastify/swagger";
-import type { FastifySwaggerUiOptions } from "@fastify/swagger-ui";
+import type { FastifyDynamicSwaggerOptions } from '@fastify/swagger';
+import type { FastifySwaggerUiOptions } from '@fastify/swagger-ui';
+import { jsonSchemaTransform } from 'fastify-type-provider-zod';
 
 export const fastifySwaggerConfig: FastifyDynamicSwaggerOptions = {
   openapi: {
@@ -12,8 +12,11 @@ export const fastifySwaggerConfig: FastifyDynamicSwaggerOptions = {
       { name: 'Auth', description: 'Authentication related end-points' },
       { name: 'Repertório', description: 'Rotas relacionadas aos repertórios' },
       { name: 'Turma', description: 'Rotas relacionadas as Turmas' },
-      { name: 'Atividade', description: 'Rotas relacionadas as Atividades'},
-      { name: 'Notificações', description: 'Rotas relacionadas as Notificações' }
+      { name: 'Atividade', description: 'Rotas relacionadas as Atividades' },
+      {
+        name: 'Notificações',
+        description: 'Rotas relacionadas as Notificações',
+      },
     ],
     components: {
       securitySchemes: {
@@ -23,13 +26,30 @@ export const fastifySwaggerConfig: FastifyDynamicSwaggerOptions = {
           bearerFormat: 'JWT',
           description: 'Enter JWT token.',
         },
+
+        accessTokenCookieAuth: {
+          type: 'apiKey',
+          in: 'cookie',
+          name: 'accessToken',
+          description:
+            'Autenticação via cookie httpOnly "accessToken" (definido automaticamente após login/refresh).',
+        },
+        refreshTokenCookieAuth: {
+          type: 'apiKey',
+          in: 'cookie',
+          name: 'refreshToken',
+          description:
+            'Necessário para a rota /auth/refresh e /auth/logout (definido automaticamente após login/refresh).',
+        },
       },
-      
-    }
+    },
   },
-  transform: jsonSchemaTransform
-}
+  transform: jsonSchemaTransform,
+};
 
 export const fastifySwaggerUiConfig: FastifySwaggerUiOptions = {
   routePrefix: '/docs',
-}
+  uiConfig: {
+    withCredentials: true,
+  },
+};

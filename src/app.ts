@@ -27,6 +27,8 @@ import { UsuarioRoutes } from './shared/Usuario/Routes';
 import { RequisicaoUsuarioRoutes } from './shared/RequisicaoUsuario/Routes';
 import { RequisicaoMudancaSenhaRoutes } from './shared/RequisicaoMudancaSenha/Routes';
 import { RequisicaoProfessorRoutes } from './shared/RequisicaoProfessor/Routes';
+import fastifyCookie from '@fastify/cookie';
+import { cookiesConfig } from './config/cookies';
 
 class App {
   readonly app: FastifyInstance;
@@ -47,6 +49,7 @@ class App {
     this.app.register(fastifyCors, corsConfig);
     this.app.register(fastifySwagger, fastifySwaggerConfig);
     this.app.register(fastifySwaggerUi, fastifySwaggerUiConfig);
+    this.app.register(fastifyCookie, cookiesConfig)
     this.app.register(fastifyMultipart, fastifyMultipartConfig);
     this.app.register(FastifySSEPlugin)
     this.app.setErrorHandler(appErrorHandler);

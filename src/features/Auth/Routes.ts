@@ -1,13 +1,15 @@
+// src/features/Auth/Routes.ts
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import { AuthSchema } from './Schemas';
+import { authPlugin } from '../../shared/plugins/auth';
 import { AddEntityWiseTags } from '../../shared/Utils';
 import { AuthController } from './Controller';
-import { authPlugin } from '../../shared/plugins/auth';
+import { AuthSchema } from './Schemas';
 
 export const AuthRoutes: FastifyPluginAsyncZod = async (app) => {
   AddEntityWiseTags(app, ['Auth']);
-  // used to enable reply.jwtSign for the handlers
   app.register(authPlugin);
 
   app.post('/login', AuthSchema.login, AuthController.login);
+  app.post('/refresh', AuthSchema.refresh, AuthController.refresh);
+  app.post('/logout', AuthSchema.logout, AuthController.logout);
 };

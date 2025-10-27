@@ -1,6 +1,9 @@
-import type { Controller } from '../../shared/Types';
+import type { Controller, RequestUserData } from '../../shared/Types';
 import type { userLoginBody } from './Types';
 import { AuthService } from './Service';
+import { ACCESS_TOKEN_COOKIE_MAX_AGE_SECONDS, REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS } from '../../shared/Env';
+import type { FastifyReply, FastifyRequest } from 'fastify';
+import { commonCookieOptions } from './Utils/CommonCookieOptions';
 
 export const AuthController: Controller = {
   login: async (request, reply) => {
@@ -8,10 +11,61 @@ export const AuthController: Controller = {
       request.body as userLoginBody,
       reply,
     );
-    if (!response.auth) {
+
+    if ('error' in response && response.error) {
+       return reply.status(500).send({ error: response.error });
+    }
+
+    if (!response.auth || !response.accessToken || !response.refreshToken) {
       return reply.status(401).send({ error: 'Credenciais inválidas.' });
     }
 
-    return reply.status(200).send({ token: response.token });
+    reply
+      .setCookie(
+        'accessToken',
+        response.accessToken,
+        commonCookieOptions(ACCESS_TOKEN_COOKIE_MAX_AGE_SECONDS)
+      )
+      .setCookie(
+        'refreshToken',
+        response.refreshToken,
+        commonCookieOptions(REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS, '/auth/refresh')
+      )
+      .status(200)
+      .send({ message: 'Login bem-sucedido' });
+  },
+
+  refresh: async (request: FastifyRequest, reply: FastifyReply) => {
+    const response = await AuthService.refresh(request, reply);
+
+    if (!response.success || !response.data) {
+      return reply
+        .status(response.status || 401)
+        .send({ error: response.message });
+    }
+
+    reply
+      .setCookie(
+        'accessToken',
+        response.data.accessToken,
+        commonCookieOptions(ACCESS_TOKEN_COOKIE_MAX_AGE_SECONDS)
+      )
+      .setCookie(
+        'refreshToken',
+        response.data.refreshToken,
+        commonCookieOptions(REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS, '/auth/refresh')
+      )
+      .status(200)
+      .send({ message: 'Token atualizado com sucesso' });
+  },
+
+  logout: async (request: FastifyRequest, reply: FastifyReply) => {
+      const response = await AuthService.logout(request, reply);
+
+      if (!response.success) {
+          return reply.status(500).send({ error: response.message  });
+      }
+
+      return reply.status(204).send();
   },
 };

@@ -2,7 +2,7 @@ import { perfilUsuarioResponse } from '../../features/Repertorios/Validations/Co
 import { authMiddleware } from '../middlewares/Authentication';
 import { genericError, schemaValidationError } from '../Schemas';
 import type { EntitySchema } from '../Types';
-import { idValidation, genericSuccessResponse } from '../Validations';
+import { genericSuccessResponse, idValidation } from '../Validations';
 import {
   createUsuarioBodyValidation,
   createUsuarioResponse,
@@ -16,7 +16,7 @@ export const UsuarioSchema: EntitySchema = {
   get: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: getUsuarioResponse,
@@ -46,7 +46,7 @@ export const UsuarioSchema: EntitySchema = {
   professorCreate: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       body: professorCreateBodyValidation,
       response: {
         201: genericSuccessResponse,
@@ -61,7 +61,7 @@ export const UsuarioSchema: EntitySchema = {
   update: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       body: updateUsuarioBodyValidation,
       response: {
@@ -78,7 +78,7 @@ export const UsuarioSchema: EntitySchema = {
 
   updateSenha: {
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       body: updateSenhaBodyValidation,
       response: {
@@ -96,7 +96,7 @@ export const UsuarioSchema: EntitySchema = {
   delete: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: genericSuccessResponse,
@@ -125,7 +125,7 @@ export const UsuarioSchema: EntitySchema = {
   fotoCreate: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: genericSuccessResponse,
@@ -144,7 +144,7 @@ export const UsuarioSchema: EntitySchema = {
   fotoUpdate: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: genericSuccessResponse,
@@ -162,7 +162,7 @@ export const UsuarioSchema: EntitySchema = {
   fotoDelete: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: genericSuccessResponse,
@@ -178,7 +178,7 @@ export const UsuarioSchema: EntitySchema = {
 
   perfil: {
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: perfilUsuarioResponse,
@@ -187,6 +187,6 @@ export const UsuarioSchema: EntitySchema = {
         500: genericError,
       },
       summary: 'Recupera o perfil de um usuário',
-    }
-  }
+    },
+  },
 };

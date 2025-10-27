@@ -1,32 +1,35 @@
 import { z } from 'zod';
-import type { EntitySchema } from '../../shared/Types';
+import { authMiddleware } from '../../shared/middlewares/Authentication';
+import {
+  authProfessor,
+  authProfessorCreate,
+} from '../../shared/middlewares/Authorization';
 import { genericError, schemaValidationError } from '../../shared/Schemas';
+import type { EntitySchema } from '../../shared/Types';
+import { genericSuccessResponse, idValidation } from '../../shared/Validations';
 import {
   createTurmaBodyValidation,
-  updateTurmaBodyValidation,
-  solicitarEntradaBodyValidation,
-  getTurmaResponse,
-  getTurmasResponse,
-  getCodigoConviteResponse,
+  getAllAtividadesQueryValidation,
+  getAllFeedbacksResponse,
+  getAllTurmaQueryValidation,
   getAlunosPendentesResponse,
   getAlunosResponse,
-  regenerarCodigoResponse,
-  getAtividadesResponse,
-  getTurmasCriadasResponse,
-  getAllTurmaQueryValidation,
-  getAllAtividadesQueryValidation,
   getAtividadesCriadorResponse,
-  getAllFeedbacksResponse,
+  getAtividadesResponse,
+  getCodigoConviteResponse,
+  getTurmaResponse,
+  getTurmasCriadasResponse,
+  getTurmasResponse,
+  regenerarCodigoResponse,
+  solicitarEntradaBodyValidation,
+  updateTurmaBodyValidation,
 } from './Validation';
-import { idValidation, genericSuccessResponse } from '../../shared/Validations';
-import { authProfessor, authProfessorCreate } from '../../shared/middlewares/Authorization';
-import { authMiddleware } from '../../shared/middlewares/Authentication';
 
 export const TurmaSchema: EntitySchema = {
   create: {
     preHandler: authProfessorCreate,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       body: createTurmaBodyValidation,
       response: {
         201: z.void(),
@@ -40,7 +43,7 @@ export const TurmaSchema: EntitySchema = {
   getAll: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       querystring: getAllTurmaQueryValidation,
       response: {
         200: getTurmasResponse,
@@ -53,7 +56,7 @@ export const TurmaSchema: EntitySchema = {
   getCriadas: {
     preHandler: authProfessor,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       querystring: getAllTurmaQueryValidation,
       response: {
         200: getTurmasCriadasResponse,
@@ -66,7 +69,7 @@ export const TurmaSchema: EntitySchema = {
   getById: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: getTurmaResponse,
@@ -80,7 +83,7 @@ export const TurmaSchema: EntitySchema = {
   update: {
     preHandler: authProfessorCreate,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       body: updateTurmaBodyValidation,
       response: {
@@ -95,7 +98,7 @@ export const TurmaSchema: EntitySchema = {
   delete: {
     preHandler: authProfessor,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: { 204: z.void(), 403: genericError, 404: genericError },
       summary: 'Professor exclui uma turma',
@@ -104,7 +107,7 @@ export const TurmaSchema: EntitySchema = {
   solicitarEntrada: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       body: solicitarEntradaBodyValidation,
       response: {
         200: z.void(),
@@ -117,7 +120,7 @@ export const TurmaSchema: EntitySchema = {
   getPedidos: {
     preHandler: authProfessor,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: getAlunosPendentesResponse,
@@ -130,7 +133,7 @@ export const TurmaSchema: EntitySchema = {
   aprovarPedido: {
     preHandler: authProfessor,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: z.object({
         id: idValidation.shape.id,
         alunoId: idValidation.shape.id,
@@ -146,7 +149,7 @@ export const TurmaSchema: EntitySchema = {
   recusarPedido: {
     preHandler: authProfessor,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: z.object({
         id: idValidation.shape.id,
         alunoId: idValidation.shape.id,
@@ -158,7 +161,7 @@ export const TurmaSchema: EntitySchema = {
   getAllAlunos: {
     preHandler: authProfessor,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: getAlunosResponse,
@@ -171,7 +174,7 @@ export const TurmaSchema: EntitySchema = {
   getCodigoConvite: {
     preHandler: authProfessor,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: getCodigoConviteResponse,
@@ -184,7 +187,7 @@ export const TurmaSchema: EntitySchema = {
   regenerarCodigoConvite: {
     preHandler: authProfessor,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: regenerarCodigoResponse,
@@ -197,7 +200,7 @@ export const TurmaSchema: EntitySchema = {
   getAllAtividades: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       querystring: getAllAtividadesQueryValidation,
       response: { 200: getAtividadesResponse, 404: genericError },
@@ -207,7 +210,7 @@ export const TurmaSchema: EntitySchema = {
   getAllAtividadesCriador: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       querystring: getAllAtividadesQueryValidation,
       response: { 200: getAtividadesCriadorResponse, 404: genericError },
@@ -217,7 +220,7 @@ export const TurmaSchema: EntitySchema = {
   removerAluno: {
     preHandler: authProfessor,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: z.object({
         id: idValidation.shape.id,
         alunoId: idValidation.shape.id,
@@ -229,7 +232,7 @@ export const TurmaSchema: EntitySchema = {
   getAllFeedbacks: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: getAllFeedbacksResponse,
@@ -238,6 +241,6 @@ export const TurmaSchema: EntitySchema = {
         500: genericError,
       },
       summary: 'Obtém todos os feedbacks de atividades da turma',
-    }
-  }
+    },
+  },
 };

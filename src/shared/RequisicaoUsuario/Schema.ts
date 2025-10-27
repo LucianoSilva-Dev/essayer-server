@@ -10,7 +10,7 @@ import {
 export const RequisicaoUsuarioSchema: EntitySchema = {
   validate: {
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       body: validateRequisicaoUsuarioBodyValidation,
       response: {
@@ -28,7 +28,7 @@ export const RequisicaoUsuarioSchema: EntitySchema = {
   get: {
     preHandler: authMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: getRequisicaoUsuarioResponse,

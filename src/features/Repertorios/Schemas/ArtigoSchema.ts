@@ -1,13 +1,11 @@
+import { optionalAuthMiddleware } from '../../../shared/middlewares/Authentication';
+import { authProfessorCreate } from '../../../shared/middlewares/Authorization';
 import { genericError, schemaValidationError } from '../../../shared/Schemas';
 import type { EntitySchema } from '../../../shared/Types';
 import {
   genericSuccessResponse,
   idValidation,
 } from '../../../shared/Validations';
-import {
-  optionalAuthMiddleware,
-} from '../../../shared/middlewares/Authentication';
-import { authProfessorCreate } from '../../../shared/middlewares/Authorization';
 import {
   createArtigoBodyValidation,
   getArtigoResponse,
@@ -19,7 +17,7 @@ export const ArtigoSchema: EntitySchema = {
   get: {
     preHandler: optionalAuthMiddleware,
     schema: {
-      security: [{ jwtAuth: [] }, {}],
+      security: [{ accessTokenCookieAuth: [] }, {}],
       params: idValidation,
       response: {
         200: getArtigoResponse,
@@ -34,7 +32,7 @@ export const ArtigoSchema: EntitySchema = {
   create: {
     preHandler: authProfessorCreate,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       body: createArtigoBodyValidation,
       response: {
         201: createRepertorioResponse,
@@ -49,7 +47,7 @@ export const ArtigoSchema: EntitySchema = {
   update: {
     preHandler: authProfessorCreate,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       body: updateArtigoBodyValidation,
       response: {

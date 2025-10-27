@@ -1,18 +1,18 @@
+import { z } from 'zod';
+import { authAdmin, authProfessor } from '../middlewares/Authorization';
 import { genericError, schemaValidationError } from '../Schemas';
 import type { EntitySchema } from '../Types';
-import { z } from 'zod';
 import { genericSuccessResponse, idValidation } from '../Validations';
 import {
   getRequisicaoProfessorResponse,
   updateStatusBodyValidation,
 } from './Validation';
-import { authAdmin, authProfessor } from '../middlewares/Authorization';
 
 export const RequisicaoProfessorSchema: EntitySchema = {
   getAll: {
     preHandler: authAdmin,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       response: {
         200: z.array(getRequisicaoProfessorResponse),
         400: schemaValidationError,
@@ -27,7 +27,7 @@ export const RequisicaoProfessorSchema: EntitySchema = {
   get: {
     preHandler: authProfessor,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
         200: getRequisicaoProfessorResponse,
@@ -44,7 +44,7 @@ export const RequisicaoProfessorSchema: EntitySchema = {
   updateStatus: {
     preHandler: authAdmin,
     schema: {
-      security: [{ jwtAuth: [] }],
+      security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       body: updateStatusBodyValidation,
       response: {
