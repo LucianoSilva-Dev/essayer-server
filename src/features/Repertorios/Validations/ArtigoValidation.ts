@@ -1,5 +1,6 @@
 import z from 'zod';
-import { comentarioResponse, perfilUsuarioResponse } from './Commom';
+import { perfilUsuarioResponse } from '../../../shared/Validations';
+import { comentarioResponse } from './Commom';
 
 export const getArtigoResponse = z.object({
   id: z.string(),

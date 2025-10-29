@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { perfilUsuarioResponse } from '../../features/Repertorios/Validations/Commom';
 
 export const createRequisicaoMudancaSenhaResponse = z.object({
   id: z.string(),

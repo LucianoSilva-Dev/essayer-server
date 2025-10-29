@@ -1,10 +1,5 @@
 import z, { boolean } from 'zod';
-
-export const perfilUsuarioResponse = z.object({
-  id: z.string(),
-  nome: z.string(),
-  fotoPath: z.string().nullable().optional()
-});
+import { perfilUsuarioResponse } from '../../../shared/Validations';
 
 export const comentarioResponse = z.object({
   id: z.string(),

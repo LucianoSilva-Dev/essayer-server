@@ -1,7 +1,8 @@
-import z from 'zod';
-import { paginacaoResponse, perfilUsuarioResponse } from './Commom';
 import { isValidObjectId } from 'mongoose';
+import z from 'zod';
 import { HasUniqueItens } from '../Helpers/HasUniqueItens';
+import { perfilUsuarioResponse } from '../../../shared/Validations';
+import { paginacaoResponse } from './Commom';
 
 export const getAllRepertorioObraDoc = z.object({
   tipoRepertorio: z.literal('Obra'),

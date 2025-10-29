@@ -15,3 +15,9 @@ export const genericSuccessResponse = z.object({
 });
 
 export const userCargo = z.enum(['admin', 'aluno', 'professor']);
+
+export const perfilUsuarioResponse = z.object({
+  id: z.string(),
+  nome: z.string(),
+  fotoPath: z.string().nullable().optional()
+});

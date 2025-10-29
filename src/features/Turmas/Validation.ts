@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { perfilUsuarioResponse } from '../Repertorios/Validations/Commom';
-import { tiposAtividade } from '../../shared/Atividade/Validations';
 import { feedbackDoc } from '../../shared/Atividade/Redacao/Validations';
+import { tiposAtividade } from '../../shared/Atividade/Validations';
+import { perfilUsuarioResponse } from '../../shared/Validations';
 
 // Validation for creating a new class
 export const createTurmaBodyValidation = z.object({

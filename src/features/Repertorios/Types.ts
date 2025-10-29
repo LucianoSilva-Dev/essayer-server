@@ -1,32 +1,32 @@
+import type { Types } from 'mongoose';
+import type z from 'zod';
 import type {
   createArtigoBodyValidation,
   getArtigoResponse,
   updateArtigoBodyValidation,
 } from './Validations/ArtigoValidation';
 import type {
-  getCitacaoResponse,
   createCitacaoBodyValidation,
+  getCitacaoResponse,
   updateCitacaoBodyValidation,
 } from './Validations/CitacaoValidation';
-import type { perfilUsuarioResponse } from './Validations/Commom';
-import type z from 'zod';
 import type {
   createObraBodyValidation,
   getObraResponse,
   updateObraBodyValidation,
 } from './Validations/ObraValidation';
-import type { Types } from 'mongoose';
 import type {
-  getAllRepertorioResponse,
-  getAllRepertorioQueryValidation,
-  getAllRepertorioDocuments,
-  getAllRepertorioObraDoc,
+  createComentarioBodyValidation,
+  fixComentarioBodyValidation,
   getAllRepertorioArtigoDoc,
   getAllRepertorioCitacaoDoc,
-  createComentarioBodyValidation,
+  getAllRepertorioDocuments,
+  getAllRepertorioObraDoc,
+  getAllRepertorioQueryValidation,
+  getAllRepertorioResponse,
   updateComentarioBodyValidation,
-  fixComentarioBodyValidation,
 } from './Validations/RepertorioValidation';
+import type { perfilUsuarioResponse } from '../../shared/Validations';
 
 // Citacao
 export type CitacaoResponse = z.infer<typeof getCitacaoResponse>;
@@ -71,7 +71,7 @@ export type CreateComentarioBody = z.infer<
 export type UpdateComentarioBody = z.infer<
   typeof updateComentarioBodyValidation
 >;
-export type FixComentarioBody = z.infer<typeof fixComentarioBodyValidation>
+export type FixComentarioBody = z.infer<typeof fixComentarioBodyValidation>;
 
 export type ComentarioSubDoc = {
   _id: Types.ObjectId;

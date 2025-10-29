@@ -2,7 +2,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 import type { SSEGenericError } from '../Types';
 import { verifyTokenFromCookie } from './Utils/VerifyTokenFormCookie';
 
-export const accessAuthMiddleware = async (
+export const authMiddleware = async (
   request: FastifyRequest,
   reply: FastifyReply,
 ) => {

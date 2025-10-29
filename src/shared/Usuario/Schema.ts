@@ -1,8 +1,7 @@
-import { perfilUsuarioResponse } from '../../features/Repertorios/Validations/Commom';
 import { authMiddleware } from '../middlewares/Authentication';
 import { genericError, schemaValidationError } from '../Schemas';
 import type { EntitySchema } from '../Types';
-import { genericSuccessResponse, idValidation } from '../Validations';
+import { genericSuccessResponse, idValidation, perfilUsuarioResponse } from '../Validations';
 import {
   createUsuarioBodyValidation,
   createUsuarioResponse,

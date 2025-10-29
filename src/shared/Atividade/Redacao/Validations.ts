@@ -1,6 +1,6 @@
 import { isValidObjectId } from 'mongoose';
 import { z } from 'zod';
-import { perfilUsuarioResponse } from '../../../features/Repertorios/Validations/Commom';
+import { perfilUsuarioResponse } from '../../Validations';
 
 export const createRedacaoBodyValidation = z.object({
   titulo: z
