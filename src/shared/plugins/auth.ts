@@ -8,14 +8,14 @@ export const authPlugin = fastifyPlugin(async (fastify) => {
     secret: JWT_TOKEN_SECRET,
     cookie: {
       cookieName: 'accessToken',
-      signed: true,
+      signed: false,
     },
-    verify: {
-      algorithms: ['HS256'],
-    },
-    sign: {
-      algorithm: 'HS256',
-    },
+    // verify: {
+    //   algorithms: ['HS256'],
+    // },
+    // sign: {
+    //   algorithm: 'HS256',
+    // },
   });
 
   fastify.decorate(

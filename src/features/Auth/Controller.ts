@@ -1,9 +1,10 @@
-import type { Controller, RequestUserData } from '../../shared/Types';
+import type { Controller } from '../../shared/Types';
 import type { userLoginBody } from './Types';
 import { AuthService } from './Service';
 import { ACCESS_TOKEN_COOKIE_MAX_AGE_SECONDS, REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS } from '../../shared/Env';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { commonCookieOptions } from './Utils/CommonCookieOptions';
+import { REFRESH_TOKEN_COOKIE_PATH } from '../../shared/Constants/auth';
 
 export const AuthController: Controller = {
   login: async (request, reply) => {
@@ -29,7 +30,7 @@ export const AuthController: Controller = {
       .setCookie(
         'refreshToken',
         response.refreshToken,
-        commonCookieOptions(REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS, '/auth/refresh')
+        commonCookieOptions(REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS, REFRESH_TOKEN_COOKIE_PATH)
       )
       .status(200)
       .send({ message: 'Login bem-sucedido' });
@@ -53,7 +54,7 @@ export const AuthController: Controller = {
       .setCookie(
         'refreshToken',
         response.data.refreshToken,
-        commonCookieOptions(REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS, '/auth/refresh')
+        commonCookieOptions(REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS, REFRESH_TOKEN_COOKIE_PATH)
       )
       .status(200)
       .send({ message: 'Token atualizado com sucesso' });

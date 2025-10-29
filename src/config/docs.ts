@@ -49,7 +49,4 @@ export const fastifySwaggerConfig: FastifyDynamicSwaggerOptions = {
 
 export const fastifySwaggerUiConfig: FastifySwaggerUiOptions = {
   routePrefix: '/docs',
-  uiConfig: {
-    withCredentials: true,
-  },
 };

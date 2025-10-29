@@ -159,7 +159,7 @@ export const AuthService = {
           `Failed to delete session from Redis during refresh for user ${userId}, session ${sessionId}. Invalidating all sessions.`,
         );
         await invalidateAllUserSessions(userId);
-        clearReplyCookies(reply)
+        clearReplyCookies(reply);
         return {
           success: false,
           status: 401,
@@ -173,7 +173,7 @@ export const AuthService = {
       if (!user) {
         console.error(`User ${userId} not found during token refresh.`);
         await invalidateAllUserSessions(userId);
-        clearReplyCookies(reply)
+        clearReplyCookies(reply);
         return {
           success: false,
           status: 404,
@@ -212,10 +212,14 @@ export const AuthService = {
     const fastify = request.server;
     const refreshToken = request.cookies.refreshToken;
 
-    clearReplyCookies(reply)
+    clearReplyCookies(reply);
 
     if (!refreshToken) {
-      return { success: true, message: 'Logout realizado (sem token).' } as const;
+      console.log('Logout with no refreshToken');
+      return {
+        success: true,
+        message: 'Logout realizado (sem token).',
+      } as const;
     }
 
     try {
@@ -230,10 +234,16 @@ export const AuthService = {
       await redisClient.del(redisKey);
 
       console.log(`Logout successful for user ${userId}, session ${sessionId}`);
-      return { success: true, message: 'Logout realizado com sucesso.' } as const;
+      return {
+        success: true,
+        message: 'Logout realizado com sucesso.',
+      } as const;
     } catch (err) {
       console.warn('Logout attempt with invalid refresh token:', err);
-      return { success: true, message: 'Logout realizado (token inválido).' } as const;
+      return {
+        success: true,
+        message: 'Logout realizado (token inválido).',
+      } as const;
     }
   },
 };
