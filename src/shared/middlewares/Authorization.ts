@@ -1,13 +1,14 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import type { RequestUserData } from '../Types';
 import { UsuarioModel } from '../Usuario/Model';
+import { verifyTokenFromCookie } from './Utils/VerifyTokenFormCookie';
 
 export const authProfessor = async (
   request: FastifyRequest,
   reply: FastifyReply,
 ) => {
   try {
-    await request.jwtVerify();
+    await verifyTokenFromCookie(request, reply);
 
     const { cargo } = request.user as RequestUserData;
 
@@ -24,7 +25,7 @@ export const authProfessorCreate = async (
   reply: FastifyReply,
 ) => {
   try {
-    await request.jwtVerify();
+    await verifyTokenFromCookie(request, reply);
 
     const { cargo, id } = request.user as RequestUserData;
 
@@ -32,12 +33,11 @@ export const authProfessorCreate = async (
       reply.status(403).send({ error: 'Necessário login como professor.' });
     }
 
-    const user = await UsuarioModel.findById(id)
+    const user = await UsuarioModel.findById(id);
 
     if (!user) {
-      reply.status(404).send({ error: 'usuário não existe.' })
+      reply.status(404).send({ error: 'usuário não existe.' });
     }
-
   } catch (err) {
     reply.status(401).send({ error: 'Login necessário.' });
   }
@@ -48,7 +48,7 @@ export const authAdmin = async (
   reply: FastifyReply,
 ) => {
   try {
-    await request.jwtVerify();
+    await verifyTokenFromCookie(request, reply);
 
     const { cargo } = request.user as RequestUserData;
 

@@ -16,7 +16,8 @@ export const optionalAuthMiddleware = async (
   const token = request.cookies.accessToken;
   if (!token) return;
   try {
-    request.server.jwt.verify(token);
+    const payload = request.server.jwt.verify(token);
+    request.user = payload
   } catch (err) {
     console.error('Optional Auth JWT Verification Error:', err);
     reply
@@ -45,7 +46,8 @@ export const sseAuthMiddleware = async (
   }
 
   try {
-    request.server.jwt.verify(token);
+    const payload = request.server.jwt.verify(token);
+    request.user = payload
   } catch (err) {
     console.error('SSE Auth JWT Verification Error:', err);
     const sseGenericError: SSEGenericError = {

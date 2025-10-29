@@ -9,10 +9,11 @@ export async function verifyTokenFromCookie(
 
     if (!cookie) {
       reply.status(401).send({ error: 'Login necessário' });
-      return false
+      return false;
     }
 
-    request.server.jwt.verify(cookie);
+    const payload = request.server.jwt.verify(cookie);
+    request.user = payload;
     return true;
   } catch (err) {
     console.error('JWT Verification Error:', err);
