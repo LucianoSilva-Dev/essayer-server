@@ -1,10 +1,13 @@
-import type { Controller } from '../../shared/Types';
-import type { userLoginBody } from './Types';
-import { AuthService } from './Service';
-import { ACCESS_TOKEN_COOKIE_MAX_AGE_SECONDS, REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS } from '../../shared/Env';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { commonCookieOptions } from './Utils/CommonCookieOptions';
 import { REFRESH_TOKEN_COOKIE_PATH } from '../../shared/Constants/auth';
+import {
+  ACCESS_TOKEN_COOKIE_MAX_AGE_SECONDS,
+  REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS,
+} from '../../shared/Env';
+import type { Controller } from '../../shared/Types';
+import { AuthService } from './Service';
+import type { userLoginBody } from './Types';
+import { commonCookieOptions } from './Utils/CommonCookieOptions';
 
 export const AuthController: Controller = {
   login: async (request, reply) => {
@@ -14,7 +17,7 @@ export const AuthController: Controller = {
     );
 
     if ('error' in response && response.error) {
-       return reply.status(500).send({ error: response.error });
+      return reply.status(500).send({ error: response.error });
     }
 
     if (!response.auth || !response.accessToken || !response.refreshToken) {
@@ -25,15 +28,18 @@ export const AuthController: Controller = {
       .setCookie(
         'accessToken',
         response.accessToken,
-        commonCookieOptions(ACCESS_TOKEN_COOKIE_MAX_AGE_SECONDS)
+        commonCookieOptions(ACCESS_TOKEN_COOKIE_MAX_AGE_SECONDS),
       )
       .setCookie(
         'refreshToken',
         response.refreshToken,
-        commonCookieOptions(REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS, REFRESH_TOKEN_COOKIE_PATH)
+        commonCookieOptions(
+          REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS,
+          REFRESH_TOKEN_COOKIE_PATH,
+        ),
       )
       .status(200)
-      .send({ message: 'Login bem-sucedido' });
+      .send(response.userData);
   },
 
   refresh: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -49,24 +55,27 @@ export const AuthController: Controller = {
       .setCookie(
         'accessToken',
         response.data.accessToken,
-        commonCookieOptions(ACCESS_TOKEN_COOKIE_MAX_AGE_SECONDS)
+        commonCookieOptions(ACCESS_TOKEN_COOKIE_MAX_AGE_SECONDS),
       )
       .setCookie(
         'refreshToken',
         response.data.refreshToken,
-        commonCookieOptions(REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS, REFRESH_TOKEN_COOKIE_PATH)
+        commonCookieOptions(
+          REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS,
+          REFRESH_TOKEN_COOKIE_PATH,
+        ),
       )
       .status(200)
       .send({ message: 'Token atualizado com sucesso' });
   },
 
   logout: async (request: FastifyRequest, reply: FastifyReply) => {
-      const response = await AuthService.logout(request, reply);
+    const response = await AuthService.logout(request, reply);
 
-      if (!response.success) {
-          return reply.status(500).send({ error: response.message  });
-      }
+    if (!response.success) {
+      return reply.status(500).send({ error: response.message });
+    }
 
-      return reply.status(204).send();
+    return reply.status(204).send();
   },
 };

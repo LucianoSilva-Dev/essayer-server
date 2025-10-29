@@ -1,4 +1,5 @@
 import z from 'zod';
+import { perfilUsuarioResponse } from '../../shared/Validations';
 
 export const userLoginBodyValidation = z.object({
   email: z
@@ -13,3 +14,8 @@ export const userLoginBodyValidation = z.object({
   }),
 });
 
+export const userLoginResponseValidation = z.object({
+  ...perfilUsuarioResponse.shape,
+  email: z.string().email(),
+  cargo: z.string(),
+});

@@ -6,7 +6,7 @@ import { Types } from 'mongoose';
 import { redisClient } from '../../shared/Redis/Provider';
 import { SessionModel } from '../../shared/Session/Model';
 import { UsuarioModel } from '../../shared/Usuario/Model';
-import type { userLoginBody } from './Types';
+import type { UserLoginResponse, userLoginBody } from './Types';
 import { clearReplyCookies } from './Utils/ClearReplyCookies';
 import { compareToken } from './Utils/CompareToken';
 import { generateAndSaveTokens } from './Utils/GenerateAndSaveTokens';
@@ -55,7 +55,12 @@ export const AuthService = {
         user.nome,
         user.cargo,
       );
-      return { auth: true, accessToken, refreshToken };
+
+      const response: UserLoginResponse = {
+        id: user._id.toString(),
+        ...user,
+      };
+      return { auth: true, accessToken, refreshToken, userData: response };
     } catch (error) {
       console.error(`Error generating tokens for user ${email}:`, error);
       return {
@@ -72,7 +77,7 @@ export const AuthService = {
     const oldRefreshToken = request.cookies.refreshToken;
 
     if (!oldRefreshToken) {
-      clearReplyCookies(reply)
+      clearReplyCookies(reply);
       return {
         success: false,
         status: 401,

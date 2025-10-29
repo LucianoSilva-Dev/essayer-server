@@ -3,15 +3,18 @@
 import z from 'zod';
 import { genericError, schemaValidationError } from '../../shared/Schemas';
 import type { EntitySchema } from '../../shared/Types';
-import { genericSuccessResponse, perfilUsuarioResponse } from '../../shared/Validations';
-import { userLoginBodyValidation } from './Validations';
+import { genericSuccessResponse } from '../../shared/Validations';
+import {
+  userLoginBodyValidation,
+  userLoginResponseValidation,
+} from './Validations';
 
 export const AuthSchema: EntitySchema = {
   login: {
     schema: {
       body: userLoginBodyValidation,
       response: {
-        200: perfilUsuarioResponse,
+        200: userLoginResponseValidation,
         400: schemaValidationError,
         401: genericError,
         500: genericError,
