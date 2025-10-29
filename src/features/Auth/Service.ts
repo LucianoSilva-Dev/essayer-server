@@ -252,4 +252,20 @@ export const AuthService = {
       } as const;
     }
   },
+
+  getUserInfo: async (id: string) => {
+    const user = await UsuarioModel.findById(id).lean();
+
+    if (!user)
+      return {
+        success: false,
+        status: 401,
+        message: 'Sessão expirada. Por favor, faça login novamente.',
+      } as const;
+
+    return {
+      success: true,
+      data: { id: user._id.toString(), ...user },
+    } as const;
+  },
 };

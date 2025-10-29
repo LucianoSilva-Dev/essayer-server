@@ -1,6 +1,5 @@
-// zod schemas for validation and response of the routes
-
 import z from 'zod';
+import { authMiddleware } from '../../shared/middlewares/Authentication';
 import { genericError, schemaValidationError } from '../../shared/Schemas';
 import type { EntitySchema } from '../../shared/Types';
 import { genericSuccessResponse } from '../../shared/Validations';
@@ -46,6 +45,19 @@ export const AuthSchema: EntitySchema = {
         'Invalida a sessão do usuário e limpa os cookies de autenticação',
       description:
         'Utiliza o refresh token (via cookie) para invalidar a sessão no servidor.',
+    },
+  },
+  getUserInfo: {
+    preHandler: authMiddleware,
+    schema: {
+      security: [{ accessTokenCookieAuth: [] }],
+      response: {
+        200: userLoginResponseValidation,
+        401: genericError,
+        500: genericError,
+      },
+      summary:
+        'Obtem informações do usuario através do accessToken (via cookie)',
     },
   },
 };

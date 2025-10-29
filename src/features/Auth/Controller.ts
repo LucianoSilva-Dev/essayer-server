@@ -4,7 +4,7 @@ import {
   ACCESS_TOKEN_COOKIE_MAX_AGE_SECONDS,
   REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS,
 } from '../../shared/Env';
-import type { Controller } from '../../shared/Types';
+import type { Controller, RequestUserData } from '../../shared/Types';
 import { AuthService } from './Service';
 import type { userLoginBody } from './Types';
 import { commonCookieOptions } from './Utils/CommonCookieOptions';
@@ -77,5 +77,15 @@ export const AuthController: Controller = {
     }
 
     return reply.status(204).send();
+  },
+
+  getUserInfo: async (request: FastifyRequest, reply: FastifyReply) => {
+    const { id } = request.user as RequestUserData;
+    const response = await AuthService.getUserInfo(id);
+
+    if (!response.success)
+      return reply.status(response.status).send({ message: response.message });
+    
+    reply.status(200).send(response.data)
   },
 };
