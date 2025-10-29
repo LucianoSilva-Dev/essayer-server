@@ -29,6 +29,7 @@ import { RequisicaoMudancaSenhaRoutes } from './shared/RequisicaoMudancaSenha/Ro
 import { RequisicaoProfessorRoutes } from './shared/RequisicaoProfessor/Routes';
 import fastifyCookie from '@fastify/cookie';
 import { cookiesConfig } from './config/cookies';
+import { unsignCookiesHook } from './shared/hooks/UnsignCookiesHook';
 
 class App {
   readonly app: FastifyInstance;
@@ -37,6 +38,7 @@ class App {
     this.app = fastify(appConfig).withTypeProvider<ZodTypeProvider>();
     this.compilers();
     this.plugins();
+    this.hooks();
     this.routes();
   }
 
@@ -53,6 +55,10 @@ class App {
     this.app.register(fastifyMultipart, fastifyMultipartConfig);
     this.app.register(FastifySSEPlugin)
     this.app.setErrorHandler(appErrorHandler);
+  }
+
+  private hooks() {
+    this.app.addHook('onRequest', unsignCookiesHook)
   }
 
   private routes() {

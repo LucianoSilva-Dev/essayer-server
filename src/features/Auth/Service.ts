@@ -72,6 +72,7 @@ export const AuthService = {
     const oldRefreshToken = request.cookies.refreshToken;
 
     if (!oldRefreshToken) {
+      clearReplyCookies(reply)
       return {
         success: false,
         status: 401,

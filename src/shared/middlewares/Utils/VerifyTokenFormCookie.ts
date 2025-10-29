@@ -5,7 +5,14 @@ export async function verifyTokenFromCookie(
   reply: FastifyReply,
 ): Promise<boolean> {
   try {
-    await request.jwtVerify();
+    const cookie = request.cookies.accessToken;
+
+    if (!cookie) {
+      reply.status(401).send({ error: 'Login necessário' });
+      return false
+    }
+
+    request.server.jwt.verify(cookie);
     return true;
   } catch (err) {
     console.error('JWT Verification Error:', err);

@@ -2,7 +2,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 import type { SSEGenericError } from '../Types';
 import { verifyTokenFromCookie } from './Utils/VerifyTokenFormCookie';
 
-export const authMiddleware = async (
+export const accessAuthMiddleware = async (
   request: FastifyRequest,
   reply: FastifyReply,
 ) => {
@@ -16,7 +16,7 @@ export const optionalAuthMiddleware = async (
   const token = request.cookies.accessToken;
   if (!token) return;
   try {
-    await request.jwtVerify();
+    request.server.jwt.verify(token);
   } catch (err) {
     console.error('Optional Auth JWT Verification Error:', err);
     reply
@@ -45,7 +45,7 @@ export const sseAuthMiddleware = async (
   }
 
   try {
-    await request.jwtVerify();
+    request.server.jwt.verify(token);
   } catch (err) {
     console.error('SSE Auth JWT Verification Error:', err);
     const sseGenericError: SSEGenericError = {
