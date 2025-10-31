@@ -1,6 +1,7 @@
 import type { FastifyDynamicSwaggerOptions } from '@fastify/swagger';
 import type { FastifySwaggerUiOptions } from '@fastify/swagger-ui';
 import { jsonSchemaTransform } from 'fastify-type-provider-zod';
+import { AppCookies } from '../shared/Constants/auth';
 
 export const fastifySwaggerConfig: FastifyDynamicSwaggerOptions = {
   openapi: {
@@ -30,14 +31,14 @@ export const fastifySwaggerConfig: FastifyDynamicSwaggerOptions = {
         accessTokenCookieAuth: {
           type: 'apiKey',
           in: 'cookie',
-          name: 'accessToken',
+          name: AppCookies.accessToken,
           description:
             'Autenticação via cookie httpOnly "accessToken" (definido automaticamente após login/refresh).',
         },
         refreshTokenCookieAuth: {
           type: 'apiKey',
           in: 'cookie',
-          name: 'refreshToken',
+          name: AppCookies.refreshToken,
           description:
             'Necessário para a rota /auth/refresh e /auth/logout (definido automaticamente após login/refresh).',
         },

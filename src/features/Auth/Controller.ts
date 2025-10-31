@@ -1,5 +1,5 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { REFRESH_TOKEN_COOKIE_PATH } from '../../shared/Constants/auth';
+import { AppCookies, REFRESH_TOKEN_COOKIE_PATH } from '../../shared/Constants/auth';
 import {
   ACCESS_TOKEN_COOKIE_MAX_AGE_SECONDS,
   REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS,
@@ -26,12 +26,12 @@ export const AuthController: Controller = {
 
     reply
       .setCookie(
-        'accessToken',
+        AppCookies.accessToken,
         response.accessToken,
         commonCookieOptions(ACCESS_TOKEN_COOKIE_MAX_AGE_SECONDS),
       )
       .setCookie(
-        'refreshToken',
+        AppCookies.refreshToken,
         response.refreshToken,
         commonCookieOptions(
           REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS,
@@ -53,12 +53,12 @@ export const AuthController: Controller = {
 
     reply
       .setCookie(
-        'accessToken',
+        AppCookies.accessToken,
         response.data.accessToken,
         commonCookieOptions(ACCESS_TOKEN_COOKIE_MAX_AGE_SECONDS),
       )
       .setCookie(
-        'refreshToken',
+        AppCookies.refreshToken,
         response.data.refreshToken,
         commonCookieOptions(
           REFRESH_TOKEN_COOKIE_MAX_AGE_SECONDS,
