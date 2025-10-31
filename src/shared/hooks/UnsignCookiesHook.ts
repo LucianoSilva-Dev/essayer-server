@@ -1,8 +1,11 @@
 import type { onRequestHookHandler } from 'fastify';
+import { AppCookiesList } from '../Constants/auth';
 
 export const unsignCookiesHook: onRequestHookHandler = async (request) => {
   const originalCookies = { ...request.cookies };
   for (const cookieName in originalCookies) {
+    // verifica apenas cookies enviados por esse backend
+    if (!AppCookiesList.includes(cookieName)) continue
     if (Object.hasOwn(originalCookies, cookieName)) {
       const signedValue = originalCookies[cookieName];
       if (signedValue) {
