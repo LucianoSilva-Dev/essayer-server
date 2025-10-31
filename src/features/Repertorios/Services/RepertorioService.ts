@@ -27,7 +27,7 @@ export const RepertorioService: Service = {
     ) {
       return {
         success: false,
-        status: 403,
+        status: 401,
         message: 'Você precisa estar logado para fazer isso',
       };
     }
