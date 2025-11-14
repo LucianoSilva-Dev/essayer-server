@@ -3,14 +3,17 @@ import { CorrigirRedacaoQueue } from '../../shared/CorrecaoRedacaoIA/Queue';
 import { EnumCorrecaoRedacaoStatus } from '../../shared/CorrecaoRedacaoIA/Types';
 import { checkModelAvailability } from '../../shared/CorrecaoRedacaoIA/Worker/CheckModelAvailability';
 import { RedacaoLivreModel } from './Model';
-import type { UpdateRedacaoLivreBody } from './Types';
+import type { CreateRedacaoLivreBody, UpdateRedacaoLivreBody } from './Types';
 
 export const RedacaoLivreService = {
-  create: async (tema: string, usuario: string) => {
+  create: async (body: CreateRedacaoLivreBody, usuario: string) => {
     try {
+      const { tema, duracao } = body;
+
       await RedacaoLivreModel.create({
         aluno: usuario,
         tema,
+        duracao,
       });
 
       return { success: true };

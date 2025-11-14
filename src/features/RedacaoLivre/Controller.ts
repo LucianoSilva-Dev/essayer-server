@@ -23,10 +23,10 @@ AppEventEmitter.on('redacao:ia:corrigida', registerCorrecaoIAListener);
 
 export const RedacaoLivreController: Controller = {
   create: async (request, reply) => {
-    const { tema } = request.body as CreateRedacaoLivreBody;
+    const body = request.body as CreateRedacaoLivreBody;
     const { id } = request.user as RequestUserData;
 
-    const response = await RedacaoLivreService.create(tema, id);
+    const response = await RedacaoLivreService.create(body, id);
     if (!response.success) {
       return reply
         .status(response.status as number)

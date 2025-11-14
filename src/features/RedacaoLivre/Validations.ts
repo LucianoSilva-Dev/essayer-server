@@ -9,6 +9,9 @@ export const createRedacaoLivreBodyValidation = z.object({
       invalid_type_error: 'O campo tema precisa ser um texto.',
     })
     .nonempty('O campo tema não pode estar vazio.'),
+  duracao: z.number({
+    invalid_type_error: 'O campo duracao precisa ser um número.',
+  }).optional(),
 });
 
 const getCorrecaoRedacaoFinalizadaResponse = z.object({
