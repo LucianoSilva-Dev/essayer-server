@@ -119,7 +119,7 @@ export const RedacaoLivreController: Controller = {
       })
       .toObject();
 
-    const correcaoId = correcao._id.toString()
+    const correcaoId = correcao._id.toString();
     redacao.correcoesIA.push(correcao);
     await redacao.save();
 
@@ -145,7 +145,7 @@ export const RedacaoLivreController: Controller = {
     const redacao = await RedacaoLivreModel.findById(redacaoLivreId);
     if (!redacao) {
       return reply.sse({
-        event: 'error',
+        event: 'appError',
         data: JSON.stringify({
           code: 404,
           message: 'Redação não encontrada',
@@ -155,7 +155,7 @@ export const RedacaoLivreController: Controller = {
 
     if (redacao.aluno.toString() !== alunoId) {
       return reply.sse({
-        event: 'error',
+        event: 'appError',
         data: JSON.stringify({
           code: 403,
           message: 'Você não pode ver correções dos amiguinhos',

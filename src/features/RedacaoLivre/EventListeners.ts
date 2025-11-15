@@ -1,4 +1,6 @@
 import type { FastifyReply } from 'fastify';
+import { EnumCorrecaoRedacaoStatus } from '../../shared/CorrecaoRedacaoIA/Types';
+import { AppEventEmitter } from '../../shared/Events/Emitter';
 import type {
   RedacaoComAtrasoEventPayload,
   RedacaoIACorrigidaEventPayload,
@@ -7,9 +9,7 @@ import type {
 import { RedacaoLivreModel } from './Model';
 import type { GetCorrecaoRedacaoResponse } from './Types';
 import { CorrecaoRedacaoEvents } from './Types';
-import { AppEventEmitter } from '../../shared/Events/Emitter';
 import { getCorrecaoRedacaoResponse } from './Validations';
-import { EnumCorrecaoRedacaoStatus } from '../../shared/CorrecaoRedacaoIA/Types';
 
 export async function registerCorrecaoIAListener(
   payload: RedacaoIACorrigidaEventPayload,
@@ -56,7 +56,7 @@ export async function streamCorrecaoRedacaoIA(
 
   if (!redacaoLivre) {
     return reply.sse({
-      event: 'error',
+      event: 'appError',
       data: JSON.stringify({
         statusCode: 404,
         message: 'Redação não encontrada',
@@ -66,7 +66,7 @@ export async function streamCorrecaoRedacaoIA(
 
   if (redacaoLivre.aluno.toString() !== payload.remetente) {
     return reply.sse({
-      event: 'error',
+      event: 'appError',
       data: JSON.stringify({
         statusCode: 403,
         message: 'Essa redação não é sua',
@@ -96,7 +96,7 @@ export async function streamCorrecaoRedacaoIADelay(
   ).lean();
   if (!redacaoLivre) {
     return reply.sse({
-      event: 'error',
+      event: 'appError',
       data: JSON.stringify({
         statusCode: 404,
         message: 'Redação não encontrada',
@@ -106,7 +106,7 @@ export async function streamCorrecaoRedacaoIADelay(
 
   if (redacaoLivre.aluno.toString() !== payload.remetente) {
     return reply.sse({
-      event: 'error',
+      event: 'appError',
       data: JSON.stringify({
         statusCode: 403,
         message: 'Essa redação não é sua',

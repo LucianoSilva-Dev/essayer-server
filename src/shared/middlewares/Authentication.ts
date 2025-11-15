@@ -17,7 +17,7 @@ export const optionalAuthMiddleware = async (
   if (!token) return;
   try {
     const payload = request.server.jwt.verify(token);
-    request.user = payload
+    request.user = payload;
   } catch (err) {
     console.error('Optional Auth JWT Verification Error:', err);
     reply
@@ -34,7 +34,7 @@ export const sseAuthMiddleware = async (
 
   if (!token) {
     const sseError: SSEGenericError = {
-      event: 'error',
+      event: 'appError',
       data: {
         statusCode: 401,
         message: 'Login necessário.',
@@ -47,11 +47,11 @@ export const sseAuthMiddleware = async (
 
   try {
     const payload = request.server.jwt.verify(token);
-    request.user = payload
+    request.user = payload;
   } catch (err) {
     console.error('SSE Auth JWT Verification Error:', err);
     const sseGenericError: SSEGenericError = {
-      event: 'error',
+      event: 'appError',
       data: {
         statusCode: 401,
         message: 'Login necessário',
