@@ -33,7 +33,7 @@ export const RedacaoLivreController: Controller = {
         .send({ error: response.message });
     }
 
-    return reply.status(201).send();
+    return reply.status(201).send(response.data);
   },
   getAll: async (request, reply) => {
     const { id } = request.user as RequestUserData;

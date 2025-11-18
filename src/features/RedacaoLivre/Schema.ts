@@ -9,6 +9,7 @@ import { idValidation } from '../../shared/Validations';
 import {
   corrigirRedacaoBodyValidation,
   createRedacaoLivreBodyValidation,
+  createRedacaoLivreResponse,
   getAllRedacaoLivreResponse,
   getRedacaoLivreResponse,
   updateRedacaoLivreBodyValidation,
@@ -21,7 +22,7 @@ export const RedacaoLivreSchema: EntitySchema = {
       security: [{ accessTokenCookieAuth: [] }],
       body: createRedacaoLivreBodyValidation,
       response: {
-        201: z.void(),
+        201: createRedacaoLivreResponse,
         400: schemaValidationError,
         403: genericError,
         500: genericError,

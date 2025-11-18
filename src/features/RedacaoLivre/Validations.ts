@@ -39,6 +39,10 @@ export const getCorrecaoRedacaoResponse = z.discriminatedUnion('status', [
 ]);
 
 
+export const createRedacaoLivreResponse = z.object({
+  id: z.string(),
+})
+
 export const getRedacaoLivreResponse = z.object({
   id: z.string(),
   tema: z.string(),
@@ -46,6 +50,8 @@ export const getRedacaoLivreResponse = z.object({
   duracao: z.number().optional(),
   correcoesIA: z.array(getCorrecaoRedacaoResponse).optional(),
   updatedAt: z.date(),
+  finalizada: z.boolean(),
+  dataRealizacao: z.date().optional(),
 });
 
 export const getAllRedacaoLivreResponse = z.object({
@@ -54,6 +60,8 @@ export const getAllRedacaoLivreResponse = z.object({
   texto: z.string().optional(),
   duracao: z.number().optional(),
   updatedAt: z.date(),
+  finalizada: z.boolean(),
+  dataRealizacao: z.date().optional(),
 });
 
 export const updateRedacaoLivreBodyValidation = z
@@ -69,6 +77,12 @@ export const updateRedacaoLivreBodyValidation = z
         invalid_type_error: 'O campo duracao precisa ser um número.',
       })
       .optional(),
+    finalizada: z.boolean({
+      invalid_type_error: 'O campo finalizada precisa ser um boolean.',
+    }).optional(),
+    dataRealizacao: z.string().datetime({
+      message: 'O campo dataRealizacao precisa ser uma data válida.',
+    }).optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: 'Forneça ao menos um campo para atualizar.',

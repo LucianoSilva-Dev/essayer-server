@@ -10,13 +10,13 @@ export const RedacaoLivreService = {
     try {
       const { tema, duracao } = body;
 
-      await RedacaoLivreModel.create({
+      const redacao = await RedacaoLivreModel.create({
         aluno: usuario,
         tema,
         duracao,
       });
 
-      return { success: true };
+      return { success: true, data: {id: redacao.id} };
     } catch (e) {
       console.log(e);
       return {
