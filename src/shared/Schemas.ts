@@ -9,7 +9,7 @@ export const schemaValidationError = z.object({
 });
 
 export const sseGenericError = z.object({
-    event: z.literal('error'),
+    event: z.literal('appError'),
     data: z.object({
         statusCode: z.number(),
         message: z.string()
