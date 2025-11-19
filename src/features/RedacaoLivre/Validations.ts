@@ -58,6 +58,7 @@ export const getAllRedacaoLivreResponse = z.object({
   id: z.string(),
   tema: z.string(),
   texto: z.string().optional(),
+  correcoesIA: z.array(getCorrecaoRedacaoResponse).optional(),
   duracao: z.number().optional(),
   updatedAt: z.date(),
   finalizada: z.boolean(),
@@ -70,7 +71,6 @@ export const updateRedacaoLivreBodyValidation = z
       .string({
         invalid_type_error: 'O campo texto precisa ser um texto.',
       })
-      .nonempty()
       .optional(),
     duracao: z
       .number({
