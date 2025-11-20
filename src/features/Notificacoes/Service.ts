@@ -18,7 +18,7 @@ export const NotificacaoService = {
   changeStatus: async (userId: string, notificacoesId: string[]) => {
     await NotificacaoModel.updateMany(
       {
-        id: notificacoesId,
+        _id: notificacoesId
       },
       {
         $addToSet: {
