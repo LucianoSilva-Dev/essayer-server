@@ -1,10 +1,10 @@
 import { AppEventEmitter } from '../../shared/Events/Emitter';
 import type {
-  RequisicaoProfessorStatusEventPayload,
-  TarefaCorrigidaEventPayload,
-  TarefaEnviadaEventPayload,
-  TarefaFechadaEventPayload,
-} from '../../shared/Events/Types';
+  NotificacaoRequisicaoProfessorStatus,
+  NotificacaoTarefaCorrigida,
+  NotificacaoTarefaEnviada,
+  NotificacaoTarefaFechada,
+} from './Types';
 import type { Controller, RequestUserData } from '../../shared/Types';
 import {
   createNotificacaoRequisicaoProfessorStatusListener,
@@ -47,30 +47,30 @@ export const NotificacaoController: Controller = {
     const { id: userId } = request.user as RequestUserData
     reply.sse({ comment: '' }) // evita fechar a conexão automaticamente
 
-    const tarefaEnviadaListenerWrapper = (payload: TarefaEnviadaEventPayload) =>
+    const tarefaEnviadaListenerWrapper = (payload: NotificacaoTarefaEnviada) =>
       streamNotificacaoTarefaEnviadaListener(payload, userId, reply);
 
-    const tarefaFechadaListenerWrapper = (payload: TarefaFechadaEventPayload) =>
+    const tarefaFechadaListenerWrapper = (payload: NotificacaoTarefaFechada) =>
       streamNotificacaoTarefaFechadaListener(payload, userId, reply);
 
     const tarefaCorrigidaListenerWrapper = (
-      payload: TarefaCorrigidaEventPayload
+      payload: NotificacaoTarefaCorrigida
     ) => streamNotificacaoTarefaCorrigidaListener(payload, userId, reply);
 
     const requisicaoProfessorStatusListenerWrapper = (
-      payload: RequisicaoProfessorStatusEventPayload
+      payload: NotificacaoRequisicaoProfessorStatus
     ) => streamNotificacaoRequisicaoProfessorStatusListener(payload, userId, reply);
 
-    AppEventEmitter.on('tarefa:enviada', tarefaEnviadaListenerWrapper);
-    AppEventEmitter.on('tarefa:fechada', tarefaFechadaListenerWrapper);
-    AppEventEmitter.on('tarefa:corrigida', tarefaCorrigidaListenerWrapper);
-    AppEventEmitter.on('requisicao-professor:status', requisicaoProfessorStatusListenerWrapper);
+    AppEventEmitter.on('notificacao:tarefa:enviada:criada', tarefaEnviadaListenerWrapper);
+    AppEventEmitter.on('notificacao:tarefa:fechada:criada', tarefaFechadaListenerWrapper);
+    AppEventEmitter.on('notificacao:tarefa:corrigida:criada', tarefaCorrigidaListenerWrapper);
+    AppEventEmitter.on('notificacao:requisicao-professor:status:criada', requisicaoProfessorStatusListenerWrapper);
 
     request.raw.once('close', () => {
-      AppEventEmitter.off('tarefa:enviada', tarefaEnviadaListenerWrapper);
-      AppEventEmitter.off('tarefa:fechada', tarefaFechadaListenerWrapper);
-      AppEventEmitter.off('tarefa:corrigida', tarefaCorrigidaListenerWrapper);
-      AppEventEmitter.off('requisicao-professor:status', requisicaoProfessorStatusListenerWrapper);
+      AppEventEmitter.off('notificacao:tarefa:enviada:criada', tarefaEnviadaListenerWrapper);
+      AppEventEmitter.off('notificacao:tarefa:fechada:criada', tarefaFechadaListenerWrapper);
+      AppEventEmitter.off('notificacao:tarefa:corrigida:criada', tarefaCorrigidaListenerWrapper);
+      AppEventEmitter.off('notificacao:requisicao-professor:status:criada', requisicaoProfessorStatusListenerWrapper);
       reply.sseContext.source.end()
     });
   },

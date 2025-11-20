@@ -14,5 +14,6 @@ export function formatTarefaCorrigida(
     tarefaId: notificacao.atividade._id.toString(),
     lido: notificacao.lidoPor.filter((value) => value === userId).length > 0,
     tipoNotificacao: TiposNotificacao.TarefaCorrigida,
+    id: notificacao._id.toString(),
   };
 }

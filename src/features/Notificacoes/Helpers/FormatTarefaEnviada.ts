@@ -12,7 +12,8 @@ export function formatTarefaEnviada(
 ): GetAllNotificacaoTarefaEnviadaDoc {
   return {
     tarefaId: notificacao.atividade._id.toString(),
-    lido: notificacao.lidoPor.filter((value) => value === userId).length > 0,
+    lido: notificacao.lidoPor.filter((value) => value.toString() === userId.toString()).length > 0,
     tipoNotificacao: TiposNotificacao.TarefaEnviada,
+    id: notificacao._id.toString(),
   };
 }

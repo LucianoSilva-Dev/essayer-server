@@ -1,4 +1,5 @@
 import type { FastifyReply } from 'fastify';
+import { AppEventEmitter } from '../../shared/Events/Emitter';
 import type {
   RequisicaoProfessorStatusEventPayload,
   TarefaCorrigidaEventPayload,
@@ -19,6 +20,12 @@ import type {
 } from './Types';
 
 import { TiposNotificacao } from './Types';
+import type {
+  NotificacaoRequisicaoProfessorStatus,
+  NotificacaoTarefaCorrigida,
+  NotificacaoTarefaEnviada,
+  NotificacaoTarefaFechada,
+} from './Types';
 
 // ---- Eventos que registram as notificações no banco de dados ----
 export async function createNotificacaoTarefaEnviadaListener(
@@ -36,7 +43,13 @@ export async function createNotificacaoTarefaEnviadaListener(
     console.error(
       'Erro: Não foi possivel criar a notificação de tarefa enviada',
     );
+    return;
   }
+
+  AppEventEmitter.emit(
+    'notificacao:tarefa:enviada:criada',
+    notificacaoTarefEnviada as unknown as NotificacaoTarefaEnviada,
+  );
 }
 
 export async function createNotificacaoTarefaFechadaListener(
@@ -54,7 +67,13 @@ export async function createNotificacaoTarefaFechadaListener(
     console.error(
       'Erro: Não foi possivel criar a notificação de tarefa fechada',
     );
+    return;
   }
+
+  AppEventEmitter.emit(
+    'notificacao:tarefa:fechada:criada',
+    notificacaoTarefFechada as unknown as NotificacaoTarefaFechada,
+  );
 }
 
 export async function createNotificacaoTarefaCorrigidaListener(
@@ -73,7 +92,13 @@ export async function createNotificacaoTarefaCorrigidaListener(
     console.error(
       'Erro: Não foi possivel criar a notificação de tarefa corrigida',
     );
+    return;
   }
+
+  AppEventEmitter.emit(
+    'notificacao:tarefa:corrigida:criada',
+    notificacaoTarefCorrigida as unknown as NotificacaoTarefaCorrigida,
+  );
 }
 
 export async function createNotificacaoRequisicaoProfessorStatusListener(
@@ -94,7 +119,13 @@ export async function createNotificacaoRequisicaoProfessorStatusListener(
     console.error(
       'Erro: Não foi possivel criar a notificação de requisição de professor',
     );
+    return;
   }
+
+  AppEventEmitter.emit(
+    'notificacao:requisicao-professor:status:criada',
+    notificacaoRequisicaoProfessorStatus as unknown as NotificacaoRequisicaoProfessorStatus,
+  );
 }
 
 // ---- Eventos que registram as notificações no banco de dados ----
@@ -102,79 +133,95 @@ export async function createNotificacaoRequisicaoProfessorStatusListener(
 // ---- Eventos que enviam notificacoes ao frontend ----
 
 export async function streamNotificacaoTarefaEnviadaListener(
-  payload: TarefaEnviadaEventPayload,
+  payload: NotificacaoTarefaEnviada,
   userId: string,
   reply: FastifyReply,
 ) {
-  if (!payload.remetentes.includes(userId)) return
+  if (
+    !payload.remetentes.some((remetente) => remetente.toString() === userId)
+  )
+    return;
 
   const notificacao: GetAllNotificacaoTarefaEnviadaDoc = {
     tipoNotificacao: TiposNotificacao.TarefaEnviada,
     lido: false,
-    tarefaId: payload.atividade._id.toString(),
+    tarefaId: payload.atividade.toString(),
+    id: payload._id.toString(),
   };
 
   reply.sse({
     event: TiposNotificacao.TarefaEnviada,
     data: JSON.stringify(notificacao),
-  })
+  });
 }
 
 export async function streamNotificacaoTarefaFechadaListener(
-  payload: TarefaFechadaEventPayload,
+  payload: NotificacaoTarefaFechada,
   userId: string,
   reply: FastifyReply,
 ) {
-  if (!payload.remetentes.includes(userId)) return
+  if (
+    !payload.remetentes.some((remetente) => remetente.toString() === userId)
+  )
+    return;
 
   const notificacao: GetAllNotificacaoTarefaFechadaDoc = {
     tipoNotificacao: TiposNotificacao.TarefaFechada,
     lido: false,
-    tarefaId: payload.atividade._id.toString(),
+    tarefaId: payload.atividade.toString(),
+    id: payload._id.toString(),
   };
 
   reply.sse({
     event: TiposNotificacao.TarefaFechada,
     data: JSON.stringify(notificacao),
-  })
+  });
 }
 
 export async function streamNotificacaoTarefaCorrigidaListener(
-  payload: TarefaCorrigidaEventPayload,
+  payload: NotificacaoTarefaCorrigida,
   userId: string,
   reply: FastifyReply,
 ) {
-  if (!payload.remetentes.includes(userId)) return
-  
+  if (
+    !payload.remetentes.some((remetente) => remetente.toString() === userId)
+  )
+    return;
+
   const notificacao: GetAllNotificacaoTarefaCorrigidaDoc = {
     tipoNotificacao: TiposNotificacao.TarefaCorrigida,
     lido: false,
-    tarefaId: payload.atividade._id.toString(),
+    tarefaId: payload.atividade.toString(),
+    id: payload._id.toString(),
   };
 
   reply.sse({
     event: TiposNotificacao.TarefaCorrigida,
     data: JSON.stringify(notificacao),
-  })
+  });
 }
 
 export async function streamNotificacaoRequisicaoProfessorStatusListener(
-  payload: RequisicaoProfessorStatusEventPayload,
+  payload: NotificacaoRequisicaoProfessorStatus,
   userId: string,
   reply: FastifyReply,
 ) {
-  if (payload.remetente !== userId) return
+  if (
+    !payload.remetentes.some((remetente) => remetente.toString() === userId)
+  )
+    return;
 
   const notificacao: GetAllNotificacaoRequisicaoProfessorStatusDoc = {
     tipoNotificacao: TiposNotificacao.RequisicaoProfessorStatus,
     lido: false,
-    requisicaoId: payload.requisicaoId,
-    motivo: payload.motivo
+    requisicaoId: payload.requisicaoId.toString(),
+    motivo: payload.motivo,
+    id: payload._id.toString(),
   };
 
   reply.sse({
     event: TiposNotificacao.RequisicaoProfessorStatus,
     data: JSON.stringify(notificacao),
-  })
+  });
 }
 // ---- Eventos que enviam notificacoes ao frontend ----

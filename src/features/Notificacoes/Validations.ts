@@ -6,24 +6,28 @@ export const getAllNotificacaoTarefaEnviadaDoc = z.object({
   tipoNotificacao: z.literal(TiposNotificacao.TarefaEnviada),
   lido: z.boolean(),
   tarefaId: z.string(),
+  id: z.string(),
 });
 
 export const getAllNotificacaoTarefaFechadaDoc = z.object({
   tipoNotificacao: z.literal(TiposNotificacao.TarefaFechada),
   lido: z.boolean(),
   tarefaId: z.string(),
+  id: z.string(),
 });
 
 export const getAllNotificacaoTarefaCorrigidaDoc = z.object({
   tipoNotificacao: z.literal(TiposNotificacao.TarefaCorrigida),
   lido: z.boolean(),
   tarefaId: z.string(),
+  id: z.string(),
 });
 
 export const getAllNotificacaoRequisicaoProfessorStatusDoc = z.object({
   tipoNotificacao: z.literal(TiposNotificacao.RequisicaoProfessorStatus),
   lido: z.boolean(),
   requisicaoId: z.string(),
+  id: z.string(),
   motivo: z.string().optional(),
 });
 

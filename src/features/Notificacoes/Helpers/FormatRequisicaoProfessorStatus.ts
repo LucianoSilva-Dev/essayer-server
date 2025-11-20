@@ -14,6 +14,7 @@ export function formatRequisicaoProfessorStatus(
     requisicaoId: notificacao.requisicaoId._id.toString(),
     lido: notificacao.lidoPor.filter((value) => value === userId).length > 0,
     tipoNotificacao: TiposNotificacao.RequisicaoProfessorStatus,
-    motivo: notificacao.motivo
+    motivo: notificacao.motivo,
+    id: notificacao._id.toString(),
   };
 }

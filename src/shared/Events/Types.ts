@@ -1,6 +1,12 @@
 import type { GetCorrecaoRedacaoResponse } from '../../features/RedacaoLivre/Types';
 import type { Atividade } from '../Atividade/Types';
 import type { CorrecaoRedacaoAIValidation } from '../CorrecaoRedacaoIA/Types';
+import type {
+  NotificacaoRequisicaoProfessorStatus,
+  NotificacaoTarefaCorrigida,
+  NotificacaoTarefaEnviada,
+  NotificacaoTarefaFechada,
+} from '../../features/Notificacoes/Types';
 
 // Notificações Sobre tarefas
 export type TarefaEnviadaEventPayload = {
@@ -52,4 +58,8 @@ export type AppEventMap = {
   'redacao:ia:persistida': RedacaoIAPersistidaEventPayload;
   'redacao:ia:delay': RedacaoComAtrasoEventPayload;
   'requisicao-professor:status': RequisicaoProfessorStatusEventPayload;
+  'notificacao:tarefa:enviada:criada': NotificacaoTarefaEnviada;
+  'notificacao:tarefa:fechada:criada': NotificacaoTarefaFechada;
+  'notificacao:tarefa:corrigida:criada': NotificacaoTarefaCorrigida;
+  'notificacao:requisicao-professor:status:criada': NotificacaoRequisicaoProfessorStatus;
 };

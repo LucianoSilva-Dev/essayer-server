@@ -14,5 +14,6 @@ export function formatTarefaFechada(
     tarefaId: notificacao.atividade._id.toString(),
     lido: notificacao.lidoPor.filter((value) => value === userId).length > 0,
     tipoNotificacao: TiposNotificacao.TarefaFechada,
+    id: notificacao._id.toString(),
   };
 }
