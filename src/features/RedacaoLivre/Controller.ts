@@ -16,6 +16,7 @@ import { RedacaoLivreService } from './Service';
 import type {
   CorrigirRedacaoBody,
   CreateRedacaoLivreBody,
+  GetAllRedacaoLivreQueryBody,
   UpdateRedacaoLivreBody,
 } from './Types';
 
@@ -37,8 +38,9 @@ export const RedacaoLivreController: Controller = {
   },
   getAll: async (request, reply) => {
     const { id } = request.user as RequestUserData;
+    const queryBody = request.query as GetAllRedacaoLivreQueryBody
 
-    const response = await RedacaoLivreService.getAll(id);
+    const response = await RedacaoLivreService.getAll(id, queryBody);
     if (!response.success) {
       return reply
         .status(response.status as number)

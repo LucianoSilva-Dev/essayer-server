@@ -3,7 +3,11 @@ import { CorrigirRedacaoQueue } from '../../shared/CorrecaoRedacaoIA/Queue';
 import { EnumCorrecaoRedacaoStatus } from '../../shared/CorrecaoRedacaoIA/Types';
 import { checkModelAvailability } from '../../shared/CorrecaoRedacaoIA/Worker/CheckModelAvailability';
 import { RedacaoLivreModel } from './Model';
-import type { CreateRedacaoLivreBody, UpdateRedacaoLivreBody } from './Types';
+import type {
+  CreateRedacaoLivreBody,
+  GetAllRedacaoLivreQueryBody,
+  UpdateRedacaoLivreBody,
+} from './Types';
 
 export const RedacaoLivreService = {
   create: async (body: CreateRedacaoLivreBody, usuario: string) => {
@@ -16,7 +20,7 @@ export const RedacaoLivreService = {
         duracao,
       });
 
-      return { success: true, data: {id: redacao.id} };
+      return { success: true, data: { id: redacao.id } };
     } catch (e) {
       console.log(e);
       return {
@@ -26,9 +30,13 @@ export const RedacaoLivreService = {
       };
     }
   },
-  getAll: async (usuario: string) => {
+  getAll: async (usuario: string, queryBody: GetAllRedacaoLivreQueryBody) => {
     try {
-      const redacoes = await RedacaoLivreModel.find({ aluno: usuario });
+      const filtro = queryBody.tema
+        ? { aluno: usuario, tema: new RegExp(queryBody.tema, 'i') }
+        : { aluno: usuario };
+
+      const redacoes = await RedacaoLivreModel.find(filtro);
 
       return { success: true, data: redacoes };
     } catch (e) {

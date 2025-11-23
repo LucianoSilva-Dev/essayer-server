@@ -1,4 +1,4 @@
-import type { Document, HydratedDocument, Types } from 'mongoose';
+import type { Types } from 'mongoose';
 import type { z } from 'zod';
 import type {
   createTurmaBodyValidation,
@@ -46,4 +46,4 @@ export type GetAlunosResponse = z.infer<typeof getAlunosResponse>;
 export type RegenerarCodigoResponse = z.infer<typeof regenerarCodigoResponse>;
 export type GetAtividadesResponse = z.infer<typeof getAtividadesResponse>;
 export type GetAllTurmaQueryBody = z.infer<typeof getAllTurmaQueryValidation>
-export type getAllAtividadesQueryBody = z.infer<typeof getAllAtividadesQueryValidation>
+export type GetAllAtividadesQueryBody = z.infer<typeof getAllAtividadesQueryValidation>

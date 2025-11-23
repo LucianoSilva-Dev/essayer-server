@@ -2,7 +2,7 @@ import type { PopulatedPerfilUsuario } from '../../shared/Types';
 import { TurmaModel } from './Model';
 import type {
   CreateTurmaBody,
-  getAllAtividadesQueryBody,
+  GetAllAtividadesQueryBody,
   GetAllTurmaQueryBody,
   GetAlunosResponse,
   Turma,
@@ -423,7 +423,7 @@ export const TurmaService = {
   getAllAtividades: async (
     turmaId: string,
     userId: string,
-    queryBody: getAllAtividadesQueryBody,
+    queryBody: GetAllAtividadesQueryBody,
   ) => {
     try {
       const id = new Types.ObjectId(userId)
@@ -498,7 +498,7 @@ export const TurmaService = {
   getAllAtividadesCriador: async (
     turmaId: string,
     userId: string,
-    queryBody: getAllAtividadesQueryBody,
+    queryBody: GetAllAtividadesQueryBody,
   ) => {
     try {
       const id = new Types.ObjectId(userId)

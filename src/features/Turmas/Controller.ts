@@ -5,7 +5,7 @@ import type {
   UpdateTurmaBody,
   SolicitarEntradaBody,
   GetAllTurmaQueryBody,
-  getAllAtividadesQueryBody,
+  GetAllAtividadesQueryBody,
 } from './Types';
 
 export const TurmaController: Controller = {
@@ -156,7 +156,7 @@ export const TurmaController: Controller = {
   getAllAtividades: async (request, reply) => {
     const { id: turmaId } = request.params as { id: string };
     const { id: userId } = request.user as RequestUserData;
-    const queryBody = request.query as getAllAtividadesQueryBody;
+    const queryBody = request.query as GetAllAtividadesQueryBody;
 
     const response = await TurmaService.getAllAtividades(
       turmaId,
@@ -172,7 +172,7 @@ export const TurmaController: Controller = {
   getAllAtividadesCriador: async (request, reply) => {
     const { id: turmaId } = request.params as { id: string };
     const { id: userId } = request.user as RequestUserData;
-    const queryBody = request.query as getAllAtividadesQueryBody;
+    const queryBody = request.query as GetAllAtividadesQueryBody;
 
     const response = await TurmaService.getAllAtividadesCriador(
       turmaId,

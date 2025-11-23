@@ -10,6 +10,7 @@ import {
   corrigirRedacaoBodyValidation,
   createRedacaoLivreBodyValidation,
   createRedacaoLivreResponse,
+  getAllRedacaoLivreQueryBody,
   getAllRedacaoLivreResponse,
   getRedacaoLivreResponse,
   updateRedacaoLivreBodyValidation,
@@ -34,6 +35,7 @@ export const RedacaoLivreSchema: EntitySchema = {
     preHandler: authMiddleware,
     schema: {
       security: [{ accessTokenCookieAuth: [] }],
+      querystring: getAllRedacaoLivreQueryBody,
       response: {
         200: z.array(getAllRedacaoLivreResponse),
         400: schemaValidationError,

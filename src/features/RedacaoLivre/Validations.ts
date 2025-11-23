@@ -9,9 +9,11 @@ export const createRedacaoLivreBodyValidation = z.object({
       invalid_type_error: 'O campo tema precisa ser um texto.',
     })
     .nonempty('O campo tema não pode estar vazio.'),
-  duracao: z.number({
-    invalid_type_error: 'O campo duracao precisa ser um número.',
-  }).optional(),
+  duracao: z
+    .number({
+      invalid_type_error: 'O campo duracao precisa ser um número.',
+    })
+    .optional(),
 });
 
 const getCorrecaoRedacaoFinalizadaResponse = z.object({
@@ -38,10 +40,9 @@ export const getCorrecaoRedacaoResponse = z.discriminatedUnion('status', [
   getCorrecaoRedacaoPendenteOuErroResponse,
 ]);
 
-
 export const createRedacaoLivreResponse = z.object({
   id: z.string(),
-})
+});
 
 export const getRedacaoLivreResponse = z.object({
   id: z.string(),
@@ -77,12 +78,17 @@ export const updateRedacaoLivreBodyValidation = z
         invalid_type_error: 'O campo duracao precisa ser um número.',
       })
       .optional(),
-    finalizada: z.boolean({
-      invalid_type_error: 'O campo finalizada precisa ser um boolean.',
-    }).optional(),
-    dataRealizacao: z.string().datetime({
-      message: 'O campo dataRealizacao precisa ser uma data válida.',
-    }).optional(),
+    finalizada: z
+      .boolean({
+        invalid_type_error: 'O campo finalizada precisa ser um boolean.',
+      })
+      .optional(),
+    dataRealizacao: z
+      .string()
+      .datetime({
+        message: 'O campo dataRealizacao precisa ser uma data válida.',
+      })
+      .optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: 'Forneça ao menos um campo para atualizar.',
@@ -101,4 +107,13 @@ export const corrigirRedacaoBodyValidation = z.object({
       invalid_type_error: 'O campo textoRedacao precisa ser um texto.',
     })
     .nonempty('O campo tema não pode estar vazio.'),
+});
+
+export const getAllRedacaoLivreQueryBody = z.object({
+  tema: z
+    .string({
+      invalid_type_error: 'O campo tema precisa ser um texto',
+    })
+    .nonempty('O campo tema não pode estar vazio')
+    .optional(),
 });

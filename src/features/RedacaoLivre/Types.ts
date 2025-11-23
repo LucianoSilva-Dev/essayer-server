@@ -1,5 +1,5 @@
 import type { z } from "zod";
-import type { corrigirRedacaoBodyValidation, createRedacaoLivreBodyValidation, getCorrecaoRedacaoResponse, updateRedacaoLivreBodyValidation } from "./Validations";
+import type { corrigirRedacaoBodyValidation, createRedacaoLivreBodyValidation, getAllRedacaoLivreQueryBody, getCorrecaoRedacaoResponse, updateRedacaoLivreBodyValidation } from "./Validations";
 
 export enum CorrecaoRedacaoEvents {
     RedacaoCorrigida = "RedacaoCorrigida",
@@ -9,6 +9,7 @@ export enum CorrecaoRedacaoEvents {
 
 export type CreateRedacaoLivreBody = z.infer<typeof createRedacaoLivreBodyValidation>
 export type UpdateRedacaoLivreBody = z.infer<typeof updateRedacaoLivreBodyValidation>
+export type GetAllRedacaoLivreQueryBody = z.infer<typeof getAllRedacaoLivreQueryBody>
 
 //IA
 export type CorrigirRedacaoBody = z.infer<typeof corrigirRedacaoBodyValidation>
