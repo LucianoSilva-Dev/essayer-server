@@ -128,7 +128,7 @@ export const getRedacaoResponse = z.object({
     .array(
       z.object({
         id: z.string(),
-        aluno: z.string(),
+        aluno: perfilUsuarioResponse,
         texto: z.string().optional(),
         dataEnvio: z.date().optional(),
         feedback: feedbackDoc.optional(),

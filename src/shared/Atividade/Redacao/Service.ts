@@ -59,9 +59,73 @@ export const RedacaoService = {
         },
         { $unwind: '$turmas' },
         {
+          $unwind: {
+            path: '$respostas',
+            preserveNullAndEmptyArrays: true
+          }
+        },
+        {
+          $lookup: {
+            from: 'usuarios',
+            localField: 'respostas.aluno',
+            foreignField: '_id',
+            as: 'alunoInfo'
+          }
+        },
+        {
+          $unwind: {
+            path: '$alunoInfo',
+            preserveNullAndEmptyArrays: true
+          }
+        },
+        {
+          $addFields: {
+            respostas: {
+              $mergeObjects: [
+                '$respostas',
+                {
+                  nome: '$alunoInfo.nome',
+                  fotoPath: '$alunoInfo.fotoPath'
+                }
+              ]
+            }
+          }
+        },
+        {
+          $group: {
+            _id: '$_id',
+            doc: { $first: '$$ROOT' },
+            respostas: {
+              $push: '$respostas'
+            }
+          }
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: [
+                '$doc',
+                {
+                  respostas: '$respostas'
+                }
+              ]
+            }
+          }
+        },
+        {
+          $addFields: {
+            primeiraResposta: {
+              $arrayElemAt: [
+                '$respostas', 0
+              ]
+            }
+          }
+        },
+        {
           $project: {
             _id: 0,
             id: { $toString: '$_id' },
+            primeiraResposta: 1,
             titulo: 1,
             descricao: 1,
             dataLimite: 1,
@@ -75,28 +139,44 @@ export const RedacaoService = {
               }
             },
             respostas: {
-              $map: {
-                input: '$respostas',
-                as: 'resp',
-                in: {
-                  id: { $toString: '$$resp._id' },
-                  aluno: { $toString: '$$resp.aluno' },
-                  texto: '$$resp.texto',
-                  dataEnvio: '$$resp.dataEnvio',
-                  feedback: {
-                    notaC1: '$$resp.feedback.notaC1',
-                    notaC2: '$$resp.feedback.notaC2',
-                    notaC3: '$$resp.feedback.notaC3',
-                    notaC4: '$$resp.feedback.notaC4',
-                    notaC5: '$$resp.feedback.notaC5',
-                    feedbackC1: '$$resp.feedback.feedbackC1',
-                    feedbackC2: '$$resp.feedback.feedbackC2',
-                    feedbackC3: '$$resp.feedback.feedbackC3',
-                    feedbackC4: '$$resp.feedback.feedbackC4',
-                    feedbackC5: '$$resp.feedback.feedbackC5',
+              $cond: {
+                if: { $ifNull: ['$primeiraResposta.aluno', false] },
+                then: {
+                  $map: {
+                    input: '$respostas',
+                    as: 'resp',
+                    in: {
+                      id: { $toString: '$$resp._id' },
+                      aluno: {
+                        id: { $toString: '$$resp.aluno' },
+                        nome: "$$resp.nome",
+                        fotoPath: '$$resp.fotoPath'
+                      },
+                      texto: '$$resp.texto',
+                      dataEnvio: '$$resp.dataEnvio',
+                      feedback: {
+                        $cond: {
+                          if: { $not: { $ifNull: ['$$resp.feedback', false] } },
+                          then: '$$REMOVE',
+                          else: {
+                            notaC1: '$$resp.feedback.notaC1',
+                            notaC2: '$$resp.feedback.notaC2',
+                            notaC3: '$$resp.feedback.notaC3',
+                            notaC4: '$$resp.feedback.notaC4',
+                            notaC5: '$$resp.feedback.notaC5',
+                            feedbackC1: '$$resp.feedback.feedbackC1',
+                            feedbackC2: '$$resp.feedback.feedbackC2',
+                            feedbackC3: '$$resp.feedback.feedbackC3',
+                            feedbackC4: '$$resp.feedback.feedbackC4',
+                            feedbackC5: '$$resp.feedback.feedbackC5',
+                          }
+                        }
+                      }
+                    },
                   },
-                }
-              },
+                },
+                else: []
+              }
             },
             turma: {
               id: { $toString: '$turmas._id' },

@@ -118,6 +118,7 @@ export const getAtividadesCriadorResponse = z.array(
     descricao: z.string(),
     dataLimite: z.date().nullable(),
     usuariosResponderam: z.array(perfilUsuarioResponse),
+    totalMembros: z.number()
   }),
 );
 

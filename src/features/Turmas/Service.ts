@@ -560,7 +560,8 @@ export const TurmaService = {
                   fotoPath: '$$usuario.fotoPath'
                 }
               }
-            }
+            },
+            totalMembros: { $size: '$membros' }
           }
         }
       ])
