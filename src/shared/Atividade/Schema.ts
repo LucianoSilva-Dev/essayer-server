@@ -62,7 +62,10 @@ export const AtividadeSchema: EntitySchema = {
     preHandler: authMiddleware,
     schema: {
       security: [{ accessTokenCookieAuth: [] }],
-      params: idValidation,
+      params: z.object({
+        id: idValidation.shape.id,
+        alunoId: idValidation.shape.id,
+      }),
       response: {
         200: getCorrecaoRedacao,
         400: schemaValidationError,

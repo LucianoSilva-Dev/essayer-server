@@ -33,8 +33,8 @@ export const AtividadeService = {
             from: 'atividades',
             localField: '_id',
             foreignField: 'turma',
-            as: 'atividades'
-          }
+            as: 'atividades',
+          },
         },
         { $unwind: '$atividades' },
         { $sort: { 'atividades.createdAt': -1 } },
@@ -50,20 +50,20 @@ export const AtividadeService = {
                   input: '$atividades.respostas',
                   as: 'resp',
                   cond: {
-                    $ifNull: ['$$resp.dataEnvio', false]
-                  }
-                }
-              }
+                    $ifNull: ['$$resp.dataEnvio', false],
+                  },
+                },
+              },
             },
             createdAt: '$atividades.createdAt',
-            totalAlunos: { $size: '$membros' }
-          }
-        }
-      ])
+            totalAlunos: { $size: '$membros' },
+          },
+        },
+      ]);
 
-      return { success: true, data: atividades }
+      return { success: true, data: atividades };
     } catch (e) {
-      console.log(e)
+      console.log(e);
       return {
         success: false,
         status: 500,
@@ -81,8 +81,8 @@ export const AtividadeService = {
             from: 'atividades',
             localField: '_id',
             foreignField: 'turma',
-            as: 'atividades'
-          }
+            as: 'atividades',
+          },
         },
         { $unwind: '$atividades' },
         {
@@ -92,11 +92,14 @@ export const AtividadeService = {
                 input: '$atividades.respostas',
                 as: 'resp',
                 cond: {
-                  $and: [{ $eq: ['$$resp.aluno', new Types.ObjectId(id)] }, { $ifNull: ['$$resp.dataEnvio', false] }]
-                }
-              }
-            }
-          }
+                  $and: [
+                    { $eq: ['$$resp.aluno', new Types.ObjectId(id)] },
+                    { $ifNull: ['$$resp.dataEnvio', false] },
+                  ],
+                },
+              },
+            },
+          },
         },
         {
           $project: {
@@ -108,26 +111,39 @@ export const AtividadeService = {
             status: {
               $switch: {
                 branches: [
-                  // biome-ignore lint/suspicious/noThenProperty: É a sintaxe do $switch
-                  { case: { $gt: [{ $size: '$respostasEnviadas' }, 0] }, then: 'Concluída' },
-                  // biome-ignore lint/suspicious/noThenProperty: É a sintaxe do $switch
-                  { case: { $or: [{ $not: { $ifNull: ['$atividades.dataLimite', false] } }, { $gt: ['$atividades.dataLimite', new Date()] }] }, then: 'Pendente' },
+                  {
+                    case: { $gt: [{ $size: '$respostasEnviadas' }, 0] },
+                    // biome-ignore lint/suspicious/noThenProperty: É a sintaxe do $switch
+                    then: 'Concluída',
+                  },
+                  {
+                    case: {
+                      $or: [
+                        {
+                          $not: { $ifNull: ['$atividades.dataLimite', false] },
+                        },
+                        { $gt: ['$atividades.dataLimite', new Date()] },
+                      ],
+                    },
+                    // biome-ignore lint/suspicious/noThenProperty: É a sintaxe do $switch
+                    then: 'Pendente',
+                  },
                 ],
-                default: "Encerrada"
-              }
+                default: 'Encerrada',
+              },
             },
             turma: {
               id: { $toString: '$_id' },
               nome: '$nome',
-              iconeId: '$iconeId'
-            }
-          }
-        }
-      ])  
+              iconeId: '$iconeId',
+            },
+          },
+        },
+      ]);
 
-      return { success: true, data: atividades }
+      return { success: true, data: atividades };
     } catch (e) {
-      console.log(e)
+      console.log(e);
       return {
         success: false,
         status: 500,
@@ -136,29 +152,43 @@ export const AtividadeService = {
     }
   },
 
-  getCorrecaoRedacao: async (id: string, requisitante: string) => {
+  getCorrecaoRedacao: async (
+    ativId: string,
+    alunoId: string,
+    requisitante: { id: string; cargo: string },
+  ) => {
     const ativs = await RedacaoAtividadeModel.aggregate([
-      {$match: {_id: new Types.ObjectId(id)}},
+      { $match: { _id: new Types.ObjectId(ativId) } },
       {
         $unwind: {
           path: '$respostas',
-          preserveNullAndEmptyArrays: true
-        }
+          preserveNullAndEmptyArrays: true,
+        },
       },
-      {$match: {'respostas.aluno': new Types.ObjectId(requisitante)}},
+      { $match: { 'respostas.aluno': new Types.ObjectId(alunoId) } },
+      {
+        $lookup: {
+          from: 'turmas',
+          localField: 'turma',
+          foreignField: '_id',
+          as: 'turma',
+        },
+      },
+      { $unwind: '$turma' },
       {
         $project: {
           _id: 0,
-          id: {$toString: '$respostas._id'},
+          id: { $toString: '$respostas._id' },
           titulo: 1,
           tema: 1,
           texto: '$respostas.texto',
-          feedback: '$respostas.feedback'
-        }
-      }
-    ])
+          feedback: '$respostas.feedback',
+          criador: { $toString: '$turma.criador' },
+        },
+      },
+    ]);
 
-    const atividade = ativs[0]
+    const atividade = ativs[0];
 
     if (!atividade) {
       return {
@@ -168,9 +198,21 @@ export const AtividadeService = {
       };
     }
 
+    if (
+      requisitante.cargo !== 'admin' &&
+      atividade.criador !== requisitante.id &&
+      requisitante.id !== alunoId
+    ) {
+      return {
+        success: false,
+        status: 403,
+        message: 'Você não tem permissão para acessar essa atividade.',
+      };
+    }
+
     return {
       success: true,
-      data: atividade
-    }
-  }
-}
+      data: atividade,
+    };
+  },
+};

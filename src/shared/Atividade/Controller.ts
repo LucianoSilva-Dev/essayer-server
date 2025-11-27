@@ -46,12 +46,13 @@ export const AtividadeController: Controller = {
   },
 
   getCorrecaoRedacao: async (request, reply) => {
-    const { id: requisitante } = request.user as RequestUserData;
-    const { id } = request.params as { id: string };
+    const user = request.user as RequestUserData
+    const { id, alunoId } = request.params as { id: string, alunoId: string };
 
     const response = await AtividadeService.getCorrecaoRedacao(
       id,
-      requisitante
+      alunoId,
+      user
     );
 
     if (!response.success) {
