@@ -30,6 +30,7 @@ import { RequisicaoProfessorRoutes } from './shared/RequisicaoProfessor/Routes';
 import fastifyCookie from '@fastify/cookie';
 import { cookiesConfig } from './config/cookies';
 import { unsignCookiesHook } from './shared/hooks/UnsignCookiesHook';
+import { RequisicaoEmailRoutes } from './shared/RequisicaoEmail/Routes';
 
 class App {
   readonly app: FastifyInstance;
@@ -79,6 +80,7 @@ class App {
     this.app.register(RedacaoLivreRoutes, {prefix: '/usuario/redacao'})
     this.app.register(NotificacaoRoutes, { prefix: '/notificacao' })
     this.app.register(BullBoardRoutes, { prefix: '/bull-board' });
+    this.app.register(RequisicaoEmailRoutes, {prefix: '/requisicao-email'})
   }
 }
 
