@@ -493,15 +493,12 @@ export const RedacaoService = {
             criador: { $toString: '$turmaInfo.criador' },
             totalResp: 1,
             createdAt: '$respostasEnviadas.createdAt',
-            test: { $subtract: ['$respostasEnviadas.dataEnvio', '$respostasEnviadas.createdAt'] },
             tempoEmMinutos: { $divide: [{ $subtract: ['$respostasEnviadas.dataEnvio', '$respostasEnviadas.createdAt'] }, 1000 * 60] },
           }
         }
       ]);
 
       const atividade = ativs[0];
-
-      console.log(atividade.createdAt);
 
       if (ativs.length == 0) {
         return {

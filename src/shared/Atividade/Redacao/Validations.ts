@@ -223,7 +223,7 @@ export const getAllRespostasRedacaoResponse = z.object({
       dataEnvio: z.date(),
       feedback: feedbackDoc.optional(),
       aluno: perfilUsuarioResponse,
-      tempoEmMinutos: z.number(),
+      tempoEmMinutos: z.number().nullable(),
     }),
   ),
   paginacao: z.object({
