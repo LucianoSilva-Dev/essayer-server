@@ -182,7 +182,13 @@ export const RedacaoService = {
               id: { $toString: '$turmas._id' },
               nome: '$turmas.nome',
               criador: { $toString: '$turmas.criador' },
-              membros: '$turmas.membros'
+              membros: {
+                $map: {
+                  input: '$turmas.membros',
+                  as: 'mem',
+                  in: {$toString: '$$mem'}
+                }
+              }
             },
           }
         }
@@ -200,7 +206,7 @@ export const RedacaoService = {
 
       if (
         atividade.turma.criador !== requisitante &&
-        !atividade.turma.membros.includes(new Types.ObjectId(requisitante))
+        !atividade.turma.membros.includes(requisitante)
       ) {
         return {
           success: false,
