@@ -462,16 +462,22 @@ export const RedacaoService = {
             texto: '$respostasEnviadas.texto',
             dataEnvio: '$respostasEnviadas.dataEnvio',
             feedback: {
-              notaC1: '$respostasEnviadas.feedback.notaC1',
-              notaC2: '$respostasEnviadas.feedback.notaC2',
-              notaC3: '$respostasEnviadas.feedback.notaC3',
-              notaC4: '$respostasEnviadas.feedback.notaC4',
-              notaC5: '$respostasEnviadas.feedback.notaC5',
-              feedbackC1: '$respostasEnviadas.feedback.feedbackC1',
-              feedbackC2: '$respostasEnviadas.feedback.feedbackC2',
-              feedbackC3: '$respostasEnviadas.feedback.feedbackC3',
-              feedbackC4: '$respostasEnviadas.feedback.feedbackC4',
-              feedbackC5: '$respostasEnviadas.feedback.feedbackC5',
+              $cond: {
+                if: { $not: { $ifNull: ['$respostasEnviadas.feedback', false] } },
+                then: '$$REMOVE',
+                else: {
+                  notaC1: '$respostasEnviadas.feedback.notaC1',
+                  notaC2: '$respostasEnviadas.feedback.notaC2',
+                  notaC3: '$respostasEnviadas.feedback.notaC3',
+                  notaC4: '$respostasEnviadas.feedback.notaC4',
+                  notaC5: '$respostasEnviadas.feedback.notaC5',
+                  feedbackC1: '$respostasEnviadas.feedback.feedbackC1',
+                  feedbackC2: '$respostasEnviadas.feedback.feedbackC2',
+                  feedbackC3: '$respostasEnviadas.feedback.feedbackC3',
+                  feedbackC4: '$respostasEnviadas.feedback.feedbackC4',
+                  feedbackC5: '$respostasEnviadas.feedback.feedbackC5',
+                },
+              }
             },
             aluno: {
               id: { $toString: '$alunoInfo._id' },
@@ -481,12 +487,15 @@ export const RedacaoService = {
             criador: { $toString: '$turmaInfo.criador' },
             totalResp: 1,
             createdAt: '$respostasEnviadas.createdAt',
+            test: { $subtract: ['$respostasEnviadas.dataEnvio', '$respostasEnviadas.createdAt'] },
             tempoEmMinutos: { $divide: [{ $subtract: ['$respostasEnviadas.dataEnvio', '$respostasEnviadas.createdAt'] }, 1000 * 60] },
           }
         }
       ]);
 
       const atividade = ativs[0];
+
+      console.log(atividade.createdAt);
 
       if (ativs.length == 0) {
         return {
