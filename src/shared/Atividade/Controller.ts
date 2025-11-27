@@ -14,7 +14,7 @@ export const AtividadeController: Controller = {
         .send({ error: response.message });
     }
 
-    return reply.status(204).send()
+    return reply.status(204).send();
   },
 
   recentes: async (request, reply) => {
@@ -32,7 +32,7 @@ export const AtividadeController: Controller = {
   },
 
   getAllAtividadesAluno: async (request, reply) => {
-    const {id} = request.user as RequestUserData;
+    const { id } = request.user as RequestUserData;
 
     const response = await AtividadeService.getAllAtividadesAluno(id);
 
@@ -43,5 +43,23 @@ export const AtividadeController: Controller = {
     }
 
     return reply.status(200).send(response.data);
-  }
+  },
+
+  getCorrecaoRedacao: async (request, reply) => {
+    const { id: requisitante } = request.user as RequestUserData;
+    const { id } = request.params as { id: string };
+
+    const response = await AtividadeService.getCorrecaoRedacao(
+      id,
+      requisitante
+    );
+
+    if (!response.success) {
+      return reply
+        .status(response.status as number)
+        .send({ error: response.message });
+    }
+
+    return reply.status(200).send(response.data);
+  },
 };

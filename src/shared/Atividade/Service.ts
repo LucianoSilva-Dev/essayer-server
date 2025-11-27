@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 import { TurmaModel } from '../../features/Turmas/Model';
 import { AtividadeModel } from './Model';
+import { RedacaoAtividadeModel } from './Redacao/Model';
 
 export const AtividadeService = {
   delete: async (id: string, requisitante: string) => {
@@ -132,6 +133,44 @@ export const AtividadeService = {
         status: 500,
         message: 'Internal Server Error',
       };
+    }
+  },
+
+  getCorrecaoRedacao: async (id: string, requisitante: string) => {
+    const ativs = await RedacaoAtividadeModel.aggregate([
+      {$match: {_id: new Types.ObjectId(id)}},
+      {
+        $unwind: {
+          path: '$respostas',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {$match: {'respostas.aluno': new Types.ObjectId(requisitante)}},
+      {
+        $project: {
+          _id: 0,
+          id: {$toString: '$respostas._id'},
+          titulo: 1,
+          tema: 1,
+          texto: '$respostas.texto',
+          feedback: '$respostas.feedback'
+        }
+      }
+    ])
+
+    const atividade = ativs[0]
+
+    if (!atividade) {
+      return {
+        success: false,
+        status: 404,
+        message: 'Atividade não encontrada',
+      };
+    }
+
+    return {
+      success: true,
+      data: atividade
     }
   }
 }

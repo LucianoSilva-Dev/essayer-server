@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { feedbackDoc } from "./Redacao/Validations";
 
 export const tiposAtividade = z.enum(['Redacao'])
 
@@ -25,3 +26,10 @@ export const getAllAtividadesAlunoResponse = z.array(z.object({
   })
 }))
 
+export const getCorrecaoRedacao = z.object({
+  id: z.string(),
+  titulo: z.string(),
+  tema: z.string(),
+  texto: z.string().optional(),
+  feedback: feedbackDoc.optional()
+})

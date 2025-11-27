@@ -8,6 +8,7 @@ import {
   AtividadesRecentesResponse,
   getAllAtividadesAlunoResponse,
 } from './Validations';
+import { getCorrecaoRedacaoResponse } from '../../features/RedacaoLivre/Validations';
 
 export const AtividadeSchema: EntitySchema = {
   delete: {
@@ -56,4 +57,19 @@ export const AtividadeSchema: EntitySchema = {
         'Retorna todas as atividades de todas as turmas que o usuário é membro.',
     },
   },
+
+  getCorrecaoRedacao: {
+    preHandler: authMiddleware,
+    schema: {
+      security: [{ accessTokenCookieAuth: [] }],
+      params: idValidation,
+      response: {
+        200: getCorrecaoRedacaoResponse,
+        400: schemaValidationError,
+        403: genericError,
+        500: genericError,
+      },
+      summary: 'Retorna a correção de uma atividade.'
+    },
+  }
 };
