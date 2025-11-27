@@ -7,8 +7,8 @@ import { idValidation } from '../Validations';
 import {
   AtividadesRecentesResponse,
   getAllAtividadesAlunoResponse,
+  getCorrecaoRedacao,
 } from './Validations';
-import { getCorrecaoRedacaoResponse } from '../../features/RedacaoLivre/Validations';
 
 export const AtividadeSchema: EntitySchema = {
   delete: {
@@ -64,7 +64,7 @@ export const AtividadeSchema: EntitySchema = {
       security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
       response: {
-        200: getCorrecaoRedacaoResponse,
+        200: getCorrecaoRedacao,
         400: schemaValidationError,
         403: genericError,
         500: genericError,
