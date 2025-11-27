@@ -32,9 +32,8 @@ export const createArtigoBodyValidation = z.object({
     required_error: 'O campo autor é obrigatório.',
   }),
   fonte: z.string({
-    invalid_type_error: 'O campo fonte precisa ser um texto.',
-    required_error: 'O campo fonte é obrigatório.',
-  }),
+    invalid_type_error: 'O campo fonte precisa ser um texto.'
+  }).optional(),
   subtopicos: z
     .array(
       z.string({
