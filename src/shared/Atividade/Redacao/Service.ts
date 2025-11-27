@@ -1,15 +1,15 @@
 import { Types } from 'mongoose';
 import { TurmaModel } from '../../../features/Turmas/Model';
 import type {
-  TarefaCorrigidaEventPayload,
-  TarefaEnviadaEventPayload,
+    TarefaCorrigidaEventPayload,
+    TarefaEnviadaEventPayload,
 } from '../../Events/Types';
 import { RedacaoAtividadeModel } from './Model';
 import type {
-  CreateRedacaoBody,
-  FeedbackRedacaoBody,
-  getAllRespostasRedacaoQueryBody,
-  UpdateRedacaoBody,
+    CreateRedacaoBody,
+    FeedbackRedacaoBody,
+    getAllRespostasRedacaoQueryBody,
+    UpdateRedacaoBody,
 } from './Types';
 
 export const RedacaoService = {
@@ -257,10 +257,7 @@ export const RedacaoService = {
 
       if (
         !atividade ||
-        !atividade.turma.membros.includes(new Types.ObjectId(requisitante)) ||
-        atividade.respostas.find(
-          (resp) => resp.aluno.toString() === requisitante,
-        )
+        !atividade.turma.membros.includes(new Types.ObjectId(requisitante))
       ) {
         return {
           success: false,
@@ -269,9 +266,18 @@ export const RedacaoService = {
         };
       }
 
-      await RedacaoAtividadeModel.findByIdAndUpdate(id, {
-        $push: { respostas: { aluno: requisitante } },
-      });
+      const updateResult = await RedacaoAtividadeModel.findOneAndUpdate(
+        { _id: id, 'respostas.aluno': { $ne: new Types.ObjectId(requisitante) } },
+        { $push: { respostas: { aluno: requisitante } } },
+      );
+
+      if (!updateResult) {
+        return {
+          success: false,
+          status: 404,
+          message: `Atividade com id ${id} não existe, é inacessível ou já foi respondida.`,
+        };
+      }
 
       return { success: true };
     } catch (e) {
