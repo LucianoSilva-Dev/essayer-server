@@ -85,12 +85,36 @@ export const AtividadeService = {
         },
         { $unwind: '$atividades' },
         {
+          $addFields: {
+            respostasEnviadas: {
+              $filter: {
+                input: '$atividades.respostas',
+                as: 'resp',
+                cond: {
+                  $and: [{ $eq: ['$$resp.aluno', new Types.ObjectId(id)] }, { $ifNull: ['$$resp.dataEnvio', false] }]
+                }
+              }
+            }
+          }
+        },
+        {
           $project: {
             id: { $toString: '$atividades._id' },
             titulo: '$atividades.titulo',
             descricao: '$atividades.descricao',
             dataLimite: '$atividades.dataLimite',
             tipoAtividade: '$atividades.tipoAtividade',
+            status: {
+              $switch: {
+                branches: [
+                  // biome-ignore lint/suspicious/noThenProperty: É a sintaxe do $switch
+                  { case: { $gt: [{ $size: '$respostasEnviadas' }, 0] }, then: 'Concluída' },
+                  // biome-ignore lint/suspicious/noThenProperty: É a sintaxe do $switch
+                  { case: { $or: [{ $not: { $ifNull: ['$atividades.dataLimite', false] } }, { $gt: ['$atividades.dataLimite', new Date()] }] }, then: 'Pendente' },
+                ],
+                default: "Encerrada"
+              }
+            },
             turma: {
               id: { $toString: '$_id' },
               nome: '$nome',

@@ -17,6 +17,7 @@ export const getAllAtividadesAlunoResponse = z.array(z.object({
   descricao: z.string(),
   dataLimite: z.date().nullable(),
   tipoAtividade: tiposAtividade,
+  status: z.string(),
   turma: z.object({
     id: z.string(),
     nome: z.string(),
