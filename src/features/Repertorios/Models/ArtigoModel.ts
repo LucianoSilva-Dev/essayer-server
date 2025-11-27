@@ -7,6 +7,6 @@ export const ArtigoModel = RepertorioModel.discriminator<Artigo>(
   new Schema({
     titulo: { type: String, required: true },
     resumo: { type: String, required: true },
-    fonte: { type: String, required: true },
+    fonte: String,
   }),
 );

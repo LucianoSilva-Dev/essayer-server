@@ -15,12 +15,12 @@ export const ArtigoController: Controller = {
     reply.send(response.data);
   },
   artigoCreate: async (request, reply) => {
-    const { titulo, resumo, autor, fonte, subtopicos, topicos } =
+    const body =
       request.body as CreateArtigoBody;
     const { id: userId } = request.user as RequestUserData;
 
     const response = await ArtigoService.create(
-      { titulo, resumo, autor, fonte, subtopicos, topicos },
+      body,
       userId,
     );
 
