@@ -1,7 +1,7 @@
 import { isValidObjectId } from 'mongoose';
 import z from 'zod';
-import { HasUniqueItens } from '../Helpers/HasUniqueItens';
 import { perfilUsuarioResponse } from '../../../shared/Validations';
+import { HasUniqueItens } from '../Helpers/HasUniqueItens';
 import { paginacaoResponse } from './Commom';
 
 export const getAllRepertorioObraDoc = z.object({
@@ -24,7 +24,7 @@ export const getAllRepertorioArtigoDoc = z.object({
   id: z.string(),
   totalLikes: z.number(),
   titulo: z.string(),
-  fonte: z.string(),
+  fonte: z.string().optional(),
   resumo: z.string(),
   autor: z.string(),
   criador: perfilUsuarioResponse,
