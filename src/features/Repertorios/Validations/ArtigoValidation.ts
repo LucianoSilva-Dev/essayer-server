@@ -7,7 +7,7 @@ export const getArtigoResponse = z.object({
   titulo: z.string(),
   resumo: z.string(),
   autor: z.string(),
-  fonte: z.string(),
+  fonte: z.string().optional(),
   criador: perfilUsuarioResponse,
   totalLikes: z.number(),
   comentarios: comentarioResponse.array(),
