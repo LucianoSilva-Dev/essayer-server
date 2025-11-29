@@ -1,6 +1,6 @@
 import { RequisicaoEmailService } from './Service';
 import type { Controller, RequestUserData } from '../Types';
-import { CreateRequisicaoEmailBody, ValidateRequisicaoEmailBody } from './Types';
+import type { CreateRequisicaoEmailBody, ValidateRequisicaoEmailBody } from './Types';
 
 export const RequisicaoEmailController: Controller = {
   create: async (request, reply) => {

@@ -7,6 +7,7 @@ import { createRequisicaoEmailBodyValidation, createRequisicaoEmailResponse, val
 
 export const RequisicaoEmailSchema: EntitySchema = {
   validate: {
+    preHandler: authMiddleware,
     schema: {
       security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,
