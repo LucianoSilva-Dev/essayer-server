@@ -44,18 +44,18 @@ export const UsuarioSchema: EntitySchema = {
 
   professorCreate: {
     schema: {
-      security: [{ accessTokenCookieAuth: [] }],
-      body: professorCreateBodyValidation,
       params: idValidation,
+      body: professorCreateBodyValidation,
       response: {
         201: genericSuccessResponse,
         400: schemaValidationError,
         401: genericError,
+        404: genericError,
         500: genericError,
       },
       summary: 'Cria uma requisição de cadastro de professor',
     },
-  },
+  },  
 
   update: {
     preHandler: authMiddleware,

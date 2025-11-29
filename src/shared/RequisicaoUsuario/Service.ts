@@ -31,7 +31,7 @@ export const RequisicaoUsuarioService = {
 
     return {
       success: true,
-      message: user.id,
+      data: user.id,
     };
   },
   get: async (id: string) => {

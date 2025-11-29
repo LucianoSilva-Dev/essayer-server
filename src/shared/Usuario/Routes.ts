@@ -12,7 +12,7 @@ export const UsuarioRoutes: FastifyPluginAsyncZod = async (app) => {
 
   app.post('/', UsuarioSchema.create, UsuarioController.create);
   app.post(
-    '/:id//professor',
+    '/:id/professor',
     UsuarioSchema.professorCreate,
     UsuarioController.professorCreate,
   );

@@ -14,7 +14,7 @@ export const RequisicaoUsuarioController: Controller = {
         .send({ error: response.message });
     }
 
-    return reply.status(200).send({ data: response.message });
+    return reply.status(200).send({id: response.data});
   },
   get: async (request, reply) => {
     const { id } = request.params as { id: string }

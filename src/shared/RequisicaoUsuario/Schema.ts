@@ -1,4 +1,3 @@
-import { authMiddleware } from '../middlewares/Authentication';
 import { genericError, schemaValidationError } from '../Schemas';
 import type { EntitySchema } from '../Types';
 import { idValidation } from '../Validations';
@@ -27,7 +26,6 @@ export const RequisicaoUsuarioSchema: EntitySchema = {
     },
   },
   get: {
-    preHandler: authMiddleware,
     schema: {
       security: [{ accessTokenCookieAuth: [] }],
       params: idValidation,

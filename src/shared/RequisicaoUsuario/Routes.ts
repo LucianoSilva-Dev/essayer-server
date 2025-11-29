@@ -1,4 +1,4 @@
-import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { AddEntityWiseTags } from "../Utils";
 import { authPlugin } from "../plugins/auth";
 import { RequisicaoUsuarioSchema } from "./Schema";
