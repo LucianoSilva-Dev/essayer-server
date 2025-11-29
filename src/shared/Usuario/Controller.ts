@@ -36,7 +36,7 @@ export const UsuarioController: Controller = {
 
   professorCreate: async (request, reply) => {
     const { lattes } = request.body as ProfessorCreateBody;
-    const { id } = request.user as RequestUserData;
+    const { id } = request.params as { id: string };
 
     const response = await UsuarioService.professorCreate(id, lattes);
     return reply.status(201).send({ message: response.message });

@@ -43,10 +43,10 @@ export const UsuarioSchema: EntitySchema = {
   },
 
   professorCreate: {
-    preHandler: authMiddleware,
     schema: {
       security: [{ accessTokenCookieAuth: [] }],
       body: professorCreateBodyValidation,
+      params: idValidation,
       response: {
         201: genericSuccessResponse,
         400: schemaValidationError,
