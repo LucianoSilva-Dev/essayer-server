@@ -1,4 +1,6 @@
+import { Types } from 'mongoose';
 import type { PopulatedPerfilUsuario } from '../../shared/Types';
+import { gerarCodigoConvite } from './Helpers/gerarCodigoConvite';
 import { TurmaModel } from './Model';
 import type {
   CreateTurmaBody,
@@ -8,8 +10,6 @@ import type {
   Turma,
   UpdateTurmaBody,
 } from './Types';
-import { Types } from 'mongoose';
-import { gerarCodigoConvite } from './Helpers/gerarCodigoConvite';
 
 export const TurmaService = {
   create: async (data: CreateTurmaBody, criadorId: string) => {
@@ -264,8 +264,8 @@ export const TurmaService = {
     const alunoObjectId = new Types.ObjectId(alunoId);
     if (
       turma.criador.toString() === alunoId ||
-      turma.membros.includes(alunoObjectId) ||
-      turma.alunosPendentes.includes(alunoObjectId)
+      turma.membros.some((membro) => membro.equals(alunoObjectId)) ||
+      turma.alunosPendentes.some((pendente) => pendente.equals(alunoObjectId))
     ) {
       return {
         success: false,
@@ -317,7 +317,15 @@ export const TurmaService = {
 
     const alunoObjectId = new Types.ObjectId(alunoId);
 
-    if (!turma.alunosPendentes.includes(alunoObjectId)) {
+    if (turma.membros.some((membro) => membro.equals(alunoObjectId))) {
+      return {
+        success: false,
+        status: 409,
+        message: 'O aluno já faz parte desta turma.',
+      } as const;
+    }
+
+    if (!turma.alunosPendentes.some((pendente) => pendente.equals(alunoObjectId))) {
       return {
         success: false,
         status: 404,
@@ -326,7 +334,7 @@ export const TurmaService = {
     }
 
     turma.alunosPendentes = turma.alunosPendentes.filter(
-      (alunoPendente) => alunoPendente !== alunoObjectId,
+      (alunoPendente) => !alunoPendente.equals(alunoObjectId),
     );
     turma.membros.push(alunoObjectId);
     await turma.save();
