@@ -83,7 +83,7 @@ export const UsuarioController: Controller = {
     const { id } = request.params as { id: string };
     const { id: requisitante, cargo } = request.user as RequestUserData;
 
-    if (requisitante !== id || cargo !== 'admin') {
+    if (requisitante !== id && cargo !== 'admin') {
       return reply.status(403).send({
         error: 'Não é possível editar a conta de outro usuário.',
       });
