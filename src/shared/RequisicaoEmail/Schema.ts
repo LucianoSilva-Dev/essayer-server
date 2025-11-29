@@ -34,6 +34,7 @@ export const RequisicaoEmailSchema: EntitySchema = {
         401: genericError,
         403: genericError,
         404: genericError,
+        409: genericError,
         500: genericError,
       },
       summary: 'Cria requisição de mudança de email.',

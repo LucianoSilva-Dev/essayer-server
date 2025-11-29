@@ -32,24 +32,24 @@ export const RequisicaoEmailService = {
       message: 'Email atualizado.',
     };
   },
-  create: async (email: string) => {
+  create: async (id: string, email: string) => {
     const code = randomBytes(6).toString('base64');
     const usuario = await UsuarioModel.findOne({ email });
 
-    if (!usuario) {
+    if (usuario) {
       return {
         succes: false,
-        status: 404,
-        message: `Usuário com email ${email} não existe.`,
+        status: 409,
+        message: `Usuário com email ${email} já existe.`,
       };
     }
 
-    const requisicao = await RequisicaoEmailModel.findOne({ requisitante: usuario.id });
+    const requisicao = await RequisicaoEmailModel.findOne({ email });
 
     if (requisicao) {
       const config = {
         from: `Incita <${EMAIL}>`,
-        to: usuario?.email,
+        to: email,
         subject: 'Mudança de Email',
         template: 'codigo',
         context: {
@@ -66,14 +66,14 @@ export const RequisicaoEmailService = {
     }
 
     const req = await RequisicaoEmailModel.create({
-      requisitante: usuario.id,
+      requisitante: id,
       codigo: code,
       email
     });
 
     const config = {
       from: `Incita <${EMAIL}>`,
-      to: usuario?.email,
+      to: email,
       subject: 'Mudança de Email',
       template: 'codigo',
       context: {

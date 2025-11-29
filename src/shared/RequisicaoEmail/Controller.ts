@@ -4,9 +4,10 @@ import { CreateRequisicaoEmailBody, ValidateRequisicaoEmailBody } from './Types'
 
 export const RequisicaoEmailController: Controller = {
   create: async (request, reply) => {
+    const { id } = request.user as RequestUserData
     const { email } = request.body as CreateRequisicaoEmailBody;
 
-    const response = await RequisicaoEmailService.create(email);
+    const response = await RequisicaoEmailService.create(id, email);
 
     if (!response.success) {
       return reply
