@@ -1,6 +1,6 @@
 import { RequisicaoUsuarioService } from './Service';
 import type { Controller } from '../Types';
-import { ValidateRequisicaoUsuarioBody } from './Types';
+import type { ValidateRequisicaoUsuarioBody } from './Types';
 
 export const RequisicaoUsuarioController: Controller = {
   validate: async (request, reply) => {
@@ -14,7 +14,7 @@ export const RequisicaoUsuarioController: Controller = {
         .send({ error: response.message });
     }
 
-    return reply.status(200).send({ message: response.message });
+    return reply.status(200).send({ data: response.message });
   },
   get: async (request, reply) => {
     const { id } = request.params as { id: string }

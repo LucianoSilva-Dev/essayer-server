@@ -1,10 +1,11 @@
 import { authMiddleware } from '../middlewares/Authentication';
 import { genericError, schemaValidationError } from '../Schemas';
 import type { EntitySchema } from '../Types';
-import { genericSuccessResponse, idValidation } from '../Validations';
+import { idValidation } from '../Validations';
 import {
   getRequisicaoUsuarioResponse,
   validateRequisicaoUsuarioBodyValidation,
+  validateRequisicaoUsuarioResponse,
 } from './Validation';
 
 export const RequisicaoUsuarioSchema: EntitySchema = {
@@ -14,7 +15,7 @@ export const RequisicaoUsuarioSchema: EntitySchema = {
       params: idValidation,
       body: validateRequisicaoUsuarioBodyValidation,
       response: {
-        200: genericSuccessResponse,
+        200: validateRequisicaoUsuarioResponse,
         400: schemaValidationError,
         401: genericError,
         403: genericError,

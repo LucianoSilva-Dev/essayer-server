@@ -16,3 +16,7 @@ export const getRequisicaoUsuarioResponse = z.object({
   email: z.string(),
   codigo: z.string(),
 })
+
+export const validateRequisicaoUsuarioResponse = z.object({
+  id: z.string()
+})

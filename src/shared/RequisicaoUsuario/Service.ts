@@ -21,7 +21,7 @@ export const RequisicaoUsuarioService = {
       };
     }
 
-    await UsuarioModel.create({
+    const user = await UsuarioModel.create({
       nome: req.nome,
       senha: req.senha,
       email: req.email,
@@ -31,7 +31,7 @@ export const RequisicaoUsuarioService = {
 
     return {
       success: true,
-      message: 'Usuário criado.',
+      message: user.id,
     };
   },
   get: async (id: string) => {
