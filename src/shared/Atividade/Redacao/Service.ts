@@ -1,15 +1,15 @@
 import { Types } from 'mongoose';
 import { TurmaModel } from '../../../features/Turmas/Model';
 import type {
-    TarefaCorrigidaEventPayload,
-    TarefaEnviadaEventPayload,
+  TarefaCorrigidaEventPayload,
+  TarefaEnviadaEventPayload,
 } from '../../Events/Types';
 import { RedacaoAtividadeModel } from './Model';
 import type {
-    CreateRedacaoBody,
-    FeedbackRedacaoBody,
-    getAllRespostasRedacaoQueryBody,
-    UpdateRedacaoBody,
+  CreateRedacaoBody,
+  FeedbackRedacaoBody,
+  getAllRespostasRedacaoQueryBody,
+  UpdateRedacaoBody,
 } from './Types';
 
 export const RedacaoService = {
@@ -122,6 +122,14 @@ export const RedacaoService = {
           }
         },
         {
+          $lookup: {
+            from: 'repertorios',
+            localField: 'repertoriosApoio',
+            foreignField: '_id',
+            as: 'repertoriosApoioDetails'
+          }
+        },
+        {
           $project: {
             _id: 0,
             id: { $toString: '$_id' },
@@ -133,9 +141,12 @@ export const RedacaoService = {
             tempoLimiteEmMinutos: 1,
             repertoriosApoio: {
               $map: {
-                input: '$repertoriosApoio',
+                input: '$repertoriosApoioDetails',
                 as: 'rep',
-                in: { $toString: '$$rep' }
+                in: {
+                  id: { $toString: '$$rep._id' },
+                  tipo: '$$rep.tipoRepertorio'
+                }
               }
             },
             respostas: {
@@ -186,7 +197,7 @@ export const RedacaoService = {
                 $map: {
                   input: '$turmas.membros',
                   as: 'mem',
-                  in: {$toString: '$$mem'}
+                  in: { $toString: '$$mem' }
                 }
               }
             },

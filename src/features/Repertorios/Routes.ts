@@ -1,14 +1,14 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import { RepertorioSchema } from './Schemas/RepertorioSchema';
-import { CitacaoSchema } from './Schemas/CitacaoSchema';
-import { ArtigoSchema } from './Schemas/ArtigoSchema';
-import { ObraSchema } from './Schemas/ObraSchema';
-import { CitacaoController } from './Controllers/CitacaoController';
-import { RepertorioController } from './Controllers/RepertorioController';
-import { ObraController } from './Controllers/ObraController';
-import { ArtigoController } from './Controllers/ArtigoController';
 import { authPlugin } from '../../shared/plugins/auth';
 import { AddEntityWiseTags } from '../../shared/Utils';
+import { ArtigoController } from './Controllers/ArtigoController';
+import { CitacaoController } from './Controllers/CitacaoController';
+import { ObraController } from './Controllers/ObraController';
+import { RepertorioController } from './Controllers/RepertorioController';
+import { ArtigoSchema } from './Schemas/ArtigoSchema';
+import { CitacaoSchema } from './Schemas/CitacaoSchema';
+import { ObraSchema } from './Schemas/ObraSchema';
+import { RepertorioSchema } from './Schemas/RepertorioSchema';
 
 export const RepertorioRoutes: FastifyPluginAsyncZod = async (app) => {
   AddEntityWiseTags(app, ['Repertório']);
@@ -16,6 +16,11 @@ export const RepertorioRoutes: FastifyPluginAsyncZod = async (app) => {
 
   // <Rotas para repertórios em geral>
   app.get('/', RepertorioSchema.get_all, RepertorioController.get_all);
+  app.get(
+    '/bulk-search',
+    RepertorioSchema.get_by_ids,
+    RepertorioController.getByIds,
+  );
   app.delete('/:id', RepertorioSchema.delete, RepertorioController.delete);
 
   // comentarios

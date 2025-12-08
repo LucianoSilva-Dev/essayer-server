@@ -1,5 +1,6 @@
 import type { Types } from 'mongoose';
 import type z from 'zod';
+import type { perfilUsuarioResponse } from '../../shared/Validations';
 import type {
   createArtigoBodyValidation,
   getArtigoResponse,
@@ -26,7 +27,6 @@ import type {
   getAllRepertorioResponse,
   updateComentarioBodyValidation,
 } from './Validations/RepertorioValidation';
-import type { perfilUsuarioResponse } from '../../shared/Validations';
 
 // Citacao
 export type CitacaoResponse = z.infer<typeof getCitacaoResponse>;
@@ -78,6 +78,8 @@ export type ComentarioSubDoc = {
   usuario: Types.ObjectId;
   texto: string;
   fixado: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 export type Repertorio = {
   autor: string;

@@ -1,6 +1,6 @@
 import type { Controller, RequestUserData } from '../../../shared/Types';
 import { RepertorioService } from '../Services/RepertorioService';
-import type { CreateComentarioBody, GetAllRepertorioQueryBody, UpdateComentarioBody, FixComentarioBody } from '../Types';
+import type { CreateComentarioBody, FixComentarioBody, GetAllRepertorioQueryBody, UpdateComentarioBody } from '../Types';
 
 export const RepertorioController: Controller = {
   get_all: async (request, reply) => {
@@ -18,6 +18,19 @@ export const RepertorioController: Controller = {
 
     return reply.status(200).send(response.data);
   },
+
+  getByIds: async (request, reply) => {
+    const { ids } = request.query as { ids: string[] };
+    const { id: userId } = (request.user as RequestUserData) || '';
+
+    const response = await RepertorioService.getByIds(ids, userId);
+    if (!response.success) {
+      return reply.status(response.status).send({ error: response.message });
+    }
+
+    return reply.status(200).send(response.data);
+  },
+
   delete: async (request, reply) => {
     const { id: repertorioId } = request.params as { id: string };
     const { id: userId, cargo } = request.user as RequestUserData;

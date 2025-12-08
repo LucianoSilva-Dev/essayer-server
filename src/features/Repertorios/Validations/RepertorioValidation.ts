@@ -55,7 +55,7 @@ export const getAllRepertorioDocuments = z.array(
       getAllRepertorioArtigoDoc,
       getAllRepertorioCitacaoDoc,
     ])
-    .optional(),
+    .nullable(),
 );
 
 export const getAllRepertorioResponse = z.object({
@@ -77,6 +77,7 @@ export const createComentarioBodyValidation = z.object({
   }),
   fixar: fixComentarioBodyValidation.shape.fixar.optional(),
 });
+
 export const updateComentarioBodyValidation = z.object({
   texto: z.string({
     required_error: 'O campo texto do comentario é obrigatório',
@@ -84,6 +85,21 @@ export const updateComentarioBodyValidation = z.object({
   }),
 });
 
+export const getRepertoriosByIdsQueryValidation = z.object({
+  ids: z
+    .union([
+      z.string().transform((val) => [val]),
+      z.array(z.string()),
+    ])
+    .refine((val) => val.length > 0, 'A lista de IDs não pode estar vazia')
+    .pipe(
+      z.array(
+        z.string().refine((val) => isValidObjectId(val), {
+          message: 'Um ou mais IDs fornecidos são inválidos.',
+        }),
+      ),
+    ),
+});
 
 export const getAllRepertorioQueryValidation = z.object({
   // opções de filtragem
@@ -208,4 +224,4 @@ export const getAllRepertorioQueryValidation = z.object({
 
 export const createRepertorioResponse = z.object({
   id: z.string()
-})
+});

@@ -1,7 +1,9 @@
-// Backend/src/features/Repertorios/Services/RepertorioService.ts
+import { Types } from 'mongoose';
 import type { Service, UserCargo } from '../../../shared/Types';
+import { formatGetAllRepertorioQuery, formatRepertorio } from '../Helpers/FormatGetAllQuery';
 import { montarFiltros } from '../Helpers/MontarFiltros';
 import { montarPaginação } from '../Helpers/MontarPaginacao';
+import { montarSort } from '../Helpers/MontarSort';
 import { RepertorioModel } from '../Models/RepertorioModel';
 import type {
   CreateComentarioBody,
@@ -11,9 +13,6 @@ import type {
   PopulatedRepertorio,
   UpdateComentarioBody,
 } from '../Types';
-import { formatGetAllRepertorioQuery } from '../Helpers/FormatGetAllQuery';
-import { montarSort } from '../Helpers/MontarSort';
-import mongoose, { HydratedDocument, Types } from 'mongoose';
 
 export const RepertorioService: Service = {
   getAll: async (
@@ -58,6 +57,24 @@ export const RepertorioService: Service = {
     };
 
     return { success: true, data: response };
+  },
+
+  getByIds: async (ids: string[], userId?: string) => {
+    const repertorios = await RepertorioModel.find({ _id: { $in: ids } })
+      .populate<Pick<PopulatedRepertorio, 'criador'>>('criador')
+      .exec();
+
+    const repertoriosMap = new Map(
+      repertorios.map((r) => [r._id.toString(), r]),
+    );
+
+    const orderedRepertorios = ids.map((id) => repertoriosMap.get(id) || null);
+
+    const formattedRepertorios = orderedRepertorios.map((r) =>
+      r ? formatRepertorio(r, userId) : null,
+    );
+
+    return { success: true, data: formattedRepertorios };
   },
   delete: async (repertorioId: string, userId: string, userRole: UserCargo) => {
     const repertorio = await RepertorioModel.findById(repertorioId);
@@ -196,10 +213,13 @@ export const RepertorioService: Service = {
 
     await repertorio.save();
 
-    return { success: true, data: 'Like adicionado com sucesso.' };
+    return { success: true, data: 'Like criado com sucesso.' };
   },
   deleteLike: async (repertorioId: string, userId: string) => {
-    const repertorio = await RepertorioModel.findById(repertorioId);
+    const repertorio = await RepertorioModel.findByIdAndUpdate(repertorioId, {
+      $pull: { likes: userId },
+    });
+
     if (!repertorio) {
       return {
         success: false,
@@ -207,23 +227,15 @@ export const RepertorioService: Service = {
         message: `Repertório com ID "${repertorioId}" não existe.`,
       };
     }
-    const likeIndex = repertorio.likes.indexOf(new Types.ObjectId(userId));
-    if (likeIndex === -1) {
-      return {
-        success: false,
-        status: 404,
-        message: 'Você ainda não deu like nesse repertório.',
-      };
-    }
-
-    repertorio.likes.splice(likeIndex, 1);
-    await repertorio.save();
 
     return { success: true, data: 'Like removido com sucesso.' };
   },
 
   createFavorito: async (repertorioId: string, userId: string) => {
-    const repertorio = await RepertorioModel.findById(repertorioId);
+    const repertorio = await RepertorioModel.findByIdAndUpdate(repertorioId, {
+      $addToSet: { favoritos: userId },
+    });
+
     if (!repertorio) {
       return {
         success: false,
@@ -236,17 +248,17 @@ export const RepertorioService: Service = {
       return {
         success: false,
         status: 409,
-        message: 'Você já favoritou esse repertório.',
+        message: 'Este repertório já está nos seus favoritos.',
       };
     }
 
-    repertorio.favoritos.push(new Types.ObjectId(userId));
-    await repertorio.save();
-
-    return { success: true, data: 'Repertório favoritado com sucesso.' };
+    return { success: true, data: 'Repertório adicionado aos favoritos.' };
   },
   deleteFavorito: async (repertorioId: string, userId: string) => {
-    const repertorio = await RepertorioModel.findById(repertorioId);
+    const repertorio = await RepertorioModel.findByIdAndUpdate(repertorioId, {
+      $pull: { favoritos: userId },
+    });
+
     if (!repertorio) {
       return {
         success: false,
@@ -255,29 +267,14 @@ export const RepertorioService: Service = {
       };
     }
 
-    const favoritoIndex = repertorio.favoritos.indexOf(
-      new Types.ObjectId(userId),
-    );
-    if (favoritoIndex === -1) {
-      return {
-        success: false,
-        status: 404,
-        message: 'Você ainda não favoritou esse repertório.',
-      };
-    }
-
-    repertorio.favoritos.splice(favoritoIndex, 1);
-    await repertorio.save();
-
     return { success: true, data: 'Repertório removido dos favoritos.' };
   },
-
   fixarComentario: async (
     repertorioId: string,
     comentarioId: string,
     userId: string,
     userRole: UserCargo,
-    body: FixComentarioBody,
+    comentarioBody: FixComentarioBody,
   ) => {
     const repertorio = await RepertorioModel.findById(repertorioId);
     if (!repertorio) {
@@ -301,16 +298,24 @@ export const RepertorioService: Service = {
       return {
         success: false,
         status: 403,
-        message: 'Você não tem permissão para fixar/desfixar este comentário.',
+        message: 'Você não tem permissão para fixar este comentário.',
       };
     }
 
-    comentario.fixado = !!body.fixar;
+    comentario.fixado = comentarioBody.fixar;
+
+    // Sort comments: pinned first, then by date (newest first)
+    repertorio.comentarios.sort((a, b) => {
+      if (a.fixado === b.fixado) {
+        // If both are pinned or both are not pinned, sort by date (newest first)
+        return (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0);
+      }
+      // Pinned comments come first
+      return a.fixado ? -1 : 1;
+    });
+
     await repertorio.save();
 
-    return {
-      success: true,
-      data: `Comentário ${body.fixar ? 'fixado' : 'desfixado'} com sucesso.`
-    };
+    return { success: true, data: 'Comentário fixado/desfixado com sucesso.' };
   },
 };

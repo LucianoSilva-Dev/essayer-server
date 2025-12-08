@@ -123,7 +123,10 @@ export const getRedacaoResponse = z.object({
   }),
   tema: z.string(),
   tempoLimiteEmMinutos: z.number().optional(),
-  repertoriosApoio: z.array(z.string()).optional(),
+  repertoriosApoio: z.array(z.object({
+    id: z.string(),
+    tipo: z.string(),
+  })).optional(),
   respostas: z
     .array(
       z.object({

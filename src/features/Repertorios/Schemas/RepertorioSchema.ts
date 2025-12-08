@@ -1,5 +1,4 @@
-// Backend/src/features/Repertorios/Validations/RepertorioValidation.ts
-
+import z from 'zod';
 import {
   authMiddleware,
   optionalAuthMiddleware,
@@ -17,10 +16,17 @@ import {
 import {
   createComentarioBodyValidation,
   fixComentarioBodyValidation,
+  getAllRepertorioDocuments,
   getAllRepertorioQueryValidation,
   getAllRepertorioResponse,
-  updateComentarioBodyValidation, // ADICIONADO
+  getRepertoriosByIdsQueryValidation,
+  updateComentarioBodyValidation,
 } from '../Validations/RepertorioValidation';
+
+const repertorioAndComentarioIdValidation = z.object({
+  id: z.string(),
+  comentarioId: z.string(),
+});
 
 export const RepertorioSchema: EntitySchema = {
   get_all: {
@@ -35,6 +41,20 @@ export const RepertorioSchema: EntitySchema = {
         500: genericError,
       },
       summary: 'Recupera todos os repertórios',
+    },
+  },
+  get_by_ids: {
+    preHandler: optionalAuthMiddleware,
+    schema: {
+      security: [{ accessTokenCookieAuth: [] }, {}],
+      querystring: getRepertoriosByIdsQueryValidation,
+      response: {
+        200: getAllRepertorioDocuments,
+        400: schemaValidationError,
+        401: genericError,
+        500: genericError,
+      },
+      summary: 'Busca repertórios por uma lista de IDs',
     },
   },
   delete: {
@@ -58,6 +78,7 @@ export const RepertorioSchema: EntitySchema = {
     preHandler: authProfessorCreate,
     schema: {
       security: [{ accessTokenCookieAuth: [] }],
+      params: idValidation,
       body: createComentarioBodyValidation,
       response: {
         200: genericSuccessResponse,
@@ -74,6 +95,7 @@ export const RepertorioSchema: EntitySchema = {
     preHandler: authProfessorCreate,
     schema: {
       security: [{ accessTokenCookieAuth: [] }],
+      params: repertorioAndComentarioIdValidation,
       body: updateComentarioBodyValidation,
       response: {
         200: genericSuccessResponse,
@@ -90,6 +112,7 @@ export const RepertorioSchema: EntitySchema = {
     preHandler: authProfessor,
     schema: {
       security: [{ accessTokenCookieAuth: [] }],
+      params: repertorioAndComentarioIdValidation,
       response: {
         200: genericSuccessResponse,
         400: schemaValidationError,
@@ -106,6 +129,7 @@ export const RepertorioSchema: EntitySchema = {
     preHandler: authProfessor,
     schema: {
       security: [{ accessTokenCookieAuth: [] }],
+      params: repertorioAndComentarioIdValidation,
       body: fixComentarioBodyValidation,
       response: {
         200: genericSuccessResponse,
@@ -124,6 +148,7 @@ export const RepertorioSchema: EntitySchema = {
     preHandler: authMiddleware,
     schema: {
       security: [{ accessTokenCookieAuth: [] }],
+      params: idValidation,
       response: {
         200: genericSuccessResponse,
         400: schemaValidationError,
@@ -139,6 +164,7 @@ export const RepertorioSchema: EntitySchema = {
     preHandler: authMiddleware,
     schema: {
       security: [{ accessTokenCookieAuth: [] }],
+      params: idValidation,
       response: {
         200: genericSuccessResponse,
         400: schemaValidationError,
@@ -154,6 +180,7 @@ export const RepertorioSchema: EntitySchema = {
     preHandler: authMiddleware,
     schema: {
       security: [{ accessTokenCookieAuth: [] }],
+      params: idValidation,
       response: {
         200: genericSuccessResponse,
         400: schemaValidationError,
@@ -169,6 +196,7 @@ export const RepertorioSchema: EntitySchema = {
     preHandler: authMiddleware,
     schema: {
       security: [{ accessTokenCookieAuth: [] }],
+      params: idValidation,
       response: {
         200: genericSuccessResponse,
         400: schemaValidationError,
