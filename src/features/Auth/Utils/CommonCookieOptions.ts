@@ -9,7 +9,7 @@ export function commonCookieOptions(
     path: path,
     httpOnly: true,
     secure: ENVIRONMENT === 'production',
-    sameSite: 'none' as const,
+    sameSite: 'lax' as const,
     maxAge: maxAgeSeconds,
     signed: true,
   };
