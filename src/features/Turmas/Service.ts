@@ -459,15 +459,20 @@ export const TurmaService = {
         { $match: filtro },
         {
           $addFields: {
-            respostasEnviadas: {
-              $filter: {
-                input: '$atividades.respostas',
-                as: 'resp',
-                cond: {
-                  $and: [{ $eq: ['$$resp.aluno', id] }, { $ifNull: ['$$resp.dataEnvio', false] }]
-                }
-              }
-            }
+            minhaResposta: {
+              $arrayElemAt: [
+                {
+                  $filter: {
+                    input: '$atividades.respostas',
+                    as: 'resp',
+                    cond: {
+                      $eq: ['$$resp.aluno', id],
+                    },
+                  },
+                },
+                0,
+              ],
+            },
           }
         },
         {
@@ -481,12 +486,28 @@ export const TurmaService = {
               $switch: {
                 branches: [
                   // biome-ignore lint/suspicious/noThenProperty: É a sintaxe do $switch
-                  { case: { $gt: [{ $size: '$respostasEnviadas' }, 0] }, then: 'Concluída' },
+                  {
+                    case: { $ifNull: ['$minhaResposta.dataEnvio', false] },
+                    then: 'Concluída',
+                  },
                   // biome-ignore lint/suspicious/noThenProperty: É a sintaxe do $switch
-                  { case: { $or: [{ $not: { $ifNull: ['$atividades.dataLimite', false] } }, { $gt: ['$atividades.dataLimite', new Date()] }] }, then: 'Pendente' },
+                  {
+                    case: { $ifNull: ['$minhaResposta', false] },
+                    then: 'Em andamento',
+                  },
+                  // biome-ignore lint/suspicious/noThenProperty: É a sintaxe do $switch
+                  {
+                    case: {
+                      $or: [
+                        { $not: { $ifNull: ['$atividades.dataLimite', false] } },
+                        { $gt: ['$atividades.dataLimite', new Date()] },
+                      ],
+                    },
+                    then: 'Pendente',
+                  },
                 ],
-                default: "Encerrada"
-              }
+                default: 'Encerrada',
+              },
             }
           }
         }
