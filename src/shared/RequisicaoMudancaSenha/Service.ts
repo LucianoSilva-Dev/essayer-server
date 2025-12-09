@@ -19,8 +19,44 @@ export const RequisicaoMudancaSenhaService = {
 
     const requisicao = await RequisicaoMudancaSenhaModel.findOne({ requisitante: usuario.id });
 
-    if (requisicao) {
-      const config = {
+    let config = {}
+    let returnId = requisicao ? requisicao.id : ""
+
+    if (!requisicao) {
+      const req = await RequisicaoMudancaSenhaModel.create({
+        requisitante: usuario.id,
+        codigo: code,
+      });
+
+      config = {
+        from: `Incita <${EMAIL}>`,
+        to: usuario?.email,
+        subject: 'Mudança de Senha',
+        template: 'codigo',
+        context: {
+          codigo: code,
+        },
+      };
+
+      returnId = req._id.toString()
+    }
+    else if (Date.now() - new Date(requisicao.updatedAt).getTime() > 1000 * 60 * 5) {
+      await RequisicaoMudancaSenhaModel.findOneAndUpdate({ requisitante: usuario.id }, {
+        codigo: code
+      })
+
+      config = {
+        from: `Incita <${EMAIL}>`,
+        to: usuario?.email,
+        subject: 'Mudança de Senha',
+        template: 'codigo',
+        context: {
+          codigo: code,
+        },
+      };
+    }
+    else {
+      config = {
         from: `Incita <${EMAIL}>`,
         to: usuario?.email,
         subject: 'Mudança de Senha',
@@ -29,35 +65,13 @@ export const RequisicaoMudancaSenhaService = {
           codigo: requisicao.codigo,
         },
       };
-
-      Transporter.sendMail(config);
-
-      return {
-        success: true,
-        data: requisicao.id,
-      };
     }
-
-    const req = await RequisicaoMudancaSenhaModel.create({
-      requisitante: usuario.id,
-      codigo: code,
-    });
-
-    const config = {
-      from: `Incita <${EMAIL}>`,
-      to: usuario?.email,
-      subject: 'Mudança de Senha',
-      template: 'codigo',
-      context: {
-        codigo: code,
-      },
-    };
 
     Transporter.sendMail(config);
 
     return {
       success: true,
-      data: req._id.toString(),
+      data: returnId
     };
   },
   validate: async (id: string, code: string) => {

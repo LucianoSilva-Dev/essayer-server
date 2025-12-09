@@ -46,8 +46,45 @@ export const RequisicaoEmailService = {
 
     const requisicao = await RequisicaoEmailModel.findOne({ email });
 
-    if (requisicao) {
-      const config = {
+    let config = {}
+    let returnId = requisicao ? requisicao.id : ""
+
+    if (!requisicao) {
+      const req = await RequisicaoEmailModel.create({
+        requisitante: id,
+        codigo: code,
+        email
+      });
+
+      config = {
+        from: `Incita <${EMAIL}>`,
+        to: email,
+        subject: 'Mudança de Email',
+        template: 'codigo',
+        context: {
+          codigo: code,
+        },
+      };
+
+      returnId = req._id.toString()
+    }
+    else if (Date.now() - new Date(requisicao.updatedAt).getTime() > 1000 * 60 * 5) {
+      await RequisicaoEmailModel.findOneAndUpdate({ email }, {
+        codigo: code
+      })
+
+      config = {
+        from: `Incita <${EMAIL}>`,
+        to: email,
+        subject: 'Mudança de Email',
+        template: 'codigo',
+        context: {
+          codigo: code,
+        },
+      };
+    }
+    else {
+      config = {
         from: `Incita <${EMAIL}>`,
         to: email,
         subject: 'Mudança de Email',
@@ -56,36 +93,13 @@ export const RequisicaoEmailService = {
           codigo: requisicao.codigo,
         },
       };
-
-      Transporter.sendMail(config);
-
-      return {
-        success: true,
-        data: requisicao.id,
-      };
     }
-
-    const req = await RequisicaoEmailModel.create({
-      requisitante: id,
-      codigo: code,
-      email
-    });
-
-    const config = {
-      from: `Incita <${EMAIL}>`,
-      to: email,
-      subject: 'Mudança de Email',
-      template: 'codigo',
-      context: {
-        codigo: code,
-      },
-    };
 
     Transporter.sendMail(config);
 
     return {
       success: true,
-      data: req._id.toString(),
+      data: returnId,
     };
   }
 }

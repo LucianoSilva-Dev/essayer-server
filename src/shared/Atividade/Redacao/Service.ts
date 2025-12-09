@@ -152,6 +152,7 @@ export const RedacaoService = {
             respostas: {
               $cond: {
                 if: { $ifNull: ['$primeiraResposta.aluno', false] },
+                // biome-ignore lint/suspicious/noThenProperty: Necessário para a sintaxe do  'if'
                 then: {
                   $map: {
                     input: '$respostas',
@@ -168,6 +169,7 @@ export const RedacaoService = {
                       feedback: {
                         $cond: {
                           if: { $not: { $ifNull: ['$$resp.feedback', false] } },
+                          // biome-ignore lint/suspicious/noThenProperty: Necessário para a sintaxe do  'if'
                           then: '$$REMOVE',
                           else: {
                             notaC1: '$$resp.feedback.notaC1',
@@ -487,6 +489,7 @@ export const RedacaoService = {
             feedback: {
               $cond: {
                 if: { $not: { $ifNull: ['$respostasEnviadas.feedback', false] } },
+                // biome-ignore lint/suspicious/noThenProperty: Necessário para a sintaxe do  'if'
                 then: '$$REMOVE',
                 else: {
                   notaC1: '$respostasEnviadas.feedback.notaC1',
@@ -517,7 +520,7 @@ export const RedacaoService = {
 
       const atividade = ativs[0];
 
-      if (ativs.length == 0) {
+      if (ativs.length === 0) {
         return {
           success: true,
           data: {

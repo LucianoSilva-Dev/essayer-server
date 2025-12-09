@@ -47,8 +47,46 @@ export const UsuarioService = {
       };
     }
 
-    if (requisicao) {
-      const config = {
+    let config = {}
+    let returnId = requisicao ? requisicao.id : ""
+
+    if (!requisicao) {
+      const req = await RequisicaoUsuarioModel.create({
+        nome,
+        email,
+        senha: hashedSenha,
+        codigo: code,
+      });
+
+      config = {
+        from: `Incita <${EMAIL}>`,
+        to: email,
+        subject: 'Cadastro Incita',
+        template: 'codigo',
+        context: {
+          codigo: code,
+        },
+      };
+
+      returnId = req._id.toString()
+    }
+    else if (Date.now() - new Date(requisicao.updatedAt).getTime() > 1000 * 60 * 5) {
+      await RequisicaoUsuarioModel.findOneAndUpdate({ email }, {
+        codigo: code
+      })
+
+      config = {
+        from: `Incita <${EMAIL}>`,
+        to: email,
+        subject: 'Cadastro Incita',
+        template: 'codigo',
+        context: {
+          codigo: code,
+        },
+      }
+    }
+    else {
+      config = {
         from: `Incita <${EMAIL}>`,
         to: email,
         subject: 'Cadastro Incita',
@@ -57,37 +95,13 @@ export const UsuarioService = {
           codigo: requisicao.codigo,
         },
       };
-
-      Transporter.sendMail(config);
-
-      return {
-        success: true,
-        data: requisicao.id,
-      };
     }
-
-    const req = await RequisicaoUsuarioModel.create({
-      nome,
-      email,
-      senha: hashedSenha,
-      codigo: code,
-    });
-
-    const config = {
-      from: `Incita <${EMAIL}>`,
-      to: email,
-      subject: 'Cadastro Incita',
-      template: 'codigo',
-      context: {
-        codigo: code,
-      },
-    };
 
     Transporter.sendMail(config);
 
     return {
       success: true,
-      data: req._id.toString(),
+      data: returnId,
     };
   },
 
