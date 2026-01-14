@@ -144,6 +144,16 @@ export const RedacaoLivreController: Controller = {
     const { id: redacaoLivreId } = request.params as { id: string };
     reply.sse({ comment: '' });
 
+    const heartbeatId = setInterval(() => {
+      try {
+        reply.raw.write(': heartbeat\n\n')
+      } catch (e) {
+        clearInterval(heartbeatId)
+        console.log('client disconnected\n');
+        console.log(e);
+      }
+    }, 30000)
+
     const redacao = await RedacaoLivreModel.findById(redacaoLivreId);
     if (!redacao) {
       return reply.sse({
@@ -178,9 +188,13 @@ export const RedacaoLivreController: Controller = {
     request.raw.on('close', () => {
       AppEventEmitter.off('redacao:ia:persistida', redacaoPersistidaWrapper);
       AppEventEmitter.off('redacao:ia:delay', redacaoDelayWrapper);
+      
+      clearInterval(heartbeatId)
+      
       reply.sseContext.source.end();
     });
   },
+
   deleteCorrecao: async (request, reply) => {
     const { id: requisitante } = request.user as RequestUserData;
     const { id, correcaoId } = request.params as {

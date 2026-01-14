@@ -47,6 +47,16 @@ export const NotificacaoController: Controller = {
     const { id: userId } = request.user as RequestUserData
     reply.sse({ comment: '' }) // evita fechar a conexão automaticamente
 
+    const heartbeatId = setInterval(() => {
+      try {
+        reply.raw.write(': heartbeat\n\n')
+      } catch (e) {
+        clearInterval(heartbeatId)
+        console.log('client disconnected\n');
+        console.log(e);
+      }
+    }, 30000)
+
     const tarefaEnviadaListenerWrapper = (payload: NotificacaoTarefaEnviada) =>
       streamNotificacaoTarefaEnviadaListener(payload, userId, reply);
 
@@ -71,6 +81,9 @@ export const NotificacaoController: Controller = {
       AppEventEmitter.off('notificacao:tarefa:fechada:criada', tarefaFechadaListenerWrapper);
       AppEventEmitter.off('notificacao:tarefa:corrigida:criada', tarefaCorrigidaListenerWrapper);
       AppEventEmitter.off('notificacao:requisicao-professor:status:criada', requisicaoProfessorStatusListenerWrapper);
+      
+      clearInterval(heartbeatId)
+
       reply.sseContext.source.end()
     });
   },
