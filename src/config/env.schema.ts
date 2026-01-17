@@ -1,0 +1,141 @@
+import z from 'zod';
+
+// Storage driver options
+export const storageDriverOptions = ['local', 'r2', 'dropbox', 'cloudinary'] as const;
+
+const envSchema = z
+  .object({
+    // ============================================
+    // BASE CONFIG
+    // ============================================
+    DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
+    PORT: z.coerce.number().default(3000),
+    NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+    TZ: z.string().default('America/Sao_Paulo'),
+
+    // ============================================
+    // REDIS
+    // ============================================
+    REDIS_HOST: z.string().min(1, 'REDIS_HOST is required'),
+    REDIS_PORT: z.coerce.number().default(6379),
+    REDIS_USERNAME: z.string().optional(), // Optional
+    REDIS_PASSWORD: z.string().optional(), // Optional
+
+    // ============================================
+    // AUTHENTICATION (better-auth)
+    // ============================================
+    BETTER_AUTH_SECRET: z.string().min(1, 'BETTER_AUTH_SECRET is required'),
+    BETTER_AUTH_URL: z.url('BETTER_AUTH_URL must be a valid URL'),
+
+    // Authentication - Social OAuth (Optional)
+    GOOGLE_CLIENT_ID: z.string().optional(),
+    GOOGLE_CLIENT_SECRET: z.string().optional(),
+
+    // ============================================
+    // AI (Vercel AI SDK - Google)
+    // ============================================
+    GOOGLE_GENERATIVE_AI_API_KEY: z.string().min(1, 'GOOGLE_GENERATIVE_AI_API_KEY is required'),
+
+    // ============================================
+    // OBJECT STORAGE
+    // ============================================
+    STORAGE_DRIVER: z.enum(storageDriverOptions).default('local'),
+    STORAGE_APP_FOLDER: z.string().default('incita-storage'),
+    STORAGE_CLEANUP_CRON: z.string().optional().default('0 */2 * * *'), // Optional - every 2 hours
+
+    // R2 Storage (Required if STORAGE_DRIVER === 'r2')
+    R2_ACCESS_KEY_ID: z.string().optional(),
+    R2_SECRET_ACCESS_KEY: z.string().optional(),
+    R2_REGION: z.string().optional().default('auto'),
+    R2_BUCKET_NAME: z.string().optional(),
+    R2_ENDPOINT: z.url().optional(),
+    R2_PUBLIC_URL: z.url().optional(),
+
+    // Dropbox Storage (Required if STORAGE_DRIVER === 'dropbox')
+    DROPBOX_CLIENT_ID: z.string().optional(),
+    DROPBOX_CLIENT_SECRET: z.string().optional(),
+    DROPBOX_REFRESH_TOKEN: z.string().optional(),
+
+    // Cloudinary Storage (Required if STORAGE_DRIVER === 'cloudinary')
+    CLOUDINARY_CLOUD_NAME: z.string().optional(),
+    CLOUDINARY_API_KEY: z.string().optional(),
+    CLOUDINARY_API_SECRET: z.string().optional(),
+
+    // ============================================
+    // EMAIL (SMTP)
+    // ============================================
+    SMTP_HOST: z.string().optional(), // Optional
+    SMTP_PORT: z.coerce.number().optional(), // Optional
+    SMTP_USER: z.string().optional(), // Optional
+    SMTP_PASS: z.string().optional(), // Optional
+    EMAIL_FROM: z.string().optional(), // Optional
+
+    // Email (Mailjet API) - Optional alternative to SMTP
+    MAILJET_API_KEY: z.string().optional(),
+    MAILJET_SECRET_KEY: z.string().optional(),
+
+    // ============================================
+    // LOGGER EMAIL NOTIFICATIONS (Optional)
+    // ============================================
+    LOGGER_EMAIL_ENABLED: z
+      .preprocess((val) => val === 'true', z.boolean())
+      .optional()
+      .default(false),
+    LOGGER_EMAIL_LEVEL: z
+      .enum(['fatal', 'error', 'warn', 'log', 'debug', 'verbose'])
+      .optional()
+      .default('error'),
+    LOGGER_EMAIL_RECIPIENTS: z.string().optional(), // Comma-separated emails
+    LOGGER_EMAIL_BATCH_INTERVAL_MS: z.coerce.number().optional().default(300000), // 5 min
+
+    // ============================================
+    // ADMIN SETUP (Optional)
+    // ============================================
+    ADMIN_SETUP: z
+      .preprocess((val) => val === 'true', z.boolean())
+      .optional()
+      .default(false),
+    ADMIN_NAME: z.string().optional(),
+    ADMIN_EMAIL: z.string().optional(),
+    ADMIN_PASSWORD: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      // Validate R2 config if driver is r2
+      if (data.STORAGE_DRIVER === 'r2') {
+        return (
+          !!data.R2_ACCESS_KEY_ID &&
+          !!data.R2_SECRET_ACCESS_KEY &&
+          !!data.R2_BUCKET_NAME &&
+          !!data.R2_ENDPOINT &&
+          !!data.R2_PUBLIC_URL
+        );
+      }
+      // Validate Dropbox config if driver is dropbox
+      if (data.STORAGE_DRIVER === 'dropbox') {
+        return (
+          !!data.DROPBOX_CLIENT_ID && !!data.DROPBOX_CLIENT_SECRET && !!data.DROPBOX_REFRESH_TOKEN
+        );
+      }
+      // Validate Cloudinary config if driver is cloudinary
+      if (data.STORAGE_DRIVER === 'cloudinary') {
+        return (
+          !!data.CLOUDINARY_CLOUD_NAME && !!data.CLOUDINARY_API_KEY && !!data.CLOUDINARY_API_SECRET
+        );
+      }
+      // Validate admin setup if admin setup is enabled
+      if (data.ADMIN_SETUP) {
+        return !!data.ADMIN_NAME && !!data.ADMIN_EMAIL && !!data.ADMIN_PASSWORD;
+      }
+      return true;
+    },
+    {
+      message: 'Missing required environment variables',
+    },
+  );
+
+export type EnvConfig = z.infer<typeof envSchema>;
+
+export default () => {
+  return envSchema.parse(process.env);
+};
