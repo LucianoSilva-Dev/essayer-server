@@ -3,6 +3,9 @@ import z from 'zod';
 // Storage driver options
 export const storageDriverOptions = ['local', 'r2', 'dropbox', 'cloudinary'] as const;
 
+// Email driver options
+export const emailDriverOptions = ['smtp', 'mailjet'] as const;
+
 const envSchema = z
   .object({
     // ============================================
@@ -62,15 +65,18 @@ const envSchema = z
     CLOUDINARY_API_SECRET: z.string().optional(),
 
     // ============================================
-    // EMAIL (SMTP)
+    // EMAIL
     // ============================================
-    SMTP_HOST: z.string().optional(), // Optional
-    SMTP_PORT: z.coerce.number().optional(), // Optional
-    SMTP_USER: z.string().optional(), // Optional
-    SMTP_PASS: z.string().optional(), // Optional
-    EMAIL_FROM: z.string().optional(), // Optional
+    EMAIL_DRIVER: z.enum(emailDriverOptions).default('smtp'),
+    EMAIL_FROM: z.string().optional(),
 
-    // Email (Mailjet API) - Optional alternative to SMTP
+    // SMTP Configuration (Required if EMAIL_DRIVER === 'smtp')
+    SMTP_HOST: z.string().optional(),
+    SMTP_PORT: z.coerce.number().optional(),
+    SMTP_USER: z.string().optional(),
+    SMTP_PASS: z.string().optional(),
+
+    // Mailjet API Configuration (Required if EMAIL_DRIVER === 'mailjet')
     MAILJET_API_KEY: z.string().optional(),
     MAILJET_SECRET_KEY: z.string().optional(),
 
@@ -130,7 +136,23 @@ const envSchema = z
       return true;
     },
     {
-      message: 'Missing required environment variables',
+      message: 'Missing required storage/admin environment variables',
+    },
+  )
+  .refine(
+    (data) => {
+      // Validate SMTP config if email driver is smtp
+      if (data.EMAIL_DRIVER === 'smtp') {
+        return !!data.SMTP_HOST && !!data.SMTP_PORT;
+      }
+      // Validate Mailjet config if email driver is mailjet
+      if (data.EMAIL_DRIVER === 'mailjet') {
+        return !!data.MAILJET_API_KEY && !!data.MAILJET_SECRET_KEY;
+      }
+      return true;
+    },
+    {
+      message: 'Missing required email configuration for the selected EMAIL_DRIVER',
     },
   );
 
