@@ -69,7 +69,7 @@ export class NodemailerProvider implements IEmailProvider {
 
       const result = await this.transporter.sendMail(mailOptions);
 
-      this.logger.log(`Email sent to ${JSON.stringify(to)} - MessageId: ${result.messageId}`);
+      this.logger.debug(`Email sent to ${JSON.stringify(to)} - MessageId: ${result.messageId}`);
 
       return {
         success: true,

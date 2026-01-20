@@ -72,7 +72,7 @@ export class MailjetProvider implements IEmailProvider {
 
       const messageId = body.Messages?.[0]?.To?.[0]?.MessageID?.toString();
 
-      this.logger.log(`Email sent successfully to ${JSON.stringify(to)} - MessageId: ${messageId}`);
+      this.logger.debug(`Email sent successfully to ${JSON.stringify(to)} - MessageId: ${messageId}`);
 
       return {
         success: true,

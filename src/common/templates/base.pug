@@ -1,0 +1,193 @@
+//- File: base.pug
+//- Base template for inheritance
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    title #{title} - Incita
+    block head
+    style.
+      /* Reset and base styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: 'Poppins', Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 20px;
+      }
+      
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      }
+      
+      .header {
+        background: linear-gradient(135deg, #0f2a36 0%, #1a3a4a 100%);
+        padding: 30px 20px;
+        text-align: center;
+        color: white;
+      }
+      
+      .logo-container {
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      
+      .logo {
+        width: 60px;
+        height: 60px;
+        background: white;
+        border-radius: 50%;
+        display: inline-block;
+        text-align: center;
+        line-height: 60px;
+        margin-bottom: 15px;
+      }
+      
+      .logo-icon {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+      }
+      
+      .header h1 {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0;
+        color: white;
+      }
+      
+      .content {
+        padding: 40px 30px;
+      }
+      
+      .greeting {
+        color: #1a3a4a;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 25px;
+      }
+      
+      .message {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 20px;
+        line-height: 1.7;
+      }
+      
+      .button {
+        display: inline-block;
+        background: linear-gradient(to right, #e8983a, #d4842a);
+        color: white !important;
+        text-decoration: none;
+        padding: 14px 32px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        text-align: center;
+        margin: 25px 0;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+      }
+      
+      .button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(232, 152, 58, 0.3);
+      }
+      
+      .warning {
+        background-color: #fff8e1;
+        border-left: 4px solid #ffc107;
+        padding: 15px;
+        margin: 25px 0;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      
+      .footer {
+        background: #f8f9fa;
+        padding: 30px;
+        text-align: center;
+        border-top: 1px solid #eee;
+      }
+      
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin: 20px 0;
+      }
+      
+      .social-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        background: #e8983a;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 22px;
+        color: white;
+      }
+      
+      .social-link:hover {
+        background: #d4842a;
+        transform: scale(1.1) translateY(-2px);
+      }
+      
+      .address {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.5;
+        margin-top: 20px;
+      }
+      
+      .copyright {
+        color: #999;
+        font-size: 12px;
+        margin-top: 15px;
+      }
+      
+      /* Responsiveness */
+      @media only screen and (max-width: 600px) {
+        .content {
+          padding: 30px 20px;
+        }
+        
+        .header {
+          padding: 25px 15px;
+        }
+        
+        .button {
+          display: block;
+          width: 100%;
+        }
+      }
+
+  body
+    .email-container
+      .header
+        .logo-container
+          .logo
+            span(style="color: #1a3a4a; font-size: 32px; font-weight: bold;") I
+        h1 Incita
+      
+      block content
+
+      block footer

@@ -1,0 +1,209 @@
+//- File: error-notification.pug
+//- Template for system log notifications
+extends base
+
+block append head
+  style.
+    .summary-box {
+      background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+      border: 2px solid #94a3b8;
+    }
+    
+    .summary-total {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 10px;
+    }
+    
+    .summary-label {
+      font-size: 14px;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 15px;
+    }
+    
+    .level-counts {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .level-badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    
+    .level-badge.fatal {
+      background-color: #7f1d1d;
+      color: #ffffff;
+    }
+    
+    .level-badge.error {
+      background-color: #fee2e2;
+      color: #dc2626;
+    }
+    
+    .level-badge.warn {
+      background-color: #fef3c7;
+      color: #d97706;
+    }
+    
+    .level-badge.log {
+      background-color: #dbeafe;
+      color: #2563eb;
+    }
+    
+    .level-badge.debug {
+      background-color: #e0e7ff;
+      color: #4f46e5;
+    }
+    
+    .level-badge.verbose {
+      background-color: #f3e8ff;
+      color: #7c3aed;
+    }
+    
+    .log-list {
+      margin: 20px 0;
+    }
+    
+    .log-item {
+      background-color: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    
+    .log-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .log-level {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    
+    .log-level.fatal {
+      background-color: #7f1d1d;
+      color: #ffffff;
+    }
+    
+    .log-level.error {
+      background-color: #fee2e2;
+      color: #dc2626;
+    }
+    
+    .log-level.warn {
+      background-color: #fef3c7;
+      color: #d97706;
+    }
+    
+    .log-level.log {
+      background-color: #dbeafe;
+      color: #2563eb;
+    }
+    
+    .log-level.debug {
+      background-color: #e0e7ff;
+      color: #4f46e5;
+    }
+    
+    .log-level.verbose {
+      background-color: #f3e8ff;
+      color: #7c3aed;
+    }
+    
+    .log-timestamp {
+      font-size: 12px;
+      color: #6b7280;
+    }
+    
+    .log-context {
+      font-size: 12px;
+      color: #4b5563;
+      background-color: #e5e7eb;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+    
+    .log-message {
+      font-size: 14px;
+      color: #111827;
+      font-family: 'Courier New', monospace;
+      background-color: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 12px;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+    
+    .meta-info {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #6b7280;
+      text-align: center;
+    }
+
+block content
+  .content
+    p.greeting System Alert
+    
+    p.message The system has recorded events that may require your attention.
+    
+    .summary-box
+      .summary-total #{logs.length}
+      .summary-label log(s) recorded
+      .level-counts
+        if levelCounts.fatal > 0
+          span.level-badge.fatal #{levelCounts.fatal} fatal
+        if levelCounts.error > 0
+          span.level-badge.error #{levelCounts.error} error
+        if levelCounts.warn > 0
+          span.level-badge.warn #{levelCounts.warn} warn
+        if levelCounts.log > 0
+          span.level-badge.log #{levelCounts.log} log
+        if levelCounts.debug > 0
+          span.level-badge.debug #{levelCounts.debug} debug
+        if levelCounts.verbose > 0
+          span.level-badge.verbose #{levelCounts.verbose} verbose
+    
+    .log-list
+      each log in logs
+        .log-item
+          .log-header
+            span.log-level(class=log.level)= log.level
+            span.log-timestamp= log.timestamp.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
+          if log.context
+            span.log-context= log.context
+          .log-message= log.message
+    
+    .meta-info
+      p Application: #{appName}
+      p Generated at: #{generatedAt}
+
+block footer
+  .footer
+    p.address
+      | Incita - System Monitoring
+    
+    p.copyright
+      | © #{new Date().getFullYear()} Incita. Automatic notification.

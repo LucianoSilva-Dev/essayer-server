@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { setAppContext } from './app.registry';
 import type { EnvConfig } from './config';
+import { LoggerService } from '@core/logger/logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -12,6 +13,9 @@ async function bootstrap() {
   // Get config service
   const configService = app.get<ConfigService<EnvConfig>>(ConfigService);
   const port = configService.get<number>('PORT') ?? 3000;
+
+  // Configure custom logger
+  app.useLogger(app.get(LoggerService));
 
   // Set the global app context
   setAppContext(app);
