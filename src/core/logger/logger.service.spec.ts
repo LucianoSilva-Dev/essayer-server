@@ -1,8 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { LoggerService } from './logger.service';
-import { EMAIL_PROVIDER, IEmailProvider } from 'src/core/email';
+import { Test, type TestingModule } from '@nestjs/testing';
 import { ConfigService } from 'src/config/config.service';
-import { vi, describe, beforeEach, it, expect, Mock, afterEach } from 'vitest';
+import { EMAIL_PROVIDER, type IEmailProvider } from 'src/core/email';
+import { afterEach, beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+import { LoggerService } from './logger.service';
 
 describe('LoggerService', () => {
   let service: LoggerService;
@@ -217,9 +217,7 @@ describe('LoggerService', () => {
 
     it('should not throw when email sending fails', async () => {
       vi.useFakeTimers();
-      (emailService.sendMail as Mock).mockRejectedValue(
-        new Error('SMTP error'),
-      );
+      (emailService.sendMail as Mock).mockRejectedValue(new Error('SMTP error'));
 
       service.error('Test error');
 

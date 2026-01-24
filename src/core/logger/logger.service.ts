@@ -1,11 +1,11 @@
 import { ConfigService } from '@config/config.service';
 import { EMAIL_PROVIDER } from '@core/email';
-import { IEmailProvider } from '@core/email/types';
-import { ConsoleLogger, Inject, Injectable, OnModuleDestroy } from '@nestjs/common';
+import type { IEmailProvider } from '@core/email/types';
+import { ConsoleLogger, Inject, Injectable, type OnModuleDestroy } from '@nestjs/common';
 
 type LogLevel = 'fatal' | 'error' | 'warn' | 'log' | 'debug' | 'verbose';
 
-interface LogEntry {
+interface ILogEntry {
   level: LogLevel;
   message: string;
   context?: string;
@@ -29,25 +29,23 @@ export class LoggerService extends ConsoleLogger implements OnModuleDestroy {
   private readonly batchIntervalMs: number;
   private readonly timezone: string;
 
-  private logBuffer: LogEntry[] = [];
+  private logBuffer: ILogEntry[] = [];
   private batchTimeout: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
     @Inject(EMAIL_PROVIDER)
     private readonly emailService: IEmailProvider,
+    @Inject(ConfigService)
     private readonly configService: ConfigService,
   ) {
     super();
-    this.isEnabled =
-      this.configService.get<boolean>('LOGGER_EMAIL_ENABLED') ?? false;
-    this.minLevel =
-      this.configService.get<LogLevel>('LOGGER_EMAIL_LEVEL') ?? 'error';
+    this.isEnabled = this.configService.get<boolean>('LOGGER_EMAIL_ENABLED') ?? false;
+    this.minLevel = this.configService.get<LogLevel>('LOGGER_EMAIL_LEVEL') ?? 'error';
     this.recipients = this.parseRecipients(
       this.configService.get<string>('LOGGER_EMAIL_RECIPIENTS') ?? '',
     );
     this.batchIntervalMs =
-      this.configService.get<number>('LOGGER_EMAIL_BATCH_INTERVAL_MS') ??
-      300000;
+      this.configService.get<number>('LOGGER_EMAIL_BATCH_INTERVAL_MS') ?? 300000;
     this.timezone = this.configService.get<string>('TZ') ?? 'America/Sao_Paulo';
   }
 
@@ -105,15 +103,11 @@ export class LoggerService extends ConsoleLogger implements OnModuleDestroy {
     return LOG_LEVEL_PRIORITY[level] <= LOG_LEVEL_PRIORITY[this.minLevel];
   }
 
-  private handleLog(
-    level: LogLevel,
-    message: unknown,
-    optionalParams: unknown[],
-  ) {
+  private handleLog(level: LogLevel, message: unknown, optionalParams: unknown[]) {
     if (!this.shouldNotify(level)) return;
 
     const context = this.extractContext(optionalParams);
-    const entry: LogEntry = {
+    const entry: ILogEntry = {
       level,
       message: this.messageToString(message),
       context,
@@ -175,8 +169,7 @@ export class LoggerService extends ConsoleLogger implements OnModuleDestroy {
     if (levelCounts.warn) subjectParts.push(`${levelCounts.warn} warn`);
     if (levelCounts.log) subjectParts.push(`${levelCounts.log} log`);
     if (levelCounts.debug) subjectParts.push(`${levelCounts.debug} debug`);
-    if (levelCounts.verbose)
-      subjectParts.push(`${levelCounts.verbose} verbose`);
+    if (levelCounts.verbose) subjectParts.push(`${levelCounts.verbose} verbose`);
 
     const subject = `[Incita Backend] ${logs.length} log(s): ${subjectParts.join(', ')}`;
 
