@@ -1,0 +1,344 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Enums
+
+enum UserRole {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+enum RequestStatus {
+  APPROVED
+  REFUSED
+}
+
+enum RepertoireType {
+  ARTICLE
+  CITATION
+  WORK
+}
+
+enum WorkType {
+  BOOK
+  FILM
+  MUSIC
+  PLAY
+}
+
+enum ActivityType {
+  ESSAY
+}
+
+enum AIResponseStatus {
+  FINISHED
+  PENDING
+  ERROR
+}
+
+enum NotificationType {
+  ACTIVITY_SENT
+  ACTIVITY_CORRECTED
+  TEACHER_REQUEST_STATUS
+}
+
+// Tables
+
+model UserRequest {
+  id String @id @default(uuid(7))
+  name     String
+  email    String
+  password String
+  code     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User?
+}
+
+model User {
+  id            String   @id @default(uuid(7))
+  name          String
+  email         String   @unique
+  password      String
+  role          UserRole @default(STUDENT)
+  photoPath     String?
+  photoPublicId String?
+  lattes        String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  notificationsSeen       Notification[]    @relation("seen")
+  notificationsSent       Notification[]    @relation("sender")
+  essays                  UserEssay[]
+  essayResponses          EssayResponse[]
+  classesPending          Class[]           @relation("pending")
+  classesMember           Class[]           @relation("member")
+  classesCreated          Class[]           @relation("creator")
+  sessions                Session[]
+  comments                Comment[]
+  favouritedRepertoires   Repertoire[]      @relation("favourite")
+  likedRepertoires        Repertoire[]      @relation("like")
+  repertoires             Repertoire[]      @relation("creator")
+  passwordRequests        PasswordRequest[]
+  emailRequests           EmailRequest[]
+  teacherRequests         TeacherRequest[]  @relation("requester")
+  teacherRequestsReviewed TeacherRequest[]  @relation("reviewer")
+  userRequest             UserRequest       @relation(fields: [request], references: [id])
+  request                 String            @unique
+}
+
+model PasswordRequest {
+  id        String         @id @default(uuid(7))
+  code      String
+  status    RequestStatus?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String 
+}
+
+model TeacherRequest {
+  id        String         @id @default(uuid(7))
+  lattes    String
+  status    RequestStatus?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  notification TeacherRequestStatusNotification?
+  user         User                              @relation("requester", fields: [userId], references: [id])
+  userId       String                           
+  reviewer     User?                             @relation("reviewer", fields: [reviewerId], references: [id])
+  reviewerId   String?                           
+}
+
+model EmailRequest {
+  id        String         @id @default(uuid(7))
+  code      String
+  email     String
+  status    RequestStatus?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String 
+}
+
+model Comment {
+  id        String   @id @default(uuid(7))
+  text      String
+  fixed     Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  repertoire   Repertoire @relation(fields: [repertoireId], references: [id])
+  repertoireId String     
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String    
+}
+
+model Repertoire {
+  id        String         @id @default(uuid(7))
+  author    String
+  topics    String[]
+  subtopics String[]
+  type      RepertoireType
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  essays     Essay[]
+  article    Article?
+  citation   Citation?
+  work       Work?
+  comments   Comment[]
+  creator    User      @relation("creator", fields: [creatorId], references: [id])
+  creatorId  String    
+  likes      User[]    @relation("like")
+  favourites User[]    @relation("favourite")
+}
+
+model Article {
+  id       String  @id @default(uuid(7))
+  title    String
+  abstract String
+  source   String?
+
+  repertoire   Repertoire @relation(fields: [repertoireId], references: [id])
+  repertoireId String     @unique
+}
+
+model Citation {
+  id     String  @id @default(uuid(7))
+  quote  String
+  source String?
+
+  repertoire   Repertoire @relation(fields: [repertoireId], references: [id])
+  repertoireId String     @unique
+}
+
+model Work {
+  id       String   @id @default(uuid(7))
+  title    String
+  synopsis String
+  type     WorkType
+
+  repertoire   Repertoire @relation(fields: [repertoireId], references: [id])
+  repertoireId String     @unique
+}
+
+model Session {
+  id               String   @id @default(uuid(7))
+  refreshTokenHash String   @unique
+  expiresAt        DateTime
+  isValid          Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model Class {
+  id        String   @id @default(uuid(7))
+  name      String
+  iconId    String   @default("none")
+  school    String?
+  code      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  activities     Activity[]
+  creator        User       @relation("creator", fields: [creatorId], references: [id])
+  creatorId      String     
+  pendingMembers User[]     @relation("pending")
+  members        User[]     @relation("member")
+}
+
+model Activity {
+  id          String       @id @default(uuid(7))
+  title       String
+  description String
+  deadline    DateTime?
+  type        ActivityType
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  essay   Essay?
+  class   Class  @relation(fields: [classId], references: [id])
+  classId String
+}
+
+model EssayFeedback {
+  id         String   @id @default(uuid(7))
+  gradeC1    Int
+  gradeC2    Int
+  gradeC3    Int
+  gradeC4    Int
+  gradeC5    Int
+  feedbackC1 String
+  feedbackC2 String
+  feedbackC3 String
+  feedbackC4 String
+  feedbackC5 String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  aiCorrection      AICorrection?
+  teacherCorrection TeacherCorrection?
+}
+
+model TeacherCorrection {
+  id   String  @id @default(uuid(7))
+  seen Boolean @default(false)
+
+  response   EssayResponse @relation(fields: [responseId], references: [id])
+  responseId String        @unique
+  feedback   EssayFeedback @relation(fields: [feedbackId], references: [id])
+  feedbackId String        @unique
+}
+
+model AICorrection {
+  id     String           @id @default(uuid(7))
+  text   String
+  status AIResponseStatus
+
+  essay      UserEssay     @relation(fields: [essayId], references: [id])
+  essayId    String       
+  feedback   EssayFeedback @relation(fields: [feedbackId], references: [id])
+  feedbackId String        @unique
+}
+
+model EssayResponse {
+  id         String    @id @default(uuid(7))
+  answerDate DateTime?
+  text       String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  essay     Essay              @relation(fields: [essayId], references: [id])
+  essayId   String             
+  feedback  TeacherCorrection?
+  student   User               @relation(fields: [studentId], references: [id])
+  studentId String             
+}
+
+model Essay {
+  id                 String @id @default(uuid(7))
+  theme              String
+  timeLimitInMinutes Float?
+
+  responses   EssayResponse[]
+  repertoires Repertoire[]
+  activity    Activity        @relation(fields: [activityId], references: [id])
+  activityId  String          @unique
+}
+
+model UserEssay {
+  id        String   @id @default(uuid(7))
+  theme     String
+  text      String?
+  duration  Float?
+  date      DateTime
+  finished  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  aiCorrections AICorrection[]
+  student       User           @relation(fields: [studentId], references: [id])
+  studentId     String         
+}
+
+model Notification {
+  id        String           @id @default(uuid(7))
+  type      NotificationType
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  teacherRequestStatus TeacherRequestStatusNotification?
+  senders              User[]                            @relation("sender")
+  seenBy               User[]                            @relation("seen")
+}
+
+model TeacherRequestStatusNotification {
+  id String @id @default(uuid(7))
+  motivo String?
+
+  teacherRequest   TeacherRequest @relation(fields: [teacherRequestId], references: [id])
+  teacherRequestId String         @unique
+  notification     Notification   @relation(fields: [notificationId], references: [id])
+  notificationId   String         @unique
+}

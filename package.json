@@ -29,6 +29,7 @@
     "@nestjs/event-emitter": "^3.0.0",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.0",
+    "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.0.0",
     "@scalar/nestjs-api-reference": "^1.0.3",
     "@thallesp/nestjs-better-auth": "^2.1.0",
@@ -68,6 +69,6 @@
     "vitest": "^4.0.0"
   },
   "prisma": {
-    "schema": "prisma/schema.prisma"
+    "schema": "src/core/prisma/schema.prisma"
   }
 }

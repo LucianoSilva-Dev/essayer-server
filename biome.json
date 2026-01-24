@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["src/**/*.ts", "test/**/*.ts"]
+    "includes": ["src/**/*.ts", "test/**/*.ts", "!src/core/prisma/generated"]
   },
   "formatter": {
     "enabled": true,
