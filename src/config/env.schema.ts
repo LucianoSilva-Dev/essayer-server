@@ -1,7 +1,7 @@
 import z from 'zod';
 
 // Storage driver options
-export const storageDriverOptions = ['local', 'r2', 'dropbox', 'cloudinary'] as const;
+export const storageDriverOptions = ['r2', 'dropbox'] as const;
 
 // Email driver options
 export const emailDriverOptions = ['smtp', 'mailjet'] as const;
@@ -42,7 +42,7 @@ const envSchema = z
     // ============================================
     // OBJECT STORAGE
     // ============================================
-    STORAGE_DRIVER: z.enum(storageDriverOptions).default('local'),
+    STORAGE_DRIVER: z.enum(storageDriverOptions),
     STORAGE_APP_FOLDER: z.string().default('incita-storage'),
     STORAGE_CLEANUP_CRON: z.string().optional().default('0 */2 * * *'), // Optional - every 2 hours
 
@@ -59,7 +59,7 @@ const envSchema = z
     DROPBOX_CLIENT_SECRET: z.string().optional(),
     DROPBOX_REFRESH_TOKEN: z.string().optional(),
 
-    // Cloudinary Storage (Required if STORAGE_DRIVER === 'cloudinary')
+    // Cloudinary Storage (required by default because it is used as the imageProvider for SmartStorageProvider)
     CLOUDINARY_CLOUD_NAME: z.string().optional(),
     CLOUDINARY_API_KEY: z.string().optional(),
     CLOUDINARY_API_SECRET: z.string().optional(),
