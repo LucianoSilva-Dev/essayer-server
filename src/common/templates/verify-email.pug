@@ -1,0 +1,66 @@
+//- File: verify-email.pug
+//- Email verification template for better-auth
+extends base
+
+block append head
+  style.
+    .verification-box {
+      background: linear-gradient(135deg, #f0f7ff 0%, #e3f2fd 100%);
+      border-radius: 10px;
+      padding: 25px;
+      margin: 30px 0;
+      text-align: center;
+      border: 2px solid #bbdefb;
+    }
+    
+    .verification-icon {
+      font-size: 48px;
+      color: #1a3a4a;
+      margin-bottom: 15px;
+    }
+    
+    .instructions {
+      background-color: #f3f4f6;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+      font-size: 14px;
+      color: #555;
+    }
+
+block content
+  .content
+    p.greeting Olá, #{name}!
+    
+    p.message Bem-vindo(a) ao Incita! Para concluir seu cadastro e ter acesso completo aos nossos recursos, precisamos verificar seu endereço de e-mail.
+    
+    .verification-box
+      .verification-icon ✓
+      h3(style="color: #1a3a4a; margin-bottom: 20px;") Verificação de E-mail
+      p(style="color: #666; margin-bottom: 25px;") Clique no botão abaixo para confirmar seu endereço de e-mail:
+      
+      a.button(href=url) Confirmar E-mail
+    
+    .instructions
+      p(style="margin-bottom: 10px;") 
+        strong Instruções:
+      p(style="margin-bottom: 5px;") 1. Clique no botão "Confirmar E-mail" acima
+      p(style="margin-bottom: 5px;") 2. Você será redirecionado para nosso site
+      p 3. Seu e-mail será confirmado automaticamente
+    
+    p.message(style="font-size: 14px; color: #666; margin-top: 25px;")
+      | Se o botão não funcionar, copie e cole este link no seu navegador:<br>
+      span(style="color: #1a3a4a; word-break: break-all;") #{url}
+    
+    .warning
+      p 
+        strong ⚠️ Importante: 
+        | Este link é válido por 24 horas. Se você não solicitou esta verificação, por favor ignore este e-mail.
+
+block footer
+  .footer
+    p.address
+      | Incita - Plataforma Educacional
+    
+    p.copyright
+      | © #{new Date().getFullYear()} Incita. Todos os direitos reservados.

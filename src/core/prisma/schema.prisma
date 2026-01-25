@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "./generated"
@@ -13,13 +10,9 @@ datasource db {
   provider = "postgresql"
 }
 
-// Enums
-
-enum UserRole {
-  STUDENT
-  TEACHER
-  ADMIN
-}
+// ============================================
+// ENUMS
+// ============================================
 
 enum RequestStatus {
   APPROVED
@@ -55,62 +48,97 @@ enum NotificationType {
   TEACHER_REQUEST_STATUS
 }
 
-// Tables
-
-model UserRequest {
-  id String @id @default(uuid(7))
-  name     String
-  email    String
-  password String
-  code     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User?
-}
+// ============================================
+// BETTER AUTH ENTITIES
+// ============================================
 
 model User {
-  id            String   @id @default(uuid(7))
+  id            String    @id @default(uuid(7))
   name          String
-  email         String   @unique
-  password      String
-  role          UserRole @default(STUDENT)
-  photoPath     String?
-  photoPublicId String?
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  role          String?   @default("student")
+  banned        Boolean?  @default(false)
+  banReason     String?
+  banExpires    DateTime?
   lattes        String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  sessions Session[]
+  accounts Account[]
 
-  notificationsSeen       Notification[]    @relation("seen")
-  notificationsSent       Notification[]    @relation("sender")
-  essays                  UserEssay[]
-  essayResponses          EssayResponse[]
-  classesPending          Class[]           @relation("pending")
-  classesMember           Class[]           @relation("member")
-  classesCreated          Class[]           @relation("creator")
-  sessions                Session[]
+  // Domain relations
+  teacherRequests         TeacherRequest[] @relation("requester")
+  teacherRequestsReviewed TeacherRequest[] @relation("reviewer")
   comments                Comment[]
-  favouritedRepertoires   Repertoire[]      @relation("favourite")
-  likedRepertoires        Repertoire[]      @relation("like")
-  repertoires             Repertoire[]      @relation("creator")
-  passwordRequests        PasswordRequest[]
-  emailRequests           EmailRequest[]
-  teacherRequests         TeacherRequest[]  @relation("requester")
-  teacherRequestsReviewed TeacherRequest[]  @relation("reviewer")
-  userRequest             UserRequest       @relation(fields: [request], references: [id])
-  request                 String            @unique
+  repertoiresCreated      Repertoire[]     @relation("creator")
+  repertoiresLiked        Repertoire[]     @relation("like")
+  repertoiresFavourited   Repertoire[]     @relation("favourite")
+  classesCreated          Class[]          @relation("creator")
+  classesPending          Class[]          @relation("pending")
+  classesMember           Class[]          @relation("member")
+  essayResponses          EssayResponse[]
+  userEssays              UserEssay[]
+  notificationsSent       Notification[]   @relation("sender")
+  notificationsSeen       Notification[]   @relation("seen")
+
+  @@unique([email])
+  @@map("user")
 }
 
-model PasswordRequest {
-  id        String         @id @default(uuid(7))
-  code      String
-  status    RequestStatus?
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+model Session {
+  id             String   @id @default(uuid(7))
+  expiresAt      DateTime
+  token          String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  ipAddress      String?
+  userAgent      String?
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  impersonatedBy String?
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String 
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
 }
+
+model Account {
+  id                    String    @id @default(uuid(7))
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(uuid(7))
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+// ============================================
+// DOMAIN ENTITIES
+// ============================================
 
 model TeacherRequest {
   id        String         @id @default(uuid(7))
@@ -121,21 +149,9 @@ model TeacherRequest {
 
   notification TeacherRequestStatusNotification?
   user         User                              @relation("requester", fields: [userId], references: [id])
-  userId       String                           
+  userId       String
   reviewer     User?                             @relation("reviewer", fields: [reviewerId], references: [id])
-  reviewerId   String?                           
-}
-
-model EmailRequest {
-  id        String         @id @default(uuid(7))
-  code      String
-  email     String
-  status    RequestStatus?
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-
-  user   User   @relation(fields: [userId], references: [id])
-  userId String 
+  reviewerId   String?
 }
 
 model Comment {
@@ -146,9 +162,9 @@ model Comment {
   updatedAt DateTime @updatedAt
 
   repertoire   Repertoire @relation(fields: [repertoireId], references: [id])
-  repertoireId String     
+  repertoireId String
   user         User       @relation(fields: [userId], references: [id])
-  userId       String    
+  userId       String
 }
 
 model Repertoire {
@@ -166,7 +182,7 @@ model Repertoire {
   work       Work?
   comments   Comment[]
   creator    User      @relation("creator", fields: [creatorId], references: [id])
-  creatorId  String    
+  creatorId  String
   likes      User[]    @relation("like")
   favourites User[]    @relation("favourite")
 }
@@ -200,18 +216,6 @@ model Work {
   repertoireId String     @unique
 }
 
-model Session {
-  id               String   @id @default(uuid(7))
-  refreshTokenHash String   @unique
-  expiresAt        DateTime
-  isValid          Boolean  @default(true)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
-}
-
 model Class {
   id        String   @id @default(uuid(7))
   name      String
@@ -223,7 +227,7 @@ model Class {
 
   activities     Activity[]
   creator        User       @relation("creator", fields: [creatorId], references: [id])
-  creatorId      String     
+  creatorId      String
   pendingMembers User[]     @relation("pending")
   members        User[]     @relation("member")
 }
@@ -277,7 +281,7 @@ model AICorrection {
   status AIResponseStatus
 
   essay      UserEssay     @relation(fields: [essayId], references: [id])
-  essayId    String       
+  essayId    String
   feedback   EssayFeedback @relation(fields: [feedbackId], references: [id])
   feedbackId String        @unique
 }
@@ -290,10 +294,10 @@ model EssayResponse {
   updatedAt  DateTime  @updatedAt
 
   essay     Essay              @relation(fields: [essayId], references: [id])
-  essayId   String             
+  essayId   String
   feedback  TeacherCorrection?
   student   User               @relation(fields: [studentId], references: [id])
-  studentId String             
+  studentId String
 }
 
 model Essay {
@@ -319,7 +323,7 @@ model UserEssay {
 
   aiCorrections AICorrection[]
   student       User           @relation(fields: [studentId], references: [id])
-  studentId     String         
+  studentId     String
 }
 
 model Notification {
@@ -334,7 +338,7 @@ model Notification {
 }
 
 model TeacherRequestStatusNotification {
-  id String @id @default(uuid(7))
+  id     String  @id @default(uuid(7))
   motivo String?
 
   teacherRequest   TeacherRequest @relation(fields: [teacherRequestId], references: [id])

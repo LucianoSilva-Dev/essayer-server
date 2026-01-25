@@ -48,6 +48,7 @@
     "zod": "^4.1.11"
   },
   "devDependencies": {
+    "@better-auth/cli": "^1.4.17",
     "@biomejs/biome": "^2.2.0",
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",

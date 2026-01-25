@@ -1,0 +1,79 @@
+//- File: change-email.pug
+//- Email change verification template for better-auth
+extends base
+
+block append head
+  style.
+    .verification-box {
+      background: linear-gradient(135deg, #fff7e6 0%, #ffecd2 100%);
+      border-radius: 10px;
+      padding: 25px;
+      margin: 30px 0;
+      text-align: center;
+      border: 2px solid #ffd699;
+    }
+    
+    .verification-icon {
+      font-size: 48px;
+      color: #1a3a4a;
+      margin-bottom: 15px;
+    }
+    
+    .instructions {
+      background-color: #f3f4f6;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .new-email-badge {
+      background-color: #1a3a4a;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+block content
+  .content
+    p.greeting Olá, #{name}!
+    
+    p.message Recebemos uma solicitação para alterar o endereço de e-mail da sua conta no Incita. Para confirmar esta alteração, precisamos verificar se você tem acesso a este novo e-mail.
+    
+    .verification-box
+      .verification-icon ✉️
+      h3(style="color: #1a3a4a; margin-bottom: 20px;") Confirmação de Alteração de E-mail
+      
+      .new-email-badge #{newEmail}
+      
+      p(style="color: #666; margin-bottom: 25px;") Clique no botão abaixo para confirmar a alteração do seu e-mail:
+      
+      a.button(href=url) Confirmar Novo E-mail
+    
+    .instructions
+      p(style="margin-bottom: 10px;") 
+        strong Instruções:
+      p(style="margin-bottom: 5px;") 1. Clique no botão "Confirmar Novo E-mail" acima
+      p(style="margin-bottom: 5px;") 2. Você será redirecionado para nosso site
+      p 3. Seu e-mail será atualizado automaticamente
+    
+    p.message(style="font-size: 14px; color: #666; margin-top: 25px;")
+      | Se o botão não funcionar, copie e cole este link no seu navegador:<br>
+      span(style="color: #1a3a4a; word-break: break-all;") #{url}
+    
+    .warning
+      p 
+        strong ⚠️ Importante: 
+        | Este link é válido por 24 horas. Se você não solicitou esta alteração de e-mail, por favor ignore este e-mail e considere alterar sua senha por segurança.
+
+block footer
+  .footer
+    p.address
+      | Incita - Plataforma Educacional
+    
+    p.copyright
+      | © #{new Date().getFullYear()} Incita. Todos os direitos reservados.

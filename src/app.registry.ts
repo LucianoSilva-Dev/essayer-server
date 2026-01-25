@@ -12,3 +12,11 @@ export function getAppContext(): INestApplication {
   }
   return appContext;
 }
+
+/**
+ * Safely attempts to get the app context without throwing.
+ * Returns null if the context has not been initialized yet.
+ */
+export function tryGetAppContext(): INestApplication | null {
+  return appContext ?? null;
+}

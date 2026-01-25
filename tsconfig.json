@@ -31,9 +31,6 @@
             ],
             "@common/*": [
                 "src/common/*"
-            ],
-            "@prisma/*": [
-                "src/core/prisma/*"
             ]
         }
     },

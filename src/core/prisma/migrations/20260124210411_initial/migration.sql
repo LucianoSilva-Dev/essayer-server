@@ -1,5 +1,4 @@
--- CreateEnum
-CREATE TYPE "UserRole" AS ENUM ('STUDENT', 'TEACHER', 'ADMIN');
+-- Note: UserRole enum removed - using TEXT for roles instead
 
 -- CreateEnum
 CREATE TYPE "RequestStatus" AS ENUM ('APPROVED', 'REFUSED');
@@ -38,7 +37,7 @@ CREATE TABLE "User" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "role" "UserRole" NOT NULL DEFAULT 'STUDENT',
+    "role" TEXT NOT NULL DEFAULT 'student',
     "photoPath" TEXT,
     "photoPublicId" TEXT,
     "lattes" TEXT,

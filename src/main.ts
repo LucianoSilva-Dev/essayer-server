@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { setAppContext } from './app.registry';
 import type { EnvConfig } from './config';
+import { setupDocs } from './core/docs/setup.docs';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -27,10 +28,14 @@ async function bootstrap() {
     credentials: true,
   });
 
+  // Setup Scalar Docs
+  await setupDocs(app, port);
+
   await app.listen(port);
 
   const url = await app.getUrl();
   console.log(`🚀 Server running at ${url} 🚀`);
+  console.log(`📚 Documentation available at ${url}/docs`);
 }
 
 void bootstrap();
