@@ -434,10 +434,10 @@ graph TD
 
 - [x] 2.1  - PrismaModule + PrismaService
 - [ ] 2.2  - RedisModule + REDIS_CLIENT provider
-- [ ] 2.3  - StorageModule (interface + cloudinary)
+- [x] 2.3  - StorageModule (interface + cloudinary)
 - [x] 2.4  - EmailModule (interface + nodemailer/mailjet)
 - [ ] 2.5  - BullMQModule (config de filas)
-- [ ] 2.6  - EventsModule (@nestjs/event-emitter)
+- [x] 2.6  - EventsModule (@nestjs/event-emitter)
 - [ ] 2.7  - DocsModule (Scalar)
 - [x] 2.8  - AuthModule (better-auth)
 - [ ] 2.9  - AIModule (interface + Vercel AI SDK)

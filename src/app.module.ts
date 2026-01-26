@@ -1,4 +1,5 @@
 import { EmailModule } from '@core/email';
+import { EventsModule } from '@core/events';
 import { PrismaModule } from '@core/prisma';
 import { StorageModule } from '@core/storage/storage.module';
 import { StorageCleanupModule } from '@core/storage-cleanup/storage-cleanup.module';
@@ -13,6 +14,7 @@ import { LoggerTestModule } from './http-test/logger';
   imports: [
     ConfigModule,
     PrismaModule,
+    EventsModule,
     EmailModule,
     AuthModule,
     EmailTestModule,
