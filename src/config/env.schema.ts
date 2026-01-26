@@ -44,7 +44,7 @@ const envSchema = z
     // ============================================
     STORAGE_DRIVER: z.enum(storageDriverOptions),
     STORAGE_APP_FOLDER: z.string().default('incita-storage'),
-    STORAGE_CLEANUP_CRON: z.string().optional().default('0 */2 * * *'), // Optional - every 2 hours
+    STORAGE_CLEANUP_CRON: z.string().optional().default('*/2 * * * *'), // Optional - every 2 minutes
 
     // R2 Storage (Required if STORAGE_DRIVER === 'r2')
     R2_ACCESS_KEY_ID: z.string().optional(),

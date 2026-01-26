@@ -7,18 +7,16 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { sanitizeFilename } from '@common/utils/string.utils';
-import { Injectable, InternalServerErrorException, type OnModuleInit } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { lookup } from 'mime-types';
 import type { ISaveFileResponse, IStorageProvider } from 'src/core/storage/types';
 import type { IR2StorageConfig } from './r2.storage.types';
 
 @Injectable()
-export class R2StorageProvider implements IStorageProvider, OnModuleInit {
+export class R2StorageProvider implements IStorageProvider {
   private client: S3Client;
 
-  constructor(private readonly config: IR2StorageConfig) {}
-
-  onModuleInit() {
+  constructor(private readonly config: IR2StorageConfig) {
     this.client = new S3Client({
       region: this.config.region,
       endpoint: this.config.endpoint,
