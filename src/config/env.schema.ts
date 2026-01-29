@@ -15,6 +15,7 @@ const envSchema = z
     PORT: z.coerce.number().default(3000),
     NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
     TZ: z.string().default('America/Sao_Paulo'),
+    API_URL: z.url().optional(), // Production API URL (used in OpenAPI docs)
 
     // ============================================
     // REDIS

@@ -438,7 +438,7 @@ graph TD
 - [x] 2.4  - EmailModule (interface + nodemailer/mailjet)
 - [ ] 2.5  - BullMQModule (config de filas)
 - [x] 2.6  - EventsModule (@nestjs/event-emitter)
-- [ ] 2.7  - DocsModule (Scalar)
+- [x] 2.7  - DocsModule (Scalar)
 - [x] 2.8  - AuthModule (better-auth)
 - [ ] 2.9  - AIModule (interface + Vercel AI SDK)
 - [x] 2.10 - LoggerModule (with email notifications)
