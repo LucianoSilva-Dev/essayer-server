@@ -433,7 +433,7 @@ graph TD
 ### Fase 2: Core Modules 🔴
 
 - [x] 2.1  - PrismaModule + PrismaService
-- [ ] 2.2  - RedisModule + REDIS_CLIENT provider
+- [x] 2.2  - RedisModule + REDIS_CLIENT provider
 - [x] 2.3  - StorageModule (interface + cloudinary)
 - [x] 2.4  - EmailModule (interface + nodemailer/mailjet)
 - [ ] 2.5  - BullMQModule (config de filas)

@@ -1,6 +1,7 @@
 import { EmailModule } from '@core/email';
 import { EventsModule } from '@core/events';
 import { PrismaModule } from '@core/prisma';
+import { RedisModule } from '@core/redis';
 import { StorageModule } from '@core/storage/storage.module';
 import { StorageCleanupModule } from '@core/storage-cleanup/storage-cleanup.module';
 import { Module } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { LoggerTestModule } from './http-test/logger';
   imports: [
     ConfigModule,
     PrismaModule,
+    RedisModule,
     EventsModule,
     EmailModule,
     AuthModule,
