@@ -92,15 +92,15 @@ export const sendResetPassword: SendEmail = async ({ user, url, token }) => {
   });
 };
 
-type SendChangeEmailVerification = NonNullable<
+type SendChangeEmailConfirmation = NonNullable<
   NonNullable<BetterAuthOptions['user']>['changeEmail']
->['sendChangeEmailVerification'];
+>['sendChangeEmailConfirmation'];
 
 /**
  * Sends email verification to the new email address when user requests an email change.
  * Uses the abstract EMAIL_PROVIDER from the DI container.
  */
-export const sendChangeEmailVerification: SendChangeEmailVerification = async ({
+export const sendChangeEmailConfirmation: SendChangeEmailConfirmation = async ({
   user,
   newEmail,
   url,

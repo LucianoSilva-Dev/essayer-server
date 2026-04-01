@@ -5,7 +5,7 @@ import { admin as adminPlugin, openAPI } from 'better-auth/plugins';
 import { PrismaClient } from '../prisma/generated/client';
 import {
   betterAuthLogger,
-  sendChangeEmailVerification,
+  sendChangeEmailConfirmation,
   sendResetPassword,
   sendVerificationEmail,
 } from './helpers';
@@ -40,7 +40,7 @@ export const auth = betterAuth({
     },
     changeEmail: {
       enabled: true,
-      sendChangeEmailVerification,
+      sendChangeEmailConfirmation,
       updateEmailWithoutVerification: true,
     },
   },
