@@ -179,7 +179,7 @@ export type ActivityGroupByOutputType = {
   _max: ActivityMaxAggregateOutputType | null
 }
 
-type GetActivityGroupByPayload<T extends ActivityGroupByArgs> = Prisma.PrismaPromise<
+export type GetActivityGroupByPayload<T extends ActivityGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ActivityGroupByOutputType, T['by']> &
       {
@@ -208,6 +208,7 @@ export type ActivityWhereInput = {
   classId?: Prisma.StringFilter<"Activity"> | string
   essay?: Prisma.XOR<Prisma.EssayNullableScalarRelationFilter, Prisma.EssayWhereInput> | null
   class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
+  activityNotifications?: Prisma.ActivityNotificationListRelationFilter
 }
 
 export type ActivityOrderByWithRelationInput = {
@@ -221,6 +222,7 @@ export type ActivityOrderByWithRelationInput = {
   classId?: Prisma.SortOrder
   essay?: Prisma.EssayOrderByWithRelationInput
   class?: Prisma.ClassOrderByWithRelationInput
+  activityNotifications?: Prisma.ActivityNotificationOrderByRelationAggregateInput
 }
 
 export type ActivityWhereUniqueInput = Prisma.AtLeast<{
@@ -237,6 +239,7 @@ export type ActivityWhereUniqueInput = Prisma.AtLeast<{
   classId?: Prisma.StringFilter<"Activity"> | string
   essay?: Prisma.XOR<Prisma.EssayNullableScalarRelationFilter, Prisma.EssayWhereInput> | null
   class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
+  activityNotifications?: Prisma.ActivityNotificationListRelationFilter
 }, "id">
 
 export type ActivityOrderByWithAggregationInput = {
@@ -277,6 +280,7 @@ export type ActivityCreateInput = {
   updatedAt?: Date | string
   essay?: Prisma.EssayCreateNestedOneWithoutActivityInput
   class: Prisma.ClassCreateNestedOneWithoutActivitiesInput
+  activityNotifications?: Prisma.ActivityNotificationCreateNestedManyWithoutActivityInput
 }
 
 export type ActivityUncheckedCreateInput = {
@@ -289,6 +293,7 @@ export type ActivityUncheckedCreateInput = {
   updatedAt?: Date | string
   classId: string
   essay?: Prisma.EssayUncheckedCreateNestedOneWithoutActivityInput
+  activityNotifications?: Prisma.ActivityNotificationUncheckedCreateNestedManyWithoutActivityInput
 }
 
 export type ActivityUpdateInput = {
@@ -301,6 +306,7 @@ export type ActivityUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   essay?: Prisma.EssayUpdateOneWithoutActivityNestedInput
   class?: Prisma.ClassUpdateOneRequiredWithoutActivitiesNestedInput
+  activityNotifications?: Prisma.ActivityNotificationUpdateManyWithoutActivityNestedInput
 }
 
 export type ActivityUncheckedUpdateInput = {
@@ -313,6 +319,7 @@ export type ActivityUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   classId?: Prisma.StringFieldUpdateOperationsInput | string
   essay?: Prisma.EssayUncheckedUpdateOneWithoutActivityNestedInput
+  activityNotifications?: Prisma.ActivityNotificationUncheckedUpdateManyWithoutActivityNestedInput
 }
 
 export type ActivityCreateManyInput = {
@@ -455,6 +462,20 @@ export type ActivityUpdateOneRequiredWithoutEssayNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ActivityUpdateToOneWithWhereWithoutEssayInput, Prisma.ActivityUpdateWithoutEssayInput>, Prisma.ActivityUncheckedUpdateWithoutEssayInput>
 }
 
+export type ActivityCreateNestedOneWithoutActivityNotificationsInput = {
+  create?: Prisma.XOR<Prisma.ActivityCreateWithoutActivityNotificationsInput, Prisma.ActivityUncheckedCreateWithoutActivityNotificationsInput>
+  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutActivityNotificationsInput
+  connect?: Prisma.ActivityWhereUniqueInput
+}
+
+export type ActivityUpdateOneRequiredWithoutActivityNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.ActivityCreateWithoutActivityNotificationsInput, Prisma.ActivityUncheckedCreateWithoutActivityNotificationsInput>
+  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutActivityNotificationsInput
+  upsert?: Prisma.ActivityUpsertWithoutActivityNotificationsInput
+  connect?: Prisma.ActivityWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ActivityUpdateToOneWithWhereWithoutActivityNotificationsInput, Prisma.ActivityUpdateWithoutActivityNotificationsInput>, Prisma.ActivityUncheckedUpdateWithoutActivityNotificationsInput>
+}
+
 export type ActivityCreateWithoutClassInput = {
   id?: string
   title: string
@@ -464,6 +485,7 @@ export type ActivityCreateWithoutClassInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   essay?: Prisma.EssayCreateNestedOneWithoutActivityInput
+  activityNotifications?: Prisma.ActivityNotificationCreateNestedManyWithoutActivityInput
 }
 
 export type ActivityUncheckedCreateWithoutClassInput = {
@@ -475,6 +497,7 @@ export type ActivityUncheckedCreateWithoutClassInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   essay?: Prisma.EssayUncheckedCreateNestedOneWithoutActivityInput
+  activityNotifications?: Prisma.ActivityNotificationUncheckedCreateNestedManyWithoutActivityInput
 }
 
 export type ActivityCreateOrConnectWithoutClassInput = {
@@ -526,6 +549,7 @@ export type ActivityCreateWithoutEssayInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   class: Prisma.ClassCreateNestedOneWithoutActivitiesInput
+  activityNotifications?: Prisma.ActivityNotificationCreateNestedManyWithoutActivityInput
 }
 
 export type ActivityUncheckedCreateWithoutEssayInput = {
@@ -537,6 +561,7 @@ export type ActivityUncheckedCreateWithoutEssayInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   classId: string
+  activityNotifications?: Prisma.ActivityNotificationUncheckedCreateNestedManyWithoutActivityInput
 }
 
 export type ActivityCreateOrConnectWithoutEssayInput = {
@@ -564,6 +589,7 @@ export type ActivityUpdateWithoutEssayInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   class?: Prisma.ClassUpdateOneRequiredWithoutActivitiesNestedInput
+  activityNotifications?: Prisma.ActivityNotificationUpdateManyWithoutActivityNestedInput
 }
 
 export type ActivityUncheckedUpdateWithoutEssayInput = {
@@ -575,6 +601,71 @@ export type ActivityUncheckedUpdateWithoutEssayInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   classId?: Prisma.StringFieldUpdateOperationsInput | string
+  activityNotifications?: Prisma.ActivityNotificationUncheckedUpdateManyWithoutActivityNestedInput
+}
+
+export type ActivityCreateWithoutActivityNotificationsInput = {
+  id?: string
+  title: string
+  description: string
+  deadline?: Date | string | null
+  type: $Enums.ActivityType
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  essay?: Prisma.EssayCreateNestedOneWithoutActivityInput
+  class: Prisma.ClassCreateNestedOneWithoutActivitiesInput
+}
+
+export type ActivityUncheckedCreateWithoutActivityNotificationsInput = {
+  id?: string
+  title: string
+  description: string
+  deadline?: Date | string | null
+  type: $Enums.ActivityType
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  classId: string
+  essay?: Prisma.EssayUncheckedCreateNestedOneWithoutActivityInput
+}
+
+export type ActivityCreateOrConnectWithoutActivityNotificationsInput = {
+  where: Prisma.ActivityWhereUniqueInput
+  create: Prisma.XOR<Prisma.ActivityCreateWithoutActivityNotificationsInput, Prisma.ActivityUncheckedCreateWithoutActivityNotificationsInput>
+}
+
+export type ActivityUpsertWithoutActivityNotificationsInput = {
+  update: Prisma.XOR<Prisma.ActivityUpdateWithoutActivityNotificationsInput, Prisma.ActivityUncheckedUpdateWithoutActivityNotificationsInput>
+  create: Prisma.XOR<Prisma.ActivityCreateWithoutActivityNotificationsInput, Prisma.ActivityUncheckedCreateWithoutActivityNotificationsInput>
+  where?: Prisma.ActivityWhereInput
+}
+
+export type ActivityUpdateToOneWithWhereWithoutActivityNotificationsInput = {
+  where?: Prisma.ActivityWhereInput
+  data: Prisma.XOR<Prisma.ActivityUpdateWithoutActivityNotificationsInput, Prisma.ActivityUncheckedUpdateWithoutActivityNotificationsInput>
+}
+
+export type ActivityUpdateWithoutActivityNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  essay?: Prisma.EssayUpdateOneWithoutActivityNestedInput
+  class?: Prisma.ClassUpdateOneRequiredWithoutActivitiesNestedInput
+}
+
+export type ActivityUncheckedUpdateWithoutActivityNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classId?: Prisma.StringFieldUpdateOperationsInput | string
+  essay?: Prisma.EssayUncheckedUpdateOneWithoutActivityNestedInput
 }
 
 export type ActivityCreateManyClassInput = {
@@ -596,6 +687,7 @@ export type ActivityUpdateWithoutClassInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   essay?: Prisma.EssayUpdateOneWithoutActivityNestedInput
+  activityNotifications?: Prisma.ActivityNotificationUpdateManyWithoutActivityNestedInput
 }
 
 export type ActivityUncheckedUpdateWithoutClassInput = {
@@ -607,6 +699,7 @@ export type ActivityUncheckedUpdateWithoutClassInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   essay?: Prisma.EssayUncheckedUpdateOneWithoutActivityNestedInput
+  activityNotifications?: Prisma.ActivityNotificationUncheckedUpdateManyWithoutActivityNestedInput
 }
 
 export type ActivityUncheckedUpdateManyWithoutClassInput = {
@@ -620,6 +713,35 @@ export type ActivityUncheckedUpdateManyWithoutClassInput = {
 }
 
 
+/**
+ * Count Type ActivityCountOutputType
+ */
+
+export type ActivityCountOutputType = {
+  activityNotifications: number
+}
+
+export type ActivityCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  activityNotifications?: boolean | ActivityCountOutputTypeCountActivityNotificationsArgs
+}
+
+/**
+ * ActivityCountOutputType without action
+ */
+export type ActivityCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ActivityCountOutputType
+   */
+  select?: Prisma.ActivityCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ActivityCountOutputType without action
+ */
+export type ActivityCountOutputTypeCountActivityNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ActivityNotificationWhereInput
+}
+
 
 export type ActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -632,6 +754,8 @@ export type ActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   classId?: boolean
   essay?: boolean | Prisma.Activity$essayArgs<ExtArgs>
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
+  activityNotifications?: boolean | Prisma.Activity$activityNotificationsArgs<ExtArgs>
+  _count?: boolean | Prisma.ActivityCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["activity"]>
 
 export type ActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -673,6 +797,8 @@ export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type ActivityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   essay?: boolean | Prisma.Activity$essayArgs<ExtArgs>
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
+  activityNotifications?: boolean | Prisma.Activity$activityNotificationsArgs<ExtArgs>
+  _count?: boolean | Prisma.ActivityCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ActivityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
@@ -686,6 +812,7 @@ export type $ActivityPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     essay: Prisma.$EssayPayload<ExtArgs> | null
     class: Prisma.$ClassPayload<ExtArgs>
+    activityNotifications: Prisma.$ActivityNotificationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1092,6 +1219,7 @@ export interface Prisma__ActivityClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   essay<T extends Prisma.Activity$essayArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Activity$essayArgs<ExtArgs>>): Prisma.Prisma__EssayClient<runtime.Types.Result.GetResult<Prisma.$EssayPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   class<T extends Prisma.ClassDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClassDefaultArgs<ExtArgs>>): Prisma.Prisma__ClassClient<runtime.Types.Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  activityNotifications<T extends Prisma.Activity$activityNotificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Activity$activityNotificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityNotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1325,6 +1453,11 @@ export type ActivityFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Skip the first `n` Activities.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Activities.
+   */
   distinct?: Prisma.ActivityScalarFieldEnum | Prisma.ActivityScalarFieldEnum[]
 }
 
@@ -1541,6 +1674,30 @@ export type Activity$essayArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   include?: Prisma.EssayInclude<ExtArgs> | null
   where?: Prisma.EssayWhereInput
+}
+
+/**
+ * Activity.activityNotifications
+ */
+export type Activity$activityNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ActivityNotification
+   */
+  select?: Prisma.ActivityNotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ActivityNotification
+   */
+  omit?: Prisma.ActivityNotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActivityNotificationInclude<ExtArgs> | null
+  where?: Prisma.ActivityNotificationWhereInput
+  orderBy?: Prisma.ActivityNotificationOrderByWithRelationInput | Prisma.ActivityNotificationOrderByWithRelationInput[]
+  cursor?: Prisma.ActivityNotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ActivityNotificationScalarFieldEnum | Prisma.ActivityNotificationScalarFieldEnum[]
 }
 
 /**

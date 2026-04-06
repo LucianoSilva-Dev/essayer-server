@@ -44,6 +44,7 @@ enum AIResponseStatus {
 
 enum NotificationType {
   ACTIVITY_SENT
+  ACTIVITY_CLOSED
   ACTIVITY_CORRECTED
   TEACHER_REQUEST_STATUS
 }
@@ -245,6 +246,7 @@ model Activity {
   essay   Essay?
   class   Class  @relation(fields: [classId], references: [id])
   classId String
+  activityNotifications ActivityNotification[]
 }
 
 model EssayFeedback {
@@ -333,6 +335,7 @@ model Notification {
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
 
+  activityNotification ActivityNotification?
   teacherRequestStatus TeacherRequestStatusNotification?
   senders              User[]                            @relation("sender")
   seenBy               User[]                            @relation("seen")
@@ -346,4 +349,13 @@ model TeacherRequestStatusNotification {
   teacherRequestId String         @unique
   notification     Notification   @relation(fields: [notificationId], references: [id])
   notificationId   String         @unique
+}
+
+model ActivityNotification {
+  id             String   @id @default(uuid(7))
+  activityId     String
+  notificationId String   @unique
+
+  activity     Activity    @relation(fields: [activityId], references: [id])
+  notification Notification @relation(fields: [notificationId], references: [id])
 }

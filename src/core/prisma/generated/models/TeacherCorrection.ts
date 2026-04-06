@@ -151,7 +151,7 @@ export type TeacherCorrectionGroupByOutputType = {
   _max: TeacherCorrectionMaxAggregateOutputType | null
 }
 
-type GetTeacherCorrectionGroupByPayload<T extends TeacherCorrectionGroupByArgs> = Prisma.PrismaPromise<
+export type GetTeacherCorrectionGroupByPayload<T extends TeacherCorrectionGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<TeacherCorrectionGroupByOutputType, T['by']> &
       {
@@ -1122,6 +1122,11 @@ export type TeacherCorrectionFindManyArgs<ExtArgs extends runtime.Types.Extensio
    * Skip the first `n` TeacherCorrections.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of TeacherCorrections.
+   */
   distinct?: Prisma.TeacherCorrectionScalarFieldEnum | Prisma.TeacherCorrectionScalarFieldEnum[]
 }
 

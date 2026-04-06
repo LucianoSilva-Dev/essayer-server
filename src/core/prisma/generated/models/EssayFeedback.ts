@@ -264,7 +264,7 @@ export type EssayFeedbackGroupByOutputType = {
   _max: EssayFeedbackMaxAggregateOutputType | null
 }
 
-type GetEssayFeedbackGroupByPayload<T extends EssayFeedbackGroupByArgs> = Prisma.PrismaPromise<
+export type GetEssayFeedbackGroupByPayload<T extends EssayFeedbackGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<EssayFeedbackGroupByOutputType, T['by']> &
       {
@@ -1502,6 +1502,11 @@ export type EssayFeedbackFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` EssayFeedbacks.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of EssayFeedbacks.
+   */
   distinct?: Prisma.EssayFeedbackScalarFieldEnum | Prisma.EssayFeedbackScalarFieldEnum[]
 }
 

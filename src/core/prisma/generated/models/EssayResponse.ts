@@ -172,7 +172,7 @@ export type EssayResponseGroupByOutputType = {
   _max: EssayResponseMaxAggregateOutputType | null
 }
 
-type GetEssayResponseGroupByPayload<T extends EssayResponseGroupByArgs> = Prisma.PrismaPromise<
+export type GetEssayResponseGroupByPayload<T extends EssayResponseGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<EssayResponseGroupByOutputType, T['by']> &
       {
@@ -1418,6 +1418,11 @@ export type EssayResponseFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` EssayResponses.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of EssayResponses.
+   */
   distinct?: Prisma.EssayResponseScalarFieldEnum | Prisma.EssayResponseScalarFieldEnum[]
 }
 

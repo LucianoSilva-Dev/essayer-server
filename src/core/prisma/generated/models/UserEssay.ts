@@ -220,7 +220,7 @@ export type UserEssayGroupByOutputType = {
   _max: UserEssayMaxAggregateOutputType | null
 }
 
-type GetUserEssayGroupByPayload<T extends UserEssayGroupByArgs> = Prisma.PrismaPromise<
+export type GetUserEssayGroupByPayload<T extends UserEssayGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<UserEssayGroupByOutputType, T['by']> &
       {
@@ -1435,6 +1435,11 @@ export type UserEssayFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Skip the first `n` UserEssays.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of UserEssays.
+   */
   distinct?: Prisma.UserEssayScalarFieldEnum | Prisma.UserEssayScalarFieldEnum[]
 }
 

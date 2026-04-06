@@ -151,7 +151,7 @@ export type NotificationGroupByOutputType = {
   _max: NotificationMaxAggregateOutputType | null
 }
 
-type GetNotificationGroupByPayload<T extends NotificationGroupByArgs> = Prisma.PrismaPromise<
+export type GetNotificationGroupByPayload<T extends NotificationGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<NotificationGroupByOutputType, T['by']> &
       {
@@ -174,6 +174,7 @@ export type NotificationWhereInput = {
   type?: Prisma.EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
   createdAt?: Prisma.DateTimeFilter<"Notification"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Notification"> | Date | string
+  activityNotification?: Prisma.XOR<Prisma.ActivityNotificationNullableScalarRelationFilter, Prisma.ActivityNotificationWhereInput> | null
   teacherRequestStatus?: Prisma.XOR<Prisma.TeacherRequestStatusNotificationNullableScalarRelationFilter, Prisma.TeacherRequestStatusNotificationWhereInput> | null
   senders?: Prisma.UserListRelationFilter
   seenBy?: Prisma.UserListRelationFilter
@@ -184,6 +185,7 @@ export type NotificationOrderByWithRelationInput = {
   type?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  activityNotification?: Prisma.ActivityNotificationOrderByWithRelationInput
   teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationOrderByWithRelationInput
   senders?: Prisma.UserOrderByRelationAggregateInput
   seenBy?: Prisma.UserOrderByRelationAggregateInput
@@ -197,6 +199,7 @@ export type NotificationWhereUniqueInput = Prisma.AtLeast<{
   type?: Prisma.EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
   createdAt?: Prisma.DateTimeFilter<"Notification"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Notification"> | Date | string
+  activityNotification?: Prisma.XOR<Prisma.ActivityNotificationNullableScalarRelationFilter, Prisma.ActivityNotificationWhereInput> | null
   teacherRequestStatus?: Prisma.XOR<Prisma.TeacherRequestStatusNotificationNullableScalarRelationFilter, Prisma.TeacherRequestStatusNotificationWhereInput> | null
   senders?: Prisma.UserListRelationFilter
   seenBy?: Prisma.UserListRelationFilter
@@ -227,6 +230,7 @@ export type NotificationCreateInput = {
   type: $Enums.NotificationType
   createdAt?: Date | string
   updatedAt?: Date | string
+  activityNotification?: Prisma.ActivityNotificationCreateNestedOneWithoutNotificationInput
   teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationCreateNestedOneWithoutNotificationInput
   senders?: Prisma.UserCreateNestedManyWithoutNotificationsSentInput
   seenBy?: Prisma.UserCreateNestedManyWithoutNotificationsSeenInput
@@ -237,6 +241,7 @@ export type NotificationUncheckedCreateInput = {
   type: $Enums.NotificationType
   createdAt?: Date | string
   updatedAt?: Date | string
+  activityNotification?: Prisma.ActivityNotificationUncheckedCreateNestedOneWithoutNotificationInput
   teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationUncheckedCreateNestedOneWithoutNotificationInput
   senders?: Prisma.UserUncheckedCreateNestedManyWithoutNotificationsSentInput
   seenBy?: Prisma.UserUncheckedCreateNestedManyWithoutNotificationsSeenInput
@@ -247,6 +252,7 @@ export type NotificationUpdateInput = {
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activityNotification?: Prisma.ActivityNotificationUpdateOneWithoutNotificationNestedInput
   teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationUpdateOneWithoutNotificationNestedInput
   senders?: Prisma.UserUpdateManyWithoutNotificationsSentNestedInput
   seenBy?: Prisma.UserUpdateManyWithoutNotificationsSeenNestedInput
@@ -257,6 +263,7 @@ export type NotificationUncheckedUpdateInput = {
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activityNotification?: Prisma.ActivityNotificationUncheckedUpdateOneWithoutNotificationNestedInput
   teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationUncheckedUpdateOneWithoutNotificationNestedInput
   senders?: Prisma.UserUncheckedUpdateManyWithoutNotificationsSentNestedInput
   seenBy?: Prisma.UserUncheckedUpdateManyWithoutNotificationsSeenNestedInput
@@ -413,11 +420,26 @@ export type NotificationUpdateOneRequiredWithoutTeacherRequestStatusNestedInput 
   update?: Prisma.XOR<Prisma.XOR<Prisma.NotificationUpdateToOneWithWhereWithoutTeacherRequestStatusInput, Prisma.NotificationUpdateWithoutTeacherRequestStatusInput>, Prisma.NotificationUncheckedUpdateWithoutTeacherRequestStatusInput>
 }
 
+export type NotificationCreateNestedOneWithoutActivityNotificationInput = {
+  create?: Prisma.XOR<Prisma.NotificationCreateWithoutActivityNotificationInput, Prisma.NotificationUncheckedCreateWithoutActivityNotificationInput>
+  connectOrCreate?: Prisma.NotificationCreateOrConnectWithoutActivityNotificationInput
+  connect?: Prisma.NotificationWhereUniqueInput
+}
+
+export type NotificationUpdateOneRequiredWithoutActivityNotificationNestedInput = {
+  create?: Prisma.XOR<Prisma.NotificationCreateWithoutActivityNotificationInput, Prisma.NotificationUncheckedCreateWithoutActivityNotificationInput>
+  connectOrCreate?: Prisma.NotificationCreateOrConnectWithoutActivityNotificationInput
+  upsert?: Prisma.NotificationUpsertWithoutActivityNotificationInput
+  connect?: Prisma.NotificationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NotificationUpdateToOneWithWhereWithoutActivityNotificationInput, Prisma.NotificationUpdateWithoutActivityNotificationInput>, Prisma.NotificationUncheckedUpdateWithoutActivityNotificationInput>
+}
+
 export type NotificationCreateWithoutSendersInput = {
   id?: string
   type: $Enums.NotificationType
   createdAt?: Date | string
   updatedAt?: Date | string
+  activityNotification?: Prisma.ActivityNotificationCreateNestedOneWithoutNotificationInput
   teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationCreateNestedOneWithoutNotificationInput
   seenBy?: Prisma.UserCreateNestedManyWithoutNotificationsSeenInput
 }
@@ -427,6 +449,7 @@ export type NotificationUncheckedCreateWithoutSendersInput = {
   type: $Enums.NotificationType
   createdAt?: Date | string
   updatedAt?: Date | string
+  activityNotification?: Prisma.ActivityNotificationUncheckedCreateNestedOneWithoutNotificationInput
   teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationUncheckedCreateNestedOneWithoutNotificationInput
   seenBy?: Prisma.UserUncheckedCreateNestedManyWithoutNotificationsSeenInput
 }
@@ -441,6 +464,7 @@ export type NotificationCreateWithoutSeenByInput = {
   type: $Enums.NotificationType
   createdAt?: Date | string
   updatedAt?: Date | string
+  activityNotification?: Prisma.ActivityNotificationCreateNestedOneWithoutNotificationInput
   teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationCreateNestedOneWithoutNotificationInput
   senders?: Prisma.UserCreateNestedManyWithoutNotificationsSentInput
 }
@@ -450,6 +474,7 @@ export type NotificationUncheckedCreateWithoutSeenByInput = {
   type: $Enums.NotificationType
   createdAt?: Date | string
   updatedAt?: Date | string
+  activityNotification?: Prisma.ActivityNotificationUncheckedCreateNestedOneWithoutNotificationInput
   teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationUncheckedCreateNestedOneWithoutNotificationInput
   senders?: Prisma.UserUncheckedCreateNestedManyWithoutNotificationsSentInput
 }
@@ -506,6 +531,7 @@ export type NotificationCreateWithoutTeacherRequestStatusInput = {
   type: $Enums.NotificationType
   createdAt?: Date | string
   updatedAt?: Date | string
+  activityNotification?: Prisma.ActivityNotificationCreateNestedOneWithoutNotificationInput
   senders?: Prisma.UserCreateNestedManyWithoutNotificationsSentInput
   seenBy?: Prisma.UserCreateNestedManyWithoutNotificationsSeenInput
 }
@@ -515,6 +541,7 @@ export type NotificationUncheckedCreateWithoutTeacherRequestStatusInput = {
   type: $Enums.NotificationType
   createdAt?: Date | string
   updatedAt?: Date | string
+  activityNotification?: Prisma.ActivityNotificationUncheckedCreateNestedOneWithoutNotificationInput
   senders?: Prisma.UserUncheckedCreateNestedManyWithoutNotificationsSentInput
   seenBy?: Prisma.UserUncheckedCreateNestedManyWithoutNotificationsSeenInput
 }
@@ -540,6 +567,7 @@ export type NotificationUpdateWithoutTeacherRequestStatusInput = {
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activityNotification?: Prisma.ActivityNotificationUpdateOneWithoutNotificationNestedInput
   senders?: Prisma.UserUpdateManyWithoutNotificationsSentNestedInput
   seenBy?: Prisma.UserUpdateManyWithoutNotificationsSeenNestedInput
 }
@@ -549,6 +577,63 @@ export type NotificationUncheckedUpdateWithoutTeacherRequestStatusInput = {
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activityNotification?: Prisma.ActivityNotificationUncheckedUpdateOneWithoutNotificationNestedInput
+  senders?: Prisma.UserUncheckedUpdateManyWithoutNotificationsSentNestedInput
+  seenBy?: Prisma.UserUncheckedUpdateManyWithoutNotificationsSeenNestedInput
+}
+
+export type NotificationCreateWithoutActivityNotificationInput = {
+  id?: string
+  type: $Enums.NotificationType
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationCreateNestedOneWithoutNotificationInput
+  senders?: Prisma.UserCreateNestedManyWithoutNotificationsSentInput
+  seenBy?: Prisma.UserCreateNestedManyWithoutNotificationsSeenInput
+}
+
+export type NotificationUncheckedCreateWithoutActivityNotificationInput = {
+  id?: string
+  type: $Enums.NotificationType
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationUncheckedCreateNestedOneWithoutNotificationInput
+  senders?: Prisma.UserUncheckedCreateNestedManyWithoutNotificationsSentInput
+  seenBy?: Prisma.UserUncheckedCreateNestedManyWithoutNotificationsSeenInput
+}
+
+export type NotificationCreateOrConnectWithoutActivityNotificationInput = {
+  where: Prisma.NotificationWhereUniqueInput
+  create: Prisma.XOR<Prisma.NotificationCreateWithoutActivityNotificationInput, Prisma.NotificationUncheckedCreateWithoutActivityNotificationInput>
+}
+
+export type NotificationUpsertWithoutActivityNotificationInput = {
+  update: Prisma.XOR<Prisma.NotificationUpdateWithoutActivityNotificationInput, Prisma.NotificationUncheckedUpdateWithoutActivityNotificationInput>
+  create: Prisma.XOR<Prisma.NotificationCreateWithoutActivityNotificationInput, Prisma.NotificationUncheckedCreateWithoutActivityNotificationInput>
+  where?: Prisma.NotificationWhereInput
+}
+
+export type NotificationUpdateToOneWithWhereWithoutActivityNotificationInput = {
+  where?: Prisma.NotificationWhereInput
+  data: Prisma.XOR<Prisma.NotificationUpdateWithoutActivityNotificationInput, Prisma.NotificationUncheckedUpdateWithoutActivityNotificationInput>
+}
+
+export type NotificationUpdateWithoutActivityNotificationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationUpdateOneWithoutNotificationNestedInput
+  senders?: Prisma.UserUpdateManyWithoutNotificationsSentNestedInput
+  seenBy?: Prisma.UserUpdateManyWithoutNotificationsSeenNestedInput
+}
+
+export type NotificationUncheckedUpdateWithoutActivityNotificationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationUncheckedUpdateOneWithoutNotificationNestedInput
   senders?: Prisma.UserUncheckedUpdateManyWithoutNotificationsSentNestedInput
   seenBy?: Prisma.UserUncheckedUpdateManyWithoutNotificationsSeenNestedInput
 }
@@ -558,6 +643,7 @@ export type NotificationUpdateWithoutSendersInput = {
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activityNotification?: Prisma.ActivityNotificationUpdateOneWithoutNotificationNestedInput
   teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationUpdateOneWithoutNotificationNestedInput
   seenBy?: Prisma.UserUpdateManyWithoutNotificationsSeenNestedInput
 }
@@ -567,6 +653,7 @@ export type NotificationUncheckedUpdateWithoutSendersInput = {
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activityNotification?: Prisma.ActivityNotificationUncheckedUpdateOneWithoutNotificationNestedInput
   teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationUncheckedUpdateOneWithoutNotificationNestedInput
   seenBy?: Prisma.UserUncheckedUpdateManyWithoutNotificationsSeenNestedInput
 }
@@ -583,6 +670,7 @@ export type NotificationUpdateWithoutSeenByInput = {
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activityNotification?: Prisma.ActivityNotificationUpdateOneWithoutNotificationNestedInput
   teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationUpdateOneWithoutNotificationNestedInput
   senders?: Prisma.UserUpdateManyWithoutNotificationsSentNestedInput
 }
@@ -592,6 +680,7 @@ export type NotificationUncheckedUpdateWithoutSeenByInput = {
   type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activityNotification?: Prisma.ActivityNotificationUncheckedUpdateOneWithoutNotificationNestedInput
   teacherRequestStatus?: Prisma.TeacherRequestStatusNotificationUncheckedUpdateOneWithoutNotificationNestedInput
   senders?: Prisma.UserUncheckedUpdateManyWithoutNotificationsSentNestedInput
 }
@@ -648,6 +737,7 @@ export type NotificationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   type?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  activityNotification?: boolean | Prisma.Notification$activityNotificationArgs<ExtArgs>
   teacherRequestStatus?: boolean | Prisma.Notification$teacherRequestStatusArgs<ExtArgs>
   senders?: boolean | Prisma.Notification$sendersArgs<ExtArgs>
   seenBy?: boolean | Prisma.Notification$seenByArgs<ExtArgs>
@@ -677,6 +767,7 @@ export type NotificationSelectScalar = {
 
 export type NotificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "createdAt" | "updatedAt", ExtArgs["result"]["notification"]>
 export type NotificationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  activityNotification?: boolean | Prisma.Notification$activityNotificationArgs<ExtArgs>
   teacherRequestStatus?: boolean | Prisma.Notification$teacherRequestStatusArgs<ExtArgs>
   senders?: boolean | Prisma.Notification$sendersArgs<ExtArgs>
   seenBy?: boolean | Prisma.Notification$seenByArgs<ExtArgs>
@@ -688,6 +779,7 @@ export type NotificationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types
 export type $NotificationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Notification"
   objects: {
+    activityNotification: Prisma.$ActivityNotificationPayload<ExtArgs> | null
     teacherRequestStatus: Prisma.$TeacherRequestStatusNotificationPayload<ExtArgs> | null
     senders: Prisma.$UserPayload<ExtArgs>[]
     seenBy: Prisma.$UserPayload<ExtArgs>[]
@@ -1091,6 +1183,7 @@ readonly fields: NotificationFieldRefs;
  */
 export interface Prisma__NotificationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  activityNotification<T extends Prisma.Notification$activityNotificationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Notification$activityNotificationArgs<ExtArgs>>): Prisma.Prisma__ActivityNotificationClient<runtime.Types.Result.GetResult<Prisma.$ActivityNotificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   teacherRequestStatus<T extends Prisma.Notification$teacherRequestStatusArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Notification$teacherRequestStatusArgs<ExtArgs>>): Prisma.Prisma__TeacherRequestStatusNotificationClient<runtime.Types.Result.GetResult<Prisma.$TeacherRequestStatusNotificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   senders<T extends Prisma.Notification$sendersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Notification$sendersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   seenBy<T extends Prisma.Notification$seenByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Notification$seenByArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1323,6 +1416,11 @@ export type NotificationFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Skip the first `n` Notifications.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Notifications.
+   */
   distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
 }
 
@@ -1512,6 +1610,25 @@ export type NotificationDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many Notifications to delete.
    */
   limit?: number
+}
+
+/**
+ * Notification.activityNotification
+ */
+export type Notification$activityNotificationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ActivityNotification
+   */
+  select?: Prisma.ActivityNotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ActivityNotification
+   */
+  omit?: Prisma.ActivityNotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActivityNotificationInclude<ExtArgs> | null
+  where?: Prisma.ActivityNotificationWhereInput
 }
 
 /**

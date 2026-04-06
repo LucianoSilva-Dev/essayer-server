@@ -151,7 +151,7 @@ export type CitationGroupByOutputType = {
   _max: CitationMaxAggregateOutputType | null
 }
 
-type GetCitationGroupByPayload<T extends CitationGroupByArgs> = Prisma.PrismaPromise<
+export type GetCitationGroupByPayload<T extends CitationGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<CitationGroupByOutputType, T['by']> &
       {
@@ -1040,6 +1040,11 @@ export type CitationFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Skip the first `n` Citations.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Citations.
+   */
   distinct?: Prisma.CitationScalarFieldEnum | Prisma.CitationScalarFieldEnum[]
 }
 

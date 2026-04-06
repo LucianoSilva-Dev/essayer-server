@@ -40,6 +40,15 @@ const envSchema = z
     // ============================================
     GOOGLE_GENERATIVE_AI_API_KEY: z.string().min(1, 'GOOGLE_GENERATIVE_AI_API_KEY is required'),
 
+    // AI Model Configuration
+    AI_PRIMARY_MODEL_NAME: z.string().default('gemini-3-flash-preview'),
+    AI_PRIMARY_MODEL_RPM: z.coerce.number().default(15),
+    AI_PRIMARY_MODEL_RPD: z.coerce.number().default(1500),
+    AI_FALLBACK_MODEL_NAME: z.string().default('gemini-2.5-pro'),
+    AI_FALLBACK_MODEL_RPM: z.coerce.number().default(5),
+    AI_FALLBACK_MODEL_RPD: z.coerce.number().default(500),
+    AI_MODEL_UNAVAILABLE_TIMEOUT_SECS: z.coerce.number().default(60),
+
     // ============================================
     // OBJECT STORAGE
     // ============================================

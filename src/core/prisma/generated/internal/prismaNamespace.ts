@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.2.0
- * Query Engine version: 0c8ef2ce45c83248ab3df073180d5eda9e8be7a3
+ * Prisma Client JS version: 7.6.0
+ * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.2.0",
-  engine: "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3"
+  client: "7.6.0",
+  engine: "75cbdc1eb7150937890ad5465d861175c6624711"
 }
 
 /**
@@ -403,7 +403,8 @@ export const ModelName = {
   Essay: 'Essay',
   UserEssay: 'UserEssay',
   Notification: 'Notification',
-  TeacherRequestStatusNotification: 'TeacherRequestStatusNotification'
+  TeacherRequestStatusNotification: 'TeacherRequestStatusNotification',
+  ActivityNotification: 'ActivityNotification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -419,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "teacherRequest" | "comment" | "repertoire" | "article" | "citation" | "work" | "class" | "activity" | "essayFeedback" | "teacherCorrection" | "aICorrection" | "essayResponse" | "essay" | "userEssay" | "notification" | "teacherRequestStatusNotification"
+    modelProps: "user" | "session" | "account" | "verification" | "teacherRequest" | "comment" | "repertoire" | "article" | "citation" | "work" | "class" | "activity" | "essayFeedback" | "teacherCorrection" | "aICorrection" | "essayResponse" | "essay" | "userEssay" | "notification" | "teacherRequestStatusNotification" | "activityNotification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1903,6 +1904,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ActivityNotification: {
+      payload: Prisma.$ActivityNotificationPayload<ExtArgs>
+      fields: Prisma.ActivityNotificationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ActivityNotificationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityNotificationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ActivityNotificationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityNotificationPayload>
+        }
+        findFirst: {
+          args: Prisma.ActivityNotificationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityNotificationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ActivityNotificationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityNotificationPayload>
+        }
+        findMany: {
+          args: Prisma.ActivityNotificationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityNotificationPayload>[]
+        }
+        create: {
+          args: Prisma.ActivityNotificationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityNotificationPayload>
+        }
+        createMany: {
+          args: Prisma.ActivityNotificationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ActivityNotificationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityNotificationPayload>[]
+        }
+        delete: {
+          args: Prisma.ActivityNotificationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityNotificationPayload>
+        }
+        update: {
+          args: Prisma.ActivityNotificationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityNotificationPayload>
+        }
+        deleteMany: {
+          args: Prisma.ActivityNotificationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ActivityNotificationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ActivityNotificationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityNotificationPayload>[]
+        }
+        upsert: {
+          args: Prisma.ActivityNotificationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivityNotificationPayload>
+        }
+        aggregate: {
+          args: Prisma.ActivityNotificationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateActivityNotification>
+        }
+        groupBy: {
+          args: Prisma.ActivityNotificationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ActivityNotificationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ActivityNotificationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ActivityNotificationCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2205,6 +2280,15 @@ export const TeacherRequestStatusNotificationScalarFieldEnum = {
 export type TeacherRequestStatusNotificationScalarFieldEnum = (typeof TeacherRequestStatusNotificationScalarFieldEnum)[keyof typeof TeacherRequestStatusNotificationScalarFieldEnum]
 
 
+export const ActivityNotificationScalarFieldEnum = {
+  id: 'id',
+  activityId: 'activityId',
+  notificationId: 'notificationId'
+} as const
+
+export type ActivityNotificationScalarFieldEnum = (typeof ActivityNotificationScalarFieldEnum)[keyof typeof ActivityNotificationScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2496,6 +2580,7 @@ export type GlobalOmitConfig = {
   userEssay?: Prisma.UserEssayOmit
   notification?: Prisma.NotificationOmit
   teacherRequestStatusNotification?: Prisma.TeacherRequestStatusNotificationOmit
+  activityNotification?: Prisma.ActivityNotificationOmit
 }
 
 /* Types for Logging */

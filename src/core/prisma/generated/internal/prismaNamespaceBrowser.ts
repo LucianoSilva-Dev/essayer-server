@@ -70,7 +70,8 @@ export const ModelName = {
   Essay: 'Essay',
   UserEssay: 'UserEssay',
   Notification: 'Notification',
-  TeacherRequestStatusNotification: 'TeacherRequestStatusNotification'
+  TeacherRequestStatusNotification: 'TeacherRequestStatusNotification',
+  ActivityNotification: 'ActivityNotification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -79,12 +80,12 @@ export type ModelName = (typeof ModelName)[keyof typeof ModelName]
  * Enums
  */
 
-export const TransactionIsolationLevel = {
+export const TransactionIsolationLevel = runtime.makeStrictEnum({
   ReadUncommitted: 'ReadUncommitted',
   ReadCommitted: 'ReadCommitted',
   RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
-} as const
+} as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
@@ -350,6 +351,15 @@ export const TeacherRequestStatusNotificationScalarFieldEnum = {
 } as const
 
 export type TeacherRequestStatusNotificationScalarFieldEnum = (typeof TeacherRequestStatusNotificationScalarFieldEnum)[keyof typeof TeacherRequestStatusNotificationScalarFieldEnum]
+
+
+export const ActivityNotificationScalarFieldEnum = {
+  id: 'id',
+  activityId: 'activityId',
+  notificationId: 'notificationId'
+} as const
+
+export type ActivityNotificationScalarFieldEnum = (typeof ActivityNotificationScalarFieldEnum)[keyof typeof ActivityNotificationScalarFieldEnum]
 
 
 export const SortOrder = {

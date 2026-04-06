@@ -158,7 +158,7 @@ export type AICorrectionGroupByOutputType = {
   _max: AICorrectionMaxAggregateOutputType | null
 }
 
-type GetAICorrectionGroupByPayload<T extends AICorrectionGroupByArgs> = Prisma.PrismaPromise<
+export type GetAICorrectionGroupByPayload<T extends AICorrectionGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<AICorrectionGroupByOutputType, T['by']> &
       {
@@ -1217,6 +1217,11 @@ export type AICorrectionFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Skip the first `n` AICorrections.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of AICorrections.
+   */
   distinct?: Prisma.AICorrectionScalarFieldEnum | Prisma.AICorrectionScalarFieldEnum[]
 }
 

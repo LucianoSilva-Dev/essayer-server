@@ -171,7 +171,7 @@ export type RepertoireGroupByOutputType = {
   _max: RepertoireMaxAggregateOutputType | null
 }
 
-type GetRepertoireGroupByPayload<T extends RepertoireGroupByArgs> = Prisma.PrismaPromise<
+export type GetRepertoireGroupByPayload<T extends RepertoireGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<RepertoireGroupByOutputType, T['by']> &
       {
@@ -2219,6 +2219,11 @@ export type RepertoireFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Skip the first `n` Repertoires.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Repertoires.
+   */
   distinct?: Prisma.RepertoireScalarFieldEnum | Prisma.RepertoireScalarFieldEnum[]
 }
 

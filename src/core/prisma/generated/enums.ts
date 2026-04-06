@@ -54,6 +54,7 @@ export type AIResponseStatus = (typeof AIResponseStatus)[keyof typeof AIResponse
 
 export const NotificationType = {
   ACTIVITY_SENT: 'ACTIVITY_SENT',
+  ACTIVITY_CLOSED: 'ACTIVITY_CLOSED',
   ACTIVITY_CORRECTED: 'ACTIVITY_CORRECTED',
   TEACHER_REQUEST_STATUS: 'TEACHER_REQUEST_STATUS'
 } as const

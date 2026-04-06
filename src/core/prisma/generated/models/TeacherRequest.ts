@@ -172,7 +172,7 @@ export type TeacherRequestGroupByOutputType = {
   _max: TeacherRequestMaxAggregateOutputType | null
 }
 
-type GetTeacherRequestGroupByPayload<T extends TeacherRequestGroupByArgs> = Prisma.PrismaPromise<
+export type GetTeacherRequestGroupByPayload<T extends TeacherRequestGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<TeacherRequestGroupByOutputType, T['by']> &
       {
@@ -1422,6 +1422,11 @@ export type TeacherRequestFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` TeacherRequests.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of TeacherRequests.
+   */
   distinct?: Prisma.TeacherRequestScalarFieldEnum | Prisma.TeacherRequestScalarFieldEnum[]
 }
 

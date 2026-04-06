@@ -117,3 +117,8 @@ export type Notification = Prisma.NotificationModel
  * 
  */
 export type TeacherRequestStatusNotification = Prisma.TeacherRequestStatusNotificationModel
+/**
+ * Model ActivityNotification
+ * 
+ */
+export type ActivityNotification = Prisma.ActivityNotificationModel

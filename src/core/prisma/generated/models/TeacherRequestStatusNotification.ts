@@ -151,7 +151,7 @@ export type TeacherRequestStatusNotificationGroupByOutputType = {
   _max: TeacherRequestStatusNotificationMaxAggregateOutputType | null
 }
 
-type GetTeacherRequestStatusNotificationGroupByPayload<T extends TeacherRequestStatusNotificationGroupByArgs> = Prisma.PrismaPromise<
+export type GetTeacherRequestStatusNotificationGroupByPayload<T extends TeacherRequestStatusNotificationGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<TeacherRequestStatusNotificationGroupByOutputType, T['by']> &
       {
@@ -1122,6 +1122,11 @@ export type TeacherRequestStatusNotificationFindManyArgs<ExtArgs extends runtime
    * Skip the first `n` TeacherRequestStatusNotifications.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of TeacherRequestStatusNotifications.
+   */
   distinct?: Prisma.TeacherRequestStatusNotificationScalarFieldEnum | Prisma.TeacherRequestStatusNotificationScalarFieldEnum[]
 }
 
