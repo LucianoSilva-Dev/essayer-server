@@ -1,14 +1,19 @@
+import { config } from 'dotenv';
 import swc from 'unplugin-swc';
 import { defineConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import path from 'node:path';
 
+config({ path: path.resolve(__dirname, '.env.test'), override: true });
+
 export default defineConfig({
   test: {
     globals: true,
     root: './',
-    include: ['src/**/*.spec.ts', 'src/**/*.test.ts'],
-    exclude: ['src/**/*.e2e.spec.ts'],
+    include: ['src/**/*.e2e.spec.ts'],
+    testTimeout: 30_000,
+    hookTimeout: 30_000,
+    fileParallelism: false,
   },
   resolve: {
     alias: {
