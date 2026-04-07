@@ -28,6 +28,8 @@ export type AICorrectionMinAggregateOutputType = {
   id: string | null
   text: string | null
   status: $Enums.AIResponseStatus | null
+  createdAt: Date | null
+  updatedAt: Date | null
   essayId: string | null
   feedbackId: string | null
 }
@@ -36,6 +38,8 @@ export type AICorrectionMaxAggregateOutputType = {
   id: string | null
   text: string | null
   status: $Enums.AIResponseStatus | null
+  createdAt: Date | null
+  updatedAt: Date | null
   essayId: string | null
   feedbackId: string | null
 }
@@ -44,6 +48,8 @@ export type AICorrectionCountAggregateOutputType = {
   id: number
   text: number
   status: number
+  createdAt: number
+  updatedAt: number
   essayId: number
   feedbackId: number
   _all: number
@@ -54,6 +60,8 @@ export type AICorrectionMinAggregateInputType = {
   id?: true
   text?: true
   status?: true
+  createdAt?: true
+  updatedAt?: true
   essayId?: true
   feedbackId?: true
 }
@@ -62,6 +70,8 @@ export type AICorrectionMaxAggregateInputType = {
   id?: true
   text?: true
   status?: true
+  createdAt?: true
+  updatedAt?: true
   essayId?: true
   feedbackId?: true
 }
@@ -70,6 +80,8 @@ export type AICorrectionCountAggregateInputType = {
   id?: true
   text?: true
   status?: true
+  createdAt?: true
+  updatedAt?: true
   essayId?: true
   feedbackId?: true
   _all?: true
@@ -151,6 +163,8 @@ export type AICorrectionGroupByOutputType = {
   id: string
   text: string
   status: $Enums.AIResponseStatus
+  createdAt: Date
+  updatedAt: Date
   essayId: string
   feedbackId: string
   _count: AICorrectionCountAggregateOutputType | null
@@ -180,6 +194,8 @@ export type AICorrectionWhereInput = {
   id?: Prisma.StringFilter<"AICorrection"> | string
   text?: Prisma.StringFilter<"AICorrection"> | string
   status?: Prisma.EnumAIResponseStatusFilter<"AICorrection"> | $Enums.AIResponseStatus
+  createdAt?: Prisma.DateTimeFilter<"AICorrection"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"AICorrection"> | Date | string
   essayId?: Prisma.StringFilter<"AICorrection"> | string
   feedbackId?: Prisma.StringFilter<"AICorrection"> | string
   essay?: Prisma.XOR<Prisma.UserEssayScalarRelationFilter, Prisma.UserEssayWhereInput>
@@ -190,6 +206,8 @@ export type AICorrectionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   text?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   essayId?: Prisma.SortOrder
   feedbackId?: Prisma.SortOrder
   essay?: Prisma.UserEssayOrderByWithRelationInput
@@ -204,6 +222,8 @@ export type AICorrectionWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.AICorrectionWhereInput | Prisma.AICorrectionWhereInput[]
   text?: Prisma.StringFilter<"AICorrection"> | string
   status?: Prisma.EnumAIResponseStatusFilter<"AICorrection"> | $Enums.AIResponseStatus
+  createdAt?: Prisma.DateTimeFilter<"AICorrection"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"AICorrection"> | Date | string
   essayId?: Prisma.StringFilter<"AICorrection"> | string
   essay?: Prisma.XOR<Prisma.UserEssayScalarRelationFilter, Prisma.UserEssayWhereInput>
   feedback?: Prisma.XOR<Prisma.EssayFeedbackScalarRelationFilter, Prisma.EssayFeedbackWhereInput>
@@ -213,6 +233,8 @@ export type AICorrectionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   text?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   essayId?: Prisma.SortOrder
   feedbackId?: Prisma.SortOrder
   _count?: Prisma.AICorrectionCountOrderByAggregateInput
@@ -227,6 +249,8 @@ export type AICorrectionScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"AICorrection"> | string
   text?: Prisma.StringWithAggregatesFilter<"AICorrection"> | string
   status?: Prisma.EnumAIResponseStatusWithAggregatesFilter<"AICorrection"> | $Enums.AIResponseStatus
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"AICorrection"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AICorrection"> | Date | string
   essayId?: Prisma.StringWithAggregatesFilter<"AICorrection"> | string
   feedbackId?: Prisma.StringWithAggregatesFilter<"AICorrection"> | string
 }
@@ -235,6 +259,8 @@ export type AICorrectionCreateInput = {
   id?: string
   text: string
   status: $Enums.AIResponseStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
   essay: Prisma.UserEssayCreateNestedOneWithoutAiCorrectionsInput
   feedback: Prisma.EssayFeedbackCreateNestedOneWithoutAiCorrectionInput
 }
@@ -243,6 +269,8 @@ export type AICorrectionUncheckedCreateInput = {
   id?: string
   text: string
   status: $Enums.AIResponseStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
   essayId: string
   feedbackId: string
 }
@@ -251,6 +279,8 @@ export type AICorrectionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAIResponseStatusFieldUpdateOperationsInput | $Enums.AIResponseStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   essay?: Prisma.UserEssayUpdateOneRequiredWithoutAiCorrectionsNestedInput
   feedback?: Prisma.EssayFeedbackUpdateOneRequiredWithoutAiCorrectionNestedInput
 }
@@ -259,6 +289,8 @@ export type AICorrectionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAIResponseStatusFieldUpdateOperationsInput | $Enums.AIResponseStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   essayId?: Prisma.StringFieldUpdateOperationsInput | string
   feedbackId?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -267,6 +299,8 @@ export type AICorrectionCreateManyInput = {
   id?: string
   text: string
   status: $Enums.AIResponseStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
   essayId: string
   feedbackId: string
 }
@@ -275,12 +309,16 @@ export type AICorrectionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAIResponseStatusFieldUpdateOperationsInput | $Enums.AIResponseStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AICorrectionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAIResponseStatusFieldUpdateOperationsInput | $Enums.AIResponseStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   essayId?: Prisma.StringFieldUpdateOperationsInput | string
   feedbackId?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -294,6 +332,8 @@ export type AICorrectionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   text?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   essayId?: Prisma.SortOrder
   feedbackId?: Prisma.SortOrder
 }
@@ -302,6 +342,8 @@ export type AICorrectionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   text?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   essayId?: Prisma.SortOrder
   feedbackId?: Prisma.SortOrder
 }
@@ -310,6 +352,8 @@ export type AICorrectionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   text?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   essayId?: Prisma.SortOrder
   feedbackId?: Prisma.SortOrder
 }
@@ -406,6 +450,8 @@ export type AICorrectionCreateWithoutFeedbackInput = {
   id?: string
   text: string
   status: $Enums.AIResponseStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
   essay: Prisma.UserEssayCreateNestedOneWithoutAiCorrectionsInput
 }
 
@@ -413,6 +459,8 @@ export type AICorrectionUncheckedCreateWithoutFeedbackInput = {
   id?: string
   text: string
   status: $Enums.AIResponseStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
   essayId: string
 }
 
@@ -436,6 +484,8 @@ export type AICorrectionUpdateWithoutFeedbackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAIResponseStatusFieldUpdateOperationsInput | $Enums.AIResponseStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   essay?: Prisma.UserEssayUpdateOneRequiredWithoutAiCorrectionsNestedInput
 }
 
@@ -443,6 +493,8 @@ export type AICorrectionUncheckedUpdateWithoutFeedbackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAIResponseStatusFieldUpdateOperationsInput | $Enums.AIResponseStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   essayId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -450,6 +502,8 @@ export type AICorrectionCreateWithoutEssayInput = {
   id?: string
   text: string
   status: $Enums.AIResponseStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
   feedback: Prisma.EssayFeedbackCreateNestedOneWithoutAiCorrectionInput
 }
 
@@ -457,6 +511,8 @@ export type AICorrectionUncheckedCreateWithoutEssayInput = {
   id?: string
   text: string
   status: $Enums.AIResponseStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
   feedbackId: string
 }
 
@@ -493,6 +549,8 @@ export type AICorrectionScalarWhereInput = {
   id?: Prisma.StringFilter<"AICorrection"> | string
   text?: Prisma.StringFilter<"AICorrection"> | string
   status?: Prisma.EnumAIResponseStatusFilter<"AICorrection"> | $Enums.AIResponseStatus
+  createdAt?: Prisma.DateTimeFilter<"AICorrection"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"AICorrection"> | Date | string
   essayId?: Prisma.StringFilter<"AICorrection"> | string
   feedbackId?: Prisma.StringFilter<"AICorrection"> | string
 }
@@ -501,6 +559,8 @@ export type AICorrectionCreateManyEssayInput = {
   id?: string
   text: string
   status: $Enums.AIResponseStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
   feedbackId: string
 }
 
@@ -508,6 +568,8 @@ export type AICorrectionUpdateWithoutEssayInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAIResponseStatusFieldUpdateOperationsInput | $Enums.AIResponseStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   feedback?: Prisma.EssayFeedbackUpdateOneRequiredWithoutAiCorrectionNestedInput
 }
 
@@ -515,6 +577,8 @@ export type AICorrectionUncheckedUpdateWithoutEssayInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAIResponseStatusFieldUpdateOperationsInput | $Enums.AIResponseStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   feedbackId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -522,6 +586,8 @@ export type AICorrectionUncheckedUpdateManyWithoutEssayInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAIResponseStatusFieldUpdateOperationsInput | $Enums.AIResponseStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   feedbackId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -531,6 +597,8 @@ export type AICorrectionSelect<ExtArgs extends runtime.Types.Extensions.Internal
   id?: boolean
   text?: boolean
   status?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   essayId?: boolean
   feedbackId?: boolean
   essay?: boolean | Prisma.UserEssayDefaultArgs<ExtArgs>
@@ -541,6 +609,8 @@ export type AICorrectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   text?: boolean
   status?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   essayId?: boolean
   feedbackId?: boolean
   essay?: boolean | Prisma.UserEssayDefaultArgs<ExtArgs>
@@ -551,6 +621,8 @@ export type AICorrectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   text?: boolean
   status?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   essayId?: boolean
   feedbackId?: boolean
   essay?: boolean | Prisma.UserEssayDefaultArgs<ExtArgs>
@@ -561,11 +633,13 @@ export type AICorrectionSelectScalar = {
   id?: boolean
   text?: boolean
   status?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   essayId?: boolean
   feedbackId?: boolean
 }
 
-export type AICorrectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "text" | "status" | "essayId" | "feedbackId", ExtArgs["result"]["aICorrection"]>
+export type AICorrectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "text" | "status" | "createdAt" | "updatedAt" | "essayId" | "feedbackId", ExtArgs["result"]["aICorrection"]>
 export type AICorrectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   essay?: boolean | Prisma.UserEssayDefaultArgs<ExtArgs>
   feedback?: boolean | Prisma.EssayFeedbackDefaultArgs<ExtArgs>
@@ -589,6 +663,8 @@ export type $AICorrectionPayload<ExtArgs extends runtime.Types.Extensions.Intern
     id: string
     text: string
     status: $Enums.AIResponseStatus
+    createdAt: Date
+    updatedAt: Date
     essayId: string
     feedbackId: string
   }, ExtArgs["result"]["aICorrection"]>
@@ -1019,6 +1095,8 @@ export interface AICorrectionFieldRefs {
   readonly id: Prisma.FieldRef<"AICorrection", 'String'>
   readonly text: Prisma.FieldRef<"AICorrection", 'String'>
   readonly status: Prisma.FieldRef<"AICorrection", 'AIResponseStatus'>
+  readonly createdAt: Prisma.FieldRef<"AICorrection", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"AICorrection", 'DateTime'>
   readonly essayId: Prisma.FieldRef<"AICorrection", 'String'>
   readonly feedbackId: Prisma.FieldRef<"AICorrection", 'String'>
 }

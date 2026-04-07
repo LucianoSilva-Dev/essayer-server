@@ -288,6 +288,8 @@ export const AICorrectionScalarFieldEnum = {
   id: 'id',
   text: 'text',
   status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   essayId: 'essayId',
   feedbackId: 'feedbackId'
 } as const

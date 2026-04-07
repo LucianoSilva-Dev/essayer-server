@@ -279,9 +279,11 @@ model TeacherCorrection {
 }
 
 model AICorrection {
-  id     String           @id @default(uuid(7))
-  text   String
-  status AIResponseStatus
+  id        String           @id @default(uuid(7))
+  text      String
+  status    AIResponseStatus
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 
   essay      UserEssay     @relation(fields: [essayId], references: [id])
   essayId    String
