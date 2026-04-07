@@ -18,7 +18,7 @@
   "assist": {
     "actions": {
       "source": {
-        "organizeImports": "on"
+        "organizeImports": "off"
       }
     }
   },
@@ -28,6 +28,7 @@
       "recommended": true,
       "style": {
         "noNonNullAssertion": "off",
+        "useImportType": "off",
         "useNamingConvention": {
           "level": "error",
           "options": {

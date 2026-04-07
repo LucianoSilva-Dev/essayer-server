@@ -1,5 +1,5 @@
 import { google } from '@ai-sdk/google';
-import type { ConfigService } from '@config/config.service';
+import { ConfigService } from '@config/config.service';
 import { REDIS_CLIENT } from '@core/redis/redis.constants';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { generateObject, generateText } from 'ai';

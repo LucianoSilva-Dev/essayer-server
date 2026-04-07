@@ -1,35 +1,40 @@
+import { ActivityCorrectedPayload, ActivitySubmittedPayload } from '@core/events';
 import {
   ForbiddenException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-} from "@nestjs/common";
-import { ActivityRepository } from "./activity.repository";
-import { CreateEssayActivityDto } from "./dto/create-essay-activity.dto";
-import { UpdateEssayActivityDto } from "./dto/update-essay-activity.dto";
-import { ProvideFeedbackDto } from "./dto/provide-feedback.dto";
-import { SubmitEssayResponseDto } from "./dto/submit-essay-response.dto";
+} from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ActivityRepository } from './activity.repository';
+import { CreateEssayActivityDto } from './dto/create-essay-activity.dto';
+import { ProvideFeedbackDto } from './dto/provide-feedback.dto';
+import { SubmitEssayResponseDto } from './dto/submit-essay-response.dto';
+import { UpdateEssayActivityDto } from './dto/update-essay-activity.dto';
 
 @Injectable()
 export class ActivityService {
-  constructor(private readonly repository: ActivityRepository) {}
+  constructor(
+    private readonly repository: ActivityRepository,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   async create(data: CreateEssayActivityDto, teacherId: string) {
     try {
       await this.repository.createEssayActivity(data, teacherId);
-      return { message: "activity created successfully" };
+      return { message: 'activity created successfully' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException("Error creating activity");
+      throw new InternalServerErrorException('Error creating activity');
     }
   }
 
   async get(activityId: string) {
     const activity = await this.repository.getEssayActivityDetails(activityId);
 
-    if (!activity) throw new NotFoundException("activity not found");
+    if (!activity) throw new NotFoundException('activity not found');
 
-    if (!activity.essay) throw new NotFoundException("essay not found");
+    if (!activity.essay) throw new NotFoundException('essay not found');
 
     return {
       id: activity.id,
@@ -43,57 +48,42 @@ export class ActivityService {
     };
   }
 
-  async update(
-    activityId: string,
-    data: UpdateEssayActivityDto,
-    teacherId: string
-  ) {
+  async update(activityId: string, data: UpdateEssayActivityDto, teacherId: string) {
     const activity = await this.repository.getActivityWithClass(activityId);
 
-    if (!activity) throw new NotFoundException("activity not found");
+    if (!activity) throw new NotFoundException('activity not found');
 
     if (activity.class.creatorId !== teacherId)
       throw new ForbiddenException(
-        "activity does not exist or you do not have permission to update it"
+        'activity does not exist or you do not have permission to update it',
       );
 
     try {
       await this.repository.updateEssayActivity(activityId, data);
-      return { message: "activity updated successfully" };
+      return { message: 'activity updated successfully' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException("Error updating activity");
+      throw new InternalServerErrorException('Error updating activity');
     }
   }
 
-  async getAllAnswers(
-    activityId: string,
-    teacherId: string,
-    offset: number,
-    limit: number
-  ) {
+  async getAllAnswers(activityId: string, teacherId: string, offset: number, limit: number) {
     const activity = await this.repository.getActivityWithClass(activityId);
 
-    if (!activity) throw new NotFoundException("activity not found");
+    if (!activity) throw new NotFoundException('activity not found');
 
     if (activity.class.creatorId !== teacherId)
       throw new ForbiddenException(
-        "activity does not exist or you do not have permission to access it"
+        'activity does not exist or you do not have permission to access it',
       );
 
     try {
       const essay = await this.repository.getEssayByActivityId(activityId);
 
-      if (!essay) throw new NotFoundException("essay not found");
+      if (!essay) throw new NotFoundException('essay not found');
 
-      const answers = await this.repository.getAllAnswersForActivity(
-        essay.id,
-        offset,
-        limit
-      );
-      const totalDocuments = await this.repository.countAnswersForActivity(
-        essay.id
-      );
+      const answers = await this.repository.getAllAnswersForActivity(essay.id, offset, limit);
+      const totalDocuments = await this.repository.countAnswersForActivity(essay.id);
 
       const documents = answers.map((answer) => ({
         id: answer.id,
@@ -108,8 +98,9 @@ export class ActivityService {
       const nextOffset = Math.min(offset + limit, totalDocuments);
       const prevOffset = Math.max(offset - limit, 0);
       const totalPages = Math.ceil(totalDocuments / limit);
-      const pagesUrl = Array.from({ length: totalPages }, (_, i) =>
-        `offset=${i * limit}&limit=${limit}`
+      const pagesUrl = Array.from(
+        { length: totalPages },
+        (_, i) => `offset=${i * limit}&limit=${limit}`,
       );
 
       return {
@@ -117,10 +108,7 @@ export class ActivityService {
         pagination: {
           offset,
           limit,
-          nextPageUrl:
-            nextOffset >= totalDocuments
-              ? null
-              : `/offset=${nextOffset}&limit=${limit}`,
+          nextPageUrl: nextOffset >= totalDocuments ? null : `/offset=${nextOffset}&limit=${limit}`,
           previousPageUrl: offset === 0 ? null : `/offset=${prevOffset}&limit=${limit}`,
           totalDocuments,
           pagesUrl,
@@ -128,9 +116,7 @@ export class ActivityService {
       };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException(
-        "Error fetching activity responses"
-      );
+      throw new InternalServerErrorException('Error fetching activity responses');
     }
   }
 
@@ -139,19 +125,14 @@ export class ActivityService {
       const classes = await this.repository.getTeacherClassIds(teacherId);
       const classIds = classes.map((c) => c.id);
 
-      const activities = await this.repository.getRecentActivities(
-        classIds,
-        4
-      );
+      const activities = await this.repository.getRecentActivities(classIds, 4);
 
       return activities.map((activity) => {
         if (!activity.essay) {
-          throw new NotFoundException("essay not found");
+          throw new NotFoundException('essay not found');
         }
 
-        const submittedCount = activity.essay.responses.filter(
-          (r) => r.answerDate
-        ).length;
+        const submittedCount = activity.essay.responses.filter((r) => r.answerDate).length;
         const totalStudents = activity.class.members.length;
 
         return {
@@ -165,107 +146,108 @@ export class ActivityService {
       });
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException("Error fetching recent activities");
+      throw new InternalServerErrorException('Error fetching recent activities');
     }
   }
 
   async start(activityId: string, studentId: string) {
     const activity = await this.repository.getEssayActivityDetails(activityId);
 
-    if (!activity) throw new NotFoundException("activity not found");
+    if (!activity) throw new NotFoundException('activity not found');
 
     const essay = activity.essay;
-    if (!essay) throw new NotFoundException("essay not found");
+    if (!essay) throw new NotFoundException('essay not found');
 
     try {
       await this.repository.startEssayResponse(essay.id, studentId);
-      return { message: "essay response started successfully" };
+      return { message: 'essay response started successfully' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException("Error starting essay response");
+      throw new InternalServerErrorException('Error starting essay response');
     }
   }
 
-  async send(
-    activityId: string,
-    studentId: string,
-    data: SubmitEssayResponseDto
-  ) {
+  async send(activityId: string, studentId: string, data: SubmitEssayResponseDto) {
     const activity = await this.repository.getEssayActivityDetails(activityId);
 
-    if (!activity) throw new NotFoundException("activity not found");
+    if (!activity) throw new NotFoundException('activity not found');
 
     const essay = activity.essay;
-    if (!essay) throw new NotFoundException("essay not found");
+    if (!essay) throw new NotFoundException('essay not found');
 
     try {
-      const response = await this.repository.submitEssayResponse(
-        essay.id,
-        studentId,
-        data.text
-      );
+      const response = await this.repository.submitEssayResponse(essay.id, studentId, data.text);
 
-      // TODO: emit event for notification
-      return { message: "essay response submitted successfully" };
+      const classData = await this.repository.getActivityWithClass(activityId);
+      if (classData) {
+        this.eventEmitter.emit(
+          'activity.submitted',
+          new ActivitySubmittedPayload(activityId, [classData.class.creatorId]),
+        );
+      }
+
+      return { message: 'essay response submitted successfully' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException("Error submitting essay response");
+      throw new InternalServerErrorException('Error submitting essay response');
     }
   }
 
-  async feedback(
-    responseId: string,
-    data: ProvideFeedbackDto,
-    teacherId: string
-  ) {
+  async feedback(responseId: string, data: ProvideFeedbackDto, teacherId: string) {
     const response = await this.repository.getResponseById(responseId);
 
-    if (!response) throw new NotFoundException("response not found");
+    if (!response) throw new NotFoundException('response not found');
 
     const creatorId = response.essay.activity.class.creatorId;
 
     if (creatorId !== teacherId)
       throw new ForbiddenException(
-        "You do not have permission to provide feedback on this response"
+        'You do not have permission to provide feedback on this response',
       );
 
     try {
       await this.repository.provideFeedback(responseId, data);
 
-      // TODO: emit event for notification
-      return { message: "Feedback sent successfully!" };
+      const activityId = response.essay.activity.id;
+      const studentId = response.student.id;
+      this.eventEmitter.emit(
+        'activity.corrected',
+        new ActivityCorrectedPayload(activityId, [studentId]),
+      );
+
+      return { message: 'Feedback sent successfully!' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException("Error providing feedback");
+      throw new InternalServerErrorException('Error providing feedback');
     }
   }
 
   async updateFeedbackStatus(responseId: string, studentId: string) {
     try {
       await this.repository.markFeedbackAsSeen(responseId);
-      return { message: "feedback status updated successfully" };
+      return { message: 'feedback status updated successfully' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException("Error updating feedback status");
+      throw new InternalServerErrorException('Error updating feedback status');
     }
   }
 
   async delete(activityId: string, teacherId: string) {
     const activity = await this.repository.getActivityWithClass(activityId);
 
-    if (!activity) throw new NotFoundException("activity not found");
+    if (!activity) throw new NotFoundException('activity not found');
 
     if (activity.class.creatorId !== teacherId)
       throw new ForbiddenException(
-        "activity does not exist or you do not have permission to delete it"
+        'activity does not exist or you do not have permission to delete it',
       );
 
     try {
       await this.repository.deleteActivity(activityId);
-      return { message: "activity deleted successfully" };
+      return { message: 'activity deleted successfully' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException("Error deleting activity");
+      throw new InternalServerErrorException('Error deleting activity');
     }
   }
 
@@ -274,22 +256,20 @@ export class ActivityService {
       const classes = await this.repository.getStudentClassIds(studentId);
       const classIds = classes.map((c) => c.id);
 
-      const activities = await this.repository.getAllActivitiesForStudent(
-        classIds
-      );
+      const activities = await this.repository.getAllActivitiesForStudent(classIds);
 
       return activities.map((activity) => {
         if (!activity.essay) {
-          throw new NotFoundException("essay not found");
+          throw new NotFoundException('essay not found');
         }
 
         const response = activity.essay.responses[0];
-        let status: "NOT_STARTED" | "IN_PROGRESS" | "SUBMITTED" = "NOT_STARTED";
+        let status: 'NOT_STARTED' | 'IN_PROGRESS' | 'SUBMITTED' = 'NOT_STARTED';
 
         if (response?.answerDate) {
-          status = "SUBMITTED";
+          status = 'SUBMITTED';
         } else if (response?.id) {
-          status = "IN_PROGRESS";
+          status = 'IN_PROGRESS';
         }
 
         return {
@@ -297,7 +277,7 @@ export class ActivityService {
           title: activity.title,
           description: activity.description,
           deadline: activity.deadline,
-          activityType: "ESSAY" as const,
+          activityType: 'ESSAY' as const,
           status,
           class: {
             id: activity.class.id,
@@ -308,26 +288,21 @@ export class ActivityService {
       });
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException(
-        "Error fetching student activities"
-      );
+      throw new InternalServerErrorException('Error fetching student activities');
     }
   }
 
   async getCorrection(activityId: string, studentId: string, userId: string) {
     const activity = await this.repository.getEssayActivityDetails(activityId);
 
-    if (!activity) throw new NotFoundException("activity not found");
+    if (!activity) throw new NotFoundException('activity not found');
 
     const essay = activity.essay;
-    if (!essay) throw new NotFoundException("essay not found");
+    if (!essay) throw new NotFoundException('essay not found');
 
-    const response = await this.repository.getResponseByEssayAndStudent(
-      essay.id,
-      studentId
-    );
+    const response = await this.repository.getResponseByEssayAndStudent(essay.id, studentId);
 
-    if (!response) throw new NotFoundException("correction not found");
+    if (!response) throw new NotFoundException('correction not found');
 
     const creatorId = response.essay.activity.class.creatorId;
 
@@ -336,7 +311,7 @@ export class ActivityService {
     const isTeacher = userId === creatorId;
 
     if (!isStudent && !isTeacher)
-      throw new ForbiddenException("You do not have permission to access this");
+      throw new ForbiddenException('You do not have permission to access this');
 
     return {
       id: response.id,
