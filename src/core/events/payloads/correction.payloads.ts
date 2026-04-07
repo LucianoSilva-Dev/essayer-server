@@ -3,6 +3,19 @@
  * Events related to the AI essay correction workflow
  */
 
+export interface ICorrectionResult {
+  gradeC1: number;
+  gradeC2: number;
+  gradeC3: number;
+  gradeC4: number;
+  gradeC5: number;
+  feedbackC1: string;
+  feedbackC2: string;
+  feedbackC3: string;
+  feedbackC4: string;
+  feedbackC5: string;
+}
+
 /**
  * Emitted when AI finishes processing a correction (before persistence)
  */
@@ -11,7 +24,7 @@ export class CorrectionCompletedPayload {
     public readonly freeWritingId: string,
     public readonly correctionId: string,
     public readonly userId: string,
-    public readonly correction: unknown,
+    public readonly correction: ICorrectionResult,
   ) {}
 }
 
