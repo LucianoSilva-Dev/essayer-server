@@ -3,21 +3,26 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
   Query,
   Session,
+  Sse,
   UsePipes,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Roles, UserSession } from '@thallesp/nestjs-better-auth';
 import { ZodResponse, ZodValidationPipe } from 'nestjs-zod';
+import { Observable } from 'rxjs';
+import { MessageEvent } from '@nestjs/common';
 import { UserEssayService } from './user-essay.service';
 import { CreateUserEssayDto } from './dto/create-user-essay.dto';
 import { GetAllUserEssayQueryDto } from './dto/get-all-user-essay-query.dto';
 import { GetUserEssayResponseDto } from './dto/get-user-essay-response.dto';
 import { UpdateUserEssayDto } from './dto/update-user-essay.dto';
+import { CorrectEssayDto } from './dto/correct-essay.dto';
 import { GenericSuccessResponseDto } from '@common/dto/genericResponseDto';
 import { IdOnlyResponseDto } from '@common/dto/idOnlyResponseDto';
 
@@ -55,7 +60,7 @@ export class UserEssayController {
 
   @Get(':id')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Retrieves a specific user essay.' })
+  @ApiOperation({ summary: 'Retrieves a specific user essay with its corrections.' })
   @ZodResponse({
     status: 200,
     description: 'user essay retrieved successfully',
@@ -94,34 +99,61 @@ export class UserEssayController {
     return this.service.delete(userEssayId, session.user.id);
   }
 
-  // ============== IGNORE ==============
   @Post(':id/correct')
   @ApiBearerAuth()
+  @HttpCode(200)
   @ApiOperation({ summary: 'Submits the specified essay for AI correction.' })
-  correct() {
-    return this.service.correct();
+  @ApiBody({ type: CorrectEssayDto })
+  correct(
+    @Param('id') essayId: string,
+    @Body() dto: CorrectEssayDto,
+    @Session() session: UserSession,
+  ) {
+    return this.service.correct(essayId, dto, session.user.id);
   }
 
-  @Get(':id/correction/listen')
+  @Sse(':id/correction/listen')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Listens for a correction event of the specified essay.',
+    summary: 'Listens for a correction event of the specified essay via SSE.',
   })
-  listenCorrection() {
-    return this.service.listenCorrection();
+  listenCorrection(
+    @Param('id') essayId: string,
+    @Session() session: UserSession,
+  ): Observable<MessageEvent> {
+    return this.service.listenCorrection(essayId, session.user.id);
   }
 
   @Delete(':id/correction/:correctionId')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Deletes an AI correction of a free essay.' })
-  deleteCorrection() {
-    return this.service.deleteCorrection();
+  @ZodResponse({
+    status: 200,
+    description: 'correction deleted successfully',
+    type: GenericSuccessResponseDto,
+  })
+  deleteCorrection(
+    @Param('id') essayId: string,
+    @Param('correctionId') correctionId: string,
+    @Session() session: UserSession,
+  ) {
+    return this.service.deleteCorrection(essayId, correctionId, session.user.id);
   }
 
   @Post(':id/correction/:correctionId/retry')
   @ApiBearerAuth()
+  @HttpCode(200)
   @ApiOperation({ summary: 'Retries a failed essay correction.' })
-  retryCorrection() {
-    return this.service.retryCorrection();
+  @ZodResponse({
+    status: 200,
+    description: 'correction retry initiated',
+    type: GenericSuccessResponseDto,
+  })
+  retryCorrection(
+    @Param('id') essayId: string,
+    @Param('correctionId') correctionId: string,
+    @Session() session: UserSession,
+  ) {
+    return this.service.retryCorrection(essayId, correctionId, session.user.id);
   }
 }

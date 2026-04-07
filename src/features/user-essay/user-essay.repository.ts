@@ -1,5 +1,7 @@
 import { PrismaService } from '@core/prisma';
-import { Injectable } from '@nestjs/common';
+import { AIResponseStatus } from '@core/prisma/generated/enums';
+import type { AICorrection } from '@core/prisma/generated/client';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserEssayDto } from './dto/create-user-essay.dto';
 import { UpdateUserEssayDto } from './dto/update-user-essay.dto';
 
@@ -60,6 +62,137 @@ export class UserEssayRepository {
   async deleteUserEssay(userEssayId: string) {
     return this.prisma.userEssay.delete({
       where: { id: userEssayId },
+    });
+  }
+
+  async getUserEssayWithCorrections(essayId: string) {
+    return this.prisma.userEssay.findUnique({
+      where: { id: essayId },
+      include: {
+        aiCorrections: {
+          include: {
+            feedback: true,
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+      },
+    });
+  }
+
+  async createAiCorrection(essayId: string, text: string) {
+    const feedback = await this.prisma.essayFeedback.create({
+      data: {
+        gradeC1: 0,
+        gradeC2: 0,
+        gradeC3: 0,
+        gradeC4: 0,
+        gradeC5: 0,
+        feedbackC1: '',
+        feedbackC2: '',
+        feedbackC3: '',
+        feedbackC4: '',
+        feedbackC5: '',
+      },
+    });
+
+    return this.prisma.aICorrection.create({
+      data: {
+        essayId,
+        text,
+        status: AIResponseStatus.PENDING,
+        feedbackId: feedback.id,
+      },
+    });
+  }
+
+  async findAiCorrectionById(correctionId: string): Promise<AICorrection | null> {
+    return this.prisma.aICorrection.findUnique({
+      where: { id: correctionId },
+      include: {
+        feedback: true,
+      },
+    });
+  }
+
+  async updateAiCorrectionToFinished(
+    correctionId: string,
+    feedbackData: {
+      gradeC1: number;
+      gradeC2: number;
+      gradeC3: number;
+      gradeC4: number;
+      gradeC5: number;
+      feedbackC1: string;
+      feedbackC2: string;
+      feedbackC3: string;
+      feedbackC4: string;
+      feedbackC5: string;
+    },
+  ) {
+    const correction = await this.prisma.aICorrection.findUnique({
+      where: { id: correctionId },
+    });
+
+    if (!correction) {
+      throw new NotFoundException('AI correction not found');
+    }
+
+    await this.prisma.$transaction([
+      this.prisma.essayFeedback.update({
+        where: { id: correction.feedbackId },
+        data: feedbackData,
+      }),
+      this.prisma.aICorrection.update({
+        where: { id: correctionId },
+        data: { status: AIResponseStatus.FINISHED },
+      }),
+    ]);
+
+    return this.prisma.aICorrection.findUnique({
+      where: { id: correctionId },
+      include: {
+        feedback: true,
+      },
+    });
+  }
+
+  async updateAiCorrectionStatus(
+    correctionId: string,
+    status: AIResponseStatus,
+  ) {
+    return this.prisma.aICorrection.update({
+      where: { id: correctionId },
+      data: { status },
+    });
+  }
+
+  async deleteAiCorrection(correctionId: string) {
+    const correction = await this.prisma.aICorrection.findUnique({
+      where: { id: correctionId },
+    });
+
+    if (!correction) {
+      throw new NotFoundException('AI correction not found');
+    }
+
+    await this.prisma.$transaction([
+      this.prisma.aICorrection.delete({
+        where: { id: correctionId },
+      }),
+      this.prisma.essayFeedback.delete({
+        where: { id: correction.feedbackId },
+      }),
+    ]);
+  }
+
+  async getActiveCorrectionCount(essayId: string): Promise<number> {
+    return this.prisma.aICorrection.count({
+      where: {
+        essayId,
+        status: AIResponseStatus.PENDING,
+      },
     });
   }
 }
