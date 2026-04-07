@@ -1,6 +1,6 @@
-import { PrismaService } from "@core/prisma";
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
-import { UpdateUserDto } from "./dto/update-user.dto";
+import { PrismaService } from '@core/prisma';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserRepository {

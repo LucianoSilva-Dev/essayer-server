@@ -32,14 +32,11 @@ const mimeTypeToFriendlyName: Record<string, string> = {
   // Documentos
   'application/pdf': 'PDF',
   'application/msword': 'Word (DOC)',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-    'Word (DOCX)',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Word (DOCX)',
   'application/vnd.ms-excel': 'Excel (XLS)',
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-    'Excel (XLSX)',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'Excel (XLSX)',
   'application/vnd.ms-powerpoint': 'PowerPoint (PPT)',
-  'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-    'PowerPoint (PPTX)',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'PowerPoint (PPTX)',
   'text/plain': 'Texto (TXT)',
   'text/csv': 'CSV',
   'application/rtf': 'RTF',
@@ -109,10 +106,7 @@ function getFriendlyFileTypeName(fileType: string | RegExp): string {
     if (regexStr.includes('audio/') || regexStr.startsWith('audio')) {
       return 'áudios';
     }
-    if (
-      regexStr.includes('application/pdf') ||
-      regexStr.includes('application/')
-    ) {
+    if (regexStr.includes('application/pdf') || regexStr.includes('application/')) {
       return 'documentos';
     }
 
@@ -180,9 +174,7 @@ class FriendlyFileTypeValidator extends FileValidator<{
   }
 
   buildErrorMessage(): string {
-    const friendlyType = getFriendlyFileTypeName(
-      this.validationOptions.fileType,
-    );
+    const friendlyType = getFriendlyFileTypeName(this.validationOptions.fileType);
     return `Tipo de arquivo não permitido. São aceitos apenas: ${friendlyType}.`;
   }
 }
@@ -192,10 +184,10 @@ class EncodingFixParseFilePipe implements PipeTransform {
   private readonly fileIsRequired: boolean;
   private readonly exceptionFactory: (error: string) => any;
 
-  constructor(options: { 
-    validators: FileValidator[], 
-    fileIsRequired?: boolean, 
-    exceptionFactory?: (error: string) => any 
+  constructor(options: {
+    validators: FileValidator[];
+    fileIsRequired?: boolean;
+    exceptionFactory?: (error: string) => any;
   }) {
     this.validators = options.validators || [];
     this.fileIsRequired = options.fileIsRequired ?? true;
@@ -239,9 +231,7 @@ class EncodingFixParseFilePipe implements PipeTransform {
   private fixEncoding(file: any) {
     if (file && typeof file === 'object' && typeof file.originalname === 'string') {
       // Fix Latin-1 to UTF-8 encoding issue from Multer
-      file.originalname = Buffer.from(file.originalname, 'latin1').toString(
-        'utf8',
-      );
+      file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf8');
     }
   }
 
@@ -267,8 +257,7 @@ export function CustomParseFilePipe(params?: CustomParseFilePipeParams) {
         fileType: fileType ?? defaultCustomParseFilePipeOpts.fileType,
       }),
     ],
-    fileIsRequired:
-      fileIsRequired ?? defaultCustomParseFilePipeOpts.fileIsRequired,
+    fileIsRequired: fileIsRequired ?? defaultCustomParseFilePipeOpts.fileIsRequired,
     exceptionFactory: (error: string) => {
       // Mensagem amigável para "file is required"
       if (error.toLowerCase().includes('file is expected')) {

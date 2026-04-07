@@ -1,5 +1,5 @@
-import { NotificationType, PrismaService } from "@core/prisma";
-import { Injectable } from "@nestjs/common";
+import { NotificationType, PrismaService } from '@core/prisma';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class NotificationRepository {
@@ -27,7 +27,7 @@ export class NotificationRepository {
           },
         },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
@@ -46,11 +46,7 @@ export class NotificationRepository {
     );
   }
 
-  createActivityNotification(
-    type: NotificationType,
-    activityId: string,
-    recipientIds: string[],
-  ) {
+  createActivityNotification(type: NotificationType, activityId: string, recipientIds: string[]) {
     return this.prisma.notification.create({
       data: {
         type,
@@ -73,7 +69,7 @@ export class NotificationRepository {
   ) {
     return this.prisma.notification.create({
       data: {
-        type: "TEACHER_REQUEST_STATUS",
+        type: 'TEACHER_REQUEST_STATUS',
         senders: {
           connect: recipientIds.map((id) => ({ id })),
         },

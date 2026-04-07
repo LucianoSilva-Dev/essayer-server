@@ -4,12 +4,12 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-} from "@nestjs/common";
-import { UserRepository } from "./user.repository";
-import { CreateTeacherDto } from "./dto/create-teacher.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { STORAGE_PROVIDER } from "@core/storage/storage.constants";
-import { IStorageProvider } from "@core/storage/types";
+} from '@nestjs/common';
+import { UserRepository } from './user.repository';
+import { CreateTeacherDto } from './dto/create-teacher.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { STORAGE_PROVIDER } from '@core/storage/storage.constants';
+import { IStorageProvider } from '@core/storage/types';
 
 @Injectable()
 export class UserService {
@@ -21,7 +21,7 @@ export class UserService {
   async get(id: string) {
     const user = await this.repository.findById(id);
 
-    if (!user) throw new NotFoundException("user not found");
+    if (!user) throw new NotFoundException('user not found');
 
     return user;
   }
@@ -30,7 +30,7 @@ export class UserService {
     const { lattes } = data;
     try {
       await this.repository.createTeacherRequest(id, lattes);
-      return { message: "request created successfully" };
+      return { message: 'request created successfully' };
     } catch (err) {
       console.log(err);
 
@@ -39,22 +39,20 @@ export class UserService {
   }
 
   async update(id: string, data: UpdateUserDto, requesterId: string) {
-    if (id !== requesterId)
-      throw new ForbiddenException("unable to edit other accounts info");
+    if (id !== requesterId) throw new ForbiddenException('unable to edit other accounts info');
 
     try {
       await this.repository.update(id, data);
 
-      return { message: "user updated successfully" };
+      return { message: 'user updated successfully' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException("Error updating user");
+      throw new InternalServerErrorException('Error updating user');
     }
   }
 
   async delete(id: string, requesterId: string) {
-    if (id !== requesterId)
-      throw new ForbiddenException("unable to delete other accounts");
+    if (id !== requesterId) throw new ForbiddenException('unable to delete other accounts');
 
     const user = await this.repository.findById(id);
 
@@ -67,18 +65,18 @@ export class UserService {
 
       await this.repository.delete(id);
 
-      return { message: "user deleted successfully" };
+      return { message: 'user deleted successfully' };
     } catch (err) {
       console.log(err);
 
-      throw new InternalServerErrorException("Error deleting user");
+      throw new InternalServerErrorException('Error deleting user');
     }
   }
 
   async profile(id: string) {
     const user = await this.repository.getProfile(id);
 
-    if (!user) throw new NotFoundException("user not found");
+    if (!user) throw new NotFoundException('user not found');
 
     return user;
   }
@@ -86,48 +84,35 @@ export class UserService {
   async getPicture(id: string) {
     const picture = await this.repository.getPicture(id);
 
-    if (!picture) throw new NotFoundException("user not found");
+    if (!picture) throw new NotFoundException('user not found');
 
     return picture;
   }
 
-  async createPicture(
-    id: string,
-    requesterId: string,
-    picture: Express.Multer.File,
-  ) {
-    if (id !== requesterId)
-      throw new ForbiddenException("unable to edit other accounts info");
+  async createPicture(id: string, requesterId: string, picture: Express.Multer.File) {
+    if (id !== requesterId) throw new ForbiddenException('unable to edit other accounts info');
 
     const user = await this.repository.findById(id);
 
     if (!user) throw new NotFoundException(`user with id ${id} not found`);
 
     try {
-      const savedFile = await this.storageService.save(
-        picture.buffer,
-        picture.originalname,
-      );
+      const savedFile = await this.storageService.save(picture.buffer, picture.originalname);
       const pictureFileId = savedFile.fileId;
       const pictureUrl = savedFile.url;
 
       await this.repository.savePicture(id, pictureFileId, pictureUrl);
 
-      return { message: "picture added successfully" };
+      return { message: 'picture added successfully' };
     } catch (err) {
       console.log(err);
 
-      throw new InternalServerErrorException("Error adding profile picture");
+      throw new InternalServerErrorException('Error adding profile picture');
     }
   }
 
-  async updatePicture(
-    id: string,
-    requesterId: string,
-    picture: Express.Multer.File,
-  ) {
-    if (id !== requesterId)
-      throw new ForbiddenException("unable to edit other accounts info");
+  async updatePicture(id: string, requesterId: string, picture: Express.Multer.File) {
+    if (id !== requesterId) throw new ForbiddenException('unable to edit other accounts info');
 
     const user = await this.repository.findById(id);
 
@@ -136,26 +121,22 @@ export class UserService {
     try {
       if (user.imageFileId) await this.storageService.delete(user.imageFileId);
 
-      const savedFile = await this.storageService.save(
-        picture.buffer,
-        picture.originalname,
-      );
+      const savedFile = await this.storageService.save(picture.buffer, picture.originalname);
       const pictureFileId = savedFile.fileId;
       const pictureUrl = savedFile.url;
 
       await this.repository.savePicture(id, pictureFileId, pictureUrl);
 
-      return { message: "picture updated successfully" };
+      return { message: 'picture updated successfully' };
     } catch (err) {
       console.log(err);
 
-      throw new InternalServerErrorException("Error updating profile picture");
+      throw new InternalServerErrorException('Error updating profile picture');
     }
   }
 
   async deletePicture(id: string, requesterId: string) {
-    if (id !== requesterId)
-      throw new ForbiddenException("unable to edit other accounts info");
+    if (id !== requesterId) throw new ForbiddenException('unable to edit other accounts info');
 
     const user = await this.repository.findById(id);
 
@@ -166,11 +147,11 @@ export class UserService {
 
       await this.repository.savePicture(id, undefined, undefined);
 
-      return { message: "image deleted succeddfully" };
+      return { message: 'image deleted succeddfully' };
     } catch (err) {
       console.log(err);
 
-      throw new InternalServerErrorException("Error deleting profile picture");
+      throw new InternalServerErrorException('Error deleting profile picture');
     }
   }
 }

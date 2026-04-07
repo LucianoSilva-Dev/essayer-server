@@ -1,20 +1,21 @@
-import { LoggerService } from "@core/logger/logger.service";
-import { ConfigService } from "@nestjs/config";
-import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
-import { setAppContext } from "./app.registry";
-import type { EnvConfig } from "./config";
-import { setupDocs } from "./core/docs/setup.docs";
+import { LoggerService } from '@core/logger/logger.service';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { setAppContext } from './app.registry';
+import type { EnvConfig } from './config';
+import { setupDocs } from './core/docs/setup.docs';
+import { setupAdmin } from '@common/setup-admin';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
     bodyParser: false,
   });
-  
+
   // Get config service
   const configService = app.get<ConfigService<EnvConfig>>(ConfigService);
-  const port = configService.get<number>("PORT") ?? 3000;
+  const port = configService.get<number>('PORT') ?? 3000;
 
   // Configure custom logger
   app.useLogger(app.get(LoggerService));
@@ -25,12 +26,17 @@ async function bootstrap() {
   // Enable CORS
   app.enableCors({
     origin: true, // TODO: Configure proper origins
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
 
   // Setup Scalar Docs
   await setupDocs(app, port);
+
+  // execute admin setup
+  if (process.env.ADMIN_SETUP === 'true') {
+    await setupAdmin();
+  }
 
   await app.listen(port);
 

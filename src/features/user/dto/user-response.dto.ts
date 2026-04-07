@@ -1,6 +1,6 @@
-import { dateToIsoString } from "@common/schema/date-to-string";
-import { createZodDto } from "nestjs-zod";
-import z from "zod";
+import { dateToIsoString } from '@common/schema/date-to-string';
+import { createZodDto } from 'nestjs-zod';
+import z from 'zod';
 
 export const userResponseSchema = z.object({
   id: z.string(),
@@ -11,5 +11,4 @@ export const userResponseSchema = z.object({
   lattes: z.string().nullable(),
 });
 
-export class UserResponseDto extends createZodDto(userResponseSchema) { }
-
+export class UserResponseDto extends createZodDto(userResponseSchema) {}

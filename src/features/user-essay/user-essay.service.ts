@@ -3,10 +3,10 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-} from "@nestjs/common";
-import { UserEssayRepository } from "./user-essay.repository";
-import { CreateUserEssayDto } from "./dto/create-user-essay.dto";
-import { UpdateUserEssayDto } from "./dto/update-user-essay.dto";
+} from '@nestjs/common';
+import { UserEssayRepository } from './user-essay.repository';
+import { CreateUserEssayDto } from './dto/create-user-essay.dto';
+import { UpdateUserEssayDto } from './dto/update-user-essay.dto';
 
 @Injectable()
 export class UserEssayService {
@@ -18,7 +18,7 @@ export class UserEssayService {
       return { id: essay.id };
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException("Error creating user essay");
+      throw new InternalServerErrorException('Error creating user essay');
     }
   }
 
@@ -37,16 +37,16 @@ export class UserEssayService {
       }));
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException("Error fetching user essays");
+      throw new InternalServerErrorException('Error fetching user essays');
     }
   }
 
   async get(userEssayId: string, studentId: string) {
     const essay = await this.repository.getUserEssayById(userEssayId);
 
-    if (!essay) throw new NotFoundException("User essay not found");
+    if (!essay) throw new NotFoundException('User essay not found');
     if (essay.studentId !== studentId)
-      throw new ForbiddenException("You do not have permission to access this essay");
+      throw new ForbiddenException('You do not have permission to access this essay');
 
     return {
       id: essay.id,
@@ -63,49 +63,40 @@ export class UserEssayService {
   async update(userEssayId: string, data: UpdateUserEssayDto, studentId: string) {
     const essay = await this.repository.getUserEssayById(userEssayId);
 
-    if (!essay) throw new NotFoundException("User essay not found");
+    if (!essay) throw new NotFoundException('User essay not found');
     if (essay.studentId !== studentId)
-      throw new ForbiddenException("You do not have permission to update this essay");
+      throw new ForbiddenException('You do not have permission to update this essay');
 
     try {
       await this.repository.updateUserEssay(userEssayId, data);
-      return { message: "User essay updated successfully" };
+      return { message: 'User essay updated successfully' };
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException("Error updating user essay");
+      throw new InternalServerErrorException('Error updating user essay');
     }
   }
 
   async delete(userEssayId: string, studentId: string) {
     const essay = await this.repository.getUserEssayById(userEssayId);
 
-    if (!essay) throw new NotFoundException("User essay not found");
+    if (!essay) throw new NotFoundException('User essay not found');
     if (essay.studentId !== studentId)
-      throw new ForbiddenException("You do not have permission to delete this essay");
+      throw new ForbiddenException('You do not have permission to delete this essay');
 
     try {
       await this.repository.deleteUserEssay(userEssayId);
-      return { message: "User essay deleted successfully" };
+      return { message: 'User essay deleted successfully' };
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException("Error deleting user essay");
+      throw new InternalServerErrorException('Error deleting user essay');
     }
   }
 
-  async correct() {
+  async correct() {}
 
-  }
+  async listenCorrection() {}
 
-  async listenCorrection() {
+  async deleteCorrection() {}
 
-  }
-
-  async deleteCorrection() {
-
-  }
-
-  async retryCorrection() {
-
-  }
+  async retryCorrection() {}
 }
-

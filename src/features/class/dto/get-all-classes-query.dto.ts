@@ -1,5 +1,5 @@
-import { createZodDto } from "nestjs-zod";
-import z from "zod";
+import { createZodDto } from 'nestjs-zod';
+import z from 'zod';
 
 export const getAllClassesQuerySchema = z.object({
   offset: z.coerce
@@ -17,4 +17,4 @@ export const getAllClassesQuerySchema = z.object({
     .transform((val) => val ?? 15),
 });
 
-export class GetAllClassesQueryDto extends createZodDto(getAllClassesQuerySchema) { }
+export class GetAllClassesQueryDto extends createZodDto(getAllClassesQuerySchema) {}

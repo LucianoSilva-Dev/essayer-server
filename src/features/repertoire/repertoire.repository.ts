@@ -1,11 +1,11 @@
-import { PrismaService } from "@core/prisma";
-import { Injectable } from "@nestjs/common";
-import { CreateCommentDto } from "./dto/create-comment.dto";
-import { FixCommentDto } from "./dto/fix-comment.dto";
+import { PrismaService } from '@core/prisma';
+import { Injectable } from '@nestjs/common';
+import { CreateCommentDto } from './dto/create-comment.dto';
+import { FixCommentDto } from './dto/fix-comment.dto';
 
 @Injectable()
 export class RepertoireRepository {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   getAll(where: any, orderBy: any, skip: number, take: number, userId?: string) {
     return this.prisma.repertoire.findMany({
@@ -28,15 +28,15 @@ export class RepertoireRepository {
         },
         likes: userId
           ? {
-            where: { id: userId },
-            select: { id: true },
-          }
+              where: { id: userId },
+              select: { id: true },
+            }
           : false,
         favourites: userId
           ? {
-            where: { id: userId },
-            select: { id: true },
-          }
+              where: { id: userId },
+              select: { id: true },
+            }
           : false,
         article: {
           select: { id: true, title: true, abstract: true, source: true },
@@ -69,15 +69,15 @@ export class RepertoireRepository {
         },
         likes: userId
           ? {
-            where: { id: userId },
-            select: { id: true },
-          }
+              where: { id: userId },
+              select: { id: true },
+            }
           : false,
         favourites: userId
           ? {
-            where: { id: userId },
-            select: { id: true },
-          }
+              where: { id: userId },
+              select: { id: true },
+            }
           : false,
         article: {
           select: { id: true, title: true, abstract: true, source: true },
@@ -97,54 +97,65 @@ export class RepertoireRepository {
   }
 
   createLike(id: string, repertoire: string) {
-    return this.prisma.repertoire.update({ where: { id: repertoire }, data: { likes: { connect: [{ id }] } } })
+    return this.prisma.repertoire.update({
+      where: { id: repertoire },
+      data: { likes: { connect: [{ id }] } },
+    });
   }
 
   removeLike(id: string, repertoire: string) {
-    return this.prisma.repertoire.update({ where: { id: repertoire }, data: { likes: { disconnect: [{ id }] } } })
+    return this.prisma.repertoire.update({
+      where: { id: repertoire },
+      data: { likes: { disconnect: [{ id }] } },
+    });
   }
 
   createFavourite(id: string, repertoire: string) {
-    return this.prisma.repertoire.update({ where: { id: repertoire }, data: { favourites: { connect: [{ id }] } } })
+    return this.prisma.repertoire.update({
+      where: { id: repertoire },
+      data: { favourites: { connect: [{ id }] } },
+    });
   }
 
   removeFavourite(id: string, repertoire: string) {
-    return this.prisma.repertoire.update({ where: { id: repertoire }, data: { favourites: { disconnect: [{ id }] } } })
+    return this.prisma.repertoire.update({
+      where: { id: repertoire },
+      data: { favourites: { disconnect: [{ id }] } },
+    });
   }
 
   async createComment(id: string, data: CreateCommentDto, userId: string) {
-    const comment = await this.prisma.comment.create({ data: { text: data.text, fixed: data.fix, repertoireId: id, userId } })
+    const comment = await this.prisma.comment.create({
+      data: { text: data.text, fixed: data.fix, repertoireId: id, userId },
+    });
 
     return this.prisma.repertoire.update({
       where: { id },
-      data: { comments: { connect: [{ id: comment.id }] } }
-    })
+      data: { comments: { connect: [{ id: comment.id }] } },
+    });
   }
 
   updateComment(id: string, data: CreateCommentDto, userId: string) {
-    return this.prisma.comment.update({ where: { id, userId }, data })
+    return this.prisma.comment.update({ where: { id, userId }, data });
   }
 
   deleteComment(id: string, userId: string, searchId: boolean) {
-    const where = searchId ? { id, userId } : { id }
+    const where = searchId ? { id, userId } : { id };
 
-    return this.prisma.comment.delete({ where })
+    return this.prisma.comment.delete({ where });
   }
 
   findOne(id: string) {
-    return this.prisma.repertoire.findUnique({ where: { id } })
+    return this.prisma.repertoire.findUnique({ where: { id } });
   }
 
   fixComment(id: string, data: FixCommentDto) {
-    return this.prisma.comment.update({ where: { id }, data: { fixed: data.fix } })
+    return this.prisma.comment.update({ where: { id }, data: { fixed: data.fix } });
   }
 
   deleteRepertoire(id: string, userId: string, searchId: boolean) {
-    const where = searchId ? { id, userId } : { id }
+    const where = searchId ? { id, userId } : { id };
 
-    return this.prisma.repertoire.delete({ where })
+    return this.prisma.repertoire.delete({ where });
   }
-
 }
-
-

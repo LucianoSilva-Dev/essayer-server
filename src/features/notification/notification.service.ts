@@ -1,12 +1,9 @@
-import { Injectable } from "@nestjs/common";
-import { Subject, interval, merge, map, finalize } from "rxjs";
-import { MessageEvent } from "@nestjs/common";
-import { NotificationRepository } from "./notification.repository";
-import {
-  SseConnectionsManager,
-  ISseNotificationEvent,
-} from "./sse-connections.manager";
-import { ChangeStatusDto } from "./dto/change-status.dto";
+import { Injectable } from '@nestjs/common';
+import { Subject, interval, merge, map, finalize } from 'rxjs';
+import { MessageEvent } from '@nestjs/common';
+import { NotificationRepository } from './notification.repository';
+import { SseConnectionsManager, ISseNotificationEvent } from './sse-connections.manager';
+import { ChangeStatusDto } from './dto/change-status.dto';
 
 @Injectable()
 export class NotificationService {
@@ -22,24 +19,23 @@ export class NotificationService {
       const read = notification.seenBy.length > 0;
 
       if (
-        notification.type === "ACTIVITY_SENT" ||
-        notification.type === "ACTIVITY_CLOSED" ||
-        notification.type === "ACTIVITY_CORRECTED"
+        notification.type === 'ACTIVITY_SENT' ||
+        notification.type === 'ACTIVITY_CLOSED' ||
+        notification.type === 'ACTIVITY_CORRECTED'
       ) {
         return {
           id: notification.id,
           type: notification.type,
           read,
-          activityId: notification.activityNotification?.activityId ?? "",
+          activityId: notification.activityNotification?.activityId ?? '',
         };
       }
 
       return {
         id: notification.id,
-        type: notification.type as "TEACHER_REQUEST_STATUS",
+        type: notification.type as 'TEACHER_REQUEST_STATUS',
         read,
-        teacherRequestId:
-          notification.teacherRequestStatus?.teacherRequestId ?? "",
+        teacherRequestId: notification.teacherRequestStatus?.teacherRequestId ?? '',
         reason: notification.teacherRequestStatus?.motivo ?? undefined,
       };
     });
@@ -59,7 +55,7 @@ export class NotificationService {
       map(
         () =>
           ({
-            type: "heartbeat",
+            type: 'heartbeat',
           }) as MessageEvent,
       ),
     );

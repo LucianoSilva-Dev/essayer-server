@@ -1,4 +1,4 @@
-import z from "zod";
+import z from 'zod';
 
 export const feedbackDoc = z.object({
   gradeC1: z.number(),

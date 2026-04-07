@@ -1,22 +1,24 @@
-import { PrismaService } from "@core/prisma";
-import { Injectable } from "@nestjs/common";
-import { CreateCitationDto } from "./dto/create-citation.dto";
-import { UpdateCitationDto } from "./dto/update-citation.dto";
+import { PrismaService } from '@core/prisma';
+import { Injectable } from '@nestjs/common';
+import { CreateCitationDto } from './dto/create-citation.dto';
+import { UpdateCitationDto } from './dto/update-citation.dto';
 
 @Injectable()
 export class CitationRepository {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(creator: string, data: CreateCitationDto) {
-    const { topics, subtopics, author, quote } = data
+    const { topics, subtopics, author, quote } = data;
 
-    const repertoire = await this.prisma.repertoire.create({ data: { topics, subtopics, author, creatorId: creator, type: 'CITATION' } })
+    const repertoire = await this.prisma.repertoire.create({
+      data: { topics, subtopics, author, creatorId: creator, type: 'CITATION' },
+    });
 
-    return this.prisma.citation.create({ data: { quote, repertoireId: repertoire.id } })
+    return this.prisma.citation.create({ data: { quote, repertoireId: repertoire.id } });
   }
 
   update(id: string, data: UpdateCitationDto) {
-    return this.prisma.citation.update({ where: { id }, data })
+    return this.prisma.citation.update({ where: { id }, data });
   }
 
   get(id: string, userId?: string) {
@@ -54,7 +56,7 @@ export class CitationRepository {
             },
             comments: {
               orderBy: {
-                fixed: 'desc'
+                fixed: 'desc',
               },
               select: {
                 user: {

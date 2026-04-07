@@ -1,10 +1,9 @@
-import { z } from "zod";
-import { createZodDto } from "nestjs-zod";
-import { feedbackDoc } from "@common/schema/feedback";
-import { dateToIsoString } from "@common/schema/date-to-string";
+import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
+import { feedbackDoc } from '@common/schema/feedback';
+import { dateToIsoString } from '@common/schema/date-to-string';
 
-
-const FeedbackSchema = feedbackDoc.extend({seen: z.boolean().default(false)})
+const FeedbackSchema = feedbackDoc.extend({ seen: z.boolean().default(false) });
 
 // Essay activity response
 const EssayActivityResponseSchema = z.object({
@@ -43,8 +42,8 @@ const StudentActivityResponseSchema = z.object({
   title: z.string(),
   description: z.string(),
   deadline: dateToIsoString.nullable(),
-  activityType: z.literal("ESSAY"),
-  status: z.enum(["NOT_STARTED", "IN_PROGRESS", "SUBMITTED"]),
+  activityType: z.literal('ESSAY'),
+  status: z.enum(['NOT_STARTED', 'IN_PROGRESS', 'SUBMITTED']),
   class: z.object({
     id: z.string(),
     name: z.string(),
@@ -91,26 +90,12 @@ const PaginatedAnswersResponseSchema = z.object({
 
 // Export DTOs
 export class FeedbackDto extends createZodDto(FeedbackSchema) {}
-export class EssayActivityResponseDto extends createZodDto(
-  EssayActivityResponseSchema
-) {}
-export class EssayResponseDetailsDto extends createZodDto(
-  EssayResponseDetailsSchema
-) {}
-export class RecentActivityResponseDto extends createZodDto(
-  RecentActivityResponseSchema
-) {}
-export class StudentActivityResponseDto extends createZodDto(
-  StudentActivityResponseSchema
-) {}
-export class CorrectionResponseDto extends createZodDto(
-  CorrectionResponseSchema
-) {}
+export class EssayActivityResponseDto extends createZodDto(EssayActivityResponseSchema) {}
+export class EssayResponseDetailsDto extends createZodDto(EssayResponseDetailsSchema) {}
+export class RecentActivityResponseDto extends createZodDto(RecentActivityResponseSchema) {}
+export class StudentActivityResponseDto extends createZodDto(StudentActivityResponseSchema) {}
+export class CorrectionResponseDto extends createZodDto(CorrectionResponseSchema) {}
 export class AnswerDetailDto extends createZodDto(AnswerDetailSchema) {}
-export class GetAllAnswersResponseDto extends createZodDto(
-  GetAllAnswersResponseSchema
-) {}
+export class GetAllAnswersResponseDto extends createZodDto(GetAllAnswersResponseSchema) {}
 export class PaginationDto extends createZodDto(PaginationSchema) {}
-export class PaginatedAnswersResponseDto extends createZodDto(
-  PaginatedAnswersResponseSchema
-) {}
+export class PaginatedAnswersResponseDto extends createZodDto(PaginatedAnswersResponseSchema) {}

@@ -1,15 +1,15 @@
-import { PrismaService } from "@core/prisma";
-import { Injectable } from "@nestjs/common";
-import { CreateClassDto } from "./dto/create-class.dto";
-import { GetAllClassesQueryDto } from "./dto/get-all-classes-query.dto";
-import { GetAllActivitiesQueryDto } from "./dto/get-all-activities-query.dto";
+import { PrismaService } from '@core/prisma';
+import { Injectable } from '@nestjs/common';
+import { CreateClassDto } from './dto/create-class.dto';
+import { GetAllClassesQueryDto } from './dto/get-all-classes-query.dto';
+import { GetAllActivitiesQueryDto } from './dto/get-all-activities-query.dto';
 
 @Injectable()
 export class ClassRepository {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   create(data: CreateClassDto, creatorId: string, code: string) {
-    return this.prisma.class.create({ data: { ...data, code, creatorId } })
+    return this.prisma.class.create({ data: { ...data, code, creatorId } });
   }
 
   getAll(query: GetAllClassesQueryDto, userId: string) {
@@ -17,9 +17,9 @@ export class ClassRepository {
       where: {
         members: {
           some: {
-            id: userId
-          }
-        }
+            id: userId,
+          },
+        },
       },
       skip: query.offset,
       take: query.limit,
@@ -28,17 +28,17 @@ export class ClassRepository {
           select: {
             id: true,
             name: true,
-            image: true
-          }
-        }
-      }
-    })
+            image: true,
+          },
+        },
+      },
+    });
   }
 
   getCreated(userId: string, query: GetAllClassesQueryDto) {
     return this.prisma.class.findMany({
       where: {
-        creatorId: userId
+        creatorId: userId,
       },
       skip: query.offset,
       take: query.limit,
@@ -46,240 +46,237 @@ export class ClassRepository {
         id: true,
         name: true,
         school: true,
-        iconId: true
-      }
-    })
+        iconId: true,
+      },
+    });
   }
 
   getById(classId: string, userId: string) {
     return this.prisma.class.findFirst({
       where: {
         id: classId,
-        OR: [
-          { creatorId: userId },
-          { members: { some: { id: userId } } }
-        ]
+        OR: [{ creatorId: userId }, { members: { some: { id: userId } } }],
       },
       include: {
         creator: {
           select: {
             id: true,
             name: true,
-            image: true
-          }
+            image: true,
+          },
         },
         members: {
           select: {
             id: true,
             name: true,
-            image: true
-          }
+            image: true,
+          },
         },
         _count: {
           select: {
-            members: true
-          }
-        }
-      }
-    })
+            members: true,
+          },
+        },
+      },
+    });
   }
 
   update(classId: string, data: Partial<CreateClassDto>, userId: string) {
     return this.prisma.class.updateMany({
       where: {
         id: classId,
-        creatorId: userId
+        creatorId: userId,
       },
-      data
-    })
+      data,
+    });
   }
 
   delete(classId: string, userId: string) {
     return this.prisma.class.deleteMany({
       where: {
         id: classId,
-        creatorId: userId
-      }
-    })
+        creatorId: userId,
+      },
+    });
   }
 
   getInviteCode(classId: string, userId: string) {
     return this.prisma.class.findFirst({
       where: {
         id: classId,
-        creatorId: userId
+        creatorId: userId,
       },
       select: {
-        code: true
-      }
-    })
+        code: true,
+      },
+    });
   }
 
   regenerateInviteCode(classId: string, userId: string, newCode: string) {
     return this.prisma.class.updateMany({
       where: {
         id: classId,
-        creatorId: userId
+        creatorId: userId,
       },
       data: {
-        code: newCode
-      }
-    })
+        code: newCode,
+      },
+    });
   }
 
   requestEntry(inviteCode: string, userId: string) {
     return this.prisma.class.findFirst({
       where: {
-        code: inviteCode
+        code: inviteCode,
       },
       select: {
         id: true,
         members: {
           where: {
-            id: userId
-          }
+            id: userId,
+          },
         },
         pendingMembers: {
           where: {
-            id: userId
-          }
+            id: userId,
+          },
         },
         creator: {
           select: {
-            id: true
-          }
-        }
-      }
-    })
+            id: true,
+          },
+        },
+      },
+    });
   }
 
   addPendingMember(classId: string, userId: string) {
     return this.prisma.class.update({
       where: {
-        id: classId
+        id: classId,
       },
       data: {
         pendingMembers: {
           connect: {
-            id: userId
-          }
-        }
-      }
-    })
+            id: userId,
+          },
+        },
+      },
+    });
   }
 
   getRequests(classId: string, userId: string) {
     return this.prisma.class.findFirst({
       where: {
         id: classId,
-        creatorId: userId
+        creatorId: userId,
       },
       select: {
         pendingMembers: {
           select: {
             id: true,
             name: true,
-            image: true
-          }
-        }
-      }
-    })
+            image: true,
+          },
+        },
+      },
+    });
   }
 
   approveRequest(classId: string, studentId: string, userId: string) {
     return this.prisma.class.findFirst({
       where: {
         id: classId,
-        creatorId: userId
+        creatorId: userId,
       },
       select: {
         members: {
           where: {
-            id: studentId
-          }
+            id: studentId,
+          },
         },
         pendingMembers: {
           where: {
-            id: studentId
-          }
+            id: studentId,
+          },
         },
         _count: {
           select: {
-            members: true
-          }
-        }
-      }
-    })
+            members: true,
+          },
+        },
+      },
+    });
   }
 
   approveRequestUpdate(classId: string, studentId: string) {
     return this.prisma.class.update({
       where: {
-        id: classId
+        id: classId,
       },
       data: {
         pendingMembers: {
           disconnect: {
-            id: studentId
-          }
+            id: studentId,
+          },
         },
         members: {
           connect: {
-            id: studentId
-          }
-        }
-      }
-    })
+            id: studentId,
+          },
+        },
+      },
+    });
   }
 
   rejectRequest(classId: string, studentId: string, userId: string) {
     return this.prisma.class.update({
       where: {
         id: classId,
-        creatorId: userId
+        creatorId: userId,
       },
       data: {
         pendingMembers: {
           disconnect: {
-            id: studentId
-          }
-        }
-      }
-    })
+            id: studentId,
+          },
+        },
+      },
+    });
   }
 
   getAllStudents(classId: string, userId: string) {
     return this.prisma.class.findFirst({
       where: {
         id: classId,
-        creatorId: userId
+        creatorId: userId,
       },
       select: {
         members: {
           select: {
             id: true,
             name: true,
-            image: true
-          }
-        }
-      }
-    })
+            image: true,
+          },
+        },
+      },
+    });
   }
 
   removeStudent(classId: string, studentId: string, userId: string) {
     return this.prisma.class.update({
       where: {
         id: classId,
-        creatorId: userId
+        creatorId: userId,
       },
       data: {
         members: {
           disconnect: {
-            id: studentId
-          }
-        }
-      }
-    })
+            id: studentId,
+          },
+        },
+      },
+    });
   }
 
   getAllActivities(classId: string, userId: string, query: GetAllActivitiesQueryDto) {
@@ -289,30 +286,32 @@ export class ClassRepository {
         class: {
           members: {
             some: {
-              id: userId
-            }
-          }
+              id: userId,
+            },
+          },
         },
-        title: query.title ? {
-          contains: query.title,
-          mode: 'insensitive'
-        } : undefined
+        title: query.title
+          ? {
+              contains: query.title,
+              mode: 'insensitive',
+            }
+          : undefined,
       },
       include: {
         essay: {
           include: {
             responses: {
               where: {
-                studentId: userId
+                studentId: userId,
               },
               select: {
-                answerDate: true
-              }
-            }
-          }
-        }
-      }
-    })
+                answerDate: true,
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
   getAllActivitiesCreator(classId: string, userId: string, query: GetAllActivitiesQueryDto) {
@@ -320,12 +319,14 @@ export class ClassRepository {
       where: {
         classId,
         class: {
-          creatorId: userId
+          creatorId: userId,
         },
-        title: query.title ? {
-          contains: query.title,
-          mode: 'insensitive'
-        } : undefined
+        title: query.title
+          ? {
+              contains: query.title,
+              mode: 'insensitive',
+            }
+          : undefined,
       },
       include: {
         essay: {
@@ -336,24 +337,24 @@ export class ClassRepository {
                   select: {
                     id: true,
                     name: true,
-                    image: true
-                  }
-                }
-              }
-            }
-          }
+                    image: true,
+                  },
+                },
+              },
+            },
+          },
         },
         class: {
           select: {
             _count: {
               select: {
-                members: true
-              }
-            }
-          }
-        }
-      }
-    })
+                members: true,
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
   getTotalClasses(userId: string) {
@@ -361,19 +362,19 @@ export class ClassRepository {
       where: {
         members: {
           some: {
-            id: userId
-          }
-        }
-      }
-    })
+            id: userId,
+          },
+        },
+      },
+    });
   }
 
   getTotalCreatedClasses(userId: string) {
     return this.prisma.class.count({
       where: {
-        creatorId: userId
-      }
-    })
+        creatorId: userId,
+      },
+    });
   }
 
   getAllFeedbacks(classId: string, userId: string) {
@@ -383,12 +384,12 @@ export class ClassRepository {
           response: {
             essay: {
               activity: {
-                classId
-              }
+                classId,
+              },
             },
-            studentId: userId
-          }
-        }
+            studentId: userId,
+          },
+        },
       },
       select: {
         id: true,
@@ -415,17 +416,16 @@ export class ClassRepository {
                       select: {
                         title: true,
                         id: true,
-                        type: true
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    })
+                        type: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
   }
-
 }

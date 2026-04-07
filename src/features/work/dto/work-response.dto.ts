@@ -1,7 +1,7 @@
-import { WorkType } from "@core/prisma";
-import { profileSchema } from "@features/user/dto/profile.dto";
-import { createZodDto } from "nestjs-zod";
-import z from "zod";
+import { WorkType } from '@core/prisma';
+import { profileSchema } from '@features/user/dto/profile.dto';
+import { createZodDto } from 'nestjs-zod';
+import z from 'zod';
 
 export const workResponseSchema = z.object({
   id: z.string(),

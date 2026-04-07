@@ -3,4 +3,4 @@ import { createCitationSchema } from './create-citation.dto';
 
 const updateCitationSchema = createCitationSchema.partial();
 
-export class UpdateCitationDto extends createZodDto(updateCitationSchema) { }
+export class UpdateCitationDto extends createZodDto(updateCitationSchema) {}

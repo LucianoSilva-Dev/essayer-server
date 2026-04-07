@@ -1,8 +1,15 @@
-import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from "@nestjs/common";
-import { RepertoireRepository } from "./repertoire.repository";
-import { GetAllRepertoireQueryDto } from "./dto/get-all-repertoire-query.dto";
-import { WorkType } from "@core/prisma";
-import { CreateCommentDto } from "./dto/create-comment.dto";
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { RepertoireRepository } from './repertoire.repository';
+import { GetAllRepertoireQueryDto } from './dto/get-all-repertoire-query.dto';
+import { WorkType } from '@core/prisma';
+import { CreateCommentDto } from './dto/create-comment.dto';
 import { FixCommentDto } from './dto/fix-comment.dto';
 
 type RepertoireBase = {
@@ -25,7 +32,6 @@ type RepertoireWork = RepertoireBase & {
   repertoireType: 'WORK';
 };
 
-
 type RepertoireArticle = RepertoireBase & {
   title: string;
   abstract: string;
@@ -43,7 +49,7 @@ export type RepertoireOutput = RepertoireWork | RepertoireArticle | RepertoireCi
 
 @Injectable()
 export class RepertoireService {
-  constructor(private readonly repository: RepertoireRepository) { }
+  constructor(private readonly repository: RepertoireRepository) {}
 
   private makeSort(query: GetAllRepertoireQueryDto) {
     switch (query.orderBy) {
@@ -63,7 +69,6 @@ export class RepertoireService {
   private makeFilter(query: GetAllRepertoireQueryDto, userId?: string) {
     if (!userId && (query.favourited || query.liked))
       throw new UnauthorizedException('User must be logged in');
-
 
     const where: any = {};
 
@@ -87,16 +92,12 @@ export class RepertoireService {
     }
 
     if (query.subtopics) {
-      const subtopics = Array.isArray(query.subtopics)
-        ? query.subtopics
-        : [query.subtopics];
+      const subtopics = Array.isArray(query.subtopics) ? query.subtopics : [query.subtopics];
       where.subtopics = { hasSome: subtopics };
     }
 
     if (query.topics) {
-      const topics = Array.isArray(query.topics)
-        ? query.topics
-        : [query.topics];
+      const topics = Array.isArray(query.topics) ? query.topics : [query.topics];
       where.topics = { hasSome: topics };
     }
 
@@ -105,21 +106,21 @@ export class RepertoireService {
     }
 
     if (typeof query.favourited === 'boolean' && userId) {
-      where.favourites = query.favourited
-        ? { some: { id: userId } }
-        : { none: { id: userId } };
+      where.favourites = query.favourited ? { some: { id: userId } } : { none: { id: userId } };
     }
 
     if (typeof query.liked === 'boolean' && userId) {
-      where.likes = query.liked
-        ? { some: { id: userId } }
-        : { none: { id: userId } };
+      where.likes = query.liked ? { some: { id: userId } } : { none: { id: userId } };
     }
 
     return where;
   }
 
-  private makePagination(query: GetAllRepertoireQueryDto, totalDocuments: number, requestUrl: string) {
+  private makePagination(
+    query: GetAllRepertoireQueryDto,
+    totalDocuments: number,
+    requestUrl: string,
+  ) {
     const nextOffset = Math.min(query.offset + query.limit, totalDocuments);
     const prevOffset = Math.max(query.offset - query.limit, 0);
 
@@ -217,130 +218,123 @@ export class RepertoireService {
   async getByIds(ids: string[], userId?: string) {
     const repertoires = await this.repository.getByIds(ids, userId);
 
-    const repertoireMap = new Map(
-      repertoires.map((r) => [r.id, r]),
-    );
+    const repertoireMap = new Map(repertoires.map((r) => [r.id, r]));
 
     const orderedRepertoires = ids.map((id) => repertoireMap.get(id) || null);
 
-    return orderedRepertoires.map((r) =>
-      r ? this.mapRepertoire(r) : null,
-    );
+    return orderedRepertoires.map((r) => (r ? this.mapRepertoire(r) : null));
   }
 
   async delete(id: string, userId: string, userRole?: string | string[]) {
-    let searchId = true
+    let searchId = true;
 
-    if (userRole === 'admin' || userRole?.includes('admin'))
-      searchId = false
+    if (userRole === 'admin' || userRole?.includes('admin')) searchId = false;
 
     try {
-      await this.repository.deleteRepertoire(id, userId, searchId)
+      await this.repository.deleteRepertoire(id, userId, searchId);
 
-      return { message: 'repertoire deleted successfully' }
+      return { message: 'repertoire deleted successfully' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException('Error deleting repertoire')
+      throw new InternalServerErrorException('Error deleting repertoire');
     }
   }
 
   async createComment(id: string, data: CreateCommentDto, userId: string) {
     try {
-      await this.repository.createComment(id, data, userId)
+      await this.repository.createComment(id, data, userId);
 
-      return { message: 'comment created successfully' }
+      return { message: 'comment created successfully' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException('Error creating comment')
+      throw new InternalServerErrorException('Error creating comment');
     }
   }
 
   async updateComment(id: string, data: CreateCommentDto, userId: string) {
     try {
-      await this.repository.updateComment(id, data, userId)
+      await this.repository.updateComment(id, data, userId);
 
-      return { message: 'comment updated successfully' }
+      return { message: 'comment updated successfully' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException('Error updating comment')
+      throw new InternalServerErrorException('Error updating comment');
     }
   }
 
   async deleteComment(id: string, userId: string, userRole?: string | string[]) {
-    let searchId = true
+    let searchId = true;
 
-    if (userRole === 'admin' || userRole?.includes('admin'))
-      searchId = false
+    if (userRole === 'admin' || userRole?.includes('admin')) searchId = false;
 
     try {
-      await this.repository.deleteComment(id, userId, searchId)
+      await this.repository.deleteComment(id, userId, searchId);
 
-      return { message: 'comment deleted successfully' }
+      return { message: 'comment deleted successfully' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException('Error deleting comment')
+      throw new InternalServerErrorException('Error deleting comment');
     }
   }
 
   async fixComment(repertoireId: string, commentId: string, data: FixCommentDto, userId: string) {
-    const repertoire = await this.repository.findOne(repertoireId)
+    const repertoire = await this.repository.findOne(repertoireId);
 
-    if (!repertoire) throw new NotFoundException('repertoire not found')
+    if (!repertoire) throw new NotFoundException('repertoire not found');
 
-    if (repertoire.creatorId !== userId) throw new ForbiddenException('cannot pin this comment')
+    if (repertoire.creatorId !== userId) throw new ForbiddenException('cannot pin this comment');
 
     try {
-      await this.repository.fixComment(commentId, data)
+      await this.repository.fixComment(commentId, data);
 
-      return { message: 'comment fixed successfully' }
+      return { message: 'comment fixed successfully' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException('Error fixing comment')
+      throw new InternalServerErrorException('Error fixing comment');
     }
   }
 
   async createLike(repertoireId: string, userId: string) {
     try {
-      await this.repository.createLike(userId, repertoireId)
+      await this.repository.createLike(userId, repertoireId);
 
-      return { message: 'like added successfully' }
+      return { message: 'like added successfully' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException('Error adding like')
+      throw new InternalServerErrorException('Error adding like');
     }
   }
 
   async deleteLike(repertoireId: string, userId: string) {
     try {
-      await this.repository.removeLike(userId, repertoireId)
+      await this.repository.removeLike(userId, repertoireId);
 
-      return { message: 'like removed successfully' }
+      return { message: 'like removed successfully' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException('Error removing like')
+      throw new InternalServerErrorException('Error removing like');
     }
   }
 
   async createFavorite(repertoireId: string, userId: string) {
     try {
-      await this.repository.createFavourite(userId, repertoireId)
+      await this.repository.createFavourite(userId, repertoireId);
 
-      return { message: 'favourited successfully' }
+      return { message: 'favourited successfully' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException('Error favouriting')
+      throw new InternalServerErrorException('Error favouriting');
     }
   }
 
   async deleteFavorite(repertoireId: string, userId: string) {
     try {
-      await this.repository.removeFavourite(userId, repertoireId)
+      await this.repository.removeFavourite(userId, repertoireId);
 
-      return { message: 'favourite removed successfully' }
+      return { message: 'favourite removed successfully' };
     } catch (err) {
       console.log(err);
-      throw new InternalServerErrorException('Error removing favourite')
+      throw new InternalServerErrorException('Error removing favourite');
     }
   }
 }
-

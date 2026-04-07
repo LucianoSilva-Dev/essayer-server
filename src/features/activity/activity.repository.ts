@@ -1,7 +1,7 @@
-import { PrismaService } from "@core/prisma";
-import { Injectable } from "@nestjs/common";
-import { CreateEssayActivityDto } from "./dto/create-essay-activity.dto";
-import { UpdateEssayActivityDto } from "./dto/update-essay-activity.dto";
+import { PrismaService } from '@core/prisma';
+import { Injectable } from '@nestjs/common';
+import { CreateEssayActivityDto } from './dto/create-essay-activity.dto';
+import { UpdateEssayActivityDto } from './dto/update-essay-activity.dto';
 
 @Injectable()
 export class ActivityRepository {
@@ -13,7 +13,7 @@ export class ActivityRepository {
         title: data.title,
         description: data.description,
         deadline: data.deadline ? new Date(data.deadline) : null,
-        type: "ESSAY",
+        type: 'ESSAY',
         classId: data.classId,
         essay: {
           create: {
@@ -44,18 +44,13 @@ export class ActivityRepository {
     });
   }
 
-  updateEssayActivity(
-    activityId: string,
-    data: UpdateEssayActivityDto
-  ) {
+  updateEssayActivity(activityId: string, data: UpdateEssayActivityDto) {
     const activityUpdate: any = {};
     const essayUpdate: any = {};
 
     if (data.title !== undefined) activityUpdate.title = data.title;
-    if (data.description !== undefined)
-      activityUpdate.description = data.description;
-    if (data.deadline !== undefined)
-      activityUpdate.deadline = new Date(data.deadline);
+    if (data.description !== undefined) activityUpdate.description = data.description;
+    if (data.deadline !== undefined) activityUpdate.deadline = new Date(data.deadline);
 
     if (data.theme !== undefined) essayUpdate.theme = data.theme;
     if (data.timeLimitInMinutes !== undefined)
@@ -81,7 +76,7 @@ export class ActivityRepository {
       where: {
         classId: { in: activityIds },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
       take: limit,
       include: {
         essay: {
@@ -125,11 +120,7 @@ export class ActivityRepository {
     });
   }
 
-  getAllAnswersForActivity(
-    essayId: string,
-    offset: number,
-    limit: number
-  ) {
+  getAllAnswersForActivity(essayId: string, offset: number, limit: number) {
     return this.prisma.essayResponse.findMany({
       where: { essayId },
       skip: offset,
@@ -157,44 +148,44 @@ export class ActivityRepository {
   }
 
   startEssayResponse(essayId: string, studentId: string) {
-    return this.prisma.essayResponse.findFirst({
-      where: {
-        essayId,
-        studentId,
-      },
-    }).then(existing => {
-      if (existing) return existing;
-      return this.prisma.essayResponse.create({
-        data: {
-          essayId,
-          studentId,
-        },
-      });
-    });
-  }
-
-  submitEssayResponse(
-    essayId: string,
-    studentId: string,
-    text: string
-  ) {
-    return this.prisma.essayResponse.updateMany({
-      where: {
-        essayId,
-        studentId,
-      },
-      data: {
-        text,
-        answerDate: new Date(),
-      },
-    }).then(() => {
-      return this.prisma.essayResponse.findFirst({
+    return this.prisma.essayResponse
+      .findFirst({
         where: {
           essayId,
           studentId,
         },
+      })
+      .then((existing) => {
+        if (existing) return existing;
+        return this.prisma.essayResponse.create({
+          data: {
+            essayId,
+            studentId,
+          },
+        });
       });
-    });
+  }
+
+  submitEssayResponse(essayId: string, studentId: string, text: string) {
+    return this.prisma.essayResponse
+      .updateMany({
+        where: {
+          essayId,
+          studentId,
+        },
+        data: {
+          text,
+          answerDate: new Date(),
+        },
+      })
+      .then(() => {
+        return this.prisma.essayResponse.findFirst({
+          where: {
+            essayId,
+            studentId,
+          },
+        });
+      });
   }
 
   getResponseById(responseId: string) {
@@ -222,10 +213,7 @@ export class ActivityRepository {
     });
   }
 
-  async provideFeedback(
-    responseId: string,
-    feedback: any
-  ) {
+  async provideFeedback(responseId: string, feedback: any) {
     // First, check if teacher correction already exists
     const existing = await this.prisma.teacherCorrection.findUnique({
       where: { responseId },

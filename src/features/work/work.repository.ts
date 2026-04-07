@@ -1,22 +1,26 @@
-import { PrismaService } from "@core/prisma";
-import { Injectable } from "@nestjs/common";
-import { CreateWorkDto } from "./dto/create-work.dto";
-import { UpdateWorkDto } from "./dto/update-work.dto";
+import { PrismaService } from '@core/prisma';
+import { Injectable } from '@nestjs/common';
+import { CreateWorkDto } from './dto/create-work.dto';
+import { UpdateWorkDto } from './dto/update-work.dto';
 
 @Injectable()
 export class WorkRepository {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(creator: string, data: CreateWorkDto) {
-    const { topics, subtopics, author, synopsis, workType: type, title } = data
+    const { topics, subtopics, author, synopsis, workType: type, title } = data;
 
-    const repertoire = await this.prisma.repertoire.create({ data: { topics, subtopics, author, creatorId: creator, type: 'WORK' } })
+    const repertoire = await this.prisma.repertoire.create({
+      data: { topics, subtopics, author, creatorId: creator, type: 'WORK' },
+    });
 
-    return this.prisma.work.create({ data: { title, synopsis, type, repertoireId: repertoire.id } })
+    return this.prisma.work.create({
+      data: { title, synopsis, type, repertoireId: repertoire.id },
+    });
   }
 
   update(id: string, data: UpdateWorkDto) {
-    return this.prisma.work.update({ where: { id }, data })
+    return this.prisma.work.update({ where: { id }, data });
   }
 
   get(id: string, userId?: string) {
@@ -55,7 +59,7 @@ export class WorkRepository {
             },
             comments: {
               orderBy: {
-                fixed: 'desc'
+                fixed: 'desc',
               },
               select: {
                 user: {

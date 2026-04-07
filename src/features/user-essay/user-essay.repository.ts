@@ -1,7 +1,7 @@
-import { PrismaService } from "@core/prisma";
-import { Injectable } from "@nestjs/common";
-import { CreateUserEssayDto } from "./dto/create-user-essay.dto";
-import { UpdateUserEssayDto } from "./dto/update-user-essay.dto";
+import { PrismaService } from '@core/prisma';
+import { Injectable } from '@nestjs/common';
+import { CreateUserEssayDto } from './dto/create-user-essay.dto';
+import { UpdateUserEssayDto } from './dto/update-user-essay.dto';
 
 @Injectable()
 export class UserEssayRepository {
@@ -25,13 +25,13 @@ export class UserEssayRepository {
     if (theme) {
       where.theme = {
         contains: theme,
-        mode: "insensitive",
+        mode: 'insensitive',
       };
     }
 
     return this.prisma.userEssay.findMany({
       where,
-      orderBy: { updatedAt: "desc" },
+      orderBy: { updatedAt: 'desc' },
     });
   }
 
@@ -63,4 +63,3 @@ export class UserEssayRepository {
     });
   }
 }
-

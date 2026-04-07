@@ -1,6 +1,6 @@
-import { profileSchema } from "@features/user/dto/profile.dto";
-import { createZodDto } from "nestjs-zod";
-import z from "zod";
+import { profileSchema } from '@features/user/dto/profile.dto';
+import { createZodDto } from 'nestjs-zod';
+import z from 'zod';
 
 export const citationResponseSchema = z.object({
   id: z.string(),
@@ -17,4 +17,4 @@ export const citationResponseSchema = z.object({
   liked: z.boolean(),
 });
 
-export class CitationResponseDto extends createZodDto(citationResponseSchema) { }
+export class CitationResponseDto extends createZodDto(citationResponseSchema) {}

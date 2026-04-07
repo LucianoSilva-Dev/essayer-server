@@ -1,6 +1,6 @@
-import { profileSchema } from "@features/user/dto/profile.dto";
-import { createZodDto } from "nestjs-zod";
-import z from "zod";
+import { profileSchema } from '@features/user/dto/profile.dto';
+import { createZodDto } from 'nestjs-zod';
+import z from 'zod';
 
 export const articleResponseSchema = z.object({
   id: z.string(),
