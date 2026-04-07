@@ -23,9 +23,9 @@ done
 echo "📦 Applying database migrations..."
 DATABASE_URL="$TEST_DB_URL" npx prisma migrate deploy
 
-VITEST_CMD="vitest run --config vitest.e2e.config.ts"
+VITEST_CMD="pnpm exec vitest run --config vitest.e2e.config.ts"
 if [[ "${1:-}" == "--watch" ]]; then
-  VITEST_CMD="vitest --config vitest.e2e.config.ts"
+  VITEST_CMD="pnpm exec vitest --config vitest.e2e.config.ts"
 fi
 
 echo "🧪 Running E2E tests..."
