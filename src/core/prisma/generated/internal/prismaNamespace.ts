@@ -80,11 +80,11 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.6.0
+ * Prisma Client JS version: 7.7.0
  * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.6.0",
+  client: "7.7.0",
   engine: "75cbdc1eb7150937890ad5465d861175c6624711"
 }
 
@@ -404,7 +404,8 @@ export const ModelName = {
   UserEssay: 'UserEssay',
   Notification: 'Notification',
   TeacherRequestStatusNotification: 'TeacherRequestStatusNotification',
-  ActivityNotification: 'ActivityNotification'
+  ActivityNotification: 'ActivityNotification',
+  IntegrationUser: 'IntegrationUser'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -420,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "teacherRequest" | "comment" | "repertoire" | "article" | "citation" | "work" | "class" | "activity" | "essayFeedback" | "teacherCorrection" | "aICorrection" | "essayResponse" | "essay" | "userEssay" | "notification" | "teacherRequestStatusNotification" | "activityNotification"
+    modelProps: "user" | "session" | "account" | "verification" | "teacherRequest" | "comment" | "repertoire" | "article" | "citation" | "work" | "class" | "activity" | "essayFeedback" | "teacherCorrection" | "aICorrection" | "essayResponse" | "essay" | "userEssay" | "notification" | "teacherRequestStatusNotification" | "activityNotification" | "integrationUser"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1978,6 +1979,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    IntegrationUser: {
+      payload: Prisma.$IntegrationUserPayload<ExtArgs>
+      fields: Prisma.IntegrationUserFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IntegrationUserFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegrationUserPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IntegrationUserFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegrationUserPayload>
+        }
+        findFirst: {
+          args: Prisma.IntegrationUserFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegrationUserPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IntegrationUserFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegrationUserPayload>
+        }
+        findMany: {
+          args: Prisma.IntegrationUserFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegrationUserPayload>[]
+        }
+        create: {
+          args: Prisma.IntegrationUserCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegrationUserPayload>
+        }
+        createMany: {
+          args: Prisma.IntegrationUserCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IntegrationUserCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegrationUserPayload>[]
+        }
+        delete: {
+          args: Prisma.IntegrationUserDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegrationUserPayload>
+        }
+        update: {
+          args: Prisma.IntegrationUserUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegrationUserPayload>
+        }
+        deleteMany: {
+          args: Prisma.IntegrationUserDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IntegrationUserUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IntegrationUserUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegrationUserPayload>[]
+        }
+        upsert: {
+          args: Prisma.IntegrationUserUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegrationUserPayload>
+        }
+        aggregate: {
+          args: Prisma.IntegrationUserAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIntegrationUser>
+        }
+        groupBy: {
+          args: Prisma.IntegrationUserGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IntegrationUserGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IntegrationUserCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IntegrationUserCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2088,6 +2163,7 @@ export const TeacherRequestScalarFieldEnum = {
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  hookUrl: 'hookUrl',
   userId: 'userId',
   reviewerId: 'reviewerId'
 } as const
@@ -2289,6 +2365,19 @@ export const ActivityNotificationScalarFieldEnum = {
 } as const
 
 export type ActivityNotificationScalarFieldEnum = (typeof ActivityNotificationScalarFieldEnum)[keyof typeof ActivityNotificationScalarFieldEnum]
+
+
+export const IntegrationUserScalarFieldEnum = {
+  id: 'id',
+  integrationName: 'integrationName',
+  userId: 'userId',
+  externalUserId: 'externalUserId',
+  externalRole: 'externalRole',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IntegrationUserScalarFieldEnum = (typeof IntegrationUserScalarFieldEnum)[keyof typeof IntegrationUserScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2583,6 +2672,7 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   teacherRequestStatusNotification?: Prisma.TeacherRequestStatusNotificationOmit
   activityNotification?: Prisma.ActivityNotificationOmit
+  integrationUser?: Prisma.IntegrationUserOmit
 }
 
 /* Types for Logging */

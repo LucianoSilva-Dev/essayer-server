@@ -7,7 +7,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { TeacherRequestResponseDto } from './dto/teacher-request-response.dto';
 import { TeacherRequestRepository } from './teacher-request.repository';
 
 @Injectable()
@@ -15,7 +14,7 @@ export class TeacherRequestService {
   constructor(
     private readonly repository: TeacherRequestRepository,
     private readonly eventEmitter: EventEmitter2,
-  ) {}
+  ) { }
 
   async getAll() {
     const requests = await this.repository.getAll();
@@ -47,7 +46,7 @@ export class TeacherRequestService {
     };
   }
 
-  // TODO: adicionar SSE e Email
+  // TODO: adicionar Email
   async updateStatus(id: string, reviewerId: string, status: RequestStatus, reason?: string) {
     if (status === 'REFUSED' && !reason)
       throw new BadRequestException('If status is REFUSED, a reason must be stated');
@@ -63,6 +62,14 @@ export class TeacherRequestService {
         'teacher-request.status',
         new TeacherRequestStatusPayload(id, request.user.id, status === 'APPROVED', reason),
       );
+
+      if (request.hookUrl) {
+        await fetch(request.hookUrl, {
+          method: 'POST', 
+          headers: { 'Content-Type': 'application/json' }, 
+          body: JSON.stringify({ status, reason }) 
+        })
+      }
 
       return { message: 'status updated successfully' };
     } catch (err) {

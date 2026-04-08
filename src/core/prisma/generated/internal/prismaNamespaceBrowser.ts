@@ -71,7 +71,8 @@ export const ModelName = {
   UserEssay: 'UserEssay',
   Notification: 'Notification',
   TeacherRequestStatusNotification: 'TeacherRequestStatusNotification',
-  ActivityNotification: 'ActivityNotification'
+  ActivityNotification: 'ActivityNotification',
+  IntegrationUser: 'IntegrationUser'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -161,6 +162,7 @@ export const TeacherRequestScalarFieldEnum = {
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  hookUrl: 'hookUrl',
   userId: 'userId',
   reviewerId: 'reviewerId'
 } as const
@@ -362,6 +364,19 @@ export const ActivityNotificationScalarFieldEnum = {
 } as const
 
 export type ActivityNotificationScalarFieldEnum = (typeof ActivityNotificationScalarFieldEnum)[keyof typeof ActivityNotificationScalarFieldEnum]
+
+
+export const IntegrationUserScalarFieldEnum = {
+  id: 'id',
+  integrationName: 'integrationName',
+  userId: 'userId',
+  externalUserId: 'externalUserId',
+  externalRole: 'externalRole',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IntegrationUserScalarFieldEnum = (typeof IntegrationUserScalarFieldEnum)[keyof typeof IntegrationUserScalarFieldEnum]
 
 
 export const SortOrder = {

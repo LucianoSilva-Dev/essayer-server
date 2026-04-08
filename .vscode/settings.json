@@ -6,5 +6,11 @@
     },
     "editor.codeActionsOnSave": {
         "source.organizeImports": "always"
+    },
+    "[prisma]": {
+        "editor.defaultFormatter": "Prisma.prisma"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
     }
 }

@@ -1,3 +1,4 @@
+import { apiKey } from '@better-auth/api-key';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
@@ -93,11 +94,22 @@ export const auth = betterAuth({
   trustedOrigins: ['*'],
 
   plugins: [
-    openAPI({ path: '/docs', disableDefaultReference: true }),
+    openAPI({ path: '/auth/docs', disableDefaultReference: true }),
     adminPlugin({
       ac,
       roles: { admin, teacher, student },
       defaultRole: 'student',
+    }),
+    apiKey({
+      enableSessionForAPIKeys: true,
+      requireName: true,
+      enableMetadata: true,
+      permissions: {
+        defaultPermissions: {
+          repertoires: ['read', 'write'],
+          users: ['provision']
+        }
+      }
     }),
   ],
 });

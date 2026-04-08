@@ -30,6 +30,7 @@ export type TeacherRequestMinAggregateOutputType = {
   status: $Enums.RequestStatus | null
   createdAt: Date | null
   updatedAt: Date | null
+  hookUrl: string | null
   userId: string | null
   reviewerId: string | null
 }
@@ -40,6 +41,7 @@ export type TeacherRequestMaxAggregateOutputType = {
   status: $Enums.RequestStatus | null
   createdAt: Date | null
   updatedAt: Date | null
+  hookUrl: string | null
   userId: string | null
   reviewerId: string | null
 }
@@ -50,6 +52,7 @@ export type TeacherRequestCountAggregateOutputType = {
   status: number
   createdAt: number
   updatedAt: number
+  hookUrl: number
   userId: number
   reviewerId: number
   _all: number
@@ -62,6 +65,7 @@ export type TeacherRequestMinAggregateInputType = {
   status?: true
   createdAt?: true
   updatedAt?: true
+  hookUrl?: true
   userId?: true
   reviewerId?: true
 }
@@ -72,6 +76,7 @@ export type TeacherRequestMaxAggregateInputType = {
   status?: true
   createdAt?: true
   updatedAt?: true
+  hookUrl?: true
   userId?: true
   reviewerId?: true
 }
@@ -82,6 +87,7 @@ export type TeacherRequestCountAggregateInputType = {
   status?: true
   createdAt?: true
   updatedAt?: true
+  hookUrl?: true
   userId?: true
   reviewerId?: true
   _all?: true
@@ -165,6 +171,7 @@ export type TeacherRequestGroupByOutputType = {
   status: $Enums.RequestStatus | null
   createdAt: Date
   updatedAt: Date
+  hookUrl: string | null
   userId: string
   reviewerId: string | null
   _count: TeacherRequestCountAggregateOutputType | null
@@ -196,6 +203,7 @@ export type TeacherRequestWhereInput = {
   status?: Prisma.EnumRequestStatusNullableFilter<"TeacherRequest"> | $Enums.RequestStatus | null
   createdAt?: Prisma.DateTimeFilter<"TeacherRequest"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TeacherRequest"> | Date | string
+  hookUrl?: Prisma.StringNullableFilter<"TeacherRequest"> | string | null
   userId?: Prisma.StringFilter<"TeacherRequest"> | string
   reviewerId?: Prisma.StringNullableFilter<"TeacherRequest"> | string | null
   notification?: Prisma.XOR<Prisma.TeacherRequestStatusNotificationNullableScalarRelationFilter, Prisma.TeacherRequestStatusNotificationWhereInput> | null
@@ -209,6 +217,7 @@ export type TeacherRequestOrderByWithRelationInput = {
   status?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  hookUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   reviewerId?: Prisma.SortOrderInput | Prisma.SortOrder
   notification?: Prisma.TeacherRequestStatusNotificationOrderByWithRelationInput
@@ -225,6 +234,7 @@ export type TeacherRequestWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumRequestStatusNullableFilter<"TeacherRequest"> | $Enums.RequestStatus | null
   createdAt?: Prisma.DateTimeFilter<"TeacherRequest"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TeacherRequest"> | Date | string
+  hookUrl?: Prisma.StringNullableFilter<"TeacherRequest"> | string | null
   userId?: Prisma.StringFilter<"TeacherRequest"> | string
   reviewerId?: Prisma.StringNullableFilter<"TeacherRequest"> | string | null
   notification?: Prisma.XOR<Prisma.TeacherRequestStatusNotificationNullableScalarRelationFilter, Prisma.TeacherRequestStatusNotificationWhereInput> | null
@@ -238,6 +248,7 @@ export type TeacherRequestOrderByWithAggregationInput = {
   status?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  hookUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   reviewerId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TeacherRequestCountOrderByAggregateInput
@@ -254,6 +265,7 @@ export type TeacherRequestScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumRequestStatusNullableWithAggregatesFilter<"TeacherRequest"> | $Enums.RequestStatus | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TeacherRequest"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"TeacherRequest"> | Date | string
+  hookUrl?: Prisma.StringNullableWithAggregatesFilter<"TeacherRequest"> | string | null
   userId?: Prisma.StringWithAggregatesFilter<"TeacherRequest"> | string
   reviewerId?: Prisma.StringNullableWithAggregatesFilter<"TeacherRequest"> | string | null
 }
@@ -264,6 +276,7 @@ export type TeacherRequestCreateInput = {
   status?: $Enums.RequestStatus | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  hookUrl?: string | null
   notification?: Prisma.TeacherRequestStatusNotificationCreateNestedOneWithoutTeacherRequestInput
   user: Prisma.UserCreateNestedOneWithoutTeacherRequestsInput
   reviewer?: Prisma.UserCreateNestedOneWithoutTeacherRequestsReviewedInput
@@ -275,6 +288,7 @@ export type TeacherRequestUncheckedCreateInput = {
   status?: $Enums.RequestStatus | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  hookUrl?: string | null
   userId: string
   reviewerId?: string | null
   notification?: Prisma.TeacherRequestStatusNotificationUncheckedCreateNestedOneWithoutTeacherRequestInput
@@ -286,6 +300,7 @@ export type TeacherRequestUpdateInput = {
   status?: Prisma.NullableEnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notification?: Prisma.TeacherRequestStatusNotificationUpdateOneWithoutTeacherRequestNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTeacherRequestsNestedInput
   reviewer?: Prisma.UserUpdateOneWithoutTeacherRequestsReviewedNestedInput
@@ -297,6 +312,7 @@ export type TeacherRequestUncheckedUpdateInput = {
   status?: Prisma.NullableEnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   reviewerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notification?: Prisma.TeacherRequestStatusNotificationUncheckedUpdateOneWithoutTeacherRequestNestedInput
@@ -308,6 +324,7 @@ export type TeacherRequestCreateManyInput = {
   status?: $Enums.RequestStatus | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  hookUrl?: string | null
   userId: string
   reviewerId?: string | null
 }
@@ -318,6 +335,7 @@ export type TeacherRequestUpdateManyMutationInput = {
   status?: Prisma.NullableEnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TeacherRequestUncheckedUpdateManyInput = {
@@ -326,6 +344,7 @@ export type TeacherRequestUncheckedUpdateManyInput = {
   status?: Prisma.NullableEnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   reviewerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -346,6 +365,7 @@ export type TeacherRequestCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  hookUrl?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   reviewerId?: Prisma.SortOrder
 }
@@ -356,6 +376,7 @@ export type TeacherRequestMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  hookUrl?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   reviewerId?: Prisma.SortOrder
 }
@@ -366,6 +387,7 @@ export type TeacherRequestMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  hookUrl?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   reviewerId?: Prisma.SortOrder
 }
@@ -483,6 +505,7 @@ export type TeacherRequestCreateWithoutUserInput = {
   status?: $Enums.RequestStatus | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  hookUrl?: string | null
   notification?: Prisma.TeacherRequestStatusNotificationCreateNestedOneWithoutTeacherRequestInput
   reviewer?: Prisma.UserCreateNestedOneWithoutTeacherRequestsReviewedInput
 }
@@ -493,6 +516,7 @@ export type TeacherRequestUncheckedCreateWithoutUserInput = {
   status?: $Enums.RequestStatus | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  hookUrl?: string | null
   reviewerId?: string | null
   notification?: Prisma.TeacherRequestStatusNotificationUncheckedCreateNestedOneWithoutTeacherRequestInput
 }
@@ -513,6 +537,7 @@ export type TeacherRequestCreateWithoutReviewerInput = {
   status?: $Enums.RequestStatus | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  hookUrl?: string | null
   notification?: Prisma.TeacherRequestStatusNotificationCreateNestedOneWithoutTeacherRequestInput
   user: Prisma.UserCreateNestedOneWithoutTeacherRequestsInput
 }
@@ -523,6 +548,7 @@ export type TeacherRequestUncheckedCreateWithoutReviewerInput = {
   status?: $Enums.RequestStatus | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  hookUrl?: string | null
   userId: string
   notification?: Prisma.TeacherRequestStatusNotificationUncheckedCreateNestedOneWithoutTeacherRequestInput
 }
@@ -562,6 +588,7 @@ export type TeacherRequestScalarWhereInput = {
   status?: Prisma.EnumRequestStatusNullableFilter<"TeacherRequest"> | $Enums.RequestStatus | null
   createdAt?: Prisma.DateTimeFilter<"TeacherRequest"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TeacherRequest"> | Date | string
+  hookUrl?: Prisma.StringNullableFilter<"TeacherRequest"> | string | null
   userId?: Prisma.StringFilter<"TeacherRequest"> | string
   reviewerId?: Prisma.StringNullableFilter<"TeacherRequest"> | string | null
 }
@@ -588,6 +615,7 @@ export type TeacherRequestCreateWithoutNotificationInput = {
   status?: $Enums.RequestStatus | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  hookUrl?: string | null
   user: Prisma.UserCreateNestedOneWithoutTeacherRequestsInput
   reviewer?: Prisma.UserCreateNestedOneWithoutTeacherRequestsReviewedInput
 }
@@ -598,6 +626,7 @@ export type TeacherRequestUncheckedCreateWithoutNotificationInput = {
   status?: $Enums.RequestStatus | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  hookUrl?: string | null
   userId: string
   reviewerId?: string | null
 }
@@ -624,6 +653,7 @@ export type TeacherRequestUpdateWithoutNotificationInput = {
   status?: Prisma.NullableEnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutTeacherRequestsNestedInput
   reviewer?: Prisma.UserUpdateOneWithoutTeacherRequestsReviewedNestedInput
 }
@@ -634,6 +664,7 @@ export type TeacherRequestUncheckedUpdateWithoutNotificationInput = {
   status?: Prisma.NullableEnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   reviewerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -644,6 +675,7 @@ export type TeacherRequestCreateManyUserInput = {
   status?: $Enums.RequestStatus | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  hookUrl?: string | null
   reviewerId?: string | null
 }
 
@@ -653,6 +685,7 @@ export type TeacherRequestCreateManyReviewerInput = {
   status?: $Enums.RequestStatus | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  hookUrl?: string | null
   userId: string
 }
 
@@ -662,6 +695,7 @@ export type TeacherRequestUpdateWithoutUserInput = {
   status?: Prisma.NullableEnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notification?: Prisma.TeacherRequestStatusNotificationUpdateOneWithoutTeacherRequestNestedInput
   reviewer?: Prisma.UserUpdateOneWithoutTeacherRequestsReviewedNestedInput
 }
@@ -672,6 +706,7 @@ export type TeacherRequestUncheckedUpdateWithoutUserInput = {
   status?: Prisma.NullableEnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notification?: Prisma.TeacherRequestStatusNotificationUncheckedUpdateOneWithoutTeacherRequestNestedInput
 }
@@ -682,6 +717,7 @@ export type TeacherRequestUncheckedUpdateManyWithoutUserInput = {
   status?: Prisma.NullableEnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -691,6 +727,7 @@ export type TeacherRequestUpdateWithoutReviewerInput = {
   status?: Prisma.NullableEnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notification?: Prisma.TeacherRequestStatusNotificationUpdateOneWithoutTeacherRequestNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTeacherRequestsNestedInput
 }
@@ -701,6 +738,7 @@ export type TeacherRequestUncheckedUpdateWithoutReviewerInput = {
   status?: Prisma.NullableEnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   notification?: Prisma.TeacherRequestStatusNotificationUncheckedUpdateOneWithoutTeacherRequestNestedInput
 }
@@ -711,6 +749,7 @@ export type TeacherRequestUncheckedUpdateManyWithoutReviewerInput = {
   status?: Prisma.NullableEnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -722,6 +761,7 @@ export type TeacherRequestSelect<ExtArgs extends runtime.Types.Extensions.Intern
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  hookUrl?: boolean
   userId?: boolean
   reviewerId?: boolean
   notification?: boolean | Prisma.TeacherRequest$notificationArgs<ExtArgs>
@@ -735,6 +775,7 @@ export type TeacherRequestSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  hookUrl?: boolean
   userId?: boolean
   reviewerId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -747,6 +788,7 @@ export type TeacherRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  hookUrl?: boolean
   userId?: boolean
   reviewerId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -759,11 +801,12 @@ export type TeacherRequestSelectScalar = {
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  hookUrl?: boolean
   userId?: boolean
   reviewerId?: boolean
 }
 
-export type TeacherRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lattes" | "status" | "createdAt" | "updatedAt" | "userId" | "reviewerId", ExtArgs["result"]["teacherRequest"]>
+export type TeacherRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lattes" | "status" | "createdAt" | "updatedAt" | "hookUrl" | "userId" | "reviewerId", ExtArgs["result"]["teacherRequest"]>
 export type TeacherRequestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   notification?: boolean | Prisma.TeacherRequest$notificationArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -791,6 +834,7 @@ export type $TeacherRequestPayload<ExtArgs extends runtime.Types.Extensions.Inte
     status: $Enums.RequestStatus | null
     createdAt: Date
     updatedAt: Date
+    hookUrl: string | null
     userId: string
     reviewerId: string | null
   }, ExtArgs["result"]["teacherRequest"]>
@@ -1224,6 +1268,7 @@ export interface TeacherRequestFieldRefs {
   readonly status: Prisma.FieldRef<"TeacherRequest", 'RequestStatus'>
   readonly createdAt: Prisma.FieldRef<"TeacherRequest", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"TeacherRequest", 'DateTime'>
+  readonly hookUrl: Prisma.FieldRef<"TeacherRequest", 'String'>
   readonly userId: Prisma.FieldRef<"TeacherRequest", 'String'>
   readonly reviewerId: Prisma.FieldRef<"TeacherRequest", 'String'>
 }

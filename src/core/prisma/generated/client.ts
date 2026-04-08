@@ -144,3 +144,8 @@ export type TeacherRequestStatusNotification = Prisma.TeacherRequestStatusNotifi
  * 
  */
 export type ActivityNotification = Prisma.ActivityNotificationModel
+/**
+ * Model IntegrationUser
+ * 
+ */
+export type IntegrationUser = Prisma.IntegrationUserModel

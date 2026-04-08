@@ -261,6 +261,7 @@ export type UserWhereInput = {
   userEssays?: Prisma.UserEssayListRelationFilter
   notificationsSent?: Prisma.NotificationListRelationFilter
   notificationsSeen?: Prisma.NotificationListRelationFilter
+  integrationMappings?: Prisma.IntegrationUserListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -292,6 +293,7 @@ export type UserOrderByWithRelationInput = {
   userEssays?: Prisma.UserEssayOrderByRelationAggregateInput
   notificationsSent?: Prisma.NotificationOrderByRelationAggregateInput
   notificationsSeen?: Prisma.NotificationOrderByRelationAggregateInput
+  integrationMappings?: Prisma.IntegrationUserOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -326,6 +328,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   userEssays?: Prisma.UserEssayListRelationFilter
   notificationsSent?: Prisma.NotificationListRelationFilter
   notificationsSeen?: Prisma.NotificationListRelationFilter
+  integrationMappings?: Prisma.IntegrationUserListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -395,6 +398,7 @@ export type UserCreateInput = {
   userEssays?: Prisma.UserEssayCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -426,6 +430,7 @@ export type UserUncheckedCreateInput = {
   userEssays?: Prisma.UserEssayUncheckedCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationUncheckedCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -457,6 +462,7 @@ export type UserUpdateInput = {
   userEssays?: Prisma.UserEssayUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -488,6 +494,7 @@ export type UserUncheckedUpdateInput = {
   userEssays?: Prisma.UserEssayUncheckedUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUncheckedUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -986,6 +993,20 @@ export type UserUncheckedUpdateManyWithoutNotificationsSeenNestedInput = {
   deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
 }
 
+export type UserCreateNestedOneWithoutIntegrationMappingsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutIntegrationMappingsInput, Prisma.UserUncheckedCreateWithoutIntegrationMappingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutIntegrationMappingsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutIntegrationMappingsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutIntegrationMappingsInput, Prisma.UserUncheckedCreateWithoutIntegrationMappingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutIntegrationMappingsInput
+  upsert?: Prisma.UserUpsertWithoutIntegrationMappingsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutIntegrationMappingsInput, Prisma.UserUpdateWithoutIntegrationMappingsInput>, Prisma.UserUncheckedUpdateWithoutIntegrationMappingsInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id?: string
   name: string
@@ -1014,6 +1035,7 @@ export type UserCreateWithoutSessionsInput = {
   userEssays?: Prisma.UserEssayCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -1044,6 +1066,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   userEssays?: Prisma.UserEssayUncheckedCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationUncheckedCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1090,6 +1113,7 @@ export type UserUpdateWithoutSessionsInput = {
   userEssays?: Prisma.UserEssayUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1120,6 +1144,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   userEssays?: Prisma.UserEssayUncheckedUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUncheckedUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -1150,6 +1175,7 @@ export type UserCreateWithoutAccountsInput = {
   userEssays?: Prisma.UserEssayCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -1180,6 +1206,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   userEssays?: Prisma.UserEssayUncheckedCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationUncheckedCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -1226,6 +1253,7 @@ export type UserUpdateWithoutAccountsInput = {
   userEssays?: Prisma.UserEssayUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -1256,6 +1284,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   userEssays?: Prisma.UserEssayUncheckedUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUncheckedUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTeacherRequestsInput = {
@@ -1286,6 +1315,7 @@ export type UserCreateWithoutTeacherRequestsInput = {
   userEssays?: Prisma.UserEssayCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTeacherRequestsInput = {
@@ -1316,6 +1346,7 @@ export type UserUncheckedCreateWithoutTeacherRequestsInput = {
   userEssays?: Prisma.UserEssayUncheckedCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationUncheckedCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTeacherRequestsInput = {
@@ -1351,6 +1382,7 @@ export type UserCreateWithoutTeacherRequestsReviewedInput = {
   userEssays?: Prisma.UserEssayCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTeacherRequestsReviewedInput = {
@@ -1381,6 +1413,7 @@ export type UserUncheckedCreateWithoutTeacherRequestsReviewedInput = {
   userEssays?: Prisma.UserEssayUncheckedCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationUncheckedCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTeacherRequestsReviewedInput = {
@@ -1427,6 +1460,7 @@ export type UserUpdateWithoutTeacherRequestsInput = {
   userEssays?: Prisma.UserEssayUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTeacherRequestsInput = {
@@ -1457,6 +1491,7 @@ export type UserUncheckedUpdateWithoutTeacherRequestsInput = {
   userEssays?: Prisma.UserEssayUncheckedUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUncheckedUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutTeacherRequestsReviewedInput = {
@@ -1498,6 +1533,7 @@ export type UserUpdateWithoutTeacherRequestsReviewedInput = {
   userEssays?: Prisma.UserEssayUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTeacherRequestsReviewedInput = {
@@ -1528,6 +1564,7 @@ export type UserUncheckedUpdateWithoutTeacherRequestsReviewedInput = {
   userEssays?: Prisma.UserEssayUncheckedUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUncheckedUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommentsInput = {
@@ -1558,6 +1595,7 @@ export type UserCreateWithoutCommentsInput = {
   userEssays?: Prisma.UserEssayCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommentsInput = {
@@ -1588,6 +1626,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   userEssays?: Prisma.UserEssayUncheckedCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationUncheckedCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommentsInput = {
@@ -1634,6 +1673,7 @@ export type UserUpdateWithoutCommentsInput = {
   userEssays?: Prisma.UserEssayUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -1664,6 +1704,7 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   userEssays?: Prisma.UserEssayUncheckedUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUncheckedUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRepertoiresCreatedInput = {
@@ -1694,6 +1735,7 @@ export type UserCreateWithoutRepertoiresCreatedInput = {
   userEssays?: Prisma.UserEssayCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRepertoiresCreatedInput = {
@@ -1724,6 +1766,7 @@ export type UserUncheckedCreateWithoutRepertoiresCreatedInput = {
   userEssays?: Prisma.UserEssayUncheckedCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationUncheckedCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRepertoiresCreatedInput = {
@@ -1759,6 +1802,7 @@ export type UserCreateWithoutRepertoiresLikedInput = {
   userEssays?: Prisma.UserEssayCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRepertoiresLikedInput = {
@@ -1789,6 +1833,7 @@ export type UserUncheckedCreateWithoutRepertoiresLikedInput = {
   userEssays?: Prisma.UserEssayUncheckedCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationUncheckedCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRepertoiresLikedInput = {
@@ -1824,6 +1869,7 @@ export type UserCreateWithoutRepertoiresFavouritedInput = {
   userEssays?: Prisma.UserEssayCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRepertoiresFavouritedInput = {
@@ -1854,6 +1900,7 @@ export type UserUncheckedCreateWithoutRepertoiresFavouritedInput = {
   userEssays?: Prisma.UserEssayUncheckedCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationUncheckedCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRepertoiresFavouritedInput = {
@@ -1900,6 +1947,7 @@ export type UserUpdateWithoutRepertoiresCreatedInput = {
   userEssays?: Prisma.UserEssayUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRepertoiresCreatedInput = {
@@ -1930,6 +1978,7 @@ export type UserUncheckedUpdateWithoutRepertoiresCreatedInput = {
   userEssays?: Prisma.UserEssayUncheckedUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUncheckedUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithWhereUniqueWithoutRepertoiresLikedInput = {
@@ -2011,6 +2060,7 @@ export type UserCreateWithoutClassesCreatedInput = {
   userEssays?: Prisma.UserEssayCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutClassesCreatedInput = {
@@ -2041,6 +2091,7 @@ export type UserUncheckedCreateWithoutClassesCreatedInput = {
   userEssays?: Prisma.UserEssayUncheckedCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationUncheckedCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutClassesCreatedInput = {
@@ -2076,6 +2127,7 @@ export type UserCreateWithoutClassesPendingInput = {
   userEssays?: Prisma.UserEssayCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutClassesPendingInput = {
@@ -2106,6 +2158,7 @@ export type UserUncheckedCreateWithoutClassesPendingInput = {
   userEssays?: Prisma.UserEssayUncheckedCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationUncheckedCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutClassesPendingInput = {
@@ -2141,6 +2194,7 @@ export type UserCreateWithoutClassesMemberInput = {
   userEssays?: Prisma.UserEssayCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutClassesMemberInput = {
@@ -2171,6 +2225,7 @@ export type UserUncheckedCreateWithoutClassesMemberInput = {
   userEssays?: Prisma.UserEssayUncheckedCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationUncheckedCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutClassesMemberInput = {
@@ -2217,6 +2272,7 @@ export type UserUpdateWithoutClassesCreatedInput = {
   userEssays?: Prisma.UserEssayUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClassesCreatedInput = {
@@ -2247,6 +2303,7 @@ export type UserUncheckedUpdateWithoutClassesCreatedInput = {
   userEssays?: Prisma.UserEssayUncheckedUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUncheckedUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithWhereUniqueWithoutClassesPendingInput = {
@@ -2309,6 +2366,7 @@ export type UserCreateWithoutEssayResponsesInput = {
   userEssays?: Prisma.UserEssayCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEssayResponsesInput = {
@@ -2339,6 +2397,7 @@ export type UserUncheckedCreateWithoutEssayResponsesInput = {
   userEssays?: Prisma.UserEssayUncheckedCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationUncheckedCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEssayResponsesInput = {
@@ -2385,6 +2444,7 @@ export type UserUpdateWithoutEssayResponsesInput = {
   userEssays?: Prisma.UserEssayUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEssayResponsesInput = {
@@ -2415,6 +2475,7 @@ export type UserUncheckedUpdateWithoutEssayResponsesInput = {
   userEssays?: Prisma.UserEssayUncheckedUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUncheckedUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutUserEssaysInput = {
@@ -2445,6 +2506,7 @@ export type UserCreateWithoutUserEssaysInput = {
   essayResponses?: Prisma.EssayResponseCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutUserEssaysInput = {
@@ -2475,6 +2537,7 @@ export type UserUncheckedCreateWithoutUserEssaysInput = {
   essayResponses?: Prisma.EssayResponseUncheckedCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutSendersInput
   notificationsSeen?: Prisma.NotificationUncheckedCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutUserEssaysInput = {
@@ -2521,6 +2584,7 @@ export type UserUpdateWithoutUserEssaysInput = {
   essayResponses?: Prisma.EssayResponseUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserEssaysInput = {
@@ -2551,6 +2615,7 @@ export type UserUncheckedUpdateWithoutUserEssaysInput = {
   essayResponses?: Prisma.EssayResponseUncheckedUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUncheckedUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationsSentInput = {
@@ -2581,6 +2646,7 @@ export type UserCreateWithoutNotificationsSentInput = {
   essayResponses?: Prisma.EssayResponseCreateNestedManyWithoutStudentInput
   userEssays?: Prisma.UserEssayCreateNestedManyWithoutStudentInput
   notificationsSeen?: Prisma.NotificationCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsSentInput = {
@@ -2611,6 +2677,7 @@ export type UserUncheckedCreateWithoutNotificationsSentInput = {
   essayResponses?: Prisma.EssayResponseUncheckedCreateNestedManyWithoutStudentInput
   userEssays?: Prisma.UserEssayUncheckedCreateNestedManyWithoutStudentInput
   notificationsSeen?: Prisma.NotificationUncheckedCreateNestedManyWithoutSeenByInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsSentInput = {
@@ -2646,6 +2713,7 @@ export type UserCreateWithoutNotificationsSeenInput = {
   essayResponses?: Prisma.EssayResponseCreateNestedManyWithoutStudentInput
   userEssays?: Prisma.UserEssayCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationCreateNestedManyWithoutSendersInput
+  integrationMappings?: Prisma.IntegrationUserCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsSeenInput = {
@@ -2676,6 +2744,7 @@ export type UserUncheckedCreateWithoutNotificationsSeenInput = {
   essayResponses?: Prisma.EssayResponseUncheckedCreateNestedManyWithoutStudentInput
   userEssays?: Prisma.UserEssayUncheckedCreateNestedManyWithoutStudentInput
   notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutSendersInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsSeenInput = {
@@ -2715,6 +2784,146 @@ export type UserUpdateManyWithWhereWithoutNotificationsSeenInput = {
   data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutNotificationsSeenInput>
 }
 
+export type UserCreateWithoutIntegrationMappingsInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  imageFileId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  lattes?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  teacherRequests?: Prisma.TeacherRequestCreateNestedManyWithoutUserInput
+  teacherRequestsReviewed?: Prisma.TeacherRequestCreateNestedManyWithoutReviewerInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  repertoiresCreated?: Prisma.RepertoireCreateNestedManyWithoutCreatorInput
+  repertoiresLiked?: Prisma.RepertoireCreateNestedManyWithoutLikesInput
+  repertoiresFavourited?: Prisma.RepertoireCreateNestedManyWithoutFavouritesInput
+  classesCreated?: Prisma.ClassCreateNestedManyWithoutCreatorInput
+  classesPending?: Prisma.ClassCreateNestedManyWithoutPendingMembersInput
+  classesMember?: Prisma.ClassCreateNestedManyWithoutMembersInput
+  essayResponses?: Prisma.EssayResponseCreateNestedManyWithoutStudentInput
+  userEssays?: Prisma.UserEssayCreateNestedManyWithoutStudentInput
+  notificationsSent?: Prisma.NotificationCreateNestedManyWithoutSendersInput
+  notificationsSeen?: Prisma.NotificationCreateNestedManyWithoutSeenByInput
+}
+
+export type UserUncheckedCreateWithoutIntegrationMappingsInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  imageFileId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  lattes?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  teacherRequests?: Prisma.TeacherRequestUncheckedCreateNestedManyWithoutUserInput
+  teacherRequestsReviewed?: Prisma.TeacherRequestUncheckedCreateNestedManyWithoutReviewerInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  repertoiresCreated?: Prisma.RepertoireUncheckedCreateNestedManyWithoutCreatorInput
+  repertoiresLiked?: Prisma.RepertoireUncheckedCreateNestedManyWithoutLikesInput
+  repertoiresFavourited?: Prisma.RepertoireUncheckedCreateNestedManyWithoutFavouritesInput
+  classesCreated?: Prisma.ClassUncheckedCreateNestedManyWithoutCreatorInput
+  classesPending?: Prisma.ClassUncheckedCreateNestedManyWithoutPendingMembersInput
+  classesMember?: Prisma.ClassUncheckedCreateNestedManyWithoutMembersInput
+  essayResponses?: Prisma.EssayResponseUncheckedCreateNestedManyWithoutStudentInput
+  userEssays?: Prisma.UserEssayUncheckedCreateNestedManyWithoutStudentInput
+  notificationsSent?: Prisma.NotificationUncheckedCreateNestedManyWithoutSendersInput
+  notificationsSeen?: Prisma.NotificationUncheckedCreateNestedManyWithoutSeenByInput
+}
+
+export type UserCreateOrConnectWithoutIntegrationMappingsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutIntegrationMappingsInput, Prisma.UserUncheckedCreateWithoutIntegrationMappingsInput>
+}
+
+export type UserUpsertWithoutIntegrationMappingsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutIntegrationMappingsInput, Prisma.UserUncheckedUpdateWithoutIntegrationMappingsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutIntegrationMappingsInput, Prisma.UserUncheckedCreateWithoutIntegrationMappingsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutIntegrationMappingsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutIntegrationMappingsInput, Prisma.UserUncheckedUpdateWithoutIntegrationMappingsInput>
+}
+
+export type UserUpdateWithoutIntegrationMappingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lattes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  teacherRequests?: Prisma.TeacherRequestUpdateManyWithoutUserNestedInput
+  teacherRequestsReviewed?: Prisma.TeacherRequestUpdateManyWithoutReviewerNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  repertoiresCreated?: Prisma.RepertoireUpdateManyWithoutCreatorNestedInput
+  repertoiresLiked?: Prisma.RepertoireUpdateManyWithoutLikesNestedInput
+  repertoiresFavourited?: Prisma.RepertoireUpdateManyWithoutFavouritesNestedInput
+  classesCreated?: Prisma.ClassUpdateManyWithoutCreatorNestedInput
+  classesPending?: Prisma.ClassUpdateManyWithoutPendingMembersNestedInput
+  classesMember?: Prisma.ClassUpdateManyWithoutMembersNestedInput
+  essayResponses?: Prisma.EssayResponseUpdateManyWithoutStudentNestedInput
+  userEssays?: Prisma.UserEssayUpdateManyWithoutStudentNestedInput
+  notificationsSent?: Prisma.NotificationUpdateManyWithoutSendersNestedInput
+  notificationsSeen?: Prisma.NotificationUpdateManyWithoutSeenByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutIntegrationMappingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lattes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  teacherRequests?: Prisma.TeacherRequestUncheckedUpdateManyWithoutUserNestedInput
+  teacherRequestsReviewed?: Prisma.TeacherRequestUncheckedUpdateManyWithoutReviewerNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  repertoiresCreated?: Prisma.RepertoireUncheckedUpdateManyWithoutCreatorNestedInput
+  repertoiresLiked?: Prisma.RepertoireUncheckedUpdateManyWithoutLikesNestedInput
+  repertoiresFavourited?: Prisma.RepertoireUncheckedUpdateManyWithoutFavouritesNestedInput
+  classesCreated?: Prisma.ClassUncheckedUpdateManyWithoutCreatorNestedInput
+  classesPending?: Prisma.ClassUncheckedUpdateManyWithoutPendingMembersNestedInput
+  classesMember?: Prisma.ClassUncheckedUpdateManyWithoutMembersNestedInput
+  essayResponses?: Prisma.EssayResponseUncheckedUpdateManyWithoutStudentNestedInput
+  userEssays?: Prisma.UserEssayUncheckedUpdateManyWithoutStudentNestedInput
+  notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutSendersNestedInput
+  notificationsSeen?: Prisma.NotificationUncheckedUpdateManyWithoutSeenByNestedInput
+}
+
 export type UserUpdateWithoutRepertoiresLikedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2743,6 +2952,7 @@ export type UserUpdateWithoutRepertoiresLikedInput = {
   userEssays?: Prisma.UserEssayUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRepertoiresLikedInput = {
@@ -2773,6 +2983,7 @@ export type UserUncheckedUpdateWithoutRepertoiresLikedInput = {
   userEssays?: Prisma.UserEssayUncheckedUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUncheckedUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutRepertoiresLikedInput = {
@@ -2819,6 +3030,7 @@ export type UserUpdateWithoutRepertoiresFavouritedInput = {
   userEssays?: Prisma.UserEssayUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRepertoiresFavouritedInput = {
@@ -2849,6 +3061,7 @@ export type UserUncheckedUpdateWithoutRepertoiresFavouritedInput = {
   userEssays?: Prisma.UserEssayUncheckedUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUncheckedUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutRepertoiresFavouritedInput = {
@@ -2895,6 +3108,7 @@ export type UserUpdateWithoutClassesPendingInput = {
   userEssays?: Prisma.UserEssayUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClassesPendingInput = {
@@ -2925,6 +3139,7 @@ export type UserUncheckedUpdateWithoutClassesPendingInput = {
   userEssays?: Prisma.UserEssayUncheckedUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUncheckedUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutClassesPendingInput = {
@@ -2971,6 +3186,7 @@ export type UserUpdateWithoutClassesMemberInput = {
   userEssays?: Prisma.UserEssayUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClassesMemberInput = {
@@ -3001,6 +3217,7 @@ export type UserUncheckedUpdateWithoutClassesMemberInput = {
   userEssays?: Prisma.UserEssayUncheckedUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutSendersNestedInput
   notificationsSeen?: Prisma.NotificationUncheckedUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutClassesMemberInput = {
@@ -3047,6 +3264,7 @@ export type UserUpdateWithoutNotificationsSentInput = {
   essayResponses?: Prisma.EssayResponseUpdateManyWithoutStudentNestedInput
   userEssays?: Prisma.UserEssayUpdateManyWithoutStudentNestedInput
   notificationsSeen?: Prisma.NotificationUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsSentInput = {
@@ -3077,6 +3295,7 @@ export type UserUncheckedUpdateWithoutNotificationsSentInput = {
   essayResponses?: Prisma.EssayResponseUncheckedUpdateManyWithoutStudentNestedInput
   userEssays?: Prisma.UserEssayUncheckedUpdateManyWithoutStudentNestedInput
   notificationsSeen?: Prisma.NotificationUncheckedUpdateManyWithoutSeenByNestedInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutNotificationsSentInput = {
@@ -3123,6 +3342,7 @@ export type UserUpdateWithoutNotificationsSeenInput = {
   essayResponses?: Prisma.EssayResponseUpdateManyWithoutStudentNestedInput
   userEssays?: Prisma.UserEssayUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUpdateManyWithoutSendersNestedInput
+  integrationMappings?: Prisma.IntegrationUserUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsSeenInput = {
@@ -3153,6 +3373,7 @@ export type UserUncheckedUpdateWithoutNotificationsSeenInput = {
   essayResponses?: Prisma.EssayResponseUncheckedUpdateManyWithoutStudentNestedInput
   userEssays?: Prisma.UserEssayUncheckedUpdateManyWithoutStudentNestedInput
   notificationsSent?: Prisma.NotificationUncheckedUpdateManyWithoutSendersNestedInput
+  integrationMappings?: Prisma.IntegrationUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutNotificationsSeenInput = {
@@ -3192,6 +3413,7 @@ export type UserCountOutputType = {
   userEssays: number
   notificationsSent: number
   notificationsSeen: number
+  integrationMappings: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3210,6 +3432,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   userEssays?: boolean | UserCountOutputTypeCountUserEssaysArgs
   notificationsSent?: boolean | UserCountOutputTypeCountNotificationsSentArgs
   notificationsSeen?: boolean | UserCountOutputTypeCountNotificationsSeenArgs
+  integrationMappings?: boolean | UserCountOutputTypeCountIntegrationMappingsArgs
 }
 
 /**
@@ -3327,6 +3550,13 @@ export type UserCountOutputTypeCountNotificationsSeenArgs<ExtArgs extends runtim
   where?: Prisma.NotificationWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountIntegrationMappingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IntegrationUserWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -3357,6 +3587,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   userEssays?: boolean | Prisma.User$userEssaysArgs<ExtArgs>
   notificationsSent?: boolean | Prisma.User$notificationsSentArgs<ExtArgs>
   notificationsSeen?: boolean | Prisma.User$notificationsSeenArgs<ExtArgs>
+  integrationMappings?: boolean | Prisma.User$integrationMappingsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -3425,6 +3656,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   userEssays?: boolean | Prisma.User$userEssaysArgs<ExtArgs>
   notificationsSent?: boolean | Prisma.User$notificationsSentArgs<ExtArgs>
   notificationsSeen?: boolean | Prisma.User$notificationsSeenArgs<ExtArgs>
+  integrationMappings?: boolean | Prisma.User$integrationMappingsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -3448,6 +3680,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     userEssays: Prisma.$UserEssayPayload<ExtArgs>[]
     notificationsSent: Prisma.$NotificationPayload<ExtArgs>[]
     notificationsSeen: Prisma.$NotificationPayload<ExtArgs>[]
+    integrationMappings: Prisma.$IntegrationUserPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3872,6 +4105,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   userEssays<T extends Prisma.User$userEssaysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userEssaysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserEssayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notificationsSent<T extends Prisma.User$notificationsSentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsSentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notificationsSeen<T extends Prisma.User$notificationsSeenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsSeenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  integrationMappings<T extends Prisma.User$integrationMappingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$integrationMappingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IntegrationUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4664,6 +4898,30 @@ export type User$notificationsSeenArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * User.integrationMappings
+ */
+export type User$integrationMappingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the IntegrationUser
+   */
+  select?: Prisma.IntegrationUserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the IntegrationUser
+   */
+  omit?: Prisma.IntegrationUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.IntegrationUserInclude<ExtArgs> | null
+  where?: Prisma.IntegrationUserWhereInput
+  orderBy?: Prisma.IntegrationUserOrderByWithRelationInput | Prisma.IntegrationUserOrderByWithRelationInput[]
+  cursor?: Prisma.IntegrationUserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.IntegrationUserScalarFieldEnum | Prisma.IntegrationUserScalarFieldEnum[]
 }
 
 /**

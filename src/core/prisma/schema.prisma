@@ -59,7 +59,7 @@ model User {
   email         String
   emailVerified Boolean   @default(false)
   image         String?
-  imageFileId   String?   // ID to locate the image file in the storage provider
+  imageFileId   String? // ID to locate the image file in the storage provider
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   role          String?   @default("student")
@@ -67,23 +67,24 @@ model User {
   banReason     String?
   banExpires    DateTime?
   lattes        String?
-  sessions Session[]
-  accounts Account[]
+  sessions      Session[]
+  accounts      Account[]
 
   // Domain relations
-  teacherRequests         TeacherRequest[] @relation("requester")
-  teacherRequestsReviewed TeacherRequest[] @relation("reviewer")
+  teacherRequests         TeacherRequest[]  @relation("requester")
+  teacherRequestsReviewed TeacherRequest[]  @relation("reviewer")
   comments                Comment[]
-  repertoiresCreated      Repertoire[]     @relation("creator")
-  repertoiresLiked        Repertoire[]     @relation("like")
-  repertoiresFavourited   Repertoire[]     @relation("favourite")
-  classesCreated          Class[]          @relation("creator")
-  classesPending          Class[]          @relation("pending")
-  classesMember           Class[]          @relation("member")
+  repertoiresCreated      Repertoire[]      @relation("creator")
+  repertoiresLiked        Repertoire[]      @relation("like")
+  repertoiresFavourited   Repertoire[]      @relation("favourite")
+  classesCreated          Class[]           @relation("creator")
+  classesPending          Class[]           @relation("pending")
+  classesMember           Class[]           @relation("member")
   essayResponses          EssayResponse[]
   userEssays              UserEssay[]
-  notificationsSent       Notification[]   @relation("sender")
-  notificationsSeen       Notification[]   @relation("seen")
+  notificationsSent       Notification[]    @relation("sender")
+  notificationsSeen       Notification[]    @relation("seen")
+  integrationMappings     IntegrationUser[]
 
   @@unique([email])
   @@map("user")
@@ -148,6 +149,7 @@ model TeacherRequest {
   status    RequestStatus?
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
+  hookUrl   String?
 
   notification TeacherRequestStatusNotification?
   user         User                              @relation("requester", fields: [userId], references: [id])
@@ -243,9 +245,9 @@ model Activity {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
-  essay   Essay?
-  class   Class  @relation(fields: [classId], references: [id])
-  classId String
+  essay                 Essay?
+  class                 Class                  @relation(fields: [classId], references: [id])
+  classId               String
   activityNotifications ActivityNotification[]
 }
 
@@ -354,10 +356,30 @@ model TeacherRequestStatusNotification {
 }
 
 model ActivityNotification {
-  id             String   @id @default(uuid(7))
+  id             String @id @default(uuid(7))
   activityId     String
-  notificationId String   @unique
+  notificationId String @unique
 
-  activity     Activity    @relation(fields: [activityId], references: [id])
+  activity     Activity     @relation(fields: [activityId], references: [id])
   notification Notification @relation(fields: [notificationId], references: [id])
+}
+
+// ============================================
+// INTEGRATION USER MAPPING
+// ============================================
+
+model IntegrationUser {
+  id              String   @id @default(uuid(7))
+  integrationName String
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  externalUserId  String
+  externalRole    String   @default("student")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([integrationName, externalUserId])
+  @@index([userId])
+  @@index([externalUserId])
+  @@map("integration_user")
 }
