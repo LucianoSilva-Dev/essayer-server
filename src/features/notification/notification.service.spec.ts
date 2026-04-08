@@ -195,7 +195,7 @@ describe('NotificationService', () => {
   });
 
   describe('listen', () => {
-    it('should return an observable that emits heartbeat events', (done) => {
+    it('should return an observable that emits heartbeat events', async () => {
       const observable = service.listen('user-1');
 
       expect(sseManager.addConnection).toHaveBeenCalledWith(
@@ -203,20 +203,18 @@ describe('NotificationService', () => {
         expect.any(Subject),
       );
 
-      const events: unknown[] = [];
-      const subscription = observable.subscribe({
-        next: (event) => {
-          events.push(event);
-          if (events.length >= 1) {
+      await new Promise<void>((resolve, reject) => {
+        const subscription = observable.subscribe({
+          next: () => {
             subscription.unsubscribe();
             expect(sseManager.removeConnection).toHaveBeenCalledWith(
               'user-1',
               expect.any(Subject),
             );
-            done();
-          }
-        },
-        error: done,
+            resolve();
+          },
+          error: reject,
+        });
       });
     });
 

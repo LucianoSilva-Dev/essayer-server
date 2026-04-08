@@ -29,7 +29,7 @@ export interface IIntegrationRequest extends Request {
 
 @Injectable()
 export class IntegrationUserMiddleware implements NestMiddleware {
-  constructor(private readonly integrationService: IntegrationService) { }
+  constructor(private readonly integrationService: IntegrationService) {}
 
   async use(req: IIntegrationRequest, _: Response, next: NextFunction) {
     const externalUserId = req.headers['x-integration-user-id'] as string | undefined;

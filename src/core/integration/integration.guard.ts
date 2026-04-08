@@ -4,7 +4,7 @@ import { IntegrationRepository } from './integration.repository';
 
 @Injectable()
 export class IntegrationUserGuard implements CanActivate {
-  constructor(private readonly repository: IntegrationRepository) { }
+  constructor(private readonly repository: IntegrationRepository) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<IIntegrationRequest>();

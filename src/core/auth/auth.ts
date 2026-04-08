@@ -101,15 +101,16 @@ export const auth = betterAuth({
       defaultRole: 'student',
     }),
     apiKey({
+      // biome-ignore lint/style/useNamingConvention: better-auth API uses consecutive uppercase
       enableSessionForAPIKeys: true,
       requireName: true,
       enableMetadata: true,
       permissions: {
         defaultPermissions: {
           repertoires: ['read', 'write'],
-          users: ['provision']
-        }
-      }
+          users: ['provision'],
+        },
+      },
     }),
   ],
 });

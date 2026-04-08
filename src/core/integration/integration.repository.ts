@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class IntegrationRepository {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async findIntegrationUser(integrationName: string, externalUserId: string) {
     return this.prisma.integrationUser.findFirst({
@@ -53,5 +53,4 @@ export class IntegrationRepository {
       },
     });
   }
-
 }

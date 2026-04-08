@@ -59,4 +59,4 @@ import { LoggerTestModule } from './http-test/logger';
     StorageCleanupModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

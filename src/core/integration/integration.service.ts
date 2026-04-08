@@ -4,7 +4,7 @@ import { IResolvedIntegrationUser } from './types';
 
 @Injectable()
 export class IntegrationService {
-  constructor(private readonly repository: IntegrationRepository) { }
+  constructor(private readonly repository: IntegrationRepository) {}
 
   async resolveOrCreateUser(
     integrationName: string,

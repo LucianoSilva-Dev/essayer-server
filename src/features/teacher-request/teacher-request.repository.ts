@@ -10,6 +10,7 @@ export class TeacherRequestRepository {
     lattes: true,
     status: true,
     createdAt: true,
+    hookUrl: true,
     user: {
       select: {
         id: true,
