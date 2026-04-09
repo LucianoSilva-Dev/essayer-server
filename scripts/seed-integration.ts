@@ -66,22 +66,19 @@ async function seedIntegration() {
     // 2. Create API key for the service user
     console.log('🔑 Creating API key...');
     try {
-      const apiKeyResult = await auth.api.createApiKey(
-        {
-          headers: new Headers(),
-        } as unknown as Parameters<typeof auth.api.createApiKey>[0],
-        {
+      const apiKeyResult = await auth.api.createApiKey({
+        body: {
           name: 'anglo-platform-dev',
+          userId: serviceUser.id,
           metadata: {
             integrationName: 'anglo-platform',
             createdAt: new Date().toISOString(),
           },
-          referenceId: serviceUser.id,
         },
-      );
+      });
 
-      if (apiKeyResult.data) {
-        const key = apiKeyResult.data;
+      if (apiKeyResult) {
+        const key = apiKeyResult;
         console.log(`✅ API key created!`);
         console.log(`   Name: ${key.name}`);
         console.log(`   Key: ${key.key}`);
