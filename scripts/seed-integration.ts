@@ -10,13 +10,14 @@
  *   npx ts-node scripts/seed-integration.ts
  */
 
+import 'dotenv/config';
 import { apiKey } from '@better-auth/api-key';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '@prisma/client';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { admin as adminPlugin, openAPI } from 'better-auth/plugins';
 import { ac, admin, student, teacher } from '../src/core/auth/roles';
+import { PrismaClient } from "../src/core/prisma/generated/client";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
