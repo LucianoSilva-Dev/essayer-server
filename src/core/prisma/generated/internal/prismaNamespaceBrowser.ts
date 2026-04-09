@@ -72,6 +72,7 @@ export const ModelName = {
   Notification: 'Notification',
   TeacherRequestStatusNotification: 'TeacherRequestStatusNotification',
   ActivityNotification: 'ActivityNotification',
+  Apikey: 'Apikey',
   IntegrationUser: 'IntegrationUser'
 } as const
 
@@ -364,6 +365,34 @@ export const ActivityNotificationScalarFieldEnum = {
 } as const
 
 export type ActivityNotificationScalarFieldEnum = (typeof ActivityNotificationScalarFieldEnum)[keyof typeof ActivityNotificationScalarFieldEnum]
+
+
+export const ApikeyScalarFieldEnum = {
+  id: 'id',
+  configId: 'configId',
+  name: 'name',
+  start: 'start',
+  referenceId: 'referenceId',
+  prefix: 'prefix',
+  key: 'key',
+  refillInterval: 'refillInterval',
+  refillAmount: 'refillAmount',
+  lastRefillAt: 'lastRefillAt',
+  enabled: 'enabled',
+  rateLimitEnabled: 'rateLimitEnabled',
+  rateLimitTimeWindow: 'rateLimitTimeWindow',
+  rateLimitMax: 'rateLimitMax',
+  requestCount: 'requestCount',
+  remaining: 'remaining',
+  lastRequest: 'lastRequest',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  permissions: 'permissions',
+  metadata: 'metadata'
+} as const
+
+export type ApikeyScalarFieldEnum = (typeof ApikeyScalarFieldEnum)[keyof typeof ApikeyScalarFieldEnum]
 
 
 export const IntegrationUserScalarFieldEnum = {

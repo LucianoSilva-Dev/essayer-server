@@ -405,6 +405,7 @@ export const ModelName = {
   Notification: 'Notification',
   TeacherRequestStatusNotification: 'TeacherRequestStatusNotification',
   ActivityNotification: 'ActivityNotification',
+  Apikey: 'Apikey',
   IntegrationUser: 'IntegrationUser'
 } as const
 
@@ -421,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "teacherRequest" | "comment" | "repertoire" | "article" | "citation" | "work" | "class" | "activity" | "essayFeedback" | "teacherCorrection" | "aICorrection" | "essayResponse" | "essay" | "userEssay" | "notification" | "teacherRequestStatusNotification" | "activityNotification" | "integrationUser"
+    modelProps: "user" | "session" | "account" | "verification" | "teacherRequest" | "comment" | "repertoire" | "article" | "citation" | "work" | "class" | "activity" | "essayFeedback" | "teacherCorrection" | "aICorrection" | "essayResponse" | "essay" | "userEssay" | "notification" | "teacherRequestStatusNotification" | "activityNotification" | "apikey" | "integrationUser"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1979,6 +1980,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Apikey: {
+      payload: Prisma.$ApikeyPayload<ExtArgs>
+      fields: Prisma.ApikeyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ApikeyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApikeyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ApikeyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApikeyPayload>
+        }
+        findFirst: {
+          args: Prisma.ApikeyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApikeyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ApikeyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApikeyPayload>
+        }
+        findMany: {
+          args: Prisma.ApikeyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApikeyPayload>[]
+        }
+        create: {
+          args: Prisma.ApikeyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApikeyPayload>
+        }
+        createMany: {
+          args: Prisma.ApikeyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ApikeyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApikeyPayload>[]
+        }
+        delete: {
+          args: Prisma.ApikeyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApikeyPayload>
+        }
+        update: {
+          args: Prisma.ApikeyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApikeyPayload>
+        }
+        deleteMany: {
+          args: Prisma.ApikeyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ApikeyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ApikeyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApikeyPayload>[]
+        }
+        upsert: {
+          args: Prisma.ApikeyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApikeyPayload>
+        }
+        aggregate: {
+          args: Prisma.ApikeyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateApikey>
+        }
+        groupBy: {
+          args: Prisma.ApikeyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ApikeyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ApikeyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ApikeyCountAggregateOutputType> | number
+        }
+      }
+    }
     IntegrationUser: {
       payload: Prisma.$IntegrationUserPayload<ExtArgs>
       fields: Prisma.IntegrationUserFieldRefs
@@ -2367,6 +2442,34 @@ export const ActivityNotificationScalarFieldEnum = {
 export type ActivityNotificationScalarFieldEnum = (typeof ActivityNotificationScalarFieldEnum)[keyof typeof ActivityNotificationScalarFieldEnum]
 
 
+export const ApikeyScalarFieldEnum = {
+  id: 'id',
+  configId: 'configId',
+  name: 'name',
+  start: 'start',
+  referenceId: 'referenceId',
+  prefix: 'prefix',
+  key: 'key',
+  refillInterval: 'refillInterval',
+  refillAmount: 'refillAmount',
+  lastRefillAt: 'lastRefillAt',
+  enabled: 'enabled',
+  rateLimitEnabled: 'rateLimitEnabled',
+  rateLimitTimeWindow: 'rateLimitTimeWindow',
+  rateLimitMax: 'rateLimitMax',
+  requestCount: 'requestCount',
+  remaining: 'remaining',
+  lastRequest: 'lastRequest',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  permissions: 'permissions',
+  metadata: 'metadata'
+} as const
+
+export type ApikeyScalarFieldEnum = (typeof ApikeyScalarFieldEnum)[keyof typeof ApikeyScalarFieldEnum]
+
+
 export const IntegrationUserScalarFieldEnum = {
   id: 'id',
   integrationName: 'integrationName',
@@ -2672,6 +2775,7 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   teacherRequestStatusNotification?: Prisma.TeacherRequestStatusNotificationOmit
   activityNotification?: Prisma.ActivityNotificationOmit
+  apikey?: Prisma.ApikeyOmit
   integrationUser?: Prisma.IntegrationUserOmit
 }
 
