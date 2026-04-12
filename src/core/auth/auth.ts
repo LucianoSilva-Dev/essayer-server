@@ -105,6 +105,9 @@ export const auth = betterAuth({
       enableSessionForAPIKeys: true,
       requireName: true,
       enableMetadata: true,
+      rateLimit: {
+        enabled: false,
+      },
       permissions: {
         defaultPermissions: {
           repertoires: ['read', 'write'],
