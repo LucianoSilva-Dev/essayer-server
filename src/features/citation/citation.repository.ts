@@ -14,22 +14,25 @@ export class CitationRepository {
       data: { topics, subtopics, author, creatorId: creator, type: 'CITATION' },
     });
 
-    return this.prisma.citation.create({ data: { quote, repertoireId: repertoire.id } });
+    await this.prisma.citation.create({ data: { quote, repertoireId: repertoire.id } });
+
+    return { id: repertoire.id };
   }
 
   update(id: string, data: UpdateCitationDto) {
-    return this.prisma.citation.update({ where: { id }, data });
+    return this.prisma.citation.update({ where: { repertoireId: id }, data });
   }
 
   get(id: string, userId?: string) {
     return this.prisma.citation.findUnique({
-      where: { id },
+      where: { repertoireId: id },
       select: {
         id: true,
         quote: true,
         source: true,
         repertoire: {
           select: {
+            id: true,
             author: true,
             topics: true,
             subtopics: true,
@@ -59,6 +62,11 @@ export class CitationRepository {
                 fixed: 'desc',
               },
               select: {
+                id: true,
+                text: true,
+                fixed: true,
+                createdAt: true,
+                updatedAt: true,
                 user: {
                   select: {
                     id: true,

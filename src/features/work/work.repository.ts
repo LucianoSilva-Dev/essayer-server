@@ -14,18 +14,20 @@ export class WorkRepository {
       data: { topics, subtopics, author, creatorId: creator, type: 'WORK' },
     });
 
-    return this.prisma.work.create({
+    await this.prisma.work.create({
       data: { title, synopsis, type, repertoireId: repertoire.id },
     });
+
+    return { id: repertoire.id };
   }
 
   update(id: string, data: UpdateWorkDto) {
-    return this.prisma.work.update({ where: { id }, data });
+    return this.prisma.work.update({ where: { repertoireId: id }, data });
   }
 
   get(id: string, userId?: string) {
     return this.prisma.work.findUnique({
-      where: { id },
+      where: { repertoireId: id },
       select: {
         id: true,
         title: true,
@@ -33,6 +35,7 @@ export class WorkRepository {
         type: true,
         repertoire: {
           select: {
+            id: true,
             author: true,
             topics: true,
             subtopics: true,
@@ -62,6 +65,11 @@ export class WorkRepository {
                 fixed: 'desc',
               },
               select: {
+                id: true,
+                text: true,
+                fixed: true,
+                createdAt: true,
+                updatedAt: true,
                 user: {
                   select: {
                     id: true,

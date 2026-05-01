@@ -14,18 +14,20 @@ export class ArticleRepository {
       data: { topics, subtopics, author, creatorId: creator, type: 'ARTICLE' },
     });
 
-    return this.prisma.article.create({
+    await this.prisma.article.create({
       data: { title, abstract, source, repertoireId: repertoire.id },
     });
+
+    return { id: repertoire.id };
   }
 
   update(id: string, data: UpdateArticleDto) {
-    return this.prisma.article.update({ where: { id }, data });
+    return this.prisma.article.update({ where: { repertoireId: id }, data });
   }
 
   get(id: string, userId?: string) {
     return this.prisma.article.findUnique({
-      where: { id },
+      where: { repertoireId: id },
       select: {
         id: true,
         title: true,
@@ -33,6 +35,7 @@ export class ArticleRepository {
         source: true,
         repertoire: {
           select: {
+            id: true,
             author: true,
             topics: true,
             subtopics: true,
@@ -62,6 +65,11 @@ export class ArticleRepository {
                 fixed: 'desc',
               },
               select: {
+                id: true,
+                text: true,
+                fixed: true,
+                createdAt: true,
+                updatedAt: true,
                 user: {
                   select: {
                     id: true,

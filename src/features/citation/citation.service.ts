@@ -17,7 +17,8 @@ export class CitationService {
     try {
       await this.repository.update(id, data);
       return { message: 'citation updated successfully' };
-    } catch (err) {
+    } catch (err: any) {
+      if (err?.code === 'P2025') throw new NotFoundException('citation not found');
       console.log(err);
       throw new InternalServerErrorException('Error updating citation');
     }
@@ -29,7 +30,7 @@ export class CitationService {
     if (!citation) throw new NotFoundException('citation not found');
 
     const formattedCitation: CitationResponseDto = {
-      id: citation.id,
+      id: citation.repertoire.id,
       quote: citation.quote,
       author: citation.repertoire.author,
       source: citation.source,

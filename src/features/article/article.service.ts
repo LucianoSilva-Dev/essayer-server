@@ -17,7 +17,8 @@ export class ArticleService {
     try {
       await this.repository.update(id, data);
       return { message: 'article updated successfully' };
-    } catch (err) {
+    } catch (err: any) {
+      if (err?.code === 'P2025') throw new NotFoundException('article not found');
       console.log(err);
       throw new InternalServerErrorException('Error updating article');
     }
@@ -29,7 +30,7 @@ export class ArticleService {
     if (!article) throw new NotFoundException('article not found');
 
     const formattedArticle: ArticleResponseDto = {
-      id: article.id,
+      id: article.repertoire.id,
       title: article.title,
       abstract: article.abstract,
       author: article.repertoire.author,

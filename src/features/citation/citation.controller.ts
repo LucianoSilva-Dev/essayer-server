@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put, Session, UsePipes } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { OptionalAuth, Roles, UserSession } from '@thallesp/nestjs-better-auth';
 import { ZodResponse, ZodValidationPipe } from 'nestjs-zod';
 import { CitationService } from './citation.service';
@@ -18,9 +18,10 @@ export class CitationController {
   @Get(':id')
   @OptionalAuth()
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Retrieves selected citation' })
+  @ApiOperation({ summary: 'Retrieves selected citation by parent repertoire ID' })
+  @ApiParam({ name: 'id', description: 'Parent repertoire ID' })
   @ZodResponse({
-    status: 201,
+    status: 200,
     description: 'citation retrieved successfully',
     type: CitationResponseDto,
   })
@@ -45,7 +46,8 @@ export class CitationController {
   @Put(':id')
   @Roles(['admin', 'teacher'])
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Updates existing citation' })
+  @ApiOperation({ summary: 'Updates existing citation by parent repertoire ID' })
+  @ApiParam({ name: 'id', description: 'Parent repertoire ID' })
   @ApiBody({ type: UpdateCitationDto })
   @ZodResponse({
     status: 200,

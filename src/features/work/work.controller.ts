@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Patch, Post, Put, Session, UsePipes } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { OptionalAuth, Roles, UserSession } from '@thallesp/nestjs-better-auth';
 import { ZodResponse, ZodValidationPipe } from 'nestjs-zod';
 import { WorkService } from './work.service';
@@ -18,9 +18,10 @@ export class WorkController {
   @Get(':id')
   @OptionalAuth()
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Retrieves selected work' })
+  @ApiOperation({ summary: 'Retrieves selected work by parent repertoire ID' })
+  @ApiParam({ name: 'id', description: 'Parent repertoire ID' })
   @ZodResponse({
-    status: 201,
+    status: 200,
     description: 'work retrieved successfully',
     type: WorkResponseDto,
   })
@@ -45,7 +46,8 @@ export class WorkController {
   @Patch(':id')
   @Roles(['admin', 'teacher'])
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Updates work data' })
+  @ApiOperation({ summary: 'Updates work data by parent repertoire ID' })
+  @ApiParam({ name: 'id', description: 'Parent repertoire ID' })
   @ApiBody({ type: UpdateWorkDto })
   @ZodResponse({
     status: 200,

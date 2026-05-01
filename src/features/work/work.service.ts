@@ -17,7 +17,8 @@ export class WorkService {
     try {
       await this.repository.update(id, data);
       return { message: 'work updated successfully' };
-    } catch (err) {
+    } catch (err: any) {
+      if (err?.code === 'P2025') throw new NotFoundException('work not found');
       console.log(err);
       throw new InternalServerErrorException('Error updating work');
     }
@@ -29,7 +30,7 @@ export class WorkService {
     if (!work) throw new NotFoundException('work not found');
 
     const formattedWork: WorkResponseDto = {
-      id: work.id,
+      id: work.repertoire.id,
       title: work.title,
       synopsis: work.synopsis,
       author: work.repertoire.author,

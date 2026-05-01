@@ -1,12 +1,11 @@
 import { Body, Controller, Get, Param, Post, Put, Session, UsePipes } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { OptionalAuth, Roles, UserSession } from '@thallesp/nestjs-better-auth';
 import { ZodResponse, ZodValidationPipe } from 'nestjs-zod';
 import { ArticleService } from './article.service';
 import { ArticleResponseDto } from './dto/article-response.dto';
 import { IdOnlyResponseDto } from '@common/dto/idOnlyResponseDto';
 import { CreateArticleDto } from './dto/create-article.dto';
-import { UpdateWorkDto } from '@features/work/dto/update-work.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { GenericSuccessResponseDto } from '@common/dto/genericResponseDto';
 
@@ -19,7 +18,8 @@ export class ArticleController {
   @Get(':id')
   @OptionalAuth()
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Retrieves selected article' })
+  @ApiOperation({ summary: 'Retrieves selected article by parent repertoire ID' })
+  @ApiParam({ name: 'id', description: 'Parent repertoire ID' })
   @ZodResponse({
     status: 200,
     description: 'article retrieved successfully',
@@ -46,8 +46,9 @@ export class ArticleController {
   @Put(':id')
   @Roles(['admin', 'teacher'])
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Updates article data' })
-  @ApiBody({ type: UpdateWorkDto })
+  @ApiOperation({ summary: 'Updates article data by parent repertoire ID' })
+  @ApiParam({ name: 'id', description: 'Parent repertoire ID' })
+  @ApiBody({ type: UpdateArticleDto })
   @ZodResponse({
     status: 200,
     description: 'article updated successfully',
