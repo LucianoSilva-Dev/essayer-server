@@ -1,5 +1,6 @@
 import { WorkType } from '@core/prisma';
 import { profileSchema } from '@features/user/dto/profile.dto';
+import { commentResponseSchema } from '@features/repertoire/dto/comment-response.dto';
 import { createZodDto } from 'nestjs-zod';
 import z from 'zod';
 
@@ -10,7 +11,7 @@ export const workResponseSchema = z.object({
   author: z.string(),
   creator: profileSchema,
   totalLikes: z.number(),
-  comments: z.array(profileSchema),
+  comments: z.array(commentResponseSchema),
   totalComments: z.number(),
   subtopics: z.array(z.string()),
   topics: z.array(z.string()),
@@ -20,3 +21,4 @@ export const workResponseSchema = z.object({
 });
 
 export class WorkResponseDto extends createZodDto(workResponseSchema) {}
+

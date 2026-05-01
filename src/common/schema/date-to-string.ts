@@ -1,7 +1,7 @@
 import z from 'zod';
 
 export const dateToIsoString = z
-  .date()
-  .transform((date) => date.toISOString())
+  .union([z.date(), z.string()])
+  .transform((date) => (typeof date === 'string' ? date : date.toISOString()))
   .pipe(z.string())
   .meta({ format: 'date-time' });

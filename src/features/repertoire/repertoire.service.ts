@@ -17,7 +17,14 @@ type RepertoireBase = {
   author: string;
   creator: { id: string; name: string; image?: string | null };
   totalLikes: number;
-  comments: Array<{ id: string; name: string; image?: string | null }>;
+  comments: Array<{
+    id: string;
+    text: string;
+    fixed: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    user: { id: string; name: string; image?: string | null };
+  }>;
   totalComments: number;
   subtopics: string[];
   topics: string[];
@@ -154,7 +161,14 @@ export class RepertoireService {
       author: repertoire.author,
       creator: repertoire.creator,
       totalLikes: repertoire._count?.likes ?? 0,
-      comments: (repertoire.comments ?? []).map((c: any) => c.user),
+      comments: (repertoire.comments ?? []).map((c: any) => ({
+        id: c.id,
+        text: c.text,
+        fixed: c.fixed,
+        createdAt: c.createdAt,
+        updatedAt: c.updatedAt,
+        user: c.user,
+      })),
       totalComments: repertoire._count?.comments ?? 0,
       subtopics: repertoire.subtopics,
       topics: repertoire.topics,

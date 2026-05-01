@@ -1,0 +1,77 @@
+
+> incita-backend@2.0.0 build /home/luciano/codigo/essayer-server-new
+> nest build
+
+[96msrc/features/article/article.controller.ts[0m:[93m23[0m:[93m4[0m - [91merror[0m[90m TS1241: [0mUnable to resolve signature of method decorator when called as an expression.
+  Argument of type 'TypedPropertyDescriptor<(id: string, session: { session: { id: string; createdAt: Date; updatedAt: Date; userId: string; expiresAt: Date; token: string; ipAddress?: string | null | undefined; userAgent?: string | ... 1 more ... | undefined; }; user: { ...; }; } & { ...; }) => Promise<...>>' is not assignable to parameter of type 'Pick<TypedPropertyDescriptor<(...args: any[]) => { id: string; title: string; abstract: string; author: string; source: string | null; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; ... 5 more ...; liked: boolean; } | Promise<...>>, "value">'.
+    Types of property 'value' are incompatible.
+      Type '((id: string, session: { session: { id: string; createdAt: Date; updatedAt: Date; userId: string; expiresAt: Date; token: string; ipAddress?: string | null | undefined; userAgent?: string | ... 1 more ... | undefined; }; user: { ...; }; } & { ...; }) => Promise<...>) | undefined' is not assignable to type '((...args: any[]) => { id: string; title: string; abstract: string; author: string; source: string | null; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; ... 5 more ...; liked: boolean; } | Promise<...>) | undefined'.
+        Type '(id: string, session: { session: { id: string; createdAt: Date; updatedAt: Date; userId: string; expiresAt: Date; token: string; ipAddress?: string | null | undefined; userAgent?: string | ... 1 more ... | undefined; }; user: { ...; }; } & { ...; }) => Promise<...>' is not assignable to type '(...args: any[]) => { id: string; title: string; abstract: string; author: string; source: string | null; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; ... 5 more ...; liked: boolean; } | Promise<...>'.
+          Type 'Promise<ArticleResponseDto>' is not assignable to type '{ id: string; title: string; abstract: string; author: string; source: string | null; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; comments: { id: string; ... 4 more ...; user: { ...; }; }[]; ... 4 more ...; liked: boolean; } | Promise<...>'.
+            Type 'Promise<ArticleResponseDto>' is not assignable to type 'Promise<{ id: string; title: string; abstract: string; author: string; source: string | null; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; comments: { id: string; ... 4 more ...; user: { ...; }; }[]; ... 4 more ...; liked: boolean; }>'.
+              Type 'ArticleResponseDto' is not assignable to type '{ id: string; title: string; abstract: string; author: string; source: string | null; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; comments: { id: string; ... 4 more ...; user: { ...; }; }[]; ... 4 more ...; liked: boolean; }'.
+                Types of property 'comments' are incompatible.
+                  Type '{ id: string; text: string; fixed: boolean; createdAt: string; updatedAt: string; user: { id: string; name: string; image?: string | null | undefined; }; }[]' is not assignable to type '{ id: string; text: string; fixed: boolean; createdAt: Date; updatedAt: Date; user: { id: string; name: string; image?: string | null | undefined; }; }[]'.
+                    Type '{ id: string; text: string; fixed: boolean; createdAt: string; updatedAt: string; user: { id: string; name: string; image?: string | null | undefined; }; }' is not assignable to type '{ id: string; text: string; fixed: boolean; createdAt: Date; updatedAt: Date; user: { id: string; name: string; image?: string | null | undefined; }; }'.
+                      Types of property 'createdAt' are incompatible.
+                        Type 'string' is not assignable to type 'Date'.
+
+[7m 23[0m   @ZodResponse({
+[7m   [0m [91m   ~~~~~~~~~~~~~[0m
+[7m 24[0m     status: 200,
+[7m   [0m [91m~~~~~~~~~~~~~~~~[0m
+[7m...[0m 
+[7m 26[0m     type: ArticleResponseDto,
+[7m   [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m 27[0m   })
+[7m   [0m [91m~~~~[0m
+[96msrc/features/citation/citation.controller.ts[0m:[93m22[0m:[93m4[0m - [91merror[0m[90m TS1241: [0mUnable to resolve signature of method decorator when called as an expression.
+  Argument of type 'TypedPropertyDescriptor<(id: string, session: { session: { id: string; createdAt: Date; updatedAt: Date; userId: string; expiresAt: Date; token: string; ipAddress?: string | null | undefined; userAgent?: string | ... 1 more ... | undefined; }; user: { ...; }; } & { ...; }) => Promise<...>>' is not assignable to parameter of type 'Pick<TypedPropertyDescriptor<(...args: any[]) => { id: string; quote: string; author: string; source: string | null; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; comments: { ...; }[]; ... 4 more ...; liked: boolean; } | Promise<...>>, "value">'.
+    Types of property 'value' are incompatible.
+      Type '((id: string, session: { session: { id: string; createdAt: Date; updatedAt: Date; userId: string; expiresAt: Date; token: string; ipAddress?: string | null | undefined; userAgent?: string | ... 1 more ... | undefined; }; user: { ...; }; } & { ...; }) => Promise<...>) | undefined' is not assignable to type '((...args: any[]) => { id: string; quote: string; author: string; source: string | null; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; comments: { id: string; ... 4 more ...; user: { ...; }; }[]; ... 4 more ...; liked: boolean; } | Promise<...>) | undefined'.
+        Type '(id: string, session: { session: { id: string; createdAt: Date; updatedAt: Date; userId: string; expiresAt: Date; token: string; ipAddress?: string | null | undefined; userAgent?: string | ... 1 more ... | undefined; }; user: { ...; }; } & { ...; }) => Promise<...>' is not assignable to type '(...args: any[]) => { id: string; quote: string; author: string; source: string | null; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; comments: { id: string; ... 4 more ...; user: { ...; }; }[]; ... 4 more ...; liked: boolean; } | Promise<...>'.
+          Type 'Promise<CitationResponseDto>' is not assignable to type '{ id: string; quote: string; author: string; source: string | null; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; comments: { id: string; text: string; fixed: boolean; createdAt: Date; updatedAt: Date; user: { ...; }; }[]; ... 4 more ...; liked: boolean; } | Promise<....'.
+            Type 'Promise<CitationResponseDto>' is not assignable to type 'Promise<{ id: string; quote: string; author: string; source: string | null; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; comments: { id: string; text: string; fixed: boolean; createdAt: Date; updatedAt: Date; user: { ...; }; }[]; ... 4 more ...; liked: boolean; }>'.
+              Type 'CitationResponseDto' is not assignable to type '{ id: string; quote: string; author: string; source: string | null; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; comments: { id: string; text: string; fixed: boolean; createdAt: Date; updatedAt: Date; user: { ...; }; }[]; ... 4 more ...; liked: boolean; }'.
+                Types of property 'comments' are incompatible.
+                  Type '{ id: string; text: string; fixed: boolean; createdAt: string; updatedAt: string; user: { id: string; name: string; image?: string | null | undefined; }; }[]' is not assignable to type '{ id: string; text: string; fixed: boolean; createdAt: Date; updatedAt: Date; user: { id: string; name: string; image?: string | null | undefined; }; }[]'.
+                    Type '{ id: string; text: string; fixed: boolean; createdAt: string; updatedAt: string; user: { id: string; name: string; image?: string | null | undefined; }; }' is not assignable to type '{ id: string; text: string; fixed: boolean; createdAt: Date; updatedAt: Date; user: { id: string; name: string; image?: string | null | undefined; }; }'.
+                      Types of property 'createdAt' are incompatible.
+                        Type 'string' is not assignable to type 'Date'.
+
+[7m 22[0m   @ZodResponse({
+[7m   [0m [91m   ~~~~~~~~~~~~~[0m
+[7m 23[0m     status: 201,
+[7m   [0m [91m~~~~~~~~~~~~~~~~[0m
+[7m...[0m 
+[7m 25[0m     type: CitationResponseDto,
+[7m   [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m 26[0m   })
+[7m   [0m [91m~~~~[0m
+[96msrc/features/work/work.controller.ts[0m:[93m22[0m:[93m4[0m - [91merror[0m[90m TS1241: [0mUnable to resolve signature of method decorator when called as an expression.
+  Argument of type 'TypedPropertyDescriptor<(id: string, session: { session: { id: string; createdAt: Date; updatedAt: Date; userId: string; expiresAt: Date; token: string; ipAddress?: string | null | undefined; userAgent?: string | ... 1 more ... | undefined; }; user: { ...; }; } & { ...; }) => Promise<...>>' is not assignable to parameter of type 'Pick<TypedPropertyDescriptor<(...args: any[]) => { id: string; title: string; synopsis: string; author: string; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; comments: { id: string; ... 4 more ...; user: { ...; }; }[]; ... 5 more ...; liked: boolean; } | Promise<...>>...'.
+    Types of property 'value' are incompatible.
+      Type '((id: string, session: { session: { id: string; createdAt: Date; updatedAt: Date; userId: string; expiresAt: Date; token: string; ipAddress?: string | null | undefined; userAgent?: string | ... 1 more ... | undefined; }; user: { ...; }; } & { ...; }) => Promise<...>) | undefined' is not assignable to type '((...args: any[]) => { id: string; title: string; synopsis: string; author: string; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; comments: { id: string; ... 4 more ...; user: { ...; }; }[]; ... 5 more ...; liked: boolean; } | Promise<...>) | undefined'.
+        Type '(id: string, session: { session: { id: string; createdAt: Date; updatedAt: Date; userId: string; expiresAt: Date; token: string; ipAddress?: string | null | undefined; userAgent?: string | ... 1 more ... | undefined; }; user: { ...; }; } & { ...; }) => Promise<...>' is not assignable to type '(...args: any[]) => { id: string; title: string; synopsis: string; author: string; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; comments: { id: string; text: string; fixed: boolean; createdAt: Date; updatedAt: Date; user: { ...; }; }[]; ... 5 more ...; liked: boolean...'.
+          Type 'Promise<WorkResponseDto>' is not assignable to type '{ id: string; title: string; synopsis: string; author: string; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; comments: { id: string; text: string; fixed: boolean; createdAt: Date; updatedAt: Date; user: { ...; }; }[]; ... 5 more ...; liked: boolean; } | Promise<...>'.
+            Type 'Promise<WorkResponseDto>' is not assignable to type 'Promise<{ id: string; title: string; synopsis: string; author: string; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; comments: { id: string; text: string; fixed: boolean; createdAt: Date; updatedAt: Date; user: { ...; }; }[]; ... 5 more ...; liked: boolean; }>'.
+              Type 'WorkResponseDto' is not assignable to type '{ id: string; title: string; synopsis: string; author: string; creator: { id: string; name: string; image?: string | null | undefined; }; totalLikes: number; comments: { id: string; text: string; fixed: boolean; createdAt: Date; updatedAt: Date; user: { ...; }; }[]; ... 5 more ...; liked: boolean; }'.
+                Types of property 'comments' are incompatible.
+                  Type '{ id: string; text: string; fixed: boolean; createdAt: string; updatedAt: string; user: { id: string; name: string; image?: string | null | undefined; }; }[]' is not assignable to type '{ id: string; text: string; fixed: boolean; createdAt: Date; updatedAt: Date; user: { id: string; name: string; image?: string | null | undefined; }; }[]'.
+                    Type '{ id: string; text: string; fixed: boolean; createdAt: string; updatedAt: string; user: { id: string; name: string; image?: string | null | undefined; }; }' is not assignable to type '{ id: string; text: string; fixed: boolean; createdAt: Date; updatedAt: Date; user: { id: string; name: string; image?: string | null | undefined; }; }'.
+                      Types of property 'createdAt' are incompatible.
+                        Type 'string' is not assignable to type 'Date'.
+
+[7m 22[0m   @ZodResponse({
+[7m   [0m [91m   ~~~~~~~~~~~~~[0m
+[7m 23[0m     status: 201,
+[7m   [0m [91m~~~~~~~~~~~~~~~~[0m
+[7m...[0m 
+[7m 25[0m     type: WorkResponseDto,
+[7m   [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m 26[0m   })
+[7m   [0m [91m~~~~[0m
+
+Found 3 error(s).
+
+ ELIFECYCLE  Command failed with exit code 1.

@@ -1,4 +1,5 @@
 import { profileSchema } from '@features/user/dto/profile.dto';
+import { commentResponseSchema } from '@features/repertoire/dto/comment-response.dto';
 import { createZodDto } from 'nestjs-zod';
 import z from 'zod';
 
@@ -10,7 +11,7 @@ export const articleResponseSchema = z.object({
   source: z.string().nullable(),
   creator: profileSchema,
   totalLikes: z.number(),
-  comments: z.array(profileSchema),
+  comments: z.array(commentResponseSchema),
   totalComments: z.number(),
   subtopics: z.array(z.string()),
   topics: z.array(z.string()),
@@ -19,3 +20,4 @@ export const articleResponseSchema = z.object({
 });
 
 export class ArticleResponseDto extends createZodDto(articleResponseSchema) {}
+
