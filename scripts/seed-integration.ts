@@ -75,6 +75,10 @@ async function seedIntegration() {
             integrationName: 'anglo-platform',
             createdAt: new Date().toISOString(),
           },
+          permissions: {
+            repertoires: ['read', 'write'],
+            users: ['provision'],
+          },
         },
       });
 
@@ -88,6 +92,7 @@ async function seedIntegration() {
 
         // Store the key for reference (in production, should be stored securely)
         console.log('📌 Save this key in your .env file as INCITA_API_KEY=<key>\n');
+        console.log('⚠️ Note: This API key is linked to the Service User, so it will NOT appear in the /auth/api-key/list endpoint if you are logged in as another account.\n');
       }
     } catch (error) {
       console.error('⚠️  Error creating API key (may already exist):', error);
