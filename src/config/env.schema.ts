@@ -105,6 +105,11 @@ const envSchema = z
     LOGGER_EMAIL_BATCH_INTERVAL_MS: z.coerce.number().optional().default(300000), // 5 min
 
     // ============================================
+    // INTEGRATION SYNC (Anglo → Incita)
+    // ============================================
+    ANGLO_SYNC_SECRET: z.string().optional(), // Shared secret for server-to-server avatar sync
+
+    // ============================================
     // ADMIN SETUP (Optional)
     // ============================================
     ADMIN_SETUP: z

@@ -13,6 +13,7 @@ describe('IntegrationService', () => {
     findUserById: vi.fn(),
     createUser: vi.fn(),
     createIntegrationUser: vi.fn(),
+    updateUserImage: vi.fn(),
   };
 
   beforeEach(async () => {
@@ -180,6 +181,40 @@ describe('IntegrationService', () => {
       expect(repository.createIntegrationUser).toHaveBeenCalledWith(
         expect.objectContaining({ externalRole: 'student' }),
       );
+    });
+  });
+
+  describe('syncUserImage', () => {
+    // V1/V2/V3: sync delegates to repository.updateUserImage
+    it('should return userId when mapping exists and image updated', async () => {
+      mockRepository.updateUserImage = vi.fn().mockResolvedValue({ userId: 'user-42' });
+
+      const result = await service.syncUserImage('anglo-platform', 'ext-abc', 'https://cdn/img.jpg');
+
+      expect(mockRepository.updateUserImage).toHaveBeenCalledWith(
+        'anglo-platform',
+        'ext-abc',
+        'https://cdn/img.jpg',
+      );
+      expect(result).toEqual({ userId: 'user-42' });
+    });
+
+    // V2: avatar deleted → null propagated
+    it('should pass null image (avatar deleted)', async () => {
+      mockRepository.updateUserImage = vi.fn().mockResolvedValue({ userId: 'user-42' });
+
+      await service.syncUserImage('anglo-platform', 'ext-abc', null);
+
+      expect(mockRepository.updateUserImage).toHaveBeenCalledWith('anglo-platform', 'ext-abc', null);
+    });
+
+    // V1: no-op when no mapping found for externalUserId
+    it('should return null when no mapping exists for the externalUserId', async () => {
+      mockRepository.updateUserImage = vi.fn().mockResolvedValue(null);
+
+      const result = await service.syncUserImage('anglo-platform', 'ext-unknown', null);
+
+      expect(result).toBeNull();
     });
   });
 });

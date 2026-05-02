@@ -68,4 +68,12 @@ export class IntegrationService {
       isNewUser: true,
     };
   }
+
+  async syncUserImage(
+    integrationName: string,
+    externalUserId: string,
+    image: string | null,
+  ): Promise<{ userId: string } | null> {
+    return this.repository.updateUserImage(integrationName, externalUserId, image);
+  }
 }

@@ -53,4 +53,24 @@ export class IntegrationRepository {
       },
     });
   }
+
+  async updateUserImage(
+    integrationName: string,
+    externalUserId: string,
+    image: string | null,
+  ): Promise<{ userId: string } | null> {
+    const integrationUser = await this.prisma.integrationUser.findFirst({
+      where: { integrationName, externalUserId },
+      select: { userId: true },
+    });
+
+    if (!integrationUser) return null;
+
+    await this.prisma.user.update({
+      where: { id: integrationUser.userId },
+      data: { image },
+    });
+
+    return { userId: integrationUser.userId };
+  }
 }

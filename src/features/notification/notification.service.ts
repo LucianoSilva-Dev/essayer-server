@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Subject, interval, merge, map, finalize } from 'rxjs';
+import { Subject, timer, merge, map, finalize } from 'rxjs';
 import { MessageEvent } from '@nestjs/common';
 import { NotificationRepository } from './notification.repository';
 import { SseConnectionsManager, ISseNotificationEvent } from './sse-connections.manager';
@@ -51,7 +51,7 @@ export class NotificationService {
 
     this.sseManager.addConnection(userId, subject);
 
-    const heartbeatStream = interval(30_000).pipe(
+    const heartbeatStream = timer(0, 30_000).pipe(
       map(
         () =>
           ({

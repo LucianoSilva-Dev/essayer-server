@@ -37,6 +37,7 @@ describe('Integration API Key Auth (E2E)', () => {
   let apiKey: string;
 
   beforeAll(async () => {
+    process.env.ANGLO_SYNC_SECRET = 'test-sync-secret';
     app = await createTestApp();
     prisma = app.prisma;
   });
@@ -203,6 +204,52 @@ describe('Integration API Key Auth (E2E)', () => {
 
       const mappings = await prisma.integrationUser.findMany();
       expect(mappings).toHaveLength(0);
+    });
+  });
+
+  describe('Avatar sync endpoint', () => {
+    it('should accept x-sync-secret without session or API key', async () => {
+      const user = await prisma.user.create({
+        data: {
+          email: 'avatar-sync@anglo.local',
+          name: 'Avatar Sync',
+          emailVerified: true,
+          role: 'teacher',
+        },
+      });
+      await prisma.integrationUser.create({
+        data: {
+          integrationName: 'anglo-platform',
+          externalUserId: 'ext-avatar-sync',
+          externalRole: 'teacher',
+          userId: user.id,
+        },
+      });
+
+      await app.server
+        .patch('/integration/users/ext-avatar-sync/image?integrationName=anglo-platform')
+        .set('x-sync-secret', 'test-sync-secret')
+        .send({ image: 'https://cdn/avatar.jpg' })
+        .expect(200);
+
+      const updated = await prisma.user.findUniqueOrThrow({ where: { id: user.id } });
+      expect(updated.image).toBe('https://cdn/avatar.jpg');
+    });
+
+    it('should reject invalid sync secret with 403', async () => {
+      await app.server
+        .patch('/integration/users/ext-avatar-sync/image?integrationName=anglo-platform')
+        .set('x-sync-secret', 'wrong-secret')
+        .send({ image: 'https://cdn/avatar.jpg' })
+        .expect(403);
+    });
+
+    it('should return 404 when sync mapping does not exist', async () => {
+      await app.server
+        .patch('/integration/users/ext-missing/image?integrationName=anglo-platform')
+        .set('x-sync-secret', 'test-sync-secret')
+        .send({ image: 'https://cdn/avatar.jpg' })
+        .expect(404);
     });
   });
 });
