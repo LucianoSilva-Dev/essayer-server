@@ -16,6 +16,7 @@ const envSchema = z
     NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
     TZ: z.string().default('America/Sao_Paulo'),
     API_URL: z.url().optional(), // Production API URL (used in OpenAPI docs)
+    CORS_ORIGINS: z.string().optional(), // Comma-separated allowlist for browser clients
 
     // ============================================
     // REDIS

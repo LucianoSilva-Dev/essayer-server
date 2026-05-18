@@ -2,6 +2,7 @@ import { AiModule } from '@core/ai';
 import { BullMqModule } from '@core/bullmq';
 import { EmailModule } from '@core/email';
 import { EventsModule } from '@core/events';
+import { HealthModule } from '@core/health/health.module';
 import { IntegrationModule } from '@core/integration';
 import { PrismaModule } from '@core/prisma';
 import { RedisModule } from '@core/redis';
@@ -30,6 +31,7 @@ import { LoggerTestModule } from './http-test/logger';
     PrismaModule,
     RedisModule,
     EventsModule,
+    HealthModule,
     BullMqModule,
     AiModule,
     EmailModule,

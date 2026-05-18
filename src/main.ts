@@ -16,6 +16,11 @@ async function bootstrap() {
   // Get config service
   const configService = app.get<ConfigService<EnvConfig>>(ConfigService);
   const port = configService.get<number>('PORT') ?? 3000;
+  const corsOrigins = configService.get<string>('CORS_ORIGINS');
+  const allowedOrigins = corsOrigins
+    ?.split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
 
   // Configure custom logger
   app.useLogger(app.get(LoggerService));
@@ -25,7 +30,7 @@ async function bootstrap() {
 
   // Enable CORS
   app.enableCors({
-    origin: true, // TODO: Configure proper origins
+    origin: allowedOrigins?.length ? allowedOrigins : true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
