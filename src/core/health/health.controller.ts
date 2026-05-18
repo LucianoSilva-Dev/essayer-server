@@ -5,8 +5,13 @@ import { HealthService } from './health.service';
 export class HealthController {
   constructor(private readonly healthService: HealthService) {}
 
+  @Get('live')
+  getLiveness() {
+    return this.healthService.getLiveness();
+  }
+
   @Get()
-  getStatus() {
-    return this.healthService.getStatus();
+  getReadiness() {
+    return this.healthService.getReadiness();
   }
 }

@@ -43,7 +43,7 @@ async function bootstrap() {
     await setupAdmin();
   }
 
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
 
   const url = await app.getUrl();
   console.log(`🚀 Server running at ${url} 🚀`);

@@ -17,6 +17,8 @@ RUN pnpm install --frozen-lockfile
 
 FROM deps AS build
 
+ENV DATABASE_URL=postgresql://postgres:postgres@localhost:5432/essayer_build
+
 COPY nest-cli.json prisma.config.ts tsconfig.build.json tsconfig.json ./
 COPY src ./src
 

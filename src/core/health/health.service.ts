@@ -10,7 +10,14 @@ export class HealthService {
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
 
-  async getStatus() {
+  getLiveness() {
+    return {
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  async getReadiness() {
     await Promise.all([this.prisma.$queryRaw`SELECT 1`, this.redis.ping()]);
 
     return {

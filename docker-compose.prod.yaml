@@ -4,21 +4,14 @@ services:
     container_name: essayer-server-nginx
     restart: unless-stopped
     depends_on:
-      api:
-        condition: service_healthy
+      - api
     ports:
-      - "${NGINX_HTTP_PORT:-80}:80"
+      - "${NGINX_HTTP_PORT:-8080}:80"
     environment:
       SERVER_NAME: ${SERVER_NAME:-_}
       CLIENT_MAX_BODY_SIZE: ${CLIENT_MAX_BODY_SIZE:-25m}
     volumes:
       - ./docker/nginx/templates:/etc/nginx/templates:ro
-    healthcheck:
-      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/ || exit 1"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
     security_opt:
       - no-new-privileges:true
     cap_drop:
@@ -44,7 +37,6 @@ services:
     image: essayer-server:prod
     container_name: essayer-server-api
     restart: unless-stopped
-    init: true
     env_file:
       - .env.production
     environment:
@@ -56,20 +48,7 @@ services:
     expose:
       - "3000"
     depends_on:
-      redis:
-        condition: service_healthy
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "node",
-          "-e",
-          "fetch('http://127.0.0.1:3000/health').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))",
-        ]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 40s
+      - redis
     security_opt:
       - no-new-privileges:true
     cap_drop:
@@ -84,32 +63,19 @@ services:
     image: redis:8.2-alpine
     container_name: essayer-server-redis
     restart: unless-stopped
+    user: "0:0"
     env_file:
       - .env.production
     command:
       [
         "sh",
         "-c",
-        "exec redis-server --appendonly yes --save 60 1000 ${REDIS_PASSWORD:+--requirepass \"$REDIS_PASSWORD\"}",
+        "mkdir -p /data/appendonlydir && exec redis-server --dir /data --appendonly yes --save 60 1000 ${REDIS_PASSWORD:+--requirepass \"$REDIS_PASSWORD\"}",
       ]
     volumes:
       - redis-data:/data
     expose:
       - "6379"
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "REDISCLI_AUTH=\"$REDIS_PASSWORD\" redis-cli ping | grep -q PONG",
-        ]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-    security_opt:
-      - no-new-privileges:true
-    cap_drop:
-      - ALL
     logging:
       driver: json-file
       options:
