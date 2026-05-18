@@ -30,11 +30,8 @@ services:
         max-file: "3"
 
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: runner
-    image: essayer-server:prod
+    image: ${API_IMAGE:-ghcr.io/lucianosilva-dev/essayer-server}:${API_IMAGE_TAG:-latest}
+    pull_policy: always
     container_name: essayer-server-api
     restart: unless-stopped
     env_file:
