@@ -19,8 +19,31 @@ export class CitationRepository {
     return { id: repertoire.id };
   }
 
-  update(id: string, data: UpdateCitationDto) {
-    return this.prisma.citation.update({ where: { repertoireId: id }, data });
+  async update(id: string, data: UpdateCitationDto) {
+    const { topics, subtopics, author, quote, source } = data;
+
+    if (topics || subtopics || author !== undefined) {
+      const repertoireData: any = {};
+      if (topics) repertoireData.topics = topics;
+      if (subtopics) repertoireData.subtopics = subtopics;
+      if (author !== undefined) repertoireData.author = author;
+
+      await this.prisma.repertoire.update({
+        where: { id },
+        data: repertoireData,
+      });
+    }
+
+    const citationData: any = {};
+    if (quote !== undefined) citationData.quote = quote;
+    if (source !== undefined) citationData.source = source;
+
+    if (Object.keys(citationData).length > 0) {
+      await this.prisma.citation.update({
+        where: { repertoireId: id },
+        data: citationData,
+      });
+    }
   }
 
   get(id: string, userId?: string) {

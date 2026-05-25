@@ -153,8 +153,14 @@ export class RepertoireRepository {
     return this.prisma.comment.update({ where: { id }, data: { fixed: data.fix } });
   }
 
-  deleteRepertoire(id: string, userId: string, searchId: boolean) {
-    const where = searchId ? { id, userId } : { id };
+  async deleteRepertoire(id: string, userId: string, searchId: boolean) {
+    const where: any = searchId ? { id, creatorId: userId } : { id };
+
+    // Deleta os filhos para evitar falha de Foreign Key Constraint (caso o Prisma não esteja com Cascade ativo)
+    await this.prisma.citation.deleteMany({ where: { repertoireId: id } });
+    await this.prisma.work.deleteMany({ where: { repertoireId: id } });
+    await this.prisma.article.deleteMany({ where: { repertoireId: id } });
+    await this.prisma.comment.deleteMany({ where: { repertoireId: id } });
 
     return this.prisma.repertoire.delete({ where });
   }
