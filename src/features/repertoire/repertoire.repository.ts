@@ -129,10 +129,12 @@ export class RepertoireRepository {
       data: { text: data.text, fixed: data.fix, repertoireId: id, userId },
     });
 
-    return this.prisma.repertoire.update({
+    await this.prisma.repertoire.update({
       where: { id },
       data: { comments: { connect: [{ id: comment.id }] } },
     });
+    
+    return comment;
   }
 
   updateComment(id: string, data: CreateCommentDto, userId: string) {
