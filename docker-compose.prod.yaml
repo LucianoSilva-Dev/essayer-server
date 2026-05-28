@@ -2,20 +2,14 @@ services:
   api:
     image: ${API_IMAGE:-ghcr.io/lucianosilva-dev/essayer-server}:${API_IMAGE_TAG:-latest}
     pull_policy: always
-    container_name: essayer-server-api
     restart: unless-stopped
-    env_file:
-      - .env.production
     environment:
       NODE_ENV: production
+      HOST: 0.0.0.0
       PORT: 3000
       TZ: ${TZ:-America/Sao_Paulo}
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
     expose:
       - "3000"
-    depends_on:
-      - redis
     security_opt:
       - no-new-privileges:true
     cap_drop:
@@ -25,29 +19,3 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
-
-  redis:
-    image: redis:8.2-alpine
-    container_name: essayer-server-redis
-    restart: unless-stopped
-    user: "0:0"
-    env_file:
-      - .env.production
-    command:
-      [
-        "sh",
-        "-c",
-        "mkdir -p /data/appendonlydir && exec redis-server --dir /data --appendonly yes --save 60 1000 ${REDIS_PASSWORD:+--requirepass \"$REDIS_PASSWORD\"}",
-      ]
-    volumes:
-      - redis-data:/data
-    expose:
-      - "6379"
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-
-volumes:
-  redis-data:

@@ -24,6 +24,7 @@ const envSchema = z
     // ============================================
     REDIS_HOST: z.string().min(1, 'REDIS_HOST is required'),
     REDIS_PORT: z.coerce.number().default(6379),
+    REDIS_DB: z.coerce.number().int().min(0).default(1),
     REDIS_USERNAME: z.string().optional(), // Optional
     REDIS_PASSWORD: z.string().optional(), // Optional
 
