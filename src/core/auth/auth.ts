@@ -12,10 +12,66 @@ import {
 } from './helpers';
 import { ac, admin, student, teacher } from './roles';
 
+const DEFAULT_LOCAL_TRUSTED_ORIGINS = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:3002',
+] as const;
+
+function parseAllowedOrigins(configuredOrigins?: string) {
+  if (!configuredOrigins) {
+    return [];
+  }
+
+  return configuredOrigins
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter((origin) => origin.length > 0);
+}
+
+function getTrustedOrigins() {
+  const configuredOrigins = parseAllowedOrigins(process.env.CORS_ORIGINS);
+
+  if (configuredOrigins.length > 0) {
+    return [...new Set(configuredOrigins)];
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    return [];
+  }
+
+  return [...DEFAULT_LOCAL_TRUSTED_ORIGINS];
+}
+
+function getCookieSameSite(): 'lax' | 'strict' | 'none' {
+  if (
+    process.env.AUTH_COOKIE_SAME_SITE === 'strict' ||
+    process.env.AUTH_COOKIE_SAME_SITE === 'none'
+  ) {
+    return process.env.AUTH_COOKIE_SAME_SITE;
+  }
+
+  return 'lax';
+}
+
+function getCookieSecure() {
+  if (process.env.AUTH_COOKIE_SECURE === 'true') {
+    return true;
+  }
+
+  if (process.env.AUTH_COOKIE_SECURE === 'false') {
+    return false;
+  }
+
+  return process.env.NODE_ENV === 'production';
+}
+
 // Create a separate PrismaClient instance for better-auth
 // This is necessary because better-auth manages its own database connections
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
+const cookieSameSite = getCookieSameSite();
+const cookieSecure = getCookieSecure();
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: 'postgresql' }),
@@ -65,7 +121,7 @@ export const auth = betterAuth({
       generateId: false, // Let the database generate IDs (UUIDv7)
     },
     defaultCookieAttributes: {
-      sameSite: 'none',
+      sameSite: cookieSameSite,
     },
     cookies: {
       // biome-ignore lint/style/useNamingConvention: better-auth API requires snake_case
@@ -74,8 +130,8 @@ export const auth = betterAuth({
           httpOnly: true,
           maxAge: 60 * 60 * 24 * 7, // 7 days
           path: '/',
-          sameSite: 'none',
-          secure: process.env.NODE_ENV === 'production',
+          sameSite: cookieSameSite,
+          secure: cookieSecure,
         },
       },
       // biome-ignore lint/style/useNamingConvention: better-auth API requires snake_case
@@ -84,14 +140,14 @@ export const auth = betterAuth({
           httpOnly: true,
           maxAge: 60 * 60 * 24 * 7, // 7 days
           path: '/',
-          sameSite: 'none',
-          secure: process.env.NODE_ENV === 'production',
+          sameSite: cookieSameSite,
+          secure: cookieSecure,
         },
       },
     },
   },
 
-  trustedOrigins: ['*'],
+  trustedOrigins: getTrustedOrigins(),
 
   plugins: [
     openAPI({ path: '/auth/docs', disableDefaultReference: true }),

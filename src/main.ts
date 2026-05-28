@@ -15,7 +15,9 @@ async function bootstrap() {
 
   // Get config service
   const configService = app.get<ConfigService<EnvConfig>>(ConfigService);
+  const host = configService.get<string>('HOST') ?? '0.0.0.0';
   const port = configService.get<number>('PORT') ?? 3000;
+  const environment = configService.get<EnvConfig['NODE_ENV']>('NODE_ENV') ?? 'development';
   const corsOrigins = configService.get<string>('CORS_ORIGINS');
   const allowedOrigins = corsOrigins
     ?.split(',')
@@ -30,7 +32,7 @@ async function bootstrap() {
 
   // Enable CORS
   app.enableCors({
-    origin: allowedOrigins?.length ? allowedOrigins : true,
+    origin: allowedOrigins?.length ? allowedOrigins : environment === 'production' ? false : true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
@@ -43,7 +45,7 @@ async function bootstrap() {
     await setupAdmin();
   }
 
-  await app.listen(port, '0.0.0.0');
+  await app.listen(port, host);
 
   const url = await app.getUrl();
   console.log(`🚀 Server running at ${url} 🚀`);

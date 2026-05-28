@@ -1,25 +1,4 @@
 services:
-  nginx:
-    image: nginx:1.27-alpine
-    container_name: essayer-server-nginx
-    restart: unless-stopped
-    depends_on:
-      - api
-    ports:
-      - "${NGINX_HTTP_PORT:-8080}:80"
-    environment:
-      SERVER_NAME: ${SERVER_NAME:-_}
-      CLIENT_MAX_BODY_SIZE: ${CLIENT_MAX_BODY_SIZE:-25m}
-    volumes:
-      - ./docker/nginx/templates:/etc/nginx/templates:ro
-    security_opt:
-      - no-new-privileges:true
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-
   api:
     image: ${API_IMAGE:-ghcr.io/lucianosilva-dev/essayer-server}:${API_IMAGE_TAG:-latest}
     pull_policy: always

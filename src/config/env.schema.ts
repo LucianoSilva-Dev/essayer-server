@@ -12,6 +12,7 @@ const envSchema = z
     // BASE CONFIG
     // ============================================
     DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
+    HOST: z.string().default('0.0.0.0'),
     PORT: z.coerce.number().default(3000),
     NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
     TZ: z.string().default('America/Sao_Paulo'),
@@ -31,6 +32,15 @@ const envSchema = z
     // ============================================
     BETTER_AUTH_SECRET: z.string().min(1, 'BETTER_AUTH_SECRET is required'),
     BETTER_AUTH_URL: z.url('BETTER_AUTH_URL must be a valid URL'),
+    AUTH_COOKIE_SAME_SITE: z.enum(['lax', 'strict', 'none']).optional().default('lax'),
+    AUTH_COOKIE_SECURE: z
+      .preprocess((value) => {
+        if (typeof value === 'boolean') return value;
+        if (value === 'true') return true;
+        if (value === 'false') return false;
+        return undefined;
+      }, z.boolean().optional())
+      .optional(),
 
     // Authentication - Social OAuth (Optional)
     GOOGLE_CLIENT_ID: z.string().optional(),
