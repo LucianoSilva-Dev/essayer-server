@@ -256,9 +256,9 @@ export class RepertoireService {
 
   async createComment(id: string, data: CreateCommentDto, userId: string) {
     try {
-      await this.repository.createComment(id, data, userId);
+      const comment = await this.repository.createComment(id, data, userId);
 
-      return { message: 'comment created successfully' };
+      return { message: 'comment created successfully', comment };
     } catch (err) {
       console.log(err);
       throw new InternalServerErrorException('Error creating comment');
