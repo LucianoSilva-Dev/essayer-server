@@ -1,3 +1,4 @@
+import { WorkType } from '@core/prisma';
 import {
   BadRequestException,
   ForbiddenException,
@@ -6,11 +7,10 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { RepertoireRepository } from './repertoire.repository';
-import { GetAllRepertoireQueryDto } from './dto/get-all-repertoire-query.dto';
-import { WorkType } from '@core/prisma';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { FixCommentDto } from './dto/fix-comment.dto';
+import { GetAllRepertoireQueryDto } from './dto/get-all-repertoire-query.dto';
+import { RepertoireRepository } from './repertoire.repository';
 
 type RepertoireBase = {
   id: string;
@@ -56,14 +56,14 @@ export type RepertoireOutput = RepertoireWork | RepertoireArticle | RepertoireCi
 
 @Injectable()
 export class RepertoireService {
-  constructor(private readonly repository: RepertoireRepository) {}
+  constructor(private readonly repository: RepertoireRepository) { }
 
   private makeSort(query: GetAllRepertoireQueryDto) {
     switch (query.orderBy) {
       case 'MaxLikes':
-        return { _count: { likes: 'desc' } };
+        return { likes: { _count: 'desc' } };
       case 'MinLikes':
-        return { _count: { likes: 'asc' } };
+        return { likes: { _count: 'asc' } };
       case 'Newest':
         return { createdAt: 'desc' };
       case 'Oldest':
