@@ -1,0 +1,13 @@
+overrides:
+  '@better-auth/core': '$better-auth'
+
+allowBuilds:
+  '@nestjs/core': true
+  '@prisma/client': true
+  '@prisma/engines': true
+  '@scarf/scarf': true
+  '@swc/core': true
+  better-sqlite3: true
+  msgpackr-extract: true
+  prisma: true
+

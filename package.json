@@ -90,10 +90,5 @@
   },
   "prisma": {
     "schema": "src/core/prisma/schema.prisma"
-  },
-  "pnpm": {
-    "overrides": {
-      "@better-auth/core": "$better-auth"
-    }
   }
 }
