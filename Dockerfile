@@ -50,4 +50,4 @@ EXPOSE 3001
 
 ENTRYPOINT ["tini", "--"]
 
-CMD ["node", "dist/src/main.js"]
+CMD ["node", "dist/main.js"]
