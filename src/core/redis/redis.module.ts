@@ -28,12 +28,14 @@ const redisProvider: Provider = {
 
     const host = configService.get('REDIS_HOST');
     const port = configService.get('REDIS_PORT');
+    const db = configService.get('REDIS_DB');
     const username = configService.get('REDIS_USERNAME');
     const password = configService.get('REDIS_PASSWORD');
 
     const redis = new Redis({
       host,
       port,
+      db,
       username: username || undefined,
       password: password || undefined,
       maxRetriesPerRequest: null, // Required for BullMQ compatibility
@@ -45,7 +47,7 @@ const redisProvider: Provider = {
     });
 
     redis.on('connect', () => {
-      logger.log(`Connected to Redis at ${host}:${port}`);
+      logger.log(`Connected to Redis at ${host}:${port}/${db}`);
     });
 
     return redis;

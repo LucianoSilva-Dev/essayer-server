@@ -12,6 +12,7 @@ import { ESSAY_CORRECTION_QUEUE } from './bullmq.constants';
         connection: {
           host: configService.get('REDIS_HOST'),
           port: configService.get('REDIS_PORT'),
+          db: configService.get('REDIS_DB'),
           username: configService.get('REDIS_USERNAME') || undefined,
           password: configService.get('REDIS_PASSWORD') || undefined,
         },
