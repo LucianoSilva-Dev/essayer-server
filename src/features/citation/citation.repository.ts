@@ -8,42 +8,46 @@ export class CitationRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(creator: string, data: CreateCitationDto) {
-    const { topics, subtopics, author, quote } = data;
+    const { topics, subtopics, author, quote, source } = data;
 
-    const repertoire = await this.prisma.repertoire.create({
-      data: { topics, subtopics, author, creatorId: creator, type: 'CITATION' },
+    return this.prisma.$transaction(async (tx) => {
+      const repertoire = await tx.repertoire.create({
+        data: { topics, subtopics, author, creatorId: creator, type: 'CITATION' },
+      });
+
+      await tx.citation.create({ data: { quote, source, repertoireId: repertoire.id } });
+
+      return { id: repertoire.id };
     });
-
-    await this.prisma.citation.create({ data: { quote, repertoireId: repertoire.id } });
-
-    return { id: repertoire.id };
   }
 
   async update(id: string, data: UpdateCitationDto) {
     const { topics, subtopics, author, quote, source } = data;
 
-    if (topics || subtopics || author !== undefined) {
-      const repertoireData: any = {};
-      if (topics) repertoireData.topics = topics;
-      if (subtopics) repertoireData.subtopics = subtopics;
-      if (author !== undefined) repertoireData.author = author;
+    return this.prisma.$transaction(async (tx) => {
+      if (topics !== undefined || subtopics !== undefined || author !== undefined) {
+        const repertoireData: any = {};
+        if (topics !== undefined) repertoireData.topics = topics;
+        if (subtopics !== undefined) repertoireData.subtopics = subtopics;
+        if (author !== undefined) repertoireData.author = author;
 
-      await this.prisma.repertoire.update({
-        where: { id },
-        data: repertoireData,
-      });
-    }
+        await tx.repertoire.update({
+          where: { id },
+          data: repertoireData,
+        });
+      }
 
-    const citationData: any = {};
-    if (quote !== undefined) citationData.quote = quote;
-    if (source !== undefined) citationData.source = source;
+      const citationData: any = {};
+      if (quote !== undefined) citationData.quote = quote;
+      if (source !== undefined) citationData.source = source;
 
-    if (Object.keys(citationData).length > 0) {
-      await this.prisma.citation.update({
-        where: { repertoireId: id },
-        data: citationData,
-      });
-    }
+      if (Object.keys(citationData).length > 0) {
+        await tx.citation.update({
+          where: { repertoireId: id },
+          data: citationData,
+        });
+      }
+    });
   }
 
   get(id: string, userId?: string) {

@@ -10,19 +10,47 @@ export class WorkRepository {
   async create(creator: string, data: CreateWorkDto) {
     const { topics, subtopics, author, synopsis, workType: type, title } = data;
 
-    const repertoire = await this.prisma.repertoire.create({
-      data: { topics, subtopics, author, creatorId: creator, type: 'WORK' },
-    });
+    return this.prisma.$transaction(async (tx) => {
+      const repertoire = await tx.repertoire.create({
+        data: { topics, subtopics, author, creatorId: creator, type: 'WORK' },
+      });
 
-    await this.prisma.work.create({
-      data: { title, synopsis, type, repertoireId: repertoire.id },
-    });
+      await tx.work.create({
+        data: { title, synopsis, type, repertoireId: repertoire.id },
+      });
 
-    return { id: repertoire.id };
+      return { id: repertoire.id };
+    });
   }
 
-  update(id: string, data: UpdateWorkDto) {
-    return this.prisma.work.update({ where: { repertoireId: id }, data });
+  async update(id: string, data: UpdateWorkDto) {
+    const { topics, subtopics, author, synopsis, workType, title } = data;
+
+    return this.prisma.$transaction(async (tx) => {
+      if (topics !== undefined || subtopics !== undefined || author !== undefined) {
+        const repertoireData: any = {};
+        if (topics !== undefined) repertoireData.topics = topics;
+        if (subtopics !== undefined) repertoireData.subtopics = subtopics;
+        if (author !== undefined) repertoireData.author = author;
+
+        await tx.repertoire.update({
+          where: { id },
+          data: repertoireData,
+        });
+      }
+
+      const workData: any = {};
+      if (title !== undefined) workData.title = title;
+      if (synopsis !== undefined) workData.synopsis = synopsis;
+      if (workType !== undefined) workData.type = workType;
+
+      if (Object.keys(workData).length > 0) {
+        await tx.work.update({
+          where: { repertoireId: id },
+          data: workData,
+        });
+      }
+    });
   }
 
   get(id: string, userId?: string) {
