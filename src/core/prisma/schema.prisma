@@ -85,6 +85,7 @@ model User {
   notificationsSent       Notification[]    @relation("sender")
   notificationsSeen       Notification[]    @relation("seen")
   integrationMappings     IntegrationUser[]
+  legalDocumentAcceptances LegalDocumentAcceptance[]
 
   @@unique([email])
   @@map("user")
@@ -416,4 +417,29 @@ model IntegrationUser {
   @@index([userId])
   @@index([externalUserId])
   @@map("integration_user")
+}
+
+// ============================================
+// LEGAL DOCUMENT ACCEPTANCE (LGPD)
+// ============================================
+
+enum LegalDocumentType {
+  TERMS_OF_USE
+}
+
+model LegalDocumentAcceptance {
+  id           String             @id @default(uuid(7))
+  userId       String
+  documentType LegalDocumentType
+  version      String
+  acceptedAt   DateTime           @default(now())
+  ipAddress    String?
+  userAgent    String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, documentType, version])
+  @@index([userId])
+  @@index([documentType, version])
+  @@map("legal_document_acceptance")
 }

@@ -22,6 +22,15 @@ export async function setupAdmin() {
       ADMIN_PASSWORD: password,
     } = validateAdmin.parse(process.env);
 
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (existingUser) {
+      console.log(`Admin user (${email}) already exists. Skipping creation.`);
+      return;
+    }
+
     const { user } = await auth.api.createUser({
       body: { email, name, password, role: 'admin' },
     });
@@ -30,9 +39,8 @@ export async function setupAdmin() {
       where: { id: user.id },
       data: { emailVerified: true },
     });
-    console.log(`Admin setup completed succesfully.`);
+    console.log(`Admin setup completed successfully.`);
   } catch (e) {
     console.error(`Error in setup-admin.ts:\n\n${e}`);
-    process.exit(1);
   }
 }

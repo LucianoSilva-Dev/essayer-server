@@ -91,7 +91,11 @@ export const auth = betterAuth({
     },
   },
 
-  trustedOrigins: ['*'],
+  trustedOrigins: process.env.TRUSTED_ORIGINS
+    ? process.env.TRUSTED_ORIGINS.split(',')
+    : process.env.NODE_ENV === 'production'
+      ? []
+      : ['http://localhost:3000', 'http://localhost:5173'],
 
   plugins: [
     openAPI({ path: '/auth/docs', disableDefaultReference: true }),

@@ -23,6 +23,7 @@ import { AuthModule } from './core/auth/auth.module';
 import type { StorageDriverOptions } from './core/storage/types';
 import { EmailTestModule } from './http-test/email';
 import { LoggerTestModule } from './http-test/logger';
+import { LegalModule } from './core/legal/legal.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { LoggerTestModule } from './http-test/logger';
     WorkModule,
     CitationModule,
     ArticleModule,
+    LegalModule,
 
     StorageModule.registerAsync({
       imports: [ConfigModule],
