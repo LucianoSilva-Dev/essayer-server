@@ -86,6 +86,7 @@ model User {
   notificationsSeen       Notification[]    @relation("seen")
   integrationMappings     IntegrationUser[]
   legalDocumentAcceptances LegalDocumentAcceptance[]
+  accessLogs              AccessLog[]
 
   @@unique([email])
   @@map("user")
@@ -443,3 +444,28 @@ model LegalDocumentAcceptance {
   @@index([documentType, version])
   @@map("legal_document_acceptance")
 }
+
+// ============================================
+// ACCESS LOG (MARCO CIVIL DA INTERNET - ART. 15)
+// ============================================
+
+model AccessLog {
+  id          String   @id @default(uuid(7))
+  userId      String?  // null para requisições anônimas
+  ipAddress   String
+  userAgent   String?
+  method      String
+  path        String
+  statusCode  Int
+  durationMs  Int?
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime // = createdAt + 6 meses
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([expiresAt]) // para limpeza agendada
+  @@map("access_log")
+}
+

@@ -406,7 +406,9 @@ export const ModelName = {
   TeacherRequestStatusNotification: 'TeacherRequestStatusNotification',
   ActivityNotification: 'ActivityNotification',
   Apikey: 'Apikey',
-  IntegrationUser: 'IntegrationUser'
+  IntegrationUser: 'IntegrationUser',
+  LegalDocumentAcceptance: 'LegalDocumentAcceptance',
+  AccessLog: 'AccessLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -422,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "teacherRequest" | "comment" | "repertoire" | "article" | "citation" | "work" | "class" | "activity" | "essayFeedback" | "teacherCorrection" | "aICorrection" | "essayResponse" | "essay" | "userEssay" | "notification" | "teacherRequestStatusNotification" | "activityNotification" | "apikey" | "integrationUser"
+    modelProps: "user" | "session" | "account" | "verification" | "teacherRequest" | "comment" | "repertoire" | "article" | "citation" | "work" | "class" | "activity" | "essayFeedback" | "teacherCorrection" | "aICorrection" | "essayResponse" | "essay" | "userEssay" | "notification" | "teacherRequestStatusNotification" | "activityNotification" | "apikey" | "integrationUser" | "legalDocumentAcceptance" | "accessLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2128,6 +2130,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    LegalDocumentAcceptance: {
+      payload: Prisma.$LegalDocumentAcceptancePayload<ExtArgs>
+      fields: Prisma.LegalDocumentAcceptanceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LegalDocumentAcceptanceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LegalDocumentAcceptancePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LegalDocumentAcceptanceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LegalDocumentAcceptancePayload>
+        }
+        findFirst: {
+          args: Prisma.LegalDocumentAcceptanceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LegalDocumentAcceptancePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LegalDocumentAcceptanceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LegalDocumentAcceptancePayload>
+        }
+        findMany: {
+          args: Prisma.LegalDocumentAcceptanceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LegalDocumentAcceptancePayload>[]
+        }
+        create: {
+          args: Prisma.LegalDocumentAcceptanceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LegalDocumentAcceptancePayload>
+        }
+        createMany: {
+          args: Prisma.LegalDocumentAcceptanceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LegalDocumentAcceptanceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LegalDocumentAcceptancePayload>[]
+        }
+        delete: {
+          args: Prisma.LegalDocumentAcceptanceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LegalDocumentAcceptancePayload>
+        }
+        update: {
+          args: Prisma.LegalDocumentAcceptanceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LegalDocumentAcceptancePayload>
+        }
+        deleteMany: {
+          args: Prisma.LegalDocumentAcceptanceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LegalDocumentAcceptanceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LegalDocumentAcceptanceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LegalDocumentAcceptancePayload>[]
+        }
+        upsert: {
+          args: Prisma.LegalDocumentAcceptanceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LegalDocumentAcceptancePayload>
+        }
+        aggregate: {
+          args: Prisma.LegalDocumentAcceptanceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLegalDocumentAcceptance>
+        }
+        groupBy: {
+          args: Prisma.LegalDocumentAcceptanceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LegalDocumentAcceptanceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LegalDocumentAcceptanceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LegalDocumentAcceptanceCountAggregateOutputType> | number
+        }
+      }
+    }
+    AccessLog: {
+      payload: Prisma.$AccessLogPayload<ExtArgs>
+      fields: Prisma.AccessLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AccessLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AccessLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessLogPayload>
+        }
+        findFirst: {
+          args: Prisma.AccessLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AccessLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessLogPayload>
+        }
+        findMany: {
+          args: Prisma.AccessLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessLogPayload>[]
+        }
+        create: {
+          args: Prisma.AccessLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessLogPayload>
+        }
+        createMany: {
+          args: Prisma.AccessLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AccessLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessLogPayload>[]
+        }
+        delete: {
+          args: Prisma.AccessLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessLogPayload>
+        }
+        update: {
+          args: Prisma.AccessLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.AccessLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AccessLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AccessLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.AccessLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccessLogPayload>
+        }
+        aggregate: {
+          args: Prisma.AccessLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAccessLog>
+        }
+        groupBy: {
+          args: Prisma.AccessLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AccessLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AccessLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AccessLogCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2483,6 +2633,35 @@ export const IntegrationUserScalarFieldEnum = {
 export type IntegrationUserScalarFieldEnum = (typeof IntegrationUserScalarFieldEnum)[keyof typeof IntegrationUserScalarFieldEnum]
 
 
+export const LegalDocumentAcceptanceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  documentType: 'documentType',
+  version: 'version',
+  acceptedAt: 'acceptedAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent'
+} as const
+
+export type LegalDocumentAcceptanceScalarFieldEnum = (typeof LegalDocumentAcceptanceScalarFieldEnum)[keyof typeof LegalDocumentAcceptanceScalarFieldEnum]
+
+
+export const AccessLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  method: 'method',
+  path: 'path',
+  statusCode: 'statusCode',
+  durationMs: 'durationMs',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt'
+} as const
+
+export type AccessLogScalarFieldEnum = (typeof AccessLogScalarFieldEnum)[keyof typeof AccessLogScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2659,6 +2838,20 @@ export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
 export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
     
 
+
+/**
+ * Reference to a field of type 'LegalDocumentType'
+ */
+export type EnumLegalDocumentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LegalDocumentType'>
+    
+
+
+/**
+ * Reference to a field of type 'LegalDocumentType[]'
+ */
+export type ListEnumLegalDocumentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LegalDocumentType[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -2777,6 +2970,8 @@ export type GlobalOmitConfig = {
   activityNotification?: Prisma.ActivityNotificationOmit
   apikey?: Prisma.ApikeyOmit
   integrationUser?: Prisma.IntegrationUserOmit
+  legalDocumentAcceptance?: Prisma.LegalDocumentAcceptanceOmit
+  accessLog?: Prisma.AccessLogOmit
 }
 
 /* Types for Logging */

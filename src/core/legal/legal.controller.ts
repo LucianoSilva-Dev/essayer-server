@@ -3,10 +3,12 @@ import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { type UserSession, Session } from '@thallesp/nestjs-better-auth';
 import type { Request } from 'express';
 import { LegalService } from './legal.service';
+import { SkipTermsCheck } from './skip-terms-check.decorator';
 
 @ApiTags('Legal')
 @Controller('legal')
 @ApiBearerAuth()
+@SkipTermsCheck()
 export class LegalController {
   private readonly logger = new Logger(LegalController.name);
 

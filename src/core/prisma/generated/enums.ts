@@ -60,3 +60,10 @@ export const NotificationType = {
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const LegalDocumentType = {
+  TERMS_OF_USE: 'TERMS_OF_USE'
+} as const
+
+export type LegalDocumentType = (typeof LegalDocumentType)[keyof typeof LegalDocumentType]

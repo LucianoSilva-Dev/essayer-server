@@ -18,12 +18,17 @@ import { UserEssayModule } from '@features/user-essay/user-essay.module';
 import { UserModule } from '@features/user/user.module';
 import { WorkModule } from '@features/work/work.module';
 import { Module } from '@nestjs/common';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ConfigModule, ConfigService } from './config';
 import { AuthModule } from './core/auth/auth.module';
 import type { StorageDriverOptions } from './core/storage/types';
 import { EmailTestModule } from './http-test/email';
 import { LoggerTestModule } from './http-test/logger';
 import { LegalModule } from './core/legal/legal.module';
+import { AccessLogModule } from './core/access-log/access-log.module';
+import { AccessLogInterceptor } from './core/access-log/access-log.interceptor';
+import { TermsAcceptanceGuard } from './core/legal/terms-acceptance.guard';
 
 @Module({
   imports: [
@@ -50,6 +55,8 @@ import { LegalModule } from './core/legal/legal.module';
     CitationModule,
     ArticleModule,
     LegalModule,
+    ScheduleModule.forRoot(),
+    AccessLogModule,
 
     StorageModule.registerAsync({
       imports: [ConfigModule],
@@ -59,6 +66,16 @@ import { LegalModule } from './core/legal/legal.module';
       }),
     }),
     StorageCleanupModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: TermsAcceptanceGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AccessLogInterceptor,
+    },
   ],
 })
 export class AppModule {}

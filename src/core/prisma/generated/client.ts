@@ -154,3 +154,13 @@ export type Apikey = Prisma.ApikeyModel
  * 
  */
 export type IntegrationUser = Prisma.IntegrationUserModel
+/**
+ * Model LegalDocumentAcceptance
+ * 
+ */
+export type LegalDocumentAcceptance = Prisma.LegalDocumentAcceptanceModel
+/**
+ * Model AccessLog
+ * 
+ */
+export type AccessLog = Prisma.AccessLogModel

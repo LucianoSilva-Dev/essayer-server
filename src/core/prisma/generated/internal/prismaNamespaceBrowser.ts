@@ -73,7 +73,9 @@ export const ModelName = {
   TeacherRequestStatusNotification: 'TeacherRequestStatusNotification',
   ActivityNotification: 'ActivityNotification',
   Apikey: 'Apikey',
-  IntegrationUser: 'IntegrationUser'
+  IntegrationUser: 'IntegrationUser',
+  LegalDocumentAcceptance: 'LegalDocumentAcceptance',
+  AccessLog: 'AccessLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -406,6 +408,35 @@ export const IntegrationUserScalarFieldEnum = {
 } as const
 
 export type IntegrationUserScalarFieldEnum = (typeof IntegrationUserScalarFieldEnum)[keyof typeof IntegrationUserScalarFieldEnum]
+
+
+export const LegalDocumentAcceptanceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  documentType: 'documentType',
+  version: 'version',
+  acceptedAt: 'acceptedAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent'
+} as const
+
+export type LegalDocumentAcceptanceScalarFieldEnum = (typeof LegalDocumentAcceptanceScalarFieldEnum)[keyof typeof LegalDocumentAcceptanceScalarFieldEnum]
+
+
+export const AccessLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  method: 'method',
+  path: 'path',
+  statusCode: 'statusCode',
+  durationMs: 'durationMs',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt'
+} as const
+
+export type AccessLogScalarFieldEnum = (typeof AccessLogScalarFieldEnum)[keyof typeof AccessLogScalarFieldEnum]
 
 
 export const SortOrder = {
